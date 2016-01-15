@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="member"> 
+ 	<!-- BlliMemberVO Result Map 설정 -->
+ 	<resultMap type="blliMemberVO" id="bmvRM">
+ 		<result property="memberId" column="member_id"/>
+ 		<result property="memberEmail" column="member_email"/>
+ 		<result property="memberPassword" column="member_password"/>
+ 		<result property="memberName" column="member_name"/>
+ 		<result property="memberState" column="member_state"/>
+ 		<result property="recommendingBabyName" column="recommending_baby_name"/>
+ 		<result property="authority" column="authority"/>
+ 	</resultMap>
+ 	<!-- BlliBabyVO Result Map 설정 -->
+ 	<resultMap type="blliBabyVO" id="bbvRM">
+ 		<result property="babyName" column="baby_name"/>
+ 		<result property="memberId" column="memberId"/>
+ 		<result property="babyBirthday" column="baby_birthday"/>
+ 		<result property="babySex" column="baby_Sex"/>
+ 		<result property="babyPhoto" column="baby_photo"/>
+ 	</resultMap>
+ 	
+ 	<!-- 준영 작성 쿼리 -->
+ 	<!-- id로 회원의 존재 여부를 찾습니다. -->
+	<select id="findMemberByIdForLogin" resultMap="bmvRM">
+		select member_id,member_password,authority,member_Email from blli_member where member_id = #{value}
+	</select>
+	<!-- 회원의 정보를 삽입합니다. -->
+	<insert id="insertMemberInfo" parameterType="blliMemberVO">
+		insert into BLLI_MEMBER (member_Id,member_password,member_email,member_name,recommending_baby_name,authority,member_State)
+		values (#{memberId},#{memberPassword},#{memberEmail},#{memberName},#{recommendingBabyName},#{authority},1)
+	</insert>
+	<!-- 회원의 아이정보를 삽입합니다. -->
+	<insert id="insertChildInfo" parameterType="blliBabyVO">
+		insert into BLLI_baby (member_Id,baby_name,baby_birthday,baby_sex,baby_photo)
+		values (#{memberId},#{babyName},#{babyBirthday},'남자','default')
+	</insert>
+	<!-- 준영 쿼리 끝 -->
+ </mapper> 		
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

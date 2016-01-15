@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="posting"> 
+ 
+ 	<resultMap type="blliPostingVO" id="bpvRM">
+ 		<result property="postingUrl" column="posting_url"/>
+ 		<result property="smallProduct" column="small_product"/>
+ 		<result property="postingTitle" column="posting_title"/>
+ 		<result property="postingSummary" column="posting_summary"/>
+ 		<result property="postingContent" column="posting_content"/>
+ 		<result property="postingScore" column="posting_score"/>
+ 		<result property="postingLikeCount" column="posting_like_count"/>
+ 		<result property="postingDislikeCount" column="posting_dislike_count"/>
+ 		<result property="postingMediaCount" column="posting_media_count"/>
+ 		<result property="postingPhotoLink" column="posting_photo_link"/>
+ 		<result property="postingTotalResidenceTime" column="posting_total_residence_time"/>
+ 		<result property="postingViewCount" column="posting_view_count"/>
+ 		<result property="postingScrapeCount" column="posting_scrape_count"/>
+ 	</resultMap>
+ 
+ 	<update id="updatePosting">
+ 		update blli_posting_test set posting_title = #{postingTitle}, posting_photo_link = #{postingPhotoLink}, posting_media_count = #{postingMediaCount},
+ 		posting_content = #{postingContent}, posting_summary = #{postingSummary}, small_product = #{smallProduct} where posting_url = #{postingUrl}
+ 	</update>
+ 	
+ 	<insert id="insertPosting">
+ 		insert into blli_posting_test(posting_url, posting_title, posting_photo_link, posting_media_count, posting_content, posting_summary, small_product)
+ 		values(#{postingUrl}, #{postingTitle}, #{postingPhotoLink}, #{postingMediaCount}, #{postingContent}, #{postingSummary}, #{smallProduct})
+ 	</insert>
+ 	
+	<select id="searchJsoupTest" resultMap="bpvRM">
+		select posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, posting_scrape_count, posting_like_count, posting_dislike_count
+		from blli_posting_test where small_product like '%' || #{searchWord} || '%'
+	</select>
+	
+ </mapper> 		
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- MyBatis  DataSource에 대한 설정 및  SQL 정의 xml 에 대한 매핑-->
+<configuration>	
+	<!-- 사용할 VO에 대한 별칭을 명시한다.  -->
+	<typeAliases>
+		<typeAlias type="kr.co.blli.model.vo.BlliMemberVO" alias="blliMemberVO"/>
+		<typeAlias type="kr.co.blli.model.vo.BlliBabyVO" alias="blliBabyVO"/>
+		<typeAlias type="kr.co.blli.model.vo.BlliPostingVO" alias="blliPostingVO"/>
+	</typeAliases>	
+    <!-- mybatis sql 정의 xml을 mapping  -->
+	<mappers>
+		<mapper resource="mybatis/config/admin.xml"></mapper>		
+		<mapper resource="mybatis/config/member.xml"></mapper>	
+		<mapper resource="mybatis/config/posting.xml"></mapper>	
+		<mapper resource="mybatis/config/product.xml"></mapper>	
+	</mappers>
+</configuration>
+
+
+
+
+
+
+
+
+
+
