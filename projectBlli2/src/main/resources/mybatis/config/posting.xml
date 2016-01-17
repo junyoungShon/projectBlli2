@@ -18,20 +18,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="postingTotalResidenceTime" column="posting_total_residence_time"/>
  		<result property="postingViewCount" column="posting_view_count"/>
  		<result property="postingScrapeCount" column="posting_scrape_count"/>
+ 		<result property="postingAuthor" column="posting_author"/>
+ 		<result property="postingDate" column="posting_date"/>
  	</resultMap>
- 
+ 	
  	<update id="updatePosting">
  		update blli_posting_test set posting_title = #{postingTitle}, posting_photo_link = #{postingPhotoLink}, posting_media_count = #{postingMediaCount},
- 		posting_content = #{postingContent}, posting_summary = #{postingSummary}, small_product = #{smallProduct} where posting_url = #{postingUrl}
+ 		posting_content = #{postingContent}, posting_summary = #{postingSummary}, small_product = #{smallProduct}, posting_author = #{postingAuthor}, posting_date = #{postingDate} 
+ 		where posting_url = #{postingUrl}
  	</update>
  	
  	<insert id="insertPosting">
- 		insert into blli_posting_test(posting_url, posting_title, posting_photo_link, posting_media_count, posting_content, posting_summary, small_product)
- 		values(#{postingUrl}, #{postingTitle}, #{postingPhotoLink}, #{postingMediaCount}, #{postingContent}, #{postingSummary}, #{smallProduct})
+ 		insert into blli_posting_test(posting_url, posting_title, posting_photo_link, posting_media_count, posting_content, posting_summary, small_product, posting_author, posting_date)
+ 		values(#{postingUrl}, #{postingTitle}, #{postingPhotoLink}, #{postingMediaCount}, #{postingContent}, #{postingSummary}, #{smallProduct}, #{postingAuthor}, #{postingDate})
  	</insert>
  	
 	<select id="searchJsoupTest" resultMap="bpvRM">
-		select posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, posting_scrape_count, posting_like_count, posting_dislike_count
+		select posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, posting_scrape_count, 
+		posting_like_count, posting_dislike_count, posting_author, to_char(posting_date,'YYYY.MM.DD') as posting_date
 		from blli_posting_test where small_product like '%' || #{searchWord} || '%'
 	</select>
 	

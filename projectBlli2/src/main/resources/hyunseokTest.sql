@@ -26,12 +26,13 @@ CREATE TABLE blli_posting_test (
 	posting_media_count  NUMBER(3) NOT NULL , -- default 0 에서 NOT NULL로 수정!
 	posting_photo_link   VARCHAR2(300) NOT NULL ,
 	posting_total_residence_time NUMBER(8) default 0 ,
-	posting_view_count NUMBER(6) default 0 ,
-	posting_scrape_count NUMBER(3) default 0, -- 추가
+	posting_view_count      NUMBER(6) default 0 ,
+	posting_scrape_count    NUMBER(3) default 0, -- 추가
+	posting_author           VARCHAR2(100) NOT NULL, -- 추가
+	posting_date             DATE NOT NULL, -- 추가
 	constraint fk_posting_small_prod_test foreign key(small_product) references test_small_product(small_product)
 );
 select * from blli_posting_test;
-
 
 drop table test_small_product;
 create table test_small_product(
@@ -44,3 +45,4 @@ insert into test_small_product(small_product) values('아가명가 샴푸의자'
 insert into test_small_product(small_product) values('베이비캠프 컴포트 샴푸체어');
 
 select small_product from test_small_product;
+

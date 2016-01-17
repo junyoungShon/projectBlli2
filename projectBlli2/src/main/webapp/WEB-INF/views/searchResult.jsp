@@ -8,23 +8,27 @@
 <title>Insert title here</title>
 </head>
 <body>
-<p style="TEXT-ALIGN: center" align="center"><span style="FONT-FAMILY: 돋움체,dotumche,applegothic; COLOR: #61b977; FONT-SIZE: 10pt"><img src="http://postfiles11.naver.net/20140307_218/ranee2011_1394202120020LSnwf_JPEG/2014-03-07_23%3B21%3B37.jpg?type=w1" width="619" height="711" style="cursor: pointer;BORDER-BOTTOM-COLOR: rgb(0,0,0); BORDER-TOP-COLOR: rgb(0,0,0); BORDER-RIGHT-COLOR: rgb(0,0,0); BORDER-LEFT-COLOR: rgb(0,0,0); rwidth: 619px; rheight: 711px" id="20140307_218/ranee2011_1394202120020LSnwf_JPEG/2014-03-07_23%3B21%3B37.jpg" onclick="popview(this, '90000003_0000000000000019A7B60F19')" alt="" class="_photoImage">&nbsp;&#8203;</span> </p>
-
-<img src="http://postfiles11.naver.net/20140307_218/ranee2011_1394202120020LSnwf_JPEG/2014-03-07_23%3B21%3B37.jpg?type=w1">
-<table>
+<table align="center" width="50%" border="1" bordercolor="silver" style="border-collapse: collapse; table-layout: fixed;" cellpadding="10" rules="none">
 <c:forEach items="${requestScope.resultList}" var="postingList">
 <tr>
-	<td colspan="2"><a href = "${postingList.postingUrl}">${postingList.postingTitle}</a></td><td colspan="3">2016.01.07</td>
+	<td colspan="6" width="70%" style="text-overflow : ellipsis;overflow : hidden;">
+	<strong><a href="${postingList.postingUrl}" style="text-decoration:none; color: black;"><NOBR>${postingList.postingTitle}</NOBR></a></strong></td>
+	<td colspan="3" align="right" width="30%"><font size="2" color="silver">${postingList.postingDate}</font></td>
 </tr>
 <tr>
-	<td colspan="2" rowspan="2"><img src = "${postingList.postingPhotoLink}"></td><td colspan="3">라니모아</td>
+	<td colspan="6" rowspan="2" align="center" width="70%"><div style="width: 400px; height: 300px; border: 1px solid; border-color: silver; display: table-cell; vertical-align: middle;">
+	<img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${postingList.postingPhotoLink}" style="max-width: 100%; max-height: 100%;"></div></td>
+	<td colspan="3" width="30%" style="word-break:break-all;"><font size="2">${postingList.postingSummary}</font></td>
 </tr>
 <tr>
-	<td colspan="3">${postingList.postingSummary}</td>
+	<td colspan="3" width="30%" align="right"><font size="3" color="orange">${postingList.postingAuthor}</font></td>
 </tr>
-<tr>
-	<td>${postingList.postingScore}점</td><td>${postingList.smallProduct}</td><td>스크랩 : ${postingList.postingScrapeCount}</td>
-	<td>좋아요 : ${postingList.postingLikeCount}</td><td>싫어요 : ${postingList.postingDislikeCount}</td>
+<tr style="border: 1px solid silver;">
+	<td colspan="2" align="center" width="20%"><strong><font size="4" color="red">${postingList.postingScore}점</font></strong></td>
+	<td colspan="4" width="40%"><font size="3" color="silver">${postingList.smallProduct}</font></td>
+	<td align="center" width="10%"><font color="silver"><img src="${initParam.root}image/스크랩.PNG" width="20px"> ${postingList.postingScrapeCount}</font></td>
+	<td align="center" width="10%"><font color="silver"><img src="${initParam.root}image/좋아요.PNG" width="15px"> ${postingList.postingLikeCount}</font></td>
+	<td align="center" width="10%"><font color="silver"><img src="${initParam.root}image/싫어요.PNG" width="15px"> ${postingList.postingDislikeCount}</font></td>
 </tr>
 </c:forEach>
 </table>
