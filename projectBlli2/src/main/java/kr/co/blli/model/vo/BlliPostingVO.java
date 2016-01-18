@@ -17,6 +17,8 @@ public class BlliPostingVO {
 	private int postingTotalResidenceTime;
 	private int postingViewCount;
 	private int postingScrapeCount;
+	private String postingAuthor;
+	private String postingDate;
 	
 	public final ArrayList<String> regex = new ArrayList<String>(Arrays.asList("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>","<[^>]*>",
 			"<!--.*-->","&nbsp;","&#xfeff;","&#x200b;","&lt;","&gt;","&amp;","&#x1112;","\n"));
@@ -31,7 +33,7 @@ public class BlliPostingVO {
 			int postingScore, int postingLikeCount, int postingDislikeCount,
 			int postingMediaCount, String postingPhotoLink,
 			int postingTotalResidenceTime, int postingViewCount,
-			int postingScrapeCount) {
+			int postingScrapeCount, String postingAuthor, String postingDate) {
 		super();
 		this.postingUrl = postingUrl;
 		this.smallProduct = smallProduct;
@@ -46,6 +48,8 @@ public class BlliPostingVO {
 		this.postingTotalResidenceTime = postingTotalResidenceTime;
 		this.postingViewCount = postingViewCount;
 		this.postingScrapeCount = postingScrapeCount;
+		this.postingAuthor = postingAuthor;
+		this.postingDate = postingDate;
 	}
 
 	public String getPostingUrl() {
@@ -152,6 +156,22 @@ public class BlliPostingVO {
 		this.postingScrapeCount = postingScrapeCount;
 	}
 
+	public String getPostingAuthor() {
+		return postingAuthor;
+	}
+
+	public void setPostingAuthor(String postingAuthor) {
+		this.postingAuthor = postingAuthor;
+	}
+
+	public String getPostingDate() {
+		return postingDate;
+	}
+
+	public void setPostingDate(String postingDate) {
+		this.postingDate = postingDate;
+	}
+
 	public ArrayList<String> getRegex() {
 		return regex;
 	}
@@ -168,6 +188,9 @@ public class BlliPostingVO {
 				+ ", postingPhotoLink=" + postingPhotoLink
 				+ ", postingTotalResidenceTime=" + postingTotalResidenceTime
 				+ ", postingViewCount=" + postingViewCount
-				+ ", postingScrapeCount=" + postingScrapeCount + "]";
+				+ ", postingScrapeCount=" + postingScrapeCount
+				+ ", postingAuthor=" + postingAuthor + ", postingDate="
+				+ postingDate + "]";
 	}
+
 }
