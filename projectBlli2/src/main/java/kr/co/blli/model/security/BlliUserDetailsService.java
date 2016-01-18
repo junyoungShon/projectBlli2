@@ -18,7 +18,6 @@ public class BlliUserDetailsService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
 		BlliMemberVO blliMemberVO = memberDAO.findMemberByIdForLogin(username);
-		System.out.println("자동로그인 체크시 이곳으로 온다.+"+username);
 		if(blliMemberVO==null)
 			throw new UsernameNotFoundException(username);	
 		BlliUserDetails blliUserDetails = 

@@ -10,7 +10,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
-	
+
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<context:component-scan base-package="kr.co.blli">
 	<context:exclude-filter type="annotation" 
@@ -69,23 +69,24 @@
 	<!-- 스프링 시큐리트 설정 - 유알엘 패턴에 따른 접근 권한 제한 , 로그인 및 로그아웃 폼 커스터마이징 -->
 	<security:http use-expressions="true">
 		<security:intercept-url pattern="/admin_*" access="hasAuthority('ROLE_ADMIN')"/>
-		<security:intercept-url pattern="/member_*" access="hasAnyAuthority('ROLE_USER','ROLE_ADMIN')"/>
+		<security:intercept-url pattern="/member_*" access="hasAnyAuthority('ROLE_USER_KAKAO','ROLE_USER_EMAIL','ROLE_ADMIN','ROLE_USER_NAVER')" requires-channel=""/>
+		<security:intercept-url pattern="/memberjoin_*" access="hasAnyAuthority('ROLE_RESTRICTED_KAKAO','ROLE_RESTRICTED_EMAIL','ROLE_ADMIN','ROLE_RESTRICTED_NAVER')"/>
 		<security:intercept-url pattern="/**" access="permitAll"/>
 		<security:form-login
 			username-parameter="memberId"
 			password-parameter="memberPassword"
-			login-page="/login.do"
+			login-page="/authorityCheck.do"
 			default-target-url="/member_proceedingToMain.do"
-			authentication-failure-url="/login.do?fail=true"
+			authentication-failure-url="/authorityCheck.do?loginFail=true"
 		/>                
 		<security:logout
 			invalidate-session="true"
 			logout-success-url="/index.do"
 			delete-cookies="JSESSIONID"
 		/>
-		<security:remember-me services-ref="rememberMeServices" key="blli" />
+		<security:remember-me services-ref="rememberMeServices" key="blli" authentication-success-handler-ref="blliAuthenticationSuccessHandler"/>
 	</security:http>	
-	
+		<bean id="blliAuthenticationSuccessHandler" class="kr.co.blli.model.security.BlliAuthenticationSuccessHandler"/>
 	  <bean id="rememberMeServices"
 	   class="org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices"> 
 	   <property name="tokenRepository" ref="persistentTokenRepository" /> 
