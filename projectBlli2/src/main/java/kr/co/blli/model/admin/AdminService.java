@@ -6,6 +6,5 @@ import java.util.Map;
 
 public interface AdminService {
 	
-	public void sendMail(String recipient, String subject, String text, Map<String, Object> textParams, String formUrl) 
-			throws FileNotFoundException, URISyntaxException;
+	public void sendMail(String memberId, String mailForm) throws FileNotFoundException, URISyntaxException;
 }

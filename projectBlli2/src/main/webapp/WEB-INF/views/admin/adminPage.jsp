@@ -9,7 +9,7 @@
 <script type="text/javascript">
 
 	alert("메일 발송 성공~");
-	location.href = "index.do";
+	location.href = ${initParam.root}+"index.do";
 
 </script>
 <body>

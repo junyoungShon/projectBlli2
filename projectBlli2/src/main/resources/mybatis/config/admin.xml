@@ -2,8 +2,36 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- <mapper namespace="admin"> 
-
+ <mapper namespace="admin">
+ 	<!-- BlliMemberVO Result Map 설정 -->
+ 	<resultMap type="blliMemberVO" id="bmbvRM">
+ 		<result property="memberId" column="member_id"/>
+ 		<result property="memberEmail" column="member_email"/>
+ 		<result property="memberPassword" column="member_password"/>
+ 		<result property="memberName" column="member_name"/>
+ 		<result property="memberState" column="member_state"/>
+ 		<result property="recommendingBabyName" column="recommending_baby_name"/>
+ 		<result property="authority" column="authority"/>
+ 	</resultMap>
+ 	<!-- BlliMailVO Result Map 설정 -->
+ 	<resultMap type="BlliMailVO" id="bmlvRM">
+ 		<result property="mailForm" column="mail_form"/>
+ 		<result property="mailSubject" column="mail_subject"/>
+ 		<result property="mailContent" column="mail_content"/>
+ 		<result property="mailFormFile" column="mail_form_file"/>
+ 	</resultMap>
+ 	
+ 	<!-- 용호 작성 쿼리 -->
+ 	<!-- memberId로 회원의 메일주소를 찾습니다. -->
+	<select id="findMemberMailAddressById" resultType="java.lang.String">
+		select member_email from blli_member where member_id = #{value}
+	</select>
+ 	<!-- mailForm으로 해당 메일의 제목, 내용, form 파일을 찾는다. -->
+	<select id="findMailSubjectAndContentByMailForm" resultMap="bmlvRM">
+		select mail_subject, mail_content, mail_form_file from blli_mailing where mail_form = #{value}
+	</select>
+	<!-- 용호 쿼리 끝 -->
+	
  </mapper> 		
  
  

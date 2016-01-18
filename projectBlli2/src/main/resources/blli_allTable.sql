@@ -107,7 +107,7 @@ CREATE TABLE blli_posting (
 	posting_photo_link   VARCHAR2(300) NOT NULL ,
 	posting_total_residence_time NUMBER(8) default 0 ,
 	posting_view_count NUMBER(6) default 0 ,
-	posting_scrape_count NUMBER(3) default 0, -- 추가
+	posting_scrap_count NUMBER(3) default 0, -- 추가
 	posting_author           VARCHAR2(100) NOT NULL, -- 추가
 	posting_date             DATE NOT NULL, -- 추가
 	constraint fk_posting_small_prod foreign key(small_product) references blli_small_product(small_product)
@@ -181,8 +181,10 @@ CREATE TABLE blli_member_scrap (
 
 drop table blli_mailing cascade constraint;
 CREATE TABLE blli_mailing (
-	email_title          VARCHAR2(100) NOT NULL primary key,
-	email_content        CLOB NOT NULL 
+	mail_form			VARCHAR2(20) NOT NULL primary key,
+	mail_subject		VARCHAR2(100) NOT NULL,
+	mail_content        CLOB NOT NULL,
+	mail_form_file		VARCHAR2(30) NOT NULL
 );
 
 
