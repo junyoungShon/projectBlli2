@@ -15,8 +15,6 @@ drop table blli_member_scrap cascade constraint;
 drop table blli_mailing cascade constraint;
 
 
--- 테이블 생성 순서 : 
-
 drop table blli_member cascade constraint;
 CREATE TABLE blli_member (
 	member_id            VARCHAR2(30) NOT NULL primary key,
@@ -186,16 +184,12 @@ CREATE TABLE blli_mailing (
 
 
 
--- 총 12개 테이블
 ------------------------------------------------------------------------------------------------------------
 
 drop sequence blli_schedule_seq;
-
 create sequence blli_schedule_seq;
 
 ------------------------------------------------------------------------------------------------------------
-
-
 -- 대분류 > 중분류 > 소분류 > 포스팅 순으로 insert
 
 

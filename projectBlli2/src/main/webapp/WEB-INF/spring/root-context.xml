@@ -93,4 +93,24 @@
 	   <property name="key" value="blli" /> 
 	   <property name="alwaysRemember" value="true" /> 
 	   </bean> 
+	   
+	<!-- velocity 설정 -->
+	<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<property name="resourceLoaderPath" value="WEB-INF/velocity" />
+	</bean>
+	
+	<!-- mailSender 설정 -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" />
+		<property name="defaultEncoding" value="utf-8" />
+		<property name="username" value="dha8312@gmail.com" />
+		<property name="password" value="asdf1020!@" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.smtp.auth">true</prop>
+			</props>
+		</property>
+	</bean>
 </beans>
