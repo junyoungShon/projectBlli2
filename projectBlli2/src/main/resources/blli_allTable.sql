@@ -63,7 +63,8 @@ CREATE TABLE blli_auto_login (
 
 drop table blli_big_category cascade constraint;
 CREATE TABLE blli_big_category (
-	big_category         VARCHAR2(50) NOT NULL primary key 
+	big_category         VARCHAR2(50) NOT NULL primary key,
+	category_id          VARCHAR2(30) NOT NULL -- 추가
 );
 
 

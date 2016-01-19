@@ -45,6 +45,9 @@
 		<li><a href="${initParam.root}member_goMain.do">goMain.do</a>
 		<li><a href="${initParam.root}admin_goAdminPage.do">goAdminPage.do</a>
 		<li><a href="${initParam.root}sendMail.do?memberId=sk159753&mailForm=findPassword">sendMail.do</a>
+		<li><a href="${initParam.root}insert_big_category.do">대분류 리스트 긁어모아</a>
+		<li><a href="${initParam.root}insert_mid_category.do">중분류 리스트 긁어모아</a>
+		<li><a href="${initParam.root}insert_small_category.do">소분류 리스트 긁어모아</a>
 		<li><a href="${initParam.root}schedule_jsoupTest.do">포스팅 리스트 긁어모아</a>
 		<li><input type = "text" name="searchWord"><input type="submit" value="검색">
 		<li><a href="${initParam.root}postingListWithSmallProducts.do">소제품 하나로 추려줘</a></li>
