@@ -11,11 +11,11 @@ CREATE TABLE blli_small_product (
 	naver_shopping_link  VARCHAR2(300) NOT NULL ,
 	constraint fk_small_prod_mid_cate foreign key(mid_category) references blli_mid_category(mid_category)
 );
-
+select * from blli_small_product;
 
 drop table blli_posting_test cascade constraint;
 CREATE TABLE blli_posting_test (
-	posting_url          VARCHAR2(300) NOT NULL primary key,
+	posting_url          VARCHAR2(300) NOT NULL ,
 	small_product   VARCHAR2(200) NOT NULL ,
 	posting_title        VARCHAR2(450) NOT NULL , -- VARCHAR2(100) 에서 VARCHAR2(450)으로 수정!
 	posting_summary      VARCHAR2(600) NOT NULL , -- VARCHAR2(300) 에서 VARCHAR2(600)으로 수정!
@@ -30,7 +30,10 @@ CREATE TABLE blli_posting_test (
 	posting_scrape_count    NUMBER(3) default 0, -- 추가
 	posting_author           VARCHAR2(100) NOT NULL, -- 추가
 	posting_date             DATE NOT NULL, -- 추가
-	constraint fk_posting_small_prod_test foreign key(small_product) references test_small_product(small_product)
+	posting_order            NUMBER(3) NOT NULL, -- 추가
+	posting_reply_count      NUMBER(4) NOT NULL, -- 추가
+	constraint fk_posting_small_prod_test foreign key(small_product) references test_small_product(small_product),
+	constraint pk_posting_test primary key(posting_url, small_product) 
 );
 select * from blli_posting_test;
 
@@ -46,3 +49,42 @@ insert into test_small_product(small_product) values('베이비캠프 컴포트 
 
 select small_product from test_small_product;
 
+		
+select posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, posting_scrape_count, 
+		posting_like_count, posting_dislike_count, posting_author, to_char(posting_date,'YYYY.MM.DD') as posting_date
+		from blli_posting_test where small_product like '%' || '업그레이드' || '%'
+		
+select bp.posting_url, bp.posting_title, bp.posting_photo_link, bp.posting_summary, bp.posting_score, bp.small_product, bp.posting_scrape_count, 
+		bp.posting_like_count, bp.posting_dislike_count, bp.posting_author, to_char(bp.posting_date,'YYYY.MM.DD') as posting_date from(
+	select b.small_product from(		
+		select posting_url from blli_posting_test where small_product like '%' || '업그레이드' || '%'
+	)p, blli_posting_test b where b.posting_url = p.posting_url 
+)sp, blli_posting_test bp group by small_product having count(*) < 2;
+
+select posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, posting_scrape_count, 
+		posting_like_count, posting_dislike_count, posting_author, to_char(posting_date,'YYYY.MM.DD') as posting_date
+		from blli_posting_test where posting_url
+	
+select bp.posting_url, bp.posting_title, bp.posting_photo_link, bp.posting_summary, bp.posting_score, bp.small_product, bp.posting_scrape_count, 
+		bp.posting_like_count, bp.posting_dislike_count, bp.posting_author, to_char(bp.posting_date,'YYYY.MM.DD') as posting_date from(
+	select count(*) over (partition by b.posting_url) as small_product_count, b.posting_url from(		
+		select posting_url from blli_posting_test where small_product like '%' || '업그레이드' || '%'
+	)p, blli_posting_test b where b.posting_url = p.posting_url 
+)sp, blli_posting_test bp where sp.small_product_count = 1 and sp.posting_url = bp.posting_url;
+
+select bp.posting_url, bp.posting_title, bp.posting_photo_link, bp.posting_summary, bp.posting_score, bp.small_product, bp.posting_scrape_count, 
+bp.posting_like_count, bp.posting_dislike_count, bp.posting_author, to_char(bp.posting_date,'YYYY.MM.DD') as posting_date from(
+	select count(*) over (partition by b.posting_url) as small_product_count, b.posting_url from(		
+		select posting_url from blli_posting_test
+	)p, blli_posting_test b where b.posting_url = p.posting_url 
+)sp, blli_posting_test bp where sp.small_product_count = 1 and sp.posting_url = bp.posting_url
+		
+select posting_url, posting_title, small_product from(
+	select count(*) over (partition by posting_url) as small_product_count, posting_url, posting_title, small_product from blli_posting_test
+)s where s.small_product_count > 1
+		
+select small_product from blli_posting_test where posting_url = 'http://blog.naver.com/2000tsk/220330030245';
+		
+		
+		
+		
