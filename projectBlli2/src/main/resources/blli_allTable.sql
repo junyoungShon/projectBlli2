@@ -21,7 +21,7 @@ drop table blli_member cascade constraint;
 CREATE TABLE blli_member (
 	member_id            VARCHAR2(30) NOT NULL primary key,
 	member_email         VARCHAR2(50) NULL ,
-	member_password      VARCHAR2(20) NOT NULL ,
+	member_password      VARCHAR2(100) NOT NULL ,
 	member_name          VARCHAR2(30) NOT NULL ,
 	member_state         NUMBER(2) default 0 ,
 	authority            VARCHAR2(20),
