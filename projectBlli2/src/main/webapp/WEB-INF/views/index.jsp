@@ -48,7 +48,7 @@
 		<li><a href="${initParam.root}schedule_jsoupTest.do">포스팅 리스트 긁어모아</a>
 		<li><input type = "text" name="searchWord"><input type="submit" value="검색">
 		<li><a href="${initParam.root}postingListWithSmallProducts.do">소제품 하나로 추려줘</a></li>
-	<sec:authorize access="isAuthenticated()">
+	<sec:authorize access="is-Authenticated()">
 		<li><a href="${initParam.root}j_spring_security_logout">로그아웃</a>
 	</sec:authorize>
 	
@@ -159,7 +159,7 @@
 
 <a href="#" onclick="kakaoLogin()">
 <img src="${initParam.root}/image/login_with_kakao.png" style="width: 300px;height: 100px"></a>
-<div class="fb-login-button" href="#" onclick="checkLoginState()">
+<div class="fb-login-button" onclick="checkLoginState()">
 <img src="${initParam.root}/image/login_with_fb.png"></div>
 </body>
 </html>
