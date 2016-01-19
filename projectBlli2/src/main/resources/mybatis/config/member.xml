@@ -16,7 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	<!-- BlliBabyVO Result Map 설정 -->
  	<resultMap type="blliBabyVO" id="bbvRM">
  		<result property="babyName" column="baby_name"/>
- 		<result property="memberId" column="memberId"/>
+ 		<result property="memberId" column="member_Id"/>
  		<result property="babyBirthday" column="baby_birthday"/>
  		<result property="babySex" column="baby_Sex"/>
  		<result property="babyPhoto" column="baby_photo"/>
@@ -30,13 +30,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 회원의 정보를 삽입합니다. -->
 	<insert id="insertMemberInfo" parameterType="blliMemberVO">
 		insert into BLLI_MEMBER (member_Id,member_password,member_email,member_name,recommending_baby_name,authority,member_State)
-		values (#{memberId},#{memberPassword},#{memberEmail},#{memberName},#{recommendingBabyName},#{authority},1)
+		values (#{memberId},#{memberPassword},#{memberEmail},#{memberName},'미등록',#{authority},1)
 	</insert>
+	<!-- 회원의 이메일을 갱신한다. -->
+	<update id="updateMemberEmail">
+		update blli_member set member_email = #{memberEmail} where member_id = #{memberId}
+	</update>
+	<!-- 회원의 권한을 갱신한다. -->
+	<update id="updateMemberAuthority">
+		update blli_member set authority = #{authority} where member_id = #{memberId}
+	</update>
 	<!-- 회원의 아이정보를 삽입합니다. -->
-	<insert id="insertChildInfo" parameterType="blliBabyVO">
+	<insert id="insertBabyInfo" parameterType="blliBabyVO">
 		insert into BLLI_baby (member_Id,baby_name,baby_birthday,baby_sex,baby_photo)
-		values (#{memberId},#{babyName},#{babyBirthday},'남자','default')
+		values (#{memberId},#{babyName},#{babyBirthday},#{babySex},'default')
 	</insert>
+	
+	<!-- 회원의 이메일로 회원의 정보를 찾아온다. -->
+	<select id="selectBlliMemberInfoByMemberId" resultMap="bmvRM">
+		select member_id,member_email,member_name,member_state,authority,recommending_baby_name from blli_member where member_id=#{value}
+	</select>
+	<!-- 회원의 이메일로 아이들의 정보를 받아온다. -->
+	<select id="selectBabyListByMemberId" resultMap="bbvRM">
+		select baby_name , baby_birthday,baby_sex,baby_photo,member_id from blli_baby where member_id = #{value}
+	</select>
 	<!-- 준영 쿼리 끝 -->
  </mapper> 		
  
