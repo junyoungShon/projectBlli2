@@ -15,7 +15,7 @@
 <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.2.js"></script>
 </head>
 <body>
-
+<a href="iframeTest.do">아이프레임테스트</a>
  	<sec:authorize access="hasAnyRole('ROLE_USER')">
 	<script type="text/javascript">
 		location.href='${initParam.root}member_proceedingToMain.do'
