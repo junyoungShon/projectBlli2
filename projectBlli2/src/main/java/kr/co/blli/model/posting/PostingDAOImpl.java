@@ -1,5 +1,6 @@
 package kr.co.blli.model.posting;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -15,7 +16,7 @@ public class PostingDAOImpl implements PostingDAO{
 	private SqlSessionTemplate sqlSessionTemplate;
 	@Override
 	public int updatePosting(BlliPostingVO postingVO) {
-		return sqlSessionTemplate.insert("posting.updatePosting", postingVO);
+		return sqlSessionTemplate.update("posting.updatePosting", postingVO);
 	}
 	@Override
 	public void insertPosting(BlliPostingVO postingVO) {
@@ -24,5 +25,21 @@ public class PostingDAOImpl implements PostingDAO{
 	@Override
 	public List<BlliPostingVO> searchJsoupTest(String searchWord) {
 		return sqlSessionTemplate.selectList("posting.searchJsoupTest", searchWord);
+	}
+	@Override
+	public List<BlliPostingVO> postingListWithSmallProducts() {
+		return sqlSessionTemplate.selectList("posting.postingListWithSmallProducts");
+	}
+	@Override
+	public List<String> searchProducts(String postingUrl) {
+		return sqlSessionTemplate.selectList("posting.searchProducts", postingUrl);
+	}
+	@Override
+	public void deleteProduct(HashMap<String, String> map) {
+		sqlSessionTemplate.delete("posting.deleteProduct", map);
+	}
+	@Override
+	public int isPostingUrl(String postingUrl) {
+		return sqlSessionTemplate.selectOne("posting.isPostingUrl",postingUrl);
 	}
 }

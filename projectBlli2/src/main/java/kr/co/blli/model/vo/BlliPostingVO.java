@@ -2,6 +2,7 @@ package kr.co.blli.model.vo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class BlliPostingVO {
 	private String postingUrl;
@@ -19,6 +20,11 @@ public class BlliPostingVO {
 	private int postingScrapeCount;
 	private String postingAuthor;
 	private String postingDate;
+	private int postingOrder;
+	private int postingReplyCount;
+	private ArrayList<String> imageList;
+	private HashMap<String, String> smallProductImage;
+	private ArrayList<String> smallProductList;
 	
 	public final ArrayList<String> regex = new ArrayList<String>(Arrays.asList("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>","<[^>]*>",
 			"<!--.*-->","&nbsp;","&#xfeff;","&#x200b;","&lt;","&gt;","&amp;","&#x1112;","\n"));
@@ -33,7 +39,11 @@ public class BlliPostingVO {
 			int postingScore, int postingLikeCount, int postingDislikeCount,
 			int postingMediaCount, String postingPhotoLink,
 			int postingTotalResidenceTime, int postingViewCount,
-			int postingScrapeCount, String postingAuthor, String postingDate) {
+			int postingScrapeCount, String postingAuthor, String postingDate,
+			int postingOrder, int postingReplyCount,
+			ArrayList<String> imageList,
+			HashMap<String, String> smallProductImage,
+			ArrayList<String> smallProductList) {
 		super();
 		this.postingUrl = postingUrl;
 		this.smallProduct = smallProduct;
@@ -50,6 +60,11 @@ public class BlliPostingVO {
 		this.postingScrapeCount = postingScrapeCount;
 		this.postingAuthor = postingAuthor;
 		this.postingDate = postingDate;
+		this.postingOrder = postingOrder;
+		this.postingReplyCount = postingReplyCount;
+		this.imageList = imageList;
+		this.smallProductImage = smallProductImage;
+		this.smallProductList = smallProductList;
 	}
 
 	public String getPostingUrl() {
@@ -172,6 +187,46 @@ public class BlliPostingVO {
 		this.postingDate = postingDate;
 	}
 
+	public int getPostingOrder() {
+		return postingOrder;
+	}
+
+	public void setPostingOrder(int postingOrder) {
+		this.postingOrder = postingOrder;
+	}
+
+	public int getPostingReplyCount() {
+		return postingReplyCount;
+	}
+
+	public void setPostingReplyCount(int postingReplyCount) {
+		this.postingReplyCount = postingReplyCount;
+	}
+
+	public ArrayList<String> getImageList() {
+		return imageList;
+	}
+
+	public void setImageList(ArrayList<String> imageList) {
+		this.imageList = imageList;
+	}
+
+	public HashMap<String, String> getSmallProductImage() {
+		return smallProductImage;
+	}
+
+	public void setSmallProductImage(HashMap<String, String> smallProductImage) {
+		this.smallProductImage = smallProductImage;
+	}
+
+	public ArrayList<String> getSmallProductList() {
+		return smallProductList;
+	}
+
+	public void setSmallProductList(ArrayList<String> smallProductList) {
+		this.smallProductList = smallProductList;
+	}
+
 	public ArrayList<String> getRegex() {
 		return regex;
 	}
@@ -190,7 +245,9 @@ public class BlliPostingVO {
 				+ ", postingViewCount=" + postingViewCount
 				+ ", postingScrapeCount=" + postingScrapeCount
 				+ ", postingAuthor=" + postingAuthor + ", postingDate="
-				+ postingDate + "]";
+				+ postingDate + ", postingOrder=" + postingOrder
+				+ ", postingReplyCount=" + postingReplyCount + ", imageList="
+				+ imageList + ", smallProductList=" + smallProductList + "]";
 	}
 
 }
