@@ -183,10 +183,8 @@ drop table blli_mailing cascade constraint;
 CREATE TABLE blli_mailing (
 	mail_form			VARCHAR2(20) NOT NULL primary key,
 	mail_subject		VARCHAR2(100) NOT NULL,
-	mail_content        CLOB NOT NULL,
 	mail_form_file		VARCHAR2(30) NOT NULL
 );
-
 
 
 ------------------------------------------------------------------------------------------------------------

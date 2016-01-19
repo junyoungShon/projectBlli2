@@ -1,16 +1,19 @@
 package kr.co.blli.model.admin;
 
 import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.mail.Message.RecipientType;
+import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import kr.co.blli.model.vo.BlliMailVO;
+import kr.co.blli.model.vo.BlliMemberVO;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -40,40 +43,39 @@ public class AdminServiceImpl implements AdminService{
 	  * @param formUrl
 	  * @throws FileNotFoundException
 	  * @throws URISyntaxException
+	 * @throws MessagingException 
+	 * @throws UnsupportedEncodingException 
 	  */
 	@Override
-	public void sendMail(String memberId, String mailForm) throws FileNotFoundException, URISyntaxException {
+	public void sendMail(String memberId, String mailForm) throws FileNotFoundException, URISyntaxException, UnsupportedEncodingException, MessagingException {
 		
-		BlliMailVO mvo = adminDAO.findMailSubjectAndContentByMailForm(mailForm);
+		BlliMailVO mlvo = adminDAO.findMailSubjectAndContentByMailForm(mailForm);
+		BlliMemberVO mbvo = adminDAO.findMemberInfoById(memberId);
 		
-		String recipient = adminDAO.findMemberMailAddressById(memberId);
-		String subject = mvo.getMailSubject();
-		String content = mvo.getMailContent();
-		String formUrl = mvo.getMailForm();
+		String recipient = mbvo.getMemberEmail();
+		String subject = mlvo.getMailSubject();
+		String contentFile = mlvo.getMailContentFile();
 		
 		Map<String, Object> textParams = new HashMap<String, Object>();
 		
-		textParams.put("content", content);
-		textParams.put("contentHeight", 150);
-
-		try {
-			MimeMessage message = mailSender.createMimeMessage();
-			
-			String mailText = null;
-			if(textParams != null) {
-				mailText = VelocityEngineUtils.mergeTemplateIntoString(velocityConfig.getVelocityEngine(), formUrl, "utf-8", textParams);
-			}
-			
-			message.setFrom(new InternetAddress("yongho.kim@blli.co.kr"));
-			message.addRecipient(RecipientType.TO, new InternetAddress(recipient)); //import javax.mail.Message.RecipientType;
-			message.setSubject(subject);
-			message.setText(mailText, "utf-8", "html");
-			
-			mailSender.send(message);
-			
-		} catch(Exception e) {
-			e.printStackTrace();
+		if(mailForm.equals("findPassword")) {
+			textParams.put("memberPassword", mbvo.getMemberPassword());
+			textParams.put("memberName", mbvo.getMemberName());
 		}
+		
+		MimeMessage message = mailSender.createMimeMessage();
+		
+		String mailText = null;
+		if(textParams != null) {
+			mailText = VelocityEngineUtils.mergeTemplateIntoString(velocityConfig.getVelocityEngine(), contentFile, "utf-8", textParams);
+		}
+		
+		message.setFrom(new InternetAddress("admin@blli.co.kr","블리", "utf-8"));
+		message.addRecipient(RecipientType.TO, new InternetAddress(recipient)); //import javax.mail.Message.RecipientType;
+		message.setSubject(subject);
+		message.setText(mailText, "utf-8", "html");
+		
+		mailSender.send(message);
 		
 	}
 	

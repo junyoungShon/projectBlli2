@@ -6,7 +6,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 </head>
-<body>
-여기는 관리자 페이쟈
+<script type="text/javascript">
+
+	alert("메일 발송 성공~");
+	location.href = ${initParam.root}+"index.do";
+
+</script>
+<body bgcolor="lime">
 </body>
 </html>
