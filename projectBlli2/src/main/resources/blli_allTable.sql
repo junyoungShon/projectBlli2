@@ -63,7 +63,8 @@ CREATE TABLE blli_auto_login (
 
 drop table blli_big_category cascade constraint;
 CREATE TABLE blli_big_category (
-	big_category         VARCHAR2(50) NOT NULL primary key 
+	big_category         VARCHAR2(50) NOT NULL primary key,
+	category_id          VARCHAR2(30) NOT NULL -- 추가
 );
 
 
@@ -185,10 +186,8 @@ drop table blli_mailing cascade constraint;
 CREATE TABLE blli_mailing (
 	mail_form			VARCHAR2(20) NOT NULL primary key,
 	mail_subject		VARCHAR2(100) NOT NULL,
-	mail_content        CLOB NOT NULL,
 	mail_form_file		VARCHAR2(30) NOT NULL
 );
-
 
 
 ------------------------------------------------------------------------------------------------------------

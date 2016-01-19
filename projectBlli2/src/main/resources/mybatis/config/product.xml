@@ -3,11 +3,20 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  <mapper namespace="product"> 
+ 
 	<select id="getSmallProduct" resultType="String">
 		select small_product from test_small_product
 	</select>
+	
+	<insert id="insertBigCategory">
+		insert into blli_big_category(category_id, big_category) values(#{categoryId}, #{bigCategory})
+	</insert>
+	
+	<select id="getBigCategoryId" resultType="String">
+		select category_id from blli_big_category
+	</select>
+	
  </mapper> 		
- 
  
  
  

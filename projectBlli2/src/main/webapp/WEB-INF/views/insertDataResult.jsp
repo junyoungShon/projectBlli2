@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-여기는 관리자 페이쟈
+등록 완료!
 </body>
 </html>

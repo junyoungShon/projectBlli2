@@ -4,20 +4,18 @@ public class BlliMailVO {
 	
 	private String mailForm;
 	private String mailSubject;
-	private String mailContent;
-	private String mailFormFile;
+	private String mailContentFile;
 	
 	public BlliMailVO() {
 		super();
 	}
 
-	public BlliMailVO(String mailForm, String mailSubject, String mailContent,
-			String mailFormFile) {
+	public BlliMailVO(String mailForm, String mailSubject,
+			String mailContentFile) {
 		super();
 		this.mailForm = mailForm;
 		this.mailSubject = mailSubject;
-		this.mailContent = mailContent;
-		this.mailFormFile = mailFormFile;
+		this.mailContentFile = mailContentFile;
 	}
 
 	public String getMailForm() {
@@ -36,27 +34,18 @@ public class BlliMailVO {
 		this.mailSubject = mailSubject;
 	}
 
-	public String getMailContent() {
-		return mailContent;
+	public String getMailContentFile() {
+		return mailContentFile;
 	}
 
-	public void setMailContent(String mailContent) {
-		this.mailContent = mailContent;
-	}
-
-	public String getMailFormFile() {
-		return mailFormFile;
-	}
-
-	public void setMailFormFile(String mailFormFile) {
-		this.mailFormFile = mailFormFile;
+	public void setMailContentFile(String mailContentFile) {
+		this.mailContentFile = mailContentFile;
 	}
 
 	@Override
 	public String toString() {
 		return "BlliMailVO [mailForm=" + mailForm + ", mailSubject="
-				+ mailSubject + ", mailContent=" + mailContent
-				+ ", mailFormFile=" + mailFormFile + "]";
+				+ mailSubject + ", mailContentFile=" + mailContentFile + "]";
 	}
-	
+
 }

@@ -28,13 +28,14 @@ drop table blli_mailing cascade constraint;
 CREATE TABLE blli_mailing (
 	mail_form			VARCHAR2(20) NOT NULL primary key,
 	mail_subject		VARCHAR2(100) NOT NULL,
-	mail_content        CLOB NOT NULL,
-	mail_form_file		VARCHAR2(30) NOT NULL
+	mail_content_file		VARCHAR2(30) NOT NULL
 );
 
 
 insert into blli_member(member_id, member_email, member_password, member_name, member_state, authority, recommending_baby_name) 
 	values('sk159753', 'sk1597530@gmail.com', 'dd', 'dd', '0', 'dd', 'dd');
+	
+select * from blli_member;
 
-insert into blli_mailing(mail_form, mail_subject, mail_content, mail_form_file) values('findPassword', 'mail_subject', 'mail_content', 'mailForm_findPassword.vm');
+insert into blli_mailing(mail_form, mail_subject, mail_content_file) values('findPassword', 'mail_subject', 'mailForm_findPassword.vm');
 select * from blli_mailing;

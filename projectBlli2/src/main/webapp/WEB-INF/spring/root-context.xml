@@ -105,11 +105,13 @@
 	
 	<!-- mailSender 설정 -->
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<!-- gmail (worksmobile에서 보낸 것으로 설정)-->
 		<property name="host" value="smtp.gmail.com" />
 		<property name="port" value="587" />
+		<property name="username" value="blli150608" />
+		<property name="password" value="wzylaavucuvlpvwh" />
+		
 		<property name="defaultEncoding" value="utf-8" />
-		<property name="username" value="dha8312@gmail.com" />
-		<property name="password" value="asdf1020!@" />
 		<property name="javaMailProperties">
 			<props>
 				<prop key="mail.smtp.starttls.enable">true</prop>
@@ -121,5 +123,5 @@
 	<!-- spring-task 설정 -->
 	<task:scheduler id="jobScheduler" pool-size="10" />
 	<task:annotation-driven scheduler="jobScheduler" />
-	
+
 </beans>

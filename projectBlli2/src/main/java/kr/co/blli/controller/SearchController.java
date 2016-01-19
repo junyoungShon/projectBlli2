@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import kr.co.blli.model.posting.PostingService;
+import kr.co.blli.model.product.ProductService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,8 +17,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class SearchController {
+	
 	@Resource
 	private PostingService postingService;
+	
+	@Resource
+	private ProductService productService;
+	
 	@RequestMapping("schedule_jsoupTest.do")
 	public ModelAndView JsoupTest() throws IOException{
 		String result = postingService.jsoupTest();
@@ -35,5 +41,15 @@ public class SearchController {
 	@RequestMapping("selectProduct.do")
 	public void selectProduct(@RequestBody List<Map<String, Object>> urlAndProduct){
 		postingService.selectProduct(urlAndProduct);
+	}
+	@RequestMapping("insert_big_category.do")
+	public ModelAndView insertBigCategory() throws IOException{
+		productService.insertBigCategory();
+		return new ModelAndView("insertDataResult");
+	}
+	@RequestMapping("insert_mid_category.do")
+	public ModelAndView insertMidCategory() throws IOException{
+		productService.insertMidCategory();
+		return new ModelAndView("insertDataResult");
 	}
 }

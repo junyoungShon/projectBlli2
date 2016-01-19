@@ -1,10 +1,5 @@
 package kr.co.blli.controller;
 
-import java.io.FileNotFoundException;
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.annotation.Resource;
 
 import kr.co.blli.model.admin.AdminService;
@@ -21,14 +16,15 @@ public class AdminController {
 	@RequestMapping("sendMail.do")
 	public String sendMail(String memberId, String mailForm) {
 		
+		String viewName = "admin/sendMail_success";
+		
 		try {
 			adminService.sendMail(memberId, mailForm);
-		} catch (FileNotFoundException fe) {
-			fe.printStackTrace();
-		} catch (URISyntaxException ue) {
-			ue.printStackTrace(); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			viewName = "admin/sendMail_fail";
 		}
 		
-		return "admin/adminPage";
+		return viewName;
 	}
 }

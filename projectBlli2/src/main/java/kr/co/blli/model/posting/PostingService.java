@@ -15,4 +15,5 @@ public interface PostingService {
 	abstract ArrayList<BlliPostingVO> postingListWithSmallProducts() throws IOException;
 
 	abstract void selectProduct(List<Map<String, Object>> urlAndProduct);
+
 }

@@ -85,6 +85,65 @@ select posting_url, posting_title, small_product from(
 		
 select small_product from blli_posting_test where posting_url = 'http://blog.naver.com/2000tsk/220330030245';
 		
-		
+CREATE TABLE blli_big_category (
+	big_category         VARCHAR2(50) NOT NULL primary key,
+	category_id          VARCHAR2(30) NOT NULL -- 추가
+);
+drop table blli_big_category;
+
+select * from blli_big_category;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		
 		

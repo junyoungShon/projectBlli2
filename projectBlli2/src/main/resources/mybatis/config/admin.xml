@@ -17,22 +17,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	<resultMap type="BlliMailVO" id="bmlvRM">
  		<result property="mailForm" column="mail_form"/>
  		<result property="mailSubject" column="mail_subject"/>
- 		<result property="mailContent" column="mail_content"/>
- 		<result property="mailFormFile" column="mail_form_file"/>
+ 		<result property="mailContentFile" column="mail_content_file"/>
  	</resultMap>
  	
  	<!-- 용호 작성 쿼리 -->
  	<!-- memberId로 회원의 메일주소를 찾습니다. -->
-	<select id="findMemberMailAddressById" resultType="java.lang.String">
-		select member_email from blli_member where member_id = #{value}
+	<select id="findMemberInfoById" resultMap="bmbvRM">
+		select member_id, member_email, member_password, member_name from blli_member where member_id = #{value}
 	</select>
  	<!-- mailForm으로 해당 메일의 제목, 내용, form 파일을 찾는다. -->
 	<select id="findMailSubjectAndContentByMailForm" resultMap="bmlvRM">
-		select mail_subject, mail_content, mail_form_file from blli_mailing where mail_form = #{value}
+		select mail_subject, mail_content_file from blli_mailing where mail_form = #{value}
 	</select>
 	<!-- 용호 쿼리 끝 -->
 	
- </mapper> 		
+ </mapper>
  
  
  
