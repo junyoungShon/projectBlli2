@@ -9,7 +9,7 @@
 </head>
 <body>
 	<!-- 회원가입페이지에 ROLE_USER접근 시 alert과 메인페이지 이동 -->
-	<sec:authorize access="hasRole('ROLE_USER','ROLE_ADMIN')">
+	<sec:authorize access="hasAnyRole('ROLE_USER','ROLE_ADMIN')">
 		<script type="text/javascript">
 			alert('이미 회원가입은 완료하셨습니다^^ 메인으로 이동할게요~');
 			location.href=${initParam.root}+'member_proceedingToMain.do';
@@ -24,8 +24,8 @@
 	</sec:authorize>
 	
 	<!-- 회원가입페이지에 비회원 접근 시 회원가입 폼 출력 -->
-	<sec:authorize access="isAnoymous()">
-		<form name="memberJoin" action="goInsertBabyInfoByEmail.do" method="post">
+	<sec:authorize access="isAnonymous()">
+		<form name="memberJoin" action="joinMemberByEmail.do" method="post">
 			회원아이디(이메일)<input type="text" name="memberId"><br>
 			회원 비밀번호<input type="password" name="memberPassword"><br>
 			회원 이름<input type="text" name="memberName"><br>

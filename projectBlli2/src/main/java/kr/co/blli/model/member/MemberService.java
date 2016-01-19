@@ -11,15 +11,11 @@ public interface MemberService {
 
 	public BlliMemberVO findMemberById(BlliMemberVO blliMemberVO);
 
-	public void joinMemberByKakao(BlliMemberVO blliMemberVO);
-
-	public void insertBabyInfoForKakaoUser(ArrayList<BlliBabyVO> list,
-			BlliMemberVO blliMemberVO);
-
-	public void insertBabyInfoForEmailUser(ArrayList<BlliBabyVO> list);
+	public void insertBabyInfo(ArrayList<BlliBabyVO> list,BlliMemberVO blliMemberVO);
 
 	public BlliMemberVO selectBlliMemberInfoByMemberId(String memberId);
 
-	public void joinMemberByNaver(BlliMemberVO blliMemberVO);
+	public void joinMemberBySNS(BlliMemberVO blliMemberVO);
+
 
 }

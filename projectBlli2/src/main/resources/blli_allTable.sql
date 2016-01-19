@@ -19,7 +19,7 @@ drop table blli_member cascade constraint;
 CREATE TABLE blli_member (
 	member_id            VARCHAR2(30) NOT NULL primary key,
 	member_email         VARCHAR2(50) NULL ,
-	member_password      VARCHAR2(20) NOT NULL ,
+	member_password      VARCHAR2(100) NOT NULL ,
 	member_name          VARCHAR2(30) NOT NULL ,
 	member_state         NUMBER(2) default 0 ,
 	authority            VARCHAR2(20),
@@ -110,6 +110,8 @@ CREATE TABLE blli_posting (
 	posting_scrap_count NUMBER(3) default 0, -- 추가
 	posting_author           VARCHAR2(100) NOT NULL, -- 추가
 	posting_date             DATE NOT NULL, -- 추가
+	posting_order            NUMBER(3) NOT NULL, -- 추가
+	posting_reply_count      NUMBER(4) NOT NULL, -- 추가
 	constraint fk_posting_small_prod foreign key(small_product) references blli_small_product(small_product)
 );
 

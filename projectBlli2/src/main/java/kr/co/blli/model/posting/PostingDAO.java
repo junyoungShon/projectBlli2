@@ -1,5 +1,6 @@
 package kr.co.blli.model.posting;
 
+import java.util.HashMap;
 import java.util.List;
 
 import kr.co.blli.model.vo.BlliPostingVO;
@@ -14,5 +15,13 @@ public interface PostingDAO {
 	void insertPosting(BlliPostingVO postingVO);
 
 	List<BlliPostingVO> searchJsoupTest(String searchWord);
-	
+
+	List<BlliPostingVO> postingListWithSmallProducts();
+
+	List<String> searchProducts(String postingUrl);
+
+	void deleteProduct(HashMap<String, String> map);
+
+	int isPostingUrl(String postingUrl);
+
 }

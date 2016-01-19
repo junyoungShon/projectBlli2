@@ -6,7 +6,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  
  	<resultMap type="blliPostingVO" id="bpvRM">
  		<result property="postingUrl" column="posting_url"/>
- 		<result property="smallProduct" column="small_product"/>
  		<result property="postingTitle" column="posting_title"/>
  		<result property="postingSummary" column="posting_summary"/>
  		<result property="postingContent" column="posting_content"/>
@@ -20,27 +19,53 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="postingScrapeCount" column="posting_scrape_count"/>
  		<result property="postingAuthor" column="posting_author"/>
  		<result property="postingDate" column="posting_date"/>
+ 		<result property="postingOrder" column="posting_order"/>
+ 		<result property="postingReplyCount" column="posting_reply_count"/>
+ 		<result property="smallProduct" column="small_product"/>
  	</resultMap>
  	
  	<update id="updatePosting">
  		update blli_posting_test set posting_title = #{postingTitle}, posting_photo_link = #{postingPhotoLink}, posting_media_count = #{postingMediaCount},
- 		posting_content = #{postingContent}, posting_summary = #{postingSummary}, small_product = #{smallProduct}, posting_author = #{postingAuthor}, posting_date = #{postingDate} 
- 		where posting_url = #{postingUrl}
+ 		posting_content = #{postingContent}, posting_summary = #{postingSummary}, posting_author = #{postingAuthor}, 
+ 		posting_date = #{postingDate}, posting_order = #{postingOrder}, posting_reply_count = #{postingReplyCount} 
+ 		where posting_url = #{postingUrl} and small_product = #{smallProduct}
  	</update>
  	
- 	<insert id="insertPosting">
- 		insert into blli_posting_test(posting_url, posting_title, posting_photo_link, posting_media_count, posting_content, posting_summary, small_product, posting_author, posting_date)
- 		values(#{postingUrl}, #{postingTitle}, #{postingPhotoLink}, #{postingMediaCount}, #{postingContent}, #{postingSummary}, #{smallProduct}, #{postingAuthor}, #{postingDate})
- 	</insert>
+ 	<select id="isPostingUrl" resultType="int">
+ 		select count(small_product) from blli_posting_test where posting_url = #{postingUrl}
+ 	</select>
  	
+ 	<insert id="insertPosting">
+ 		insert into blli_posting_test(posting_url, small_product, posting_title, posting_photo_link, posting_media_count, posting_content, posting_summary,
+ 		posting_author, posting_date, posting_order, posting_reply_count)
+ 		values(#{postingUrl}, #{smallProduct}, #{postingTitle}, #{postingPhotoLink}, #{postingMediaCount}, #{postingContent}, #{postingSummary},
+ 		#{postingAuthor}, #{postingDate}, #{postingOrder}, #{postingReplyCount})
+ 	</insert>
+
 	<select id="searchJsoupTest" resultMap="bpvRM">
-		select posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, posting_scrape_count, 
-		posting_like_count, posting_dislike_count, posting_author, to_char(posting_date,'YYYY.MM.DD') as posting_date
-		from blli_posting_test where small_product like '%' || #{searchWord} || '%'
+		select bp.posting_url, bp.posting_title, bp.posting_photo_link, bp.posting_summary, bp.posting_score, bp.small_product, bp.posting_scrape_count, 
+		bp.posting_like_count, bp.posting_dislike_count, bp.posting_author, to_char(bp.posting_date,'YYYY.MM.DD') as posting_date from(
+			select count(*) over (partition by b.posting_url) as small_product_count, b.posting_url from(		
+				select posting_url from blli_posting_test where small_product like '%' || #{searchWord} || '%'
+			)p, blli_posting_test b where b.posting_url = p.posting_url 
+		)sp, blli_posting_test bp where sp.small_product_count = 1 and sp.posting_url = bp.posting_url
 	</select>
 	
+	<select id="postingListWithSmallProducts" resultMap="bpvRM">
+		select posting_url, posting_title, small_product from(
+			select count(*) over (partition by posting_url) as small_product_count, posting_url, posting_title, small_product from blli_posting_test
+		)s where s.small_product_count > 1
+	</select>
+	
+	<select id="searchProducts" resultType="String">
+		select small_product from blli_posting_test where posting_url = #{postingUrl}
+	</select>
+	
+	<delete id="deleteProduct">
+		delete from blli_posting_test where posting_url = #{postingUrl} and small_product = #{smallProduct}
+	</delete>
+	
  </mapper> 		
- 
  
  
  
