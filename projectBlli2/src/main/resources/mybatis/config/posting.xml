@@ -24,6 +24,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="smallProduct" column="small_product"/>
  	</resultMap>
  	
+ 	<select id="countOfPostingUrl" resultType="int">
+ 		select count(posting_url) from blli_posting_test where posting_url = #{postingUrl}
+ 	</select>
+ 	
+ 	<select id="getPostingStatus" resultType="String">
+ 		select posting_status from blli_posting_test where posting_url = #{postingUrl}
+ 	</select>
+ 	
+ 	<select id="getAllPostingStatus" resultType="String">
+ 		select posting_status from blli_posting_test where posting_url = #{postingUrl}
+ 	</select>
+ 	
  	<update id="updatePosting">
  		update blli_posting_test set posting_title = #{postingTitle}, posting_photo_link = #{postingPhotoLink}, posting_media_count = #{postingMediaCount},
  		posting_content = #{postingContent}, posting_summary = #{postingSummary}, posting_author = #{postingAuthor}, 
@@ -31,15 +43,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		where posting_url = #{postingUrl} and small_product = #{smallProduct}
  	</update>
  	
- 	<select id="isPostingUrl" resultType="int">
- 		select count(small_product) from blli_posting_test where posting_url = #{postingUrl}
- 	</select>
- 	
  	<insert id="insertPosting">
  		insert into blli_posting_test(posting_url, small_product, posting_title, posting_photo_link, posting_media_count, posting_content, posting_summary,
- 		posting_author, posting_date, posting_order, posting_reply_count)
+ 		posting_author, posting_date, posting_order, posting_reply_count, posting_status)
  		values(#{postingUrl}, #{smallProduct}, #{postingTitle}, #{postingPhotoLink}, #{postingMediaCount}, #{postingContent}, #{postingSummary},
- 		#{postingAuthor}, #{postingDate}, #{postingOrder}, #{postingReplyCount})
+ 		#{postingAuthor}, #{postingDate}, #{postingOrder}, #{postingReplyCount}, 'unconfirmed')
  	</insert>
 
 	<select id="searchJsoupTest" resultMap="bpvRM">

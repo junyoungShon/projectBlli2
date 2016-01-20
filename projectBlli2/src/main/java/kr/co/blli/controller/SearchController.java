@@ -52,4 +52,9 @@ public class SearchController {
 		productService.insertMidCategory();
 		return new ModelAndView("insertDataResult");
 	}
+	@RequestMapping("insert_small_product.do")
+	public ModelAndView insertSmallProduct() throws IOException{
+		productService.insertSmallProduct();
+		return new ModelAndView("insertDataResult");
+	}
 }

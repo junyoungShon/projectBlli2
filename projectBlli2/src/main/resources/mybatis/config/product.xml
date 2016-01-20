@@ -4,21 +4,50 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  <mapper namespace="product"> 
  
+ 	<resultMap type="blliBigCategoryVO" id="bbcvRM">
+ 		<result property="bigCategory" column="big_category"/>
+ 		<result property="categoryId" column="category_id"/>
+ 	</resultMap>
+ 	
+ 	<resultMap type="blliMidCategoryVO" id="bmcvRM">
+ 		<result property="midCategory" column="mid_category"/>
+ 		<result property="midCategoryInfo" column="mid_category_info"/>
+ 		<result property="midCategoryMainPhotoLink" column="mid_category_main_photo_link"/>
+ 		<result property="midCategoryWhentouseMin" column="mid_category_whentouse_min"/>
+ 		<result property="midCategoryWhentouseMax" column="mid_category_whentouse_max"/>
+ 		<result property="bigCategory" column="big_category"/>
+ 		<result property="categoryId" column="category_id"/>
+ 	</resultMap>
+ 
 	<select id="getSmallProduct" resultType="String">
 		select small_product from test_small_product
 	</select>
+	
+	<update id="updateBigCategory">
+		update blli_big_category set category_id = #{categoryId} where big_category = #{bigCategory}
+	</update>
 	
 	<insert id="insertBigCategory">
 		insert into blli_big_category(category_id, big_category) values(#{categoryId}, #{bigCategory})
 	</insert>
 	
-	<select id="getBigCategoryId" resultType="String">
-		select category_id from blli_big_category
+	<select id="getBigCategory" resultMap="bbcvRM">
+		select category_id, big_category from blli_big_category
+	</select>
+	
+	<update id="updateMidCategory">
+		update blli_mid_category set category_id = #{categoryId} where mid_category = #{midCategory} and big_category = #{bigCategory}
+	</update>
+	
+	<insert id="insertMidCategory">
+		insert into blli_mid_category(mid_category, mid_category_main_photo_link, big_category, category_id) values(#{midCategory}, #{midCategoryMainPhotoLink}, #{bigCategory}, #{categoryId})
+	</insert>
+	
+	<select id="getMidCategory" resultMap="bmcvRM">
+		select category_id, mid_category from blli_mid_category
 	</select>
 	
  </mapper> 		
- 
- 
  
  
  

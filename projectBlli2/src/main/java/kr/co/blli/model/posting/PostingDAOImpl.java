@@ -39,7 +39,15 @@ public class PostingDAOImpl implements PostingDAO{
 		sqlSessionTemplate.delete("posting.deleteProduct", map);
 	}
 	@Override
-	public int isPostingUrl(String postingUrl) {
-		return sqlSessionTemplate.selectOne("posting.isPostingUrl",postingUrl);
+	public int countOfPostingUrl(String postingUrl) {
+		return sqlSessionTemplate.selectOne("posting.countOfPostingUrl", postingUrl);
+	}
+	@Override
+	public String getPostingStatus(String postingUrl) {
+		return sqlSessionTemplate.selectOne("posting.getPostingStatus",postingUrl);
+	}
+	@Override
+	public List<String> getAllPostingStatus(String postingUrl) {
+		return sqlSessionTemplate.selectList("posting.getAllPostingStatus",postingUrl);
 	}
 }

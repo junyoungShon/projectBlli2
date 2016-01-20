@@ -32,6 +32,7 @@ CREATE TABLE blli_posting_test (
 	posting_date             DATE NOT NULL, -- 추가
 	posting_order            NUMBER(3) NOT NULL, -- 추가
 	posting_reply_count      NUMBER(4) NOT NULL, -- 추가
+	posting_status            VARCHAR2(30) NOT NULL, -- 추가
 	constraint fk_posting_small_prod_test foreign key(small_product) references test_small_product(small_product),
 	constraint pk_posting_test primary key(posting_url, small_product) 
 );
@@ -93,9 +94,22 @@ drop table blli_big_category;
 
 select * from blli_big_category;
 
+CREATE TABLE blli_mid_category (
+	mid_category         VARCHAR2(100) NOT NULL, -- VARCHAR2(50)을 VARCHAR2(100)으로 수정
+	mid_category_info    VARCHAR2(250) NULL ,
+	mid_category_main_photo_link VARCHAR2(300) NOT NULL ,
+	mid_category_whentouse NUMBER(20) NULL ,
+	big_category         VARCHAR2(50) NOT NULL ,
+	category_id          VARCHAR2(30) NOT NULL, -- 추가
+	constraint pk_mid_category primary key (mid_category, category_id), -- category와 id를 복합키로 변경
+	constraint fk_mid_cate_big_cate foreign key(big_category) references blli_big_category(big_category)
+);
 
+update blli_mid_category set category_id = 'asd' where mid_category = '가디건' and big_category = '임부복';
 
+select * from blli_mid_category;
 
+select category_id, big_category from blli_big_category
 
 
 
