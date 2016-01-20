@@ -1,5 +1,6 @@
 package kr.co.blli.controller;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import javax.annotation.Resource;
@@ -47,35 +48,42 @@ public class MemberController {
 	}
 	/**
 	  * @Method Name : proceedingToMain
-	  * @Method 설명 : 로그인 혹은 회원 가입 후 메인으로 진입하기 위한 중간페이지
+	  * @Method 설명 : 로그인 혹은 회원 가입 후 메인으로 진입하기 위한 중간페이지로서 세션 처리를 담당한다.
 	  * @작성일 : 2016. 1. 14.
 	  * @작성자 : junyoung
 	  * @return
 	 */
 	@RequestMapping("member_proceedingToMain.do")
-	public ModelAndView proceedingToMain(){
+	public ModelAndView proceedingToMain(HttpServletRequest request){
+		HttpSession session =  request.getSession();
+		SecurityContext ctx=(SecurityContext) session.getAttribute("SPRING_SECURITY_CONTEXT");
+		Authentication auth=ctx.getAuthentication();
+		//메인 페이지로 이동하며 세션에 blliMemberVO객체를 담아준다.
+		//Query : member_id,member_email,member_name,member_state,authority,recommending_baby_name
+		BlliMemberVO blliMemberVO = memberService.selectBlliMemberInfoByMemberId(auth.getName());
 		ModelAndView mav = new ModelAndView();
+		session.setAttribute("blliMemberVO", blliMemberVO);
 		mav.setViewName("redirect:member_goMain.do");
 		return mav;
 	}
 	/**
-	 * 
 	  * @Method Name : goMainPage
 	  * @Method 설명 : 메인 페이지로 이동하는 메서드로서 스프링 시큐리티가 세션에 담은 memberEmail을 key값으로 하여 메인페이지에 필요한 정보를
-	  * 세션에 담는다.
+	  * 세션에 담는다. 메인페이지 진입 시 담겨 야할 내용 <아이 리스트 , 추천받을  아이의 추천상품-제외상품 제외, 현재 추천 받는 중분류 상품 들 각각 찜하기 상위 2개 소제품, 찜하기 상위 10개의 소제품 중 고득점 포스팅 각 2개 씩 총 20개 , 알림 갯수>
 	  * @작성일 : 2016. 1. 13.
 	  * @작성자 : junyoung
 	  * @return
+	 * @throws ParseException 
 	 */
 	@RequestMapping("member_goMain.do")
-	public ModelAndView goMainPage(HttpServletRequest request){
+	public ModelAndView goMainPage(HttpServletRequest request) throws ParseException{
 		HttpSession session =  request.getSession();
-		SecurityContext ctx=(SecurityContext) session.getAttribute("SPRING_SECURITY_CONTEXT");
-		Authentication auth=ctx.getAuthentication();
-		System.out.println(auth.getName());
-		//테스트를 위해 임시로 blliMemberVO를 생성하였음
-		BlliMemberVO blliMemberVO = memberService.selectBlliMemberInfoByMemberId(auth.getName());
-		session.setAttribute("blliMemberVO", blliMemberVO);
+		BlliMemberVO blliMemberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
+		//메인페이지로 이동할 때 회원이 가진 아이리스트를 전달 받는다.
+		blliMemberVO.setBlliBabyVOList(memberService.selectBabyListByMemberId(blliMemberVO.getMemberId()));
+		//메인페이지로 이동할 때 회원에게 추천될 상품 리스트를 전달받는다.
+		List<BlliMidCategoryVO> blliMidCategoryVOList = productService.selectRecommendingMidCategory(blliMemberVO);
+		request.setAttribute("blliMemberVO", blliMemberVO);
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("/blli/main");
 		return mav;
@@ -104,7 +112,6 @@ public class MemberController {
 	}
 	
 	/**
-	 * 
 	  * @Method Name : goAdminPage
 	  * @Method 설명 : 스프링 시큐리티 관리자 테스트 페이지 이동
 	  * @작성일 : 2016. 1. 13.
@@ -118,7 +125,6 @@ public class MemberController {
 		return mav;
 	}
 	/**
-	 * 
 	  * @Method Name : goJoinMemberPage
 	  * @Method 설명 : 로그인 페이지로 이동
 	  * @작성일 : 2016. 1. 14.
@@ -204,9 +210,8 @@ public class MemberController {
 	}
 	
 	/**
-	 * 아이 및 이메일을 등록하는 메서드
 	  * @Method Name : insertBabyInfoForKakaoUser
-	  * @Method 설명 :
+	  * @Method 설명 : 아이 및 이메일을 등록하는 메서드
 	  * @작성일 : 2016. 1. 16.
 	  * @작성자 : junyoung
 	  * @param request
@@ -238,6 +243,8 @@ public class MemberController {
 			blliBabyVO.setBabySex(request.getParameter("thirdBabySex"));
 			list.add(blliBabyVO);
 		}
+		//첫번째 아이로 추천아이를 선정해줌
+		blliMemberVO.setRecommendingBabyName(request.getParameter("firstBabyName"));
 		memberService.insertBabyInfo(list,blliMemberVO);
 		return "redirect:member_proceedingToMain.do";
 	}

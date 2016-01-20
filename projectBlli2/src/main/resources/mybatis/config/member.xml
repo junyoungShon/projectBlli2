@@ -40,6 +40,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateMemberAuthority">
 		update blli_member set authority = #{authority} where member_id = #{memberId}
 	</update>
+	
+	<!-- 회원의 추천아이를 갱신한다. -->
+	<update id="updateRecommendingBabyName">
+		update blli_member set RECOMMENDING_BABY_NAME = #{recommendingBabyName} where member_id = #{memberId}
+	</update>
+	
 	<!-- 회원의 아이정보를 삽입합니다. -->
 	<insert id="insertBabyInfo" parameterType="blliBabyVO">
 		insert into BLLI_baby (member_Id,baby_name,baby_birthday,baby_sex,baby_photo)

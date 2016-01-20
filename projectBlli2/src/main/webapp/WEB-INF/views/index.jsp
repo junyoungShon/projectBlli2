@@ -51,7 +51,7 @@
 		<li><a href="${initParam.root}schedule_jsoupTest.do">포스팅 리스트 긁어모아</a>
 		<li><input type = "text" name="searchWord"><input type="submit" value="검색">
 		<li><a href="${initParam.root}postingListWithSmallProducts.do">소제품 하나로 추려줘</a></li>
-	<sec:authorize access="is-Authenticated()">
+	<sec:authorize access="isAuthenticated()">
 		<li><a href="${initParam.root}j_spring_security_logout">로그아웃</a>
 	</sec:authorize>
 	
