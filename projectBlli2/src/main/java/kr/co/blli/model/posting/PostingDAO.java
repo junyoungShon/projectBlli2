@@ -22,6 +22,10 @@ public interface PostingDAO {
 
 	void deleteProduct(HashMap<String, String> map);
 
-	int isPostingUrl(String postingUrl);
+	int countOfPostingUrl(String postingUrl);
+
+	String getPostingStatus(String postingUrl);
+
+	List<String> getAllPostingStatus(String postingUrl);
 
 }

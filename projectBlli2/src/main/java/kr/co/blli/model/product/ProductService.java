@@ -8,4 +8,6 @@ public interface ProductService {
 
 	void insertMidCategory() throws IOException;
 
+	void insertSmallProduct() throws IOException;
+
 }

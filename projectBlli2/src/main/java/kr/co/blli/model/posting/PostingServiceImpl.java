@@ -189,12 +189,37 @@ public class PostingServiceImpl implements PostingService {
 				}else{
 					postingVO.setPostingSummary(postingContent);
 				}
-				//포스팅 update
-				int updateResult = postingDAO.updatePosting(postingVO);
-				int isPostingUrl = postingDAO.isPostingUrl(postingVO.getPostingUrl());
-				//포스팅 insert
-				if(updateResult == 0 && isPostingUrl == 0){
+				
+				int countOfPostingUrl = postingDAO.countOfPostingUrl(postingVO.getPostingUrl());
+				String postingStatus = "";
+				//url개수에 따른 포스팅 상태와 update, insert 기능
+				if(countOfPostingUrl == 0){
 					postingDAO.insertPosting(postingVO);
+				}else if(countOfPostingUrl == 1){
+					postingStatus = postingDAO.getPostingStatus(postingVO.getPostingUrl());
+					if(postingStatus.equals("unconfirmed")){
+						int updateResult = postingDAO.updatePosting(postingVO);						
+						if(updateResult == 0){
+							postingDAO.insertPosting(postingVO);
+						}
+					}else{
+						postingDAO.updatePosting(postingVO);
+					}
+				}else{
+					postingStatus = postingDAO.getPostingStatus(postingVO.getPostingUrl());
+					if(postingStatus.equals("unconfirmed")){
+						ArrayList<String> allPostingStatus = (ArrayList<String>)postingDAO.getAllPostingStatus(postingVO.getPostingUrl());
+						if(allPostingStatus.contains("dead")){
+							postingDAO.updatePosting(postingVO);
+						}else{
+							int updateResult = postingDAO.updatePosting(postingVO);
+							if(updateResult == 0){
+								postingDAO.insertPosting(postingVO);
+							}
+						}
+					}else if(postingStatus.equals("confirmed")){
+						postingDAO.updatePosting(postingVO);
+					}
 				}
 			} //while
 		} //for
