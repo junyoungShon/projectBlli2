@@ -10,6 +10,6 @@
 여기는 메인페이쟈
 ${sessionScope.blliMemberVO.memberName}님 환영합니다.<br>
 당신의 아이 정보입니다.
-${sessionScope.blliMemberVO.babyList}
+${sessionScope.blliMemberVO.blliBabyVOList}
 </body>
 </html>
