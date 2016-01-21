@@ -11,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<typeAlias type="kr.co.blli.model.vo.BlliPostingVO" alias="blliPostingVO"/>
 		<typeAlias type="kr.co.blli.model.vo.BlliBigCategoryVO" alias="blliBigCategoryVO"/>
 		<typeAlias type="kr.co.blli.model.vo.BlliMidCategoryVO" alias="blliMidCategoryVO"/>
+		<typeAlias type="kr.co.blli.model.vo.BlliSmallProductVO" alias="blliSmallProductVO"/>
 		<typeAlias type="kr.co.blli.model.vo.BlliMailVO" alias="BlliMailVO"/>
 		<typeAlias type="kr.co.blli.model.vo.BlliNotRecommMidCategoryVO" alias="blliNotRecommMidCategoryVO"/>
 	</typeAliases>	

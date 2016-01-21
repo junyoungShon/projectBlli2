@@ -111,9 +111,16 @@ select * from blli_mid_category;
 
 select category_id, big_category from blli_big_category
 
+2011.03
+create table dayday_test(
+	dayday DATE primary key
+)
+insert into dayday_test(dayday) values('2011.03.01');
+select * from dayday_test;
 
+select * from blli_small_product;
 
-
+select * from blli_small_prod_buy_link;
 
 
 

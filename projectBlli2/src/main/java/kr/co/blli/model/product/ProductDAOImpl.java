@@ -9,6 +9,7 @@ import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliBigCategoryVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
+import kr.co.blli.model.vo.BlliSmallProductBuyLinkVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -20,7 +21,7 @@ public class ProductDAOImpl implements ProductDAO{
 	private SqlSessionTemplate sqlSessionTemplate;
 
 	@Override
-	public List<String> getSmallProduct() {
+	public List<BlliSmallProductVO> getSmallProduct() {
 		return sqlSessionTemplate.selectList("product.getSmallProduct");
 	}
 
@@ -128,7 +129,24 @@ public class ProductDAOImpl implements ProductDAO{
 			HashMap<String, String> paraMap) {
 		return sqlSessionTemplate.selectOne("product.selectSameAgeMomBestPickedSmallProduct", paraMap);
 	}
-	
 
-	
+	@Override
+	public void insertSmallProduct(BlliSmallProductVO blliSmallProductVO) {
+		sqlSessionTemplate.insert("product.insertSmallProduct", blliSmallProductVO);
+	}
+
+	@Override
+	public int updateSmallProduct(BlliSmallProductVO blliSmallProductVO) {
+		return sqlSessionTemplate.update("product.updateSmallProduct", blliSmallProductVO);
+	}
+
+	@Override
+	public void insertSmallProductBuyLink(BlliSmallProductBuyLinkVO blliSmallProductBuyLinkVO) {
+		sqlSessionTemplate.insert("product.insertSmallProductBuyLink", blliSmallProductBuyLinkVO);
+	}
+
+	@Override
+	public int updateSmallProductBuyLink(BlliSmallProductBuyLinkVO blliSmallProductBuyLinkVO) {
+		return sqlSessionTemplate.update("product.updateSmallProductBuyLink", blliSmallProductBuyLinkVO);
+	}
 }

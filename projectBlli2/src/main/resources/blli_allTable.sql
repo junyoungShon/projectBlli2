@@ -65,27 +65,28 @@ CREATE TABLE blli_auto_login (
 drop table blli_big_category cascade constraint;
 CREATE TABLE blli_big_category (
 	big_category         VARCHAR2(50) NOT NULL primary key,
-	category_id          VARCHAR2(30) NOT NULL -- 추가
+	big_category_id          VARCHAR2(30) NOT NULL -- 추가
 );
 
 
 drop table blli_mid_category cascade constraint;
 CREATE TABLE blli_mid_category (
+	mid_category_id          VARCHAR2(30) NOT NULL, -- 추가
 	mid_category         VARCHAR2(100) NOT NULL, -- VARCHAR2(50)을 VARCHAR2(100)으로 수정
 	mid_category_info    VARCHAR2(250) NULL ,
 	mid_category_main_photo_link VARCHAR2(300) NOT NULL ,
 	mid_category_whentouse_min NUMBER(20) NULL , -- 컬럼명 변경
 	mid_category_whentouse_max NUMBER(20) NULL , -- 추가
 	big_category         VARCHAR2(50) NOT NULL ,
-	category_id          VARCHAR2(30) NOT NULL, -- 추가
-	constraint pk_mid_category primary key (mid_category, category_id), -- category와 id를 복합키로 변경
+	constraint pk_mid_category primary key(mid_category_id, mid_category),
 	constraint fk_mid_cate_big_cate foreign key(big_category) references blli_big_category(big_category)
 );
 
 
 drop table blli_small_product cascade constraint;
-CREATE TABLE blli_small_product (
-	small_product   VARCHAR2(100) NOT NULL primary key,
+CREATE TABLE blli_small_product ( -- naver_shopping_link  VARCHAR2(300) NOT NULL 삭제
+	small_product_id     VARCHAR2(30) NOT NULL primary key, -- 추가
+	small_product   VARCHAR2(500) NOT NULL , -- VARCHAR2(100)을 VARCHAR2(500)으로 변경
 	mid_category         VARCHAR2(50) NOT NULL ,
 	category_id          VARCHAR2(30) NOT NULL, -- 추가
 	small_product_maker  VARCHAR2(50) NOT NULL ,
@@ -95,17 +96,19 @@ CREATE TABLE blli_small_product (
 	small_product_main_photo_link VARCHAR2(300) NOT NULL ,
 	small_product_score  NUMBER(4) default 0 ,
 	small_product_posting_count NUMBER(8) NOT NULL , -- default 0을 NOT NULL로 변경
-	naver_shopping_link  VARCHAR2(300) NOT NULL ,
 	naver_shopping_order NUMBER(5) NOT NULL, -- 추가
 	product_register_day DATE NOT NULL, -- 추가
-	constraint fk_small_prod_mid_cate foreign key(mid_category,category_id) references blli_mid_category(mid_category,category_id) --수정
+	constraint fk_small_prod_mid_cate foreign key(mid_category,category_id) references blli_mid_category(mid_category,category_id), --수정
+	mid_category_id      VARCHAR2(30) NOT NULL, -- 추가
+	constraint fk_small_prod_mid_cate foreign key(mid_category, mid_category_id) references blli_mid_category(mid_category, mid_category_id) -- mid_category_id 추가
 );
 
 
 drop table blli_posting cascade constraint;
 CREATE TABLE blli_posting (
 	posting_url          VARCHAR2(300) NOT NULL primary key,
-	small_product   VARCHAR2(200) NOT NULL ,
+	small_product       VARCHAR2(200) NOT NULL ,
+	small_product_id   VARCHAR2(30) NOT NULL , -- 추가
 	posting_title        VARCHAR2(450) NOT NULL , -- VARCHAR2(100) 에서 VARCHAR2(450)으로 수정!
 	posting_summary      VARCHAR2(600) NOT NULL , -- VARCHAR2(300) 에서 VARCHAR2(600)으로 수정!
 	posting_content      CLOB NOT NULL ,
@@ -123,19 +126,21 @@ CREATE TABLE blli_posting (
 	posting_reply_count      NUMBER(4) NOT NULL, -- 추가
 	posting_status            VARCHAR2(30) NOT NULL, -- 추가
 	constraint fk_posting_small_prod foreign key(small_product) references blli_small_product(small_product)
+	posting_status            VARCHAR2(30) NOT NULL, -- 추가
+	constraint fk_posting_small_prod_id foreign key(small_product_id) references blli_small_product(small_product_id)
 );
 
 
 drop table blli_small_prod_buy_link cascade constraint;
 CREATE TABLE blli_small_prod_buy_link (
-	buy_link             VARCHAR2(50) NOT NULL ,
-	small_product   VARCHAR2(100) NOT NULL ,
+	small_product_id    VARCHAR2(30) NOT NULL primary key, -- 추가
+	buy_link             VARCHAR2(2000) NOT NULL , -- VARCHAR2(50)을 VARCHAR2(2000)으로 변경
 	buy_link_price       NUMBER(10) NOT NULL ,
-	buy_link_delivery_cost NUMBER(6) NOT NULL ,
+	buy_link_delivery_cost VARCHAR2(30) NOT NULL , -- NUMBER(6)를 VARCHAR2(30)으로 변경
+	buy_link_option     VARCHAR2(30) NULL, -- 추가
 	seller               VARCHAR2(50) NOT NULL ,
 	buy_link_click_count NUMBER(10) default 0 ,
-	constraint fk_small_buy_link_small foreign key(small_product) references blli_small_product(small_product),
-	constraint pk_small_buy_link primary key (buy_link, small_product)
+	constraint fk_small_buy_link_small foreign key(small_product_id) references blli_small_product(small_product_id) -- 변경
 );
 
 

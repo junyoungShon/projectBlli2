@@ -9,11 +9,12 @@ import kr.co.blli.model.vo.BlliBigCategoryVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
+import kr.co.blli.model.vo.BlliSmallProductBuyLinkVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 
 public interface ProductDAO {
 
-	List<String> getSmallProduct();
+	List<BlliSmallProductVO> getSmallProduct();
 
 	void insertBigCategory(BlliBigCategoryVO blliBigCategoryVO);
 
@@ -39,5 +40,12 @@ public interface ProductDAO {
 
 	BlliSmallProductVO selectSameAgeMomBestPickedSmallProduct(HashMap<String, String> paraMap);
 
+	void insertSmallProduct(BlliSmallProductVO blliSmallProductVO);
+
+	int updateSmallProduct(BlliSmallProductVO blliSmallProductVO);
+
+	void insertSmallProductBuyLink(BlliSmallProductBuyLinkVO blliSmallProductBuyLinkVO);
+
+	int updateSmallProductBuyLink(BlliSmallProductBuyLinkVO blliSmallProductBuyLinkVO);
 
 }

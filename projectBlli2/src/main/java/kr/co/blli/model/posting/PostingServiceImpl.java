@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 
 import kr.co.blli.model.product.ProductDAO;
 import kr.co.blli.model.vo.BlliPostingVO;
+import kr.co.blli.model.vo.BlliSmallProductVO;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -39,7 +40,7 @@ public class PostingServiceImpl implements PostingService {
 	@Override
 	public String jsoupTest() throws IOException {
 		String key = "6694c8294c8d04cdfe78262583a13052"; //네이버 검색API 이용하기 위해 발급받은 key값
-		ArrayList<String> smallProductList = (ArrayList<String>)productDAO.getSmallProduct(); //소제품 리스트를 불러와 변수에 할당
+		ArrayList<BlliSmallProductVO> smallProductList = (ArrayList<BlliSmallProductVO>)productDAO.getSmallProduct(); //소제품 리스트를 불러와 변수에 할당
 		String postingUrl = ""; //포스팅 주소
 		String smallProduct = ""; //검색할 소제품
 		String frameSourceUrl = ""; //프레임 소스 주소
@@ -55,7 +56,7 @@ public class PostingServiceImpl implements PostingService {
 		for(int i=0;i<smallProductList.size();i++){ //소제품들 한개씩 뽑아서 포스팅 검색
 			int countOfPosting = 1; //수집한 포스팅 개수
 			int page = 1; //검색 페이지
-			smallProduct = smallProductList.get(i);
+			smallProduct = smallProductList.get(i).getSmallProduct();
 			//소제품 관련 총 포스팅 개수
 			int totalPosting = Integer.parseInt(Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+smallProduct+"&display=1&start="+page+"&target=blog&sort=sim").get().select("total").text());
 			
@@ -80,6 +81,7 @@ public class PostingServiceImpl implements PostingService {
 				
 				BlliPostingVO postingVO = new BlliPostingVO();
 				postingMediaCount = 0; //이미지 갯수 초기화
+				postingVO.setSmallProductId(smallProductList.get(i).getSmallProductId()); //소제품ID를 vo에 저장
 				postingVO.setSmallProduct(smallProduct); //소제품을 vo에 저장
 				postingVO.setPostingOrder(page-1); //포스팅 검색시 배열 순서를 vo에 저장
 				
