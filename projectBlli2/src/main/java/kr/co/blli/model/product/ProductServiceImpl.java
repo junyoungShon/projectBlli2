@@ -2,11 +2,16 @@ package kr.co.blli.model.product;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.annotation.Resource;
 
+import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliBigCategoryVO;
+import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
+import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 
 import org.jsoup.Jsoup;
@@ -93,5 +98,72 @@ public class ProductServiceImpl implements ProductService{
 			Document doc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?pagingIndex=1&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&cat_id="+midCategory.get(i).getCategoryId()+"&frm=NVSHMDL").get();
 			
 		}*/
+	}
+
+	/**
+	  * @Method Name : selectRecommendingMidCategory
+	  * @Method 설명 : 회원의 추천받을 아이이름과 , 아이디를 이용해 추천대상인 중분류 제품을 선정한다.(회원이 추천을 기피했던 중제품 제외)
+	  * @작성일 : 2016. 1. 20.
+	  * @작성자 : junyoung
+	  * @param blliBabyVO
+	  * @return
+	 */
+	@Override
+	public List<BlliMidCategoryVO> selectRecommendingMidCategory(BlliBabyVO blliBabyVO) {
+		//회원의 추천받을 아이이름과 , 아이디를 이용해 추천대상인 중분류 제품을 선정한다.(회원이 추천을 기피했던 중제품 제외)
+		List<BlliMidCategoryVO> blliMidCategoryVOList = productDAO.selectRecommendingMidCategory(blliBabyVO);
+		//기피 중분류들을 추출한다.
+		List<BlliNotRecommMidCategoryVO> notRecommMidCategoryList = productDAO.selectNotRecommMidCategoryList(blliBabyVO); 
+		//이중 for문으로 추천받을 중분류 제품에서 기피한 중제품을 제거한다.
+		if(blliMidCategoryVOList!=null&&notRecommMidCategoryList!=null)
+		for(int i=0;i<notRecommMidCategoryList.size();i++){
+			for(int j=0;j<blliMidCategoryVOList.size();j++){
+				if(notRecommMidCategoryList.get(i).getCategoryId().equals(blliMidCategoryVOList.get(j).getCategoryId())){
+					blliMidCategoryVOList.remove(j);
+				}
+			}
+		}
+		return blliMidCategoryVOList;
+	}
+	/**
+	  * @Method Name : deleteRecommendMidCategory
+	  * @Method 설명 : 회원이 중분류 카테고리를 추천받고 싶지않을 때 추천 받지 않을 중분류 제품을 삭제해준다.
+	  * @작성일 : 2016. 1. 20.
+	  * @작성자 : junyoung
+	  * @param blliNotRecommMidCategoryVO
+	 */
+	@Override
+	public void deleteRecommendMidCategory(BlliNotRecommMidCategoryVO blliNotRecommMidCategoryVO) {
+		productDAO.deleteRecommendMidCategory(blliNotRecommMidCategoryVO);
+	}
+
+	@Override
+	public List<BlliSmallProductVO> selectSameAgeMomBestPickedSmallProductList(
+			List<BlliMidCategoryVO> blliMidCategoryVOList, BlliBabyVO blliBabyVO) {
+		List<BlliSmallProductVO> blliSmallProductVOList = new ArrayList<BlliSmallProductVO>();
+		int recommMidNumber = blliMidCategoryVOList.size();
+		
+		if(recommMidNumber>9){
+			for(int i=0;i<blliMidCategoryVOList.size();i++){
+				HashMap<String,String> paraMap = new HashMap<String, String>();
+				paraMap.put("recommMid", blliMidCategoryVOList.get(i).getMidCategory());
+				paraMap.put("babyMonthAge",Integer.toString(blliBabyVO.getBabyMonthAge()));
+				//중제품 당 찜 상위 1개 만을 가져온다.
+				blliSmallProductVOList.add(productDAO.selectSameAgeMomBestPickedSmallProduct(paraMap));
+			}
+		}else{
+			for(int i=0;i<blliMidCategoryVOList.size();i++){
+				HashMap<String,String> paraMap = new HashMap<String, String>();
+				paraMap.put("recommMid", blliMidCategoryVOList.get(i).getMidCategory());
+				paraMap.put("babyMonthAge",Integer.toString(blliBabyVO.getBabyMonthAge()));
+				// 중제품 당 찜 상위 2개씩을 가져온다.
+				List<BlliSmallProductVO> tempList = productDAO.selectSameAgeMomBestPickedSmallProductList(paraMap);
+				for(int j=0;j<tempList.size();j++){
+					blliSmallProductVOList.add(tempList.get(j));
+				}
+			}
+		}
+		
+		return blliSmallProductVOList;
 	}
 }

@@ -10,7 +10,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="memberPassword" column="member_password"/>
  		<result property="memberName" column="member_name"/>
  		<result property="memberState" column="member_state"/>
- 		<result property="recommendingBabyName" column="recommending_baby_name"/>
  		<result property="authority" column="authority"/>
  	</resultMap>
  	<!-- BlliBabyVO Result Map 설정 -->
@@ -20,6 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="babyBirthday" column="baby_birthday"/>
  		<result property="babySex" column="baby_Sex"/>
  		<result property="babyPhoto" column="baby_photo"/>
+ 		<result property="recommending" column="recommending"/>
  	</resultMap>
  	
  	<!-- 준영 작성 쿼리 -->
@@ -29,8 +29,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<!-- 회원의 정보를 삽입합니다. -->
 	<insert id="insertMemberInfo" parameterType="blliMemberVO">
-		insert into BLLI_MEMBER (member_Id,member_password,member_email,member_name,recommending_baby_name,authority,member_State)
-		values (#{memberId},#{memberPassword},#{memberEmail},#{memberName},'미등록',#{authority},1)
+		insert into BLLI_MEMBER (member_Id,member_password,member_email,member_name,authority,member_State)
+		values (#{memberId},#{memberPassword},#{memberEmail},#{memberName},#{authority},1)
 	</insert>
 	<!-- 회원의 이메일을 갱신한다. -->
 	<update id="updateMemberEmail">
@@ -41,25 +41,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update blli_member set authority = #{authority} where member_id = #{memberId}
 	</update>
 	
-	<!-- 회원의 추천아이를 갱신한다. -->
-	<update id="updateRecommendingBabyName">
-		update blli_member set RECOMMENDING_BABY_NAME = #{recommendingBabyName} where member_id = #{memberId}
-	</update>
-	
 	<!-- 회원의 아이정보를 삽입합니다. -->
 	<insert id="insertBabyInfo" parameterType="blliBabyVO">
-		insert into BLLI_baby (member_Id,baby_name,baby_birthday,baby_sex,baby_photo)
-		values (#{memberId},#{babyName},#{babyBirthday},#{babySex},'default')
+		insert into BLLI_baby (member_Id,baby_name,baby_birthday,baby_sex,baby_photo,recommending)
+		values (#{memberId},#{babyName},#{babyBirthday},#{babySex},'default',#{recommending})
 	</insert>
 	
 	<!-- 회원의 이메일로 회원의 정보를 찾아온다. -->
 	<select id="selectBlliMemberInfoByMemberId" resultMap="bmvRM">
-		select member_id,member_email,member_name,member_state,authority,recommending_baby_name from blli_member where member_id=#{value}
+		select member_id,member_email,member_name,member_state,authority from blli_member where member_id=#{value}
 	</select>
 	<!-- 회원의 이메일로 아이들의 정보를 받아온다. -->
 	<select id="selectBabyListByMemberId" resultMap="bbvRM">
-		select baby_name , baby_birthday,baby_sex,baby_photo,member_id from blli_baby where member_id = #{value}
+		select member_id , baby_name , baby_birthday,baby_sex,baby_photo,member_id,recommending from blli_baby where member_id = #{value}
 	</select>
+	<!-- 회원의 추천 대상 아이를 바꿔줍니다. -->
+	<update id="changeRecommendingBaby">
+		update blli_baby set recommending = #{recommending} where member_id = #{memberId} and baby_name=#{babyName}
+	</update>
 	<!-- 준영 쿼리 끝 -->
  </mapper> 		
  

@@ -2,6 +2,7 @@ package kr.co.blli.controller;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,9 @@ import kr.co.blli.model.product.ProductService;
 import kr.co.blli.model.security.BlliUserDetailsService;
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMemberVO;
+import kr.co.blli.model.vo.BlliMidCategoryVO;
+import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
+import kr.co.blli.model.vo.BlliSmallProductVO;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -80,10 +84,24 @@ public class MemberController {
 		HttpSession session =  request.getSession();
 		BlliMemberVO blliMemberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
 		//메인페이지로 이동할 때 회원이 가진 아이리스트를 전달 받는다.
-		blliMemberVO.setBlliBabyVOList(memberService.selectBabyListByMemberId(blliMemberVO.getMemberId()));
+		List <BlliBabyVO> blliBabyVOList=memberService.selectBabyListByMemberId(blliMemberVO.getMemberId());
+		blliMemberVO.setBlliBabyVOList(blliBabyVOList);
+		BlliBabyVO blliBabyVO = null;
+		//추천 받을 아이 추출
+		for(int i=0;i<blliBabyVOList.size();i++){
+			if(blliBabyVOList.get(i).getRecommending()==1){
+				blliBabyVO = blliBabyVOList.get(i);
+			}
+		}
 		//메인페이지로 이동할 때 회원에게 추천될 상품 리스트를 전달받는다.
-		List<BlliMidCategoryVO> blliMidCategoryVOList = productService.selectRecommendingMidCategory(blliMemberVO);
+		List<BlliMidCategoryVO> blliMidCategoryVOList = productService.selectRecommendingMidCategory(blliBabyVO);
+		
+		//메인페이지로 이동할 때 회원에게 추천 될 소분류 상품 리스트를 전달 받는다.(또래엄마가 많이 찜한 상품)
+		List<BlliSmallProductVO> blliSmallProductVOList = productService.selectSameAgeMomBestPickedSmallProductList(blliMidCategoryVOList,blliBabyVO);
+		//회원정보 삽입
 		request.setAttribute("blliMemberVO", blliMemberVO);
+		//회원에게 추천될 상품 리스트 삽입
+		request.setAttribute("blliMidCategoryVOList", blliMidCategoryVOList);
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("/blli/main");
 		return mav;
@@ -225,6 +243,7 @@ public class MemberController {
 			blliBabyVO.setBabyName(request.getParameter("firstBabyName"));
 			blliBabyVO.setBabyBirthday(request.getParameter("firstBabyBirthday"));
 			blliBabyVO.setBabySex(request.getParameter("firstBabySex"));
+			blliBabyVO.setRecommending(1);
 			list.add(blliBabyVO);
 		}
 		if(request.getParameter("secondBabySex")!=null){
@@ -233,6 +252,7 @@ public class MemberController {
 			blliBabyVO.setBabyName(request.getParameter("secondBabyName"));
 			blliBabyVO.setBabyBirthday(request.getParameter("secondBabyBirthday"));
 			blliBabyVO.setBabySex(request.getParameter("secondBabySex"));
+			blliBabyVO.setRecommending(0);
 			list.add(blliBabyVO);
 		}
 		if(request.getParameter("thirdBabySex")!=null){
@@ -241,12 +261,33 @@ public class MemberController {
 			blliBabyVO.setBabyName(request.getParameter("thirdBabyName"));
 			blliBabyVO.setBabyBirthday(request.getParameter("thirdBabyBirthday"));
 			blliBabyVO.setBabySex(request.getParameter("thirdBabySex"));
+			blliBabyVO.setRecommending(0);
 			list.add(blliBabyVO);
 		}
 		//첫번째 아이로 추천아이를 선정해줌
-		blliMemberVO.setRecommendingBabyName(request.getParameter("firstBabyName"));
 		memberService.insertBabyInfo(list,blliMemberVO);
 		return "redirect:member_proceedingToMain.do";
+	}
+	
+	/**
+	  * @Method Name : 사용자가 추천을 제외한 중분류 상품을 지워준다.
+	  * @Method 설명 :
+	  * @작성일 : 2016. 1. 20.
+	  * @작성자 : junyoung
+	  * @param blliNotRecommMidCategoryVO
+	 */
+	@RequestMapping("deleteRecommendMidCategory.do")
+	@ResponseBody
+	public void deleteRecommendMidCategory(BlliNotRecommMidCategoryVO blliNotRecommMidCategoryVO){
+		productService.deleteRecommendMidCategory(blliNotRecommMidCategoryVO);
+	}
+	
+	@RequestMapping("changeRecommendingBaby.do")
+	public String changeRecommendingBaby(BlliBabyVO blliBabyVO){
+		//아이 디비의 추천 대상을 바꾼다.
+		memberService.changeRecommendingBaby(blliBabyVO);
+		//메인으로 이동
+		return "redirect:member_goMain.do";
 	}
 	
 }

@@ -21,5 +21,7 @@ public interface MemberService {
 
 	public List<BlliBabyVO> selectBabyListByMemberId(String memberId) throws ParseException;
 
+	public void changeRecommendingBaby(BlliBabyVO blliBabyVO);
+
 
 }

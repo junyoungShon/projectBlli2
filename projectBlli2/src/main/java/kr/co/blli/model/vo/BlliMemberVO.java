@@ -8,24 +8,19 @@ public class BlliMemberVO{
 	private String memberPassword;
 	private String memberName;
 	private int memberState;
-	private String recommendingBabyName;
 	private String authority;
 	//blliMember테이블의 1:N 관계 테이블 VO 추가 - 자동로그인 테이블 제외
 	private List<BlliBabyVO> blliBabyVOList ;
 	private List<BlliScheduleVO> blliScheduleVOList;
-	private List<BlliRecommendingMidCategoryVO> blliRecommendingMidCategoryVOList;
+	private List<BlliMidCategoryVO> blliRecommendingMidCategoryVOList;
 
 	
 	public BlliMemberVO() {
 		super();
 	}
-
-
 	public String getMemberId() {
 		return memberId;
 	}
-
-
 	public void setMemberId(String memberId) {
 		this.memberId = memberId;
 	}
@@ -71,16 +66,6 @@ public class BlliMemberVO{
 	}
 
 
-	public String getRecommendingBabyName() {
-		return recommendingBabyName;
-	}
-
-
-	public void setRecommendingBabyName(String recommendingBabyName) {
-		this.recommendingBabyName = recommendingBabyName;
-	}
-
-
 	public String getAuthority() {
 		return authority;
 	}
@@ -111,28 +96,26 @@ public class BlliMemberVO{
 	}
 
 
-	public List<BlliRecommendingMidCategoryVO> getBlliRecommendingMidCategoryVOList() {
+	public List<BlliMidCategoryVO> getBlliRecommendingMidCategoryVOList() {
 		return blliRecommendingMidCategoryVOList;
 	}
 
 
 	public void setBlliRecommendingMidCategoryVOList(
-			List<BlliRecommendingMidCategoryVO> blliRecommendingMidCategoryVOList) {
+			List<BlliMidCategoryVO> blliRecommendingMidCategoryVOList) {
 		this.blliRecommendingMidCategoryVOList = blliRecommendingMidCategoryVOList;
 	}
 
 
-	
 	@Override
 	public String toString() {
 		return "BlliMemberVO [memberId=" + memberId + ", memberEmail="
 				+ memberEmail + ", memberPassword=" + memberPassword
 				+ ", memberName=" + memberName + ", memberState=" + memberState
-				+ ", recommendingBabyName=" + recommendingBabyName
 				+ ", authority=" + authority + ", blliBabyVOList="
 				+ blliBabyVOList + ", blliScheduleVOList=" + blliScheduleVOList
 				+ ", blliRecommendingMidCategoryVOList="
-				+ blliRecommendingMidCategoryVOList + ", blliMemberDipsVOList="
-				+ "]";
+				+ blliRecommendingMidCategoryVOList + "]";
 	}
+	
 }

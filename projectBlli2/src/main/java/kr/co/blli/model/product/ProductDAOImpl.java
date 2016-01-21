@@ -1,12 +1,15 @@
 package kr.co.blli.model.product;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliBigCategoryVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
+import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
+import kr.co.blli.model.vo.BlliSmallProductVO;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
@@ -50,4 +53,82 @@ public class ProductDAOImpl implements ProductDAO{
 	public List<BlliMidCategoryVO> getMidCategory() {
 		return sqlSessionTemplate.selectList("product.getMidCategory");
 	}
+	/**
+	  * @Method Name : selectRecommendingMidCategory
+	  * @Method 설명 : 추천 상품 리스트를 출력한다.
+	  * @작성일 : 2016. 1. 20.
+	  * @작성자 : junyoung
+	  * @param blliBabyVO
+	  * @return
+	 */
+	@Override
+	public List<BlliMidCategoryVO> selectRecommendingMidCategory(
+			BlliBabyVO blliBabyVO) {
+		return sqlSessionTemplate.selectList("product.selectRecommendingMidCategory",blliBabyVO);
+	}
+	/**
+	  * @Method Name : selectNotRecommMidCategoryList
+	  * @Method 설명 : 사용자가 제거 요청한 카테고리를 가져온다.
+	  * @작성일 : 2016. 1. 20.
+	  * @작성자 : junyoung
+	  * @param blliBabyVO
+	  * @return
+	 */
+	@Override
+	public List<BlliNotRecommMidCategoryVO> selectNotRecommMidCategoryList(
+			BlliBabyVO blliBabyVO) {
+		return sqlSessionTemplate.selectList("product.selectNotRecommMidCategoryList",blliBabyVO);
+	}
+	/**
+	  * @Method Name : deleteRecommendMidCategory
+	  * @Method 설명 : 회원이 중분류 카테고리를 추천받고 싶지않을 때 추천 받지 않을 중분류 제품을 삭제해준다.
+	  * @작성일 : 2016. 1. 20.
+	  * @작성자 : junyoung
+	  * @param blliNotRecommMidCategoryVO
+	 */
+	@Override
+	public void deleteRecommendMidCategory(BlliNotRecommMidCategoryVO blliNotRecommMidCategoryVO) {
+		sqlSessionTemplate.insert("product.deleteRecommendMidCategory", blliNotRecommMidCategoryVO);
+	}
+	/**
+	  * @Method Name : selectSameAgeMomBestPickedSmallProductList
+	  * @Method 설명 : 현재 
+	  * @작성일 : 2016. 1. 21.
+	  * @작성자 : junyoung
+	  * @param put
+	 */
+	@Override
+	public void selectSameAgeMomBestPickedSmallProductList(Integer put) {
+		// TODO Auto-generated method stub
+		
+	}
+	/**
+	  * @Method Name : selectSameAgeMomBestPickedSmallProductList
+	  * @Method 설명 : 추천받고 있는 중분류 제품에 속하는 소분류 중 찜수가 많은 제품들을 가져온다.(두개씩 가져온다.) 
+	  * @작성일 : 2016. 1. 21.
+	  * @작성자 : junyoung
+	  * @param paraMap
+	  * @return
+	 */
+	@Override
+	public List<BlliSmallProductVO> selectSameAgeMomBestPickedSmallProductList(
+			HashMap<String, String> paraMap) {
+		return sqlSessionTemplate.selectList("product.selectSameAgeMomBestPickedSmallProductList", paraMap);
+	}
+	/**
+	  * @Method Name : selectSameAgeMomBestPickedSmallProduct
+	  * @Method 설명 : 추천 받고 있는 중분류 제품에 속하는 소분류 중 찜수가 많은 제품들 중 찜수가 가장많은 1개만 가져온다.
+	  * @작성일 : 2016. 1. 21.
+	  * @작성자 : junyoung
+	  * @param paraMap
+	  * @return
+	 */
+	@Override
+	public BlliSmallProductVO selectSameAgeMomBestPickedSmallProduct(
+			HashMap<String, String> paraMap) {
+		return sqlSessionTemplate.selectOne("product.selectSameAgeMomBestPickedSmallProduct", paraMap);
+	}
+	
+
+	
 }

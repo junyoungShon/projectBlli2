@@ -22,8 +22,8 @@ CREATE TABLE blli_member (
 	member_password      VARCHAR2(100) NOT NULL ,
 	member_name          VARCHAR2(30) NOT NULL ,
 	member_state         NUMBER(2) default 0 ,
-	authority            VARCHAR2(20),
-	recommending_baby_name VARCHAR2(50) NOT NULL
+	--recommending 		NUMBER(1) NOT NULL, 삭제 
+	authority            VARCHAR2(20)
 );
 
 	
@@ -34,6 +34,7 @@ CREATE TABLE blli_baby (
 	baby_sex            VARCHAR2(10) NOT NULL ,
 	baby_photo          VARCHAR2(200) NULL ,
 	member_id           VARCHAR2(30) NOT NULL ,
+	recommending 		NUMBER(1) NOT NULL, --추가됨 0은 현재비추천 1은 현재추천대상
 	constraint fk_baby_member_id foreign key(member_id) references blli_member(member_id),
 	constraint pk_baby primary key (member_id, baby_name)
 );
@@ -86,6 +87,7 @@ drop table blli_small_product cascade constraint;
 CREATE TABLE blli_small_product (
 	small_product   VARCHAR2(100) NOT NULL primary key,
 	mid_category         VARCHAR2(50) NOT NULL ,
+	category_id          VARCHAR2(30) NOT NULL, -- 추가
 	small_product_maker  VARCHAR2(50) NOT NULL ,
 	small_propduct_whentouse_min NUMBER(20) NULL , -- 컬럼명 변경, NOT NULL을 NULL로 변경
 	small_propduct_whentouse_max NUMBER(20) NULL , -- 추가
@@ -96,7 +98,7 @@ CREATE TABLE blli_small_product (
 	naver_shopping_link  VARCHAR2(300) NOT NULL ,
 	naver_shopping_order NUMBER(5) NOT NULL, -- 추가
 	product_register_day DATE NOT NULL, -- 추가
-	constraint fk_small_prod_mid_cate foreign key(mid_category) references blli_mid_category(mid_category)
+	constraint fk_small_prod_mid_cate foreign key(mid_category,category_id) references blli_mid_category(mid_category,category_id) --수정
 );
 
 
@@ -149,8 +151,9 @@ drop table blli_recomm_mid_category cascade constraint;
 CREATE TABLE blli_recomm_mid_category (
 	member_id            VARCHAR2(30) NOT NULL ,
 	mid_category         VARCHAR2(50) NOT NULL ,
+	category_id          VARCHAR2(30) NOT NULL, -- 추가
 	constraint fk_recomm_mid_cate_mem_id foreign key(member_id) references blli_member(member_id),
-	constraint fk_recomm_mid_cate_mid_cate foreign key(mid_category) references blli_mid_category(mid_category),
+	constraint fk_recomm_mid_mid_cate foreign key(mid_category,category_id) references blli_mid_category(mid_category,category_id), --수정
 	constraint pk_recomm_mid_cate primary key (member_id, mid_category)
 );
 
