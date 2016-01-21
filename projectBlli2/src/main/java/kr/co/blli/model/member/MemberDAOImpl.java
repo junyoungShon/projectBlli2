@@ -96,4 +96,15 @@ public class MemberDAOImpl implements MemberDAO{
 	public List<BlliBabyVO> selectBabyListByMemberId(String memberId) {
 		return sqlSessionTemplate.selectList("member.selectBabyListByMemberId", memberId);
 	}
+	/**
+	  * @Method Name : updateRecommendingBabyName
+	  * @Method 설명 : 회원이 추천 받고 있는 아이를 변경해줍니다.
+	  * @작성일 : 2016. 1. 20.
+	  * @작성자 : junyoung
+	  * @param blliMemberVO
+	 */
+	@Override
+	public void updateRecommendingBabyName(BlliMemberVO blliMemberVO) {
+		sqlSessionTemplate.update("member.updateRecommendingBabyName", blliMemberVO);
+	}
 }

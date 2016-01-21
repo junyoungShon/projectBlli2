@@ -162,7 +162,7 @@
 
 <a href="#" onclick="kakaoLogin()">
 <img src="${initParam.root}/image/login_with_kakao.png" style="width: 300px;height: 100px"></a>
-<div class="fb-login-button" href="#" onclick="checkLoginState()">
+<div class="fb-login-button" onclick="checkLoginState()">
 <img src="${initParam.root}/image/login_with_fb.png"></div>
 </body>
 </html>
