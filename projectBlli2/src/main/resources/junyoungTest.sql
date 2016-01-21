@@ -40,7 +40,7 @@ CREATE TABLE blli_recomm_mid_category (
 CREATE TABLE BLLI_NOT_RECOMM_MID_CATEGORY(
 	member_id            VARCHAR2(30) NOT NULL ,
 	mid_category         VARCHAR2(50) NOT NULL ,
-	category_id          VARCHAR2(30) NOT NULL, -- 추가
+	mid_category_id          VARCHAR2(30) NOT NULL, -- 추가
 	constraint fk_NOT_recomm_mid_cate_mem_id foreign key(member_id) references blli_member(member_id),
 	constraint fk_NOT_recomm_mid_mid_cate foreign key(mid_category,category_id) references blli_mid_category(mid_category,category_id), --수정
 	constraint pk_NOT_recomm_mid_cate primary key (member_id, mid_category)
@@ -185,3 +185,15 @@ SMALL_PRODUCT_MAIN_PHOTO_LINK, SMALL_PRODUCT_SCORE, SMALL_PRODUCT_POSTING_COUNT,
 from BLLI_SMALL_PRODUCT
 where MID_CATEGORY = '유축기' and 12  >= SMALL_PROPDUCT_WHENTOUSE_MIN and 12<= SMALL_PROPDUCT_WHENTOUSE_MAX
 order by SMALL_PRODUCT_DIBS_COUNT desc) where rn<3
+
+
+
+insert into "SCOTT"."BLLI_POSTING" ("POSTING_URL", "SMALL_PRODUCT", "SMALL_PRODUCT_ID", "POSTING_TITLE", "POSTING_SUMMARY", "POSTING_CONTENT", "POSTING_MEDIA_COUNT", "POSTING_PHOTO_LINK", "POSTING_AUTHOR", "POSTING_DATE", "POSTING_ORDER", "POSTING_REPLY_COUNT", "POSTING_STATUS") 
+values('http://blog.naver.com/dear_hyde/220517255806', 'Cowala 트루 오리지널 골드+ 3...', '7903518970', '[코알라분유] 뉴질랜드 코알라 조제분...', 'asdfasdf', 'asdfasdf', 5, 'http://postfiles6.na...', '디어 태브라더', '2014-05-05', 1, 1, '1')
+
+
+select posting_url,small_product,small_product_id,posting_title,posting_summary,posting_content,posting_score,posting_like_count,
+		posting_dislike_count,posting_media_count,posting_photo_link,posting_total_residence_time,posting_view_count,posting_scrap_count,posting_author,posting_date
+		from blli_posting
+		where posting_status = 'confirmed'
+		order by posting_score asc;

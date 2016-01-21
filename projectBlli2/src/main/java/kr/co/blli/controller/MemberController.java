@@ -15,6 +15,7 @@ import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
+import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -98,10 +99,17 @@ public class MemberController {
 		
 		//메인페이지로 이동할 때 회원에게 추천 될 소분류 상품 리스트를 전달 받는다.(또래엄마가 많이 찜한 상품)
 		List<BlliSmallProductVO> blliSmallProductVOList = productService.selectSameAgeMomBestPickedSmallProductList(blliMidCategoryVOList,blliBabyVO);
+		
+		//메인페이지로 이동할 때 회원에게 추천 될 소분류 상품과 관련 된 포스팅을 보여준다.<으아아아 여기있으면 아니되오!!>
+		List<BlliPostingVO> blliPostingVOList = productService.selectPostingBySmallProductList(blliSmallProductVOList);
 		//회원정보 삽입
 		request.setAttribute("blliMemberVO", blliMemberVO);
-		//회원에게 추천될 상품 리스트 삽입
+		//회원에게 추천될 중분류 상품 리스트 삽입
 		request.setAttribute("blliMidCategoryVOList", blliMidCategoryVOList);
+		//회원에게 추천될 소분류 상품 리스트 삽입
+		request.setAttribute("blliSmallProductVOList", blliSmallProductVOList);
+		//회원에게 추천될 소분류 관련 포스팅 리스트 삽입
+		request.setAttribute("blliPostingVOList", blliPostingVOList);
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("/blli/main");
 		return mav;
@@ -279,9 +287,17 @@ public class MemberController {
 	@RequestMapping("deleteRecommendMidCategory.do")
 	@ResponseBody
 	public void deleteRecommendMidCategory(BlliNotRecommMidCategoryVO blliNotRecommMidCategoryVO){
+		System.out.println(blliNotRecommMidCategoryVO);
 		productService.deleteRecommendMidCategory(blliNotRecommMidCategoryVO);
 	}
-	
+	/**
+	  * @Method Name : changeRecommendingBaby
+	  * @Method 설명 : 메인 페이지에서 현재 추천 받는 대상 아이를 바꾼다.
+	  * @작성일 : 2016. 1. 21.
+	  * @작성자 : junyoung
+	  * @param blliBabyVO
+	  * @return
+	 */
 	@RequestMapping("changeRecommendingBaby.do")
 	public String changeRecommendingBaby(BlliBabyVO blliBabyVO){
 		//아이 디비의 추천 대상을 바꾼다.
@@ -289,5 +305,9 @@ public class MemberController {
 		//메인으로 이동
 		return "redirect:member_goMain.do";
 	}
+	
+	
+	
+		
 	
 }

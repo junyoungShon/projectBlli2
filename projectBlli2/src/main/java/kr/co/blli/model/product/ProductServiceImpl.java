@@ -12,6 +12,7 @@ import kr.co.blli.model.vo.BlliBigCategoryVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
+import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductBuyLinkVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 
@@ -46,6 +47,7 @@ public class ProductServiceImpl implements ProductService{
 	public void insertMidCategory() throws IOException {
 		int index = 1;
 		ArrayList<BlliBigCategoryVO> bigCategory = (ArrayList<BlliBigCategoryVO>)productDAO.getBigCategory();
+			
 		for(int i=0;i<bigCategory.size();i++){
 			Document doc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?cat_id="+bigCategory.get(i).getBigCategoryId()).get();
 			Elements midCategoriesHtml = doc.select(".finder .finder_row .finder_list a");
@@ -141,7 +143,6 @@ public class ProductServiceImpl implements ProductService{
 					blliSmallProductVO.setSmallProductMaker(smallProductMaker);
 					blliSmallProductVO.setProductRegisterDay(productRegisterDay);
 					blliSmallProductVO.setSmallProductId(smallProductId);
-					
 					int updateResult = productDAO.updateSmallProduct(blliSmallProductVO);
 					if(updateResult == 0){
 						productDAO.insertSmallProduct(blliSmallProductVO);
@@ -215,7 +216,7 @@ public class ProductServiceImpl implements ProductService{
 		if(blliMidCategoryVOList!=null&&notRecommMidCategoryList!=null)
 		for(int i=0;i<notRecommMidCategoryList.size();i++){
 			for(int j=0;j<blliMidCategoryVOList.size();j++){
-				if(notRecommMidCategoryList.get(i).getCategoryId().equals(blliMidCategoryVOList.get(j).getMidCategoryId())){
+				if(notRecommMidCategoryList.get(i).getMidCategoryId().equals(blliMidCategoryVOList.get(j).getMidCategoryId())){
 					blliMidCategoryVOList.remove(j);
 				}
 			}
@@ -233,13 +234,21 @@ public class ProductServiceImpl implements ProductService{
 	public void deleteRecommendMidCategory(BlliNotRecommMidCategoryVO blliNotRecommMidCategoryVO) {
 		productDAO.deleteRecommendMidCategory(blliNotRecommMidCategoryVO);
 	}
-
+	/**
+	  * @Method Name : selectSameAgeMomBestPickedSmallProductList
+	  * @Method 설명 : 현재 추천 받고 있는 중분류를 기준으로 또래 엄마들이 가장많이 찜한 상품들을 보여준다.
+	  * @작성일 : 2016. 1. 21.
+	  * @작성자 : junyoung
+	  * @param blliMidCategoryVOList
+	  * @param blliBabyVO
+	  * @return
+	 */
 	@Override
 	public List<BlliSmallProductVO> selectSameAgeMomBestPickedSmallProductList(
 			List<BlliMidCategoryVO> blliMidCategoryVOList, BlliBabyVO blliBabyVO) {
 		List<BlliSmallProductVO> blliSmallProductVOList = new ArrayList<BlliSmallProductVO>();
 		int recommMidNumber = blliMidCategoryVOList.size();
-		
+		System.out.println("여기오냐");
 		if(recommMidNumber>9){
 			for(int i=0;i<blliMidCategoryVOList.size();i++){
 				HashMap<String,String> paraMap = new HashMap<String, String>();
@@ -260,7 +269,32 @@ public class ProductServiceImpl implements ProductService{
 				}
 			}
 		}
-		
+		System.out.println(blliSmallProductVOList);
 		return blliSmallProductVOList;
+	}
+	/**
+	  * @Method Name : selectPostingBySmallProductList
+	  * @Method 설명 : <!극혐주의!> 포스팅 관련 이므로 여기있으면 안되지만 구조상 여기왔다 . 상의해보자
+	  * @작성일 : 2016. 1. 21.
+	  * @작성자 : junyoung
+	  * @param blliMidCategoryVOList
+	  * @return
+	 */
+	@Override
+	public List<BlliPostingVO> selectPostingBySmallProductList(List<BlliSmallProductVO> blliSmallProductVOList) {
+		List<BlliPostingVO> blliPostingVOList = new ArrayList<BlliPostingVO>();
+		//점수순 노출 , 상태(confirmed) , 포스팅 대상 소제품 등을 기준으로 출력<!극혐주의!> 포스팅 관련 이므로 여기있으면 안되지만 구조상 여기왔다 . 상의해보자
+		for(int i=0;i<blliSmallProductVOList.size();i++){
+			List<BlliPostingVO> tempList = productDAO.selectPostingBySmallProductList(blliSmallProductVOList.get(i).getSmallProductId());
+			System.out.println(blliSmallProductVOList.get(i).getMidCategoryId());
+			if(tempList!=null){
+				for(int j=0;j<tempList.size();j++){
+					blliPostingVOList.add(tempList.get(j));
+					System.out.println(tempList.get(j));
+				}
+			}
+			
+		}
+		return blliPostingVOList;
 	}
 }

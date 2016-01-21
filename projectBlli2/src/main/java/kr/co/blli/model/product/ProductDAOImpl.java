@@ -9,6 +9,7 @@ import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliBigCategoryVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
+import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductBuyLinkVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 
@@ -148,5 +149,18 @@ public class ProductDAOImpl implements ProductDAO{
 	@Override
 	public int updateSmallProductBuyLink(BlliSmallProductBuyLinkVO blliSmallProductBuyLinkVO) {
 		return sqlSessionTemplate.update("product.updateSmallProductBuyLink", blliSmallProductBuyLinkVO);
+	}
+	/**
+	  * @Method Name : selectPostingBySmallProductList
+	  * @Method 설명 : 점수순 노출 , 상태(confirmed) , 포스팅 대상 소제품 등을 기준으로 출력<!극혐주의!> 포스팅 관련 이므로 여기있으면 안되지만 구조상 여기왔다 . 상의해보자
+	  * @작성일 : 2016. 1. 21.
+	  * @작성자 : junyoung
+	  * @param midCategoryId
+	  * @return
+	 */
+	@Override
+	public List<BlliPostingVO> selectPostingBySmallProductList(String smallProductId) {
+		System.out.println("DAO"+smallProductId);
+		return sqlSessionTemplate.selectList("posting.selectPostingBySmallProductList", smallProductId);
 	}
 }

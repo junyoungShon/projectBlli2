@@ -23,6 +23,7 @@ public class BlliPostingVO {
 	private String postingDate;
 	private int postingOrder;
 	private int postingReplyCount;
+	private String postingStatus;
 	private ArrayList<String> imageList;
 	private HashMap<String, String> smallProductImage;
 	private ArrayList<String> smallProductList;
@@ -41,7 +42,7 @@ public class BlliPostingVO {
 			int postingDislikeCount, int postingMediaCount,
 			String postingPhotoLink, int postingTotalResidenceTime,
 			int postingViewCount, int postingScrapeCount, String postingAuthor,
-			String postingDate, int postingOrder, int postingReplyCount,
+			String postingDate, int postingOrder, int postingReplyCount,String postingStatus,
 			ArrayList<String> imageList,
 			HashMap<String, String> smallProductImage,
 			ArrayList<String> smallProductList) {
@@ -64,6 +65,7 @@ public class BlliPostingVO {
 		this.postingDate = postingDate;
 		this.postingOrder = postingOrder;
 		this.postingReplyCount = postingReplyCount;
+		this.postingStatus = postingStatus;
 		this.imageList = imageList;
 		this.smallProductImage = smallProductImage;
 		this.smallProductList = smallProductList;
@@ -212,6 +214,14 @@ public class BlliPostingVO {
 	public void setPostingReplyCount(int postingReplyCount) {
 		this.postingReplyCount = postingReplyCount;
 	}
+	
+	public String getPostingStatus() {
+		return postingStatus;
+	}
+
+	public void setPostingStatus(String postingStatus) {
+		this.postingStatus = postingStatus;
+	}
 
 	public ArrayList<String> getImageList() {
 		return imageList;
@@ -256,9 +266,12 @@ public class BlliPostingVO {
 				+ ", postingScrapeCount=" + postingScrapeCount
 				+ ", postingAuthor=" + postingAuthor + ", postingDate="
 				+ postingDate + ", postingOrder=" + postingOrder
-				+ ", postingReplyCount=" + postingReplyCount + ", imageList="
+				+ ", postingReplyCount=" + postingReplyCount
+				+ ", postingStatus=" + postingStatus + ", imageList="
 				+ imageList + ", smallProductImage=" + smallProductImage
 				+ ", smallProductList=" + smallProductList + "]";
 	}
+
+	
 
 }

@@ -7,6 +7,7 @@ import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
+import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 
 public interface ProductService {
@@ -23,5 +24,7 @@ public interface ProductService {
 
 	public List<BlliSmallProductVO> selectSameAgeMomBestPickedSmallProductList(
 			List<BlliMidCategoryVO> blliMidCategoryVOList, BlliBabyVO blliBabyVO);
+
+	public List<BlliPostingVO> selectPostingBySmallProductList(List<BlliSmallProductVO> blliSmallProductVOList);
 
 }

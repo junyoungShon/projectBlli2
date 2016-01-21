@@ -14,6 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="postingDislikeCount" column="posting_dislike_count"/>
  		<result property="postingMediaCount" column="posting_media_count"/>
  		<result property="postingPhotoLink" column="posting_photo_link"/>
+ 		<result property="postingStatus" column="posting_status"/>
  		<result property="postingTotalResidenceTime" column="posting_total_residence_time"/>
  		<result property="postingViewCount" column="posting_view_count"/>
  		<result property="postingScrapeCount" column="posting_scrape_count"/>
@@ -73,7 +74,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteProduct">
 		delete from blli_posting where posting_url = #{postingUrl} and small_product = #{smallProduct}
 	</delete>
-	
+	<!-- 준영쿼리 시작 -->
+	<select id="selectPostingBySmallProductList" resultMap="bpvRM">
+		select posting_url,small_product,small_product_id,posting_title,posting_summary,posting_content,posting_score,posting_like_count,
+		posting_dislike_count,posting_media_count,posting_photo_link,posting_total_residence_time,posting_view_count,posting_scrap_count,posting_author,posting_date
+		from blli_posting
+		where posting_status = 'confirmed' and small_product_id = #{value}
+		order by posting_score asc
+	</select>
+	<!-- 준영 쿼리 끝 -->
+	<update id="updatePostingViewCountAndResidenceTime">
+		update blli_posting set posting_total_residence_time = posting_total_residence_time + #{postingTotalResidenceTime} , posting_view_count = posting_view_count+1
+ 		where posting_url = #{postingUrl} and small_product_id = #{smallProductId}
+	</update>
  </mapper> 		
  
  

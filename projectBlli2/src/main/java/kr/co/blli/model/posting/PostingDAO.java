@@ -28,4 +28,6 @@ public interface PostingDAO {
 
 	List<String> getAllPostingStatus(String postingUrl);
 
+	void updatePostingViewCountAndResidenceTime(BlliPostingVO blliPostingVO);
+
 }
