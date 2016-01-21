@@ -7,6 +7,7 @@ import java.util.HashMap;
 public class BlliPostingVO {
 	private String postingUrl;
 	private String smallProduct;
+	private String smallProductId;
 	private String postingTitle;
 	private String postingSummary;
 	private String postingContent;
@@ -35,18 +36,19 @@ public class BlliPostingVO {
 	}
 
 	public BlliPostingVO(String postingUrl, String smallProduct,
-			String postingTitle, String postingSummary, String postingContent,
-			int postingScore, int postingLikeCount, int postingDislikeCount,
-			int postingMediaCount, String postingPhotoLink,
-			int postingTotalResidenceTime, int postingViewCount,
-			int postingScrapeCount, String postingAuthor, String postingDate,
-			int postingOrder, int postingReplyCount,
+			String smallProductId, String postingTitle, String postingSummary,
+			String postingContent, int postingScore, int postingLikeCount,
+			int postingDislikeCount, int postingMediaCount,
+			String postingPhotoLink, int postingTotalResidenceTime,
+			int postingViewCount, int postingScrapeCount, String postingAuthor,
+			String postingDate, int postingOrder, int postingReplyCount,
 			ArrayList<String> imageList,
 			HashMap<String, String> smallProductImage,
 			ArrayList<String> smallProductList) {
 		super();
 		this.postingUrl = postingUrl;
 		this.smallProduct = smallProduct;
+		this.smallProductId = smallProductId;
 		this.postingTitle = postingTitle;
 		this.postingSummary = postingSummary;
 		this.postingContent = postingContent;
@@ -81,6 +83,14 @@ public class BlliPostingVO {
 
 	public void setSmallProduct(String smallProduct) {
 		this.smallProduct = smallProduct;
+	}
+
+	public String getSmallProductId() {
+		return smallProductId;
+	}
+
+	public void setSmallProductId(String smallProductId) {
+		this.smallProductId = smallProductId;
 	}
 
 	public String getPostingTitle() {
@@ -234,20 +244,21 @@ public class BlliPostingVO {
 	@Override
 	public String toString() {
 		return "BlliPostingVO [postingUrl=" + postingUrl + ", smallProduct="
-				+ smallProduct + ", postingTitle=" + postingTitle
-				+ ", postingSummary=" + postingSummary + ", postingContent="
-				+ postingContent + ", postingScore=" + postingScore
-				+ ", postingLikeCount=" + postingLikeCount
-				+ ", postingDislikeCount=" + postingDislikeCount
-				+ ", postingMediaCount=" + postingMediaCount
-				+ ", postingPhotoLink=" + postingPhotoLink
+				+ smallProduct + ", smallProductId=" + smallProductId
+				+ ", postingTitle=" + postingTitle + ", postingSummary="
+				+ postingSummary + ", postingContent=" + postingContent
+				+ ", postingScore=" + postingScore + ", postingLikeCount="
+				+ postingLikeCount + ", postingDislikeCount="
+				+ postingDislikeCount + ", postingMediaCount="
+				+ postingMediaCount + ", postingPhotoLink=" + postingPhotoLink
 				+ ", postingTotalResidenceTime=" + postingTotalResidenceTime
 				+ ", postingViewCount=" + postingViewCount
 				+ ", postingScrapeCount=" + postingScrapeCount
 				+ ", postingAuthor=" + postingAuthor + ", postingDate="
 				+ postingDate + ", postingOrder=" + postingOrder
 				+ ", postingReplyCount=" + postingReplyCount + ", imageList="
-				+ imageList + ", smallProductList=" + smallProductList + "]";
+				+ imageList + ", smallProductImage=" + smallProductImage
+				+ ", smallProductList=" + smallProductList + "]";
 	}
 
 }

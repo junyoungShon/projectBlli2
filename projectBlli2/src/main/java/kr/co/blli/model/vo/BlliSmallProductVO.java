@@ -3,6 +3,7 @@ package kr.co.blli.model.vo;
 public class BlliSmallProductVO {
 	private String smallProduct;
 	private String midCategory;
+	private String midCategoryId;
 	private String smallProductMaker;
 	private int smallProductWhenToUseMin;
 	private int smallProductWhenToUseMax;
@@ -13,19 +14,22 @@ public class BlliSmallProductVO {
 	private int naverShoppingOrder;
 	private int smallProductPostingCount;
 	private String productRegisterDay;
+	private String smallProductId;
 	public BlliSmallProductVO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public BlliSmallProductVO(String smallProduct, String midCategory,
-			String smallProductMaker, int smallProductWhenToUseMin,
-			int smallProductWhenToUseMax, int smallProductDibsCount,
-			String smallProductMainPhotoLink, int smallProductScore,
-			String naverShoppingLink, int naverShoppingOrder,
-			int smallProductPostingCount, String productRegisterDay) {
+			String midCategoryId, String smallProductMaker,
+			int smallProductWhenToUseMin, int smallProductWhenToUseMax,
+			int smallProductDibsCount, String smallProductMainPhotoLink,
+			int smallProductScore, String naverShoppingLink,
+			int naverShoppingOrder, int smallProductPostingCount,
+			String productRegisterDay, String smallProductId) {
 		super();
 		this.smallProduct = smallProduct;
 		this.midCategory = midCategory;
+		this.midCategoryId = midCategoryId;
 		this.smallProductMaker = smallProductMaker;
 		this.smallProductWhenToUseMin = smallProductWhenToUseMin;
 		this.smallProductWhenToUseMax = smallProductWhenToUseMax;
@@ -36,6 +40,7 @@ public class BlliSmallProductVO {
 		this.naverShoppingOrder = naverShoppingOrder;
 		this.smallProductPostingCount = smallProductPostingCount;
 		this.productRegisterDay = productRegisterDay;
+		this.smallProductId = smallProductId;
 	}
 	public String getSmallProduct() {
 		return smallProduct;
@@ -48,6 +53,12 @@ public class BlliSmallProductVO {
 	}
 	public void setMidCategory(String midCategory) {
 		this.midCategory = midCategory;
+	}
+	public String getMidCategoryId() {
+		return midCategoryId;
+	}
+	public void setMidCategoryId(String midCategoryId) {
+		this.midCategoryId = midCategoryId;
 	}
 	public String getSmallProductMaker() {
 		return smallProductMaker;
@@ -109,19 +120,26 @@ public class BlliSmallProductVO {
 	public void setProductRegisterDay(String productRegisterDay) {
 		this.productRegisterDay = productRegisterDay;
 	}
+	public String getSmallProductId() {
+		return smallProductId;
+	}
+	public void setSmallProductId(String smallProductId) {
+		this.smallProductId = smallProductId;
+	}
 	@Override
 	public String toString() {
 		return "BlliSmallProductVO [smallProduct=" + smallProduct
-				+ ", midCategory=" + midCategory + ", smallProductMaker="
-				+ smallProductMaker + ", smallProductWhenToUseMin="
-				+ smallProductWhenToUseMin + ", smallProductWhenToUseMax="
-				+ smallProductWhenToUseMax + ", smallProductDibsCount="
-				+ smallProductDibsCount + ", smallProductMainPhotoLink="
-				+ smallProductMainPhotoLink + ", smallProductScore="
-				+ smallProductScore + ", naverShoppingLink="
-				+ naverShoppingLink + ", naverShoppingOrder="
-				+ naverShoppingOrder + ", smallProductPostingCount="
-				+ smallProductPostingCount + ", productRegisterDay="
-				+ productRegisterDay + "]";
+				+ ", midCategory=" + midCategory + ", midCategoryId="
+				+ midCategoryId + ", smallProductMaker=" + smallProductMaker
+				+ ", smallProductWhenToUseMin=" + smallProductWhenToUseMin
+				+ ", smallProductWhenToUseMax=" + smallProductWhenToUseMax
+				+ ", smallProductDibsCount=" + smallProductDibsCount
+				+ ", smallProductMainPhotoLink=" + smallProductMainPhotoLink
+				+ ", smallProductScore=" + smallProductScore
+				+ ", naverShoppingLink=" + naverShoppingLink
+				+ ", naverShoppingOrder=" + naverShoppingOrder
+				+ ", smallProductPostingCount=" + smallProductPostingCount
+				+ ", productRegisterDay=" + productRegisterDay
+				+ ", smallProductId=" + smallProductId + "]";
 	}
 }
