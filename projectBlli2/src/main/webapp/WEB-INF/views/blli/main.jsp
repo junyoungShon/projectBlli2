@@ -12,7 +12,6 @@
 <link rel="stylesheet" href="${initParam.root}css/flickity.css" media="screen">
 <script type="text/javascript">
 	$(document).ready(function(){
-		
 		//중분류 추천 제거 클릭 시 추천 대상에서 제외
 		$('.recommendMidDelete').click(function(){
 			if(confirm('정말 삭제하시겠어요??')){
@@ -37,17 +36,76 @@
 						+"&memberId=${sessionScope.blliMemberVO.memberId}",
 				success:function(){
 					alert("변경완료!");
-					location.href='${initParam.root}member_goMain.do '
+					location.href='${initParam.root}member_goMain.do'
 				}
 			});
 		});
+		//소제품 찜하기 스크립트
+		$('.smallProductDibBtn').click(function(){
+			$.ajax({
+				type:"get",
+				url:"smallProductDib.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(this).next('.smallProductId').val(),
+				success:function(result){
+					if(result==1){
+						alert('찜하기 성공!');
+					}else if(result==0){
+						alert('찜하기 해제!');
+					}
+				}
+			});
+		});
+		//포스팅 스크랩 스크립트
+		$('.postingScrapBtn').click(function(){
+			$.ajax({
+				type:"get",
+				url:"postingScrap.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(this).parent().parent().parent().siblings('.smallProductIdInfo').val()
+						+'&postingUrl='+$(this).parent().parent().parent().siblings('.postingUrlInfo').val(),
+				success:function(result){
+					if(result==1){
+						alert('스크랩 성공!');
+					}else if(result==0){
+						alert('스크랩 해제!');
+					}
+				}
+			}); 
+		});
+		//포스팅 좋아요 스크립트
+		$('.postingLikeBtn').click(function(){
+			$.ajax({
+				type:"get",
+				url:"postingLike.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(this).parent().parent().parent().siblings('.smallProductIdInfo').val()
+						+'&postingUrl='+$(this).parent().parent().parent().siblings('.postingUrlInfo').val(),
+				success:function(result){
+					if(result==1){
+						alert('좋아요 성공!');
+					}else if(result==0){
+						alert('좋아요 해제!');
+					}
+				}
+			}); 
+		});
+		//포스팅 싫어요 스크립트
+		$('.postingDisLikeBtn').click(function(){
+			$.ajax({
+				type:"get",
+				url:"postingDisLike.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(this).parent().parent().parent().siblings('.smallProductIdInfo').val()
+						+'&postingUrl='+$(this).parent().parent().parent().siblings('.postingUrlInfo').val(),
+				success:function(result){
+					if(result==1){
+						alert('싫어요 성공!');
+					}else if(result==0){
+						alert('싫어요 해제!');
+					}
+				}
+			}); 
+		});
 		
+		//중분류추천 슬라이드 설정 js
 		$('.midRecommProduct').flickity({
 			  // options
 			  freeScroll: true,
 			  wrapAround: true
-			});
-		
+		});
 	});
 </script>
 </head>
@@ -118,32 +176,20 @@ ${sessionScope.blliMemberVO.memberName}님 환영합니다.<br>
 		<tr>
 			<td>${blliSmallProductVOList.smallProduct}</td><td>${blliSmallProductVOList.midCategory}</td><td>${blliSmallProductVOList.midCategoryId}</td>
 			<td>${blliSmallProductVOList.smallProductMaker}</td><td>${blliSmallProductVOList.smallProductWhenToUseMin}개월~${blliSmallProductVOList.smallProductWhenToUseMax}개월</td>
-			<td>${blliSmallProductVOList.smallProductDibsCount}<input type="button" value="찜하기" ></td>
+			<c:if test="${blliSmallProductVOList.isDib==0}">
+				<td>${blliSmallProductVOList.smallProductDibsCount}
+				<input type="button" value="찜하기" class="smallProductDibBtn"><input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId"></td>
+			</c:if>
+			<c:if test="${blliSmallProductVOList.isDib==1}">
+				<td>${blliSmallProductVOList.smallProductDibsCount}
+				<input type="button" value="찜취소" class="smallProductDibBtn"><input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId"></td>
+			</c:if>
 			<td>${blliSmallProductVOList.smallProductMainPhotoLink}</td>
 			<td>${blliSmallProductVOList.smallProductScore}</td>
 		</tr>
 	</c:forEach>
 	
 </table>
-<!-- <result property="postingUrl" column="posting_url"/>
- 		<result property="postingTitle" column="posting_title"/>
- 		<result property="postingSummary" column="posting_summary"/>
- 		<result property="postingContent" column="posting_content"/>
- 		<result property="postingScore" column="posting_score"/>
- 		<result property="postingLikeCount" column="posting_like_count"/>
- 		<result property="postingDislikeCount" column="posting_dislike_count"/>
- 		<result property="postingMediaCount" column="posting_media_count"/>
- 		<result property="postingPhotoLink" column="posting_photo_link"/>
- 		<result property="postingStatus" column="posting_status"/>
- 		<result property="postingTotalResidenceTime" column="posting_total_residence_time"/>
- 		<result property="postingViewCount" column="posting_view_count"/>
- 		<result property="postingScrapeCount" column="posting_scrape_count"/>
- 		<result property="postingAuthor" column="posting_author"/>
- 		<result property="postingDate" column="posting_date"/>
- 		<result property="postingOrder" column="posting_order"/>
- 		<result property="postingReplyCount" column="posting_reply_count"/>
- 		<result property="smallProduct" column="small_product"/>
- 		<result property="smallProductId" column="small_product_id"/> -->
 <h1>현재 추천되고 있는 소제품관련 블로그!</h1>
 <table align="center" width="50%" border="1" bordercolor="silver" style="border-collapse: collapse; table-layout: fixed;" cellpadding="10" rules="none">
 <c:forEach items="${requestScope.blliPostingVOList}" var="postingList">
@@ -163,10 +209,27 @@ ${sessionScope.blliMemberVO.memberName}님 환영합니다.<br>
 <tr style="border: 1px solid silver;">
 	<td colspan="2" align="center" width="20%"><strong><font size="4" color="red">${postingList.postingScore}점</font></strong></td>
 	<td colspan="4" width="40%"><font size="3" color="silver">${postingList.smallProduct}</font></td>
-	<td align="center" width="10%"><font color="silver"><img src="${initParam.root}image/스크랩.PNG" width="20px"> ${postingList.postingScrapeCount}</font></td>
-	<td align="center" width="10%"><font color="silver"><img src="${initParam.root}image/좋아요.PNG" width="15px"> ${postingList.postingLikeCount}</font></td>
-	<td align="center" width="10%"><font color="silver"><img src="${initParam.root}image/싫어요.PNG" width="15px"> ${postingList.postingDislikeCount}</font></td>
+	<c:if test="${postingList.isScrapped==0}">
+		<td align="center" width="10%"><font color="silver"><img src="${initParam.root}image/스크랩.PNG" class="postingScrapBtn" width="20px"> ${postingList.postingScrapeCount}스크랩하기</font></td>
+	</c:if>
+	<c:if test="${postingList.isScrapped==1}">
+		<td align="center" width="10%"><font color="silver"><img src="${initParam.root}image/스크랩.PNG" class="postingScrapBtn" width="20px"> ${postingList.postingScrapeCount}스크랩취소</font></td>
+	</c:if>
+	<c:if test="${postingList.isLike==0}">
+		<td align="center" width="10%"><font color="silver"><img src="${initParam.root}image/좋아요.PNG" class="postingLikeBtn" width="15px">좋아요 ${postingList.postingLikeCount}</font></td>
+	</c:if>
+	<c:if test="${postingList.isLike==1}">
+		<td align="center" width="10%"><font color="silver"><img src="${initParam.root}image/좋아요.PNG" class="postingLikeBtn" width="15px">좋아요 취소${postingList.postingLikeCount}</font></td>
+	</c:if>
+	<c:if test="${postingList.isDisLike==0}">
+		<td align="center" width="10%"><font color="silver"><img src="${initParam.root}image/좋아요.PNG" class="postingLikeBtn" width="15px">싫어요 ${postingList.postingLikeCount}</font></td>
+	</c:if>
+	<c:if test="${postingList.isDisLike==1}">
+		<td align="center" width="10%"><font color="silver"><img src="${initParam.root}image/싫어요.PNG" class="postingDisLikeBtn" width="15px">싫어요 취소${postingList.postingDislikeCount}</font></td>
+	</c:if>
 </tr>
+<input type="hidden" class="smallProductIdInfo" value="${postingList.smallProductId}">
+<input type="hidden" class="postingUrlInfo" value="${postingList.postingUrl}">
 </c:forEach>
 </table>
 

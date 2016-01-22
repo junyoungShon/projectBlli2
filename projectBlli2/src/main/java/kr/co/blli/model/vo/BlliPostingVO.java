@@ -24,16 +24,22 @@ public class BlliPostingVO {
 	private int postingOrder;
 	private int postingReplyCount;
 	private String postingStatus;
+	//16.01.22 추가
+	private int isLike;
+	//16.01.22 추가
+	private int isDisLike;
+	//16.01.22 추가
+	private int isScrapped;
 	private ArrayList<String> imageList;
 	private HashMap<String, String> smallProductImage;
 	private ArrayList<String> smallProductList;
+	
 	
 	public final ArrayList<String> regex = new ArrayList<String>(Arrays.asList("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>","<[^>]*>",
 			"<!--.*-->","&nbsp;","&#xfeff;","&#x200b;","&lt;","&gt;","&amp;","&#x1112;","\n"));
 
 	public BlliPostingVO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public BlliPostingVO(String postingUrl, String smallProduct,
@@ -42,7 +48,8 @@ public class BlliPostingVO {
 			int postingDislikeCount, int postingMediaCount,
 			String postingPhotoLink, int postingTotalResidenceTime,
 			int postingViewCount, int postingScrapeCount, String postingAuthor,
-			String postingDate, int postingOrder, int postingReplyCount,String postingStatus,
+			String postingDate, int postingOrder, int postingReplyCount,
+			String postingStatus, int isLike, int isDisLike, int isScrapped,
 			ArrayList<String> imageList,
 			HashMap<String, String> smallProductImage,
 			ArrayList<String> smallProductList) {
@@ -66,11 +73,13 @@ public class BlliPostingVO {
 		this.postingOrder = postingOrder;
 		this.postingReplyCount = postingReplyCount;
 		this.postingStatus = postingStatus;
+		this.isLike = isLike;
+		this.isDisLike = isDisLike;
+		this.isScrapped = isScrapped;
 		this.imageList = imageList;
 		this.smallProductImage = smallProductImage;
 		this.smallProductList = smallProductList;
 	}
-
 	public String getPostingUrl() {
 		return postingUrl;
 	}
@@ -251,6 +260,30 @@ public class BlliPostingVO {
 		return regex;
 	}
 
+	public int getIsLike() {
+		return isLike;
+	}
+
+	public void setIsLike(int isLike) {
+		this.isLike = isLike;
+	}
+
+	public int getIsDisLike() {
+		return isDisLike;
+	}
+
+	public void setIsDisLike(int isDisLike) {
+		this.isDisLike = isDisLike;
+	}
+
+	public int getIsScrapped() {
+		return isScrapped;
+	}
+
+	public void setIsScrapped(int isScrapped) {
+		this.isScrapped = isScrapped;
+	}
+
 	@Override
 	public String toString() {
 		return "BlliPostingVO [postingUrl=" + postingUrl + ", smallProduct="
@@ -267,11 +300,10 @@ public class BlliPostingVO {
 				+ ", postingAuthor=" + postingAuthor + ", postingDate="
 				+ postingDate + ", postingOrder=" + postingOrder
 				+ ", postingReplyCount=" + postingReplyCount
-				+ ", postingStatus=" + postingStatus + ", imageList="
-				+ imageList + ", smallProductImage=" + smallProductImage
-				+ ", smallProductList=" + smallProductList + "]";
+				+ ", postingStatus=" + postingStatus + ", isLike=" + isLike
+				+ ", isDisLike=" + isDisLike + ", isScrapped=" + isScrapped
+				+ ", imageList=" + imageList + ", smallProductImage="
+				+ smallProductImage + ", smallProductList=" + smallProductList
+				+ "]";
 	}
-
-	
-
 }

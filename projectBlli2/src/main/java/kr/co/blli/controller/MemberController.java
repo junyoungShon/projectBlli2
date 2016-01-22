@@ -12,9 +12,13 @@ import kr.co.blli.model.member.MemberService;
 import kr.co.blli.model.product.ProductService;
 import kr.co.blli.model.security.BlliUserDetailsService;
 import kr.co.blli.model.vo.BlliBabyVO;
+import kr.co.blli.model.vo.BlliMemberDibsVO;
+import kr.co.blli.model.vo.BlliMemberScrapVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
+import kr.co.blli.model.vo.BlliPostingDisLikeVO;
+import kr.co.blli.model.vo.BlliPostingLikeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 
@@ -101,7 +105,7 @@ public class MemberController {
 		List<BlliSmallProductVO> blliSmallProductVOList = productService.selectSameAgeMomBestPickedSmallProductList(blliMidCategoryVOList,blliBabyVO);
 		
 		//메인페이지로 이동할 때 회원에게 추천 될 소분류 상품과 관련 된 포스팅을 보여준다.<으아아아 여기있으면 아니되오!!>
-		List<BlliPostingVO> blliPostingVOList = productService.selectPostingBySmallProductList(blliSmallProductVOList);
+		List<BlliPostingVO> blliPostingVOList = productService.selectPostingBySmallProductList(blliSmallProductVOList,blliMemberVO.getMemberId());
 		//회원정보 삽입
 		request.setAttribute("blliMemberVO", blliMemberVO);
 		//회원에게 추천될 중분류 상품 리스트 삽입
@@ -305,8 +309,67 @@ public class MemberController {
 		//메인으로 이동
 		return "redirect:member_goMain.do";
 	}
-	
-	
+	/**
+	  * @Method Name : smallProductDib
+	  * @Method 설명 : 소제품을 찜하고 그 결과를 반환해주는 컨트롤러 메서드
+	  * @작성일 : 2016. 1. 22.
+	  * @작성자 : junyoung
+	  * @param blliMemberDibsVO
+	  * @return
+	 */
+	@RequestMapping("smallProductDib.do")
+	@ResponseBody
+	public int smallProductDib(BlliMemberDibsVO blliMemberDibsVO){
+		int result=0;
+		result = productService.smallProductDib(blliMemberDibsVO);
+		return result;
+	}
+	/**
+	 * @Method Name : postingScrap
+	 * @Method 설명 : 블로그 스크랩 버튼에 대해 그 결과를 반환해주는 컨트롤러 메서드
+	 * @작성일 : 2016. 1. 22.
+	 * @작성자 : junyoung
+	 * @param blliMemberDibsVO
+	 * @return
+	 */
+	@RequestMapping("postingScrap.do")
+	@ResponseBody
+	public int postingScrap(BlliMemberScrapVO blliMemberScrapVO){
+		System.out.println(blliMemberScrapVO);
+		int result=0;
+		result = productService.postingScrap(blliMemberScrapVO);
+		return result;
+	}
+	/**
+	 * @Method Name : postingLike
+	 * @Method 설명 : 소제품 관련 포스팅을 좋아요 누르면 그 결과를 반환해주는 컨트롤러 메서드
+	 * @작성일 : 2016. 1. 22.
+	 * @작성자 : junyoung
+	 * @param blliMemberDibsVO
+	 * @return
+	 */
+	@RequestMapping("postingLike.do")
+	@ResponseBody
+	public int postingLike(BlliPostingLikeVO blliPostingLikeVO){
+		int result=0;
+		result = productService.postingLike(blliPostingLikeVO);
+		return result;
+	}
+	/**
+	 * @Method Name : postingDisLike
+	 * @Method 설명 : 소제품을 관련 포스팅을  싫어요 누르면 그 결과를 반환해주는 컨트롤러 메서드
+	 * @작성일 : 2016. 1. 22.
+	 * @작성자 : junyoung
+	 * @param blliMemberDibsVO
+	 * @return
+	 */
+	@RequestMapping("postingDisLike.do")
+	@ResponseBody
+	public int postingDisLike(BlliPostingDisLikeVO blliPostingDisLikeVO){
+		int result=0;
+		result = productService.postingDisLike(blliPostingDisLikeVO);
+		return result;
+	}
 	
 		
 	

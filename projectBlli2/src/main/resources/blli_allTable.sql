@@ -176,6 +176,8 @@ drop table blli_member_dibs cascade constraint;
 CREATE TABLE blli_member_dibs (
 	member_id            VARCHAR2(30) NOT NULL ,
 	small_product_id   VARCHAR2(100) NOT NULL ,
+	--16.01.22 추가
+	dibs_time			DATE NOT NULL, 
 	constraint fk_member_dibs_member_id foreign key(member_id) references blli_member(member_id),
 	constraint fk_member_dibs_small_prod foreign key(small_product_id) references blli_small_product(small_product_id),
 	constraint pk_member_dibs primary key (member_id, small_product_id)
@@ -199,9 +201,35 @@ drop table blli_member_scrap cascade constraint;
 CREATE TABLE blli_member_scrap (
 	member_id            VARCHAR2(30) NOT NULL ,
 	posting_url          VARCHAR2(300) NOT NULL ,
+	small_product_id   VARCHAR2(30) NOT NULL , -- 추가
+	scrap_time			DATE,
 	constraint fk_member_scrap_mem_id foreign key(member_id) references blli_member(member_id),
 	constraint fk_member_scrap_post_url foreign key(posting_url) references blli_posting(posting_url),
-	constraint pk_member_scrap primary key (member_id, posting_url)
+	constraint fk_member_scrap_small_p_id foreign key(small_product_id) references blli_small_product(small_product_id),
+	constraint pk_member_scrap primary key (member_id, posting_url,small_product_id)
+);
+
+drop table blli_posting_like cascade constraint;
+CREATE TABLE blli_posting_like (
+	member_id            VARCHAR2(30) NOT NULL ,
+	posting_url          VARCHAR2(300) NOT NULL ,
+	small_product_id   VARCHAR2(30) NOT NULL , -- 추가
+	LIKE_time			DATE,
+	constraint fk_member_LIKE_mem_id foreign key(member_id) references blli_member(member_id),
+	constraint fk_member_LIKE_post_url foreign key(posting_url) references blli_posting(posting_url),
+	constraint fk_member_LIKE_small_p_id foreign key(small_product_id) references blli_small_product(small_product_id),
+	constraint pk_member_LIKE primary key (member_id, posting_url,small_product_id)
+);
+drop table blli_posting_dislike cascade constraint;
+CREATE TABLE blli_posting_dislike (
+	member_id            VARCHAR2(30) NOT NULL ,
+	posting_url          VARCHAR2(300) NOT NULL ,
+	small_product_id   VARCHAR2(30) NOT NULL , -- 추가
+	DISLIKE_time			DATE,
+	constraint fk_member_DISLIKE_mem_id foreign key(member_id) references blli_member(member_id),
+	constraint fk_member_DISLIKE_post_url foreign key(posting_url) references blli_posting(posting_url),
+	constraint fk_member_DISLIKE_small_p_id foreign key(small_product_id) references blli_small_product(small_product_id),
+	constraint pk_member_DISLIKE primary key (member_id, posting_url,small_product_id)
 );
 
 

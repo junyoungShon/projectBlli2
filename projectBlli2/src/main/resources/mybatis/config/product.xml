@@ -101,6 +101,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		order by SMALL_PRODUCT_DIBS_COUNT desc) where rn=1
 		]]> 
 	</select>
+	<delete id="deleteDipsInfo">
+		delete from blli_member_dibs where member_id=#{memberId} and small_product_id = #{smallProductId}
+	</delete>
+	<insert id="insertDipsInfo">
+		insert into blli_member_dibs (member_id,small_product_id,dibs_time) values (#{memberId},#{smallProductId},sysdate)
+	</insert>
+	<update id="updatePlusSmallProductDibsCount">
+		update blli_small_product set small_product_dibs_count = small_product_dibs_count+1 where small_product_id=#{smallProductId}
+	</update>
+	<update id="updateMinusSmallProductDibsCount">
+		update blli_small_product set small_product_dibs_count = small_product_dibs_count-1 where small_product_id=#{smallProductId}
+	</update>
+	<!-- 회원이 소제품을 찜했는지 여부를 반환 -->
+	<select id="selectMemberDibsSmallProduct" resultType="Integer">
+		select count(*) from blli_member_dibs where member_Id=#{memberId} and small_product_id = #{smallProductId}
+	</select>
 	<!-- 끝 -->
 	<insert id="insertSmallProduct">
 		insert into blli_small_product(small_product_id, small_product, mid_category, small_product_maker, small_product_main_photo_link, small_product_posting_count, naver_shopping_order, product_register_day, mid_category_id)
