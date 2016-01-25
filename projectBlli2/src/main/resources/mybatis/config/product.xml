@@ -52,9 +52,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<update id="updateMidCategory">
-		update blli_mid_category set mid_category_id = #{midCategoryId}, mid_category_main_photo_link = #{midCategoryMainPhotoLink}, big_category = #{bigCategory}, mid_category_id = #{midCategoryId} 
-		where mid_category = #{midCategory} and big_category = #{bigCategory}
-	</update>
+      update blli_mid_category set mid_category_id = #{midCategoryId}, mid_category_main_photo_link = #{midCategoryMainPhotoLink}, big_category = #{bigCategory} 
+      where mid_category = #{midCategory} and big_category = #{bigCategory}
+   </update>
 	
 	<insert id="insertMidCategory">
 		insert into blli_mid_category(mid_category, mid_category_main_photo_link, big_category, mid_category_id) values(#{midCategory}, #{midCategoryMainPhotoLink}, #{bigCategory}, #{midCategoryId})

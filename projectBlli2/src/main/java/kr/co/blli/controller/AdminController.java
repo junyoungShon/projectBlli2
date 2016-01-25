@@ -12,19 +12,5 @@ public class AdminController {
 	@Resource
 	private AdminService adminService;
 	
-	
-	@RequestMapping("sendMail.do")
-	public String sendMail(String memberId, String mailForm) {
-		
-		String viewName = "admin/sendMail_success";
-		try {
-			adminService.sendMail(memberId, mailForm);
-		} catch (Exception e) {
-			e.printStackTrace();
-			viewName = "admin/sendMail_fail";
-		}
-		
-		return viewName;
-	}
 }
  

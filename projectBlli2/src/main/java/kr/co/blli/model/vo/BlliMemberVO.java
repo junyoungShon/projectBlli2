@@ -12,8 +12,8 @@ public class BlliMemberVO{
 	private String authority;
 	//blliMember테이블의 1:N 관계 테이블 VO 추가 - 자동로그인 테이블 제외
 	private List<BlliBabyVO> blliBabyVOList ;
-	private List<BlliScheduleVO> blliScheduleVOList;
-	private List<BlliRecommendingMidCategoryVO> blliRecommendingMidCategoryVOList;
+	//private List<BlliScheduleVO> blliScheduleVOList;
+	//private List<BlliRecommendingMidCategoryVO> blliRecommendingMidCategoryVOList;
 
 	
 	public BlliMemberVO() {
@@ -101,7 +101,7 @@ public class BlliMemberVO{
 	}
 
 
-	public List<BlliScheduleVO> getBlliScheduleVOList() {
+	/*public List<BlliScheduleVO> getBlliScheduleVOList() {
 		return blliScheduleVOList;
 	}
 
@@ -119,11 +119,11 @@ public class BlliMemberVO{
 	public void setBlliRecommendingMidCategoryVOList(
 			List<BlliRecommendingMidCategoryVO> blliRecommendingMidCategoryVOList) {
 		this.blliRecommendingMidCategoryVOList = blliRecommendingMidCategoryVOList;
-	}
+	}*/
 
 
 	
-	@Override
+	/*@Override
 	public String toString() {
 		return "BlliMemberVO [memberId=" + memberId + ", memberEmail="
 				+ memberEmail + ", memberPassword=" + memberPassword
@@ -134,5 +134,5 @@ public class BlliMemberVO{
 				+ ", blliRecommendingMidCategoryVOList="
 				+ blliRecommendingMidCategoryVOList + ", blliMemberDipsVOList="
 				+ "]";
-	}
+	}*/
 }

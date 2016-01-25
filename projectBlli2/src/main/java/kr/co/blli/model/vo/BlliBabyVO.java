@@ -9,7 +9,7 @@ public class BlliBabyVO {
 	private String babySex;
 	private String babyPhoto;
 	//BlliBaby테이블의 1:N 관계 테이블 VO 추가
-	private List<BlliScheduleVO> blliScheduleVOList;
+	//private List<BlliScheduleVO> blliScheduleVOList;
 	//월령 계산 후 저장하기 위한 변수 설정
 	private int babyMonthAge;
 	//태어나고 지난 일 수
@@ -59,13 +59,13 @@ public class BlliBabyVO {
 		this.babyPhoto = babyPhoto;
 	}
 
-	public List<BlliScheduleVO> getBlliScheduleVOList() {
+	/*public List<BlliScheduleVO> getBlliScheduleVOList() {
 		return blliScheduleVOList;
 	}
 
 	public void setBlliScheduleVOList(List<BlliScheduleVO> blliScheduleVOList) {
 		this.blliScheduleVOList = blliScheduleVOList;
-	}
+	}*/
 
 	public int getBabyMonthAge() {
 		return babyMonthAge;
@@ -83,14 +83,14 @@ public class BlliBabyVO {
 		this.babyDayAge = babyDayAge;
 	}
 
-	@Override
+	/*@Override
 	public String toString() {
 		return "BlliBabyVO [memberId=" + memberId + ", babyName=" + babyName
 				+ ", babyBirthday=" + babyBirthday + ", babySex=" + babySex
 				+ ", babyPhoto=" + babyPhoto + ", blliScheduleVOList="
 				+ blliScheduleVOList + ", babyMonthAge=" + babyMonthAge
 				+ ", babyDayAge=" + babyDayAge + "]";
-	}
+	}*/
 
 	
 }
