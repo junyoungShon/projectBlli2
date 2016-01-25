@@ -16,4 +16,6 @@ public interface PostingService {
 
 	abstract void selectProduct(List<Map<String, Object>> urlAndProduct);
 
+	abstract void recordResidenceTime(BlliPostingVO blliPostingVO);
+
 }

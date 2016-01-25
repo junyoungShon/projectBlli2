@@ -22,8 +22,8 @@ CREATE TABLE blli_member (
 	member_password      VARCHAR2(100) NOT NULL ,
 	member_name          VARCHAR2(30) NOT NULL ,
 	member_state         NUMBER(2) default 0 ,
-	authority            VARCHAR2(20),
-	recommending_baby_name VARCHAR2(50) NOT NULL
+	--recommending 		NUMBER(1) NOT NULL, 삭제 
+	authority            VARCHAR2(20)
 );
 
 	
@@ -34,6 +34,7 @@ CREATE TABLE blli_baby (
 	baby_sex            VARCHAR2(10) NOT NULL ,
 	baby_photo          VARCHAR2(200) NULL ,
 	member_id           VARCHAR2(30) NOT NULL ,
+	recommending 		NUMBER(1) NOT NULL, --추가됨 0은 현재비추천 1은 현재추천대상
 	constraint fk_baby_member_id foreign key(member_id) references blli_member(member_id),
 	constraint pk_baby primary key (member_id, baby_name)
 );
@@ -83,21 +84,22 @@ CREATE TABLE blli_mid_category (
 
 
 drop table blli_small_product cascade constraint;
+
 CREATE TABLE blli_small_product ( -- naver_shopping_link  VARCHAR2(300) NOT NULL 삭제
-	small_product_id     VARCHAR2(30) NOT NULL primary key, -- 추가
-	small_product   VARCHAR2(500) NOT NULL , -- VARCHAR2(100)을 VARCHAR2(500)으로 변경
-	mid_category         VARCHAR2(50) NOT NULL ,
-	small_product_maker  VARCHAR2(50) NOT NULL ,
-	small_propduct_whentouse_min NUMBER(20) NULL , -- 컬럼명 변경, NOT NULL을 NULL로 변경
-	small_propduct_whentouse_max NUMBER(20) NULL , -- 추가
-	small_product_dibs_count NUMBER(10) default 0 ,
-	small_product_main_photo_link VARCHAR2(300) NOT NULL ,
-	small_product_score  NUMBER(4) default 0 ,
-	small_product_posting_count NUMBER(8) NOT NULL , -- default 0을 NOT NULL로 변경
-	naver_shopping_order NUMBER(5) NOT NULL, -- 추가
-	product_register_day DATE NOT NULL, -- 추가
-	mid_category_id      VARCHAR2(30) NOT NULL, -- 추가
-	constraint fk_small_prod_mid_cate foreign key(mid_category, mid_category_id) references blli_mid_category(mid_category, mid_category_id) -- mid_category_id 추가
+   small_product_id     VARCHAR2(30) NOT NULL primary key, -- 추가
+   small_product   VARCHAR2(100) NOT NULL ,
+   mid_category         VARCHAR2(50) NOT NULL ,
+   small_product_maker  VARCHAR2(50) NOT NULL ,
+   small_propduct_whentouse_min NUMBER(20) NULL , -- 컬럼명 변경, NOT NULL을 NULL로 변경
+   small_propduct_whentouse_max NUMBER(20) NULL , -- 추가
+   small_product_dibs_count NUMBER(10) default 0 ,
+   small_product_main_photo_link VARCHAR2(300) NOT NULL ,
+   small_product_score  NUMBER(4) default 0 ,
+   small_product_posting_count NUMBER(8) NOT NULL , -- default 0을 NOT NULL로 변경
+   naver_shopping_order NUMBER(5) NOT NULL, -- 추가
+   product_register_day DATE NOT NULL, -- 추가
+   mid_category_id      VARCHAR2(30) NOT NULL, -- 추가
+   constraint fk_small_prod_mid_cate foreign key(mid_category, mid_category_id) references blli_mid_category(mid_category, mid_category_id) -- mid_category_id 추가
 );
 
 
@@ -122,6 +124,7 @@ CREATE TABLE blli_posting (
 	posting_order            NUMBER(3) NOT NULL, -- 추가
 	posting_reply_count      NUMBER(4) NOT NULL, -- 추가
 	posting_status            VARCHAR2(30) NOT NULL, -- 추가
+	--constraint fk_posting_small_prod foreign key(small_product) references blli_small_product(small_product)
 	constraint fk_posting_small_prod_id foreign key(small_product_id) references blli_small_product(small_product_id)
 );
 
@@ -142,8 +145,8 @@ CREATE TABLE blli_small_prod_buy_link (
 drop table blli_small_product_photo cascade constraint;
 CREATE TABLE blli_small_product_photo (
 	small_product_photo_link VARCHAR2(300) NOT NULL primary key,
-	small_product   VARCHAR2(100) NOT NULL ,
-	constraint fk_small_prod_photo_small foreign key(small_product) references blli_small_product(small_product)
+	small_product_id   VARCHAR2(100) NOT NULL ,
+	constraint fk_small_prod_photo_small foreign key(small_product_id) references blli_small_product(small_product_id)
 );
 
 
@@ -151,20 +154,33 @@ drop table blli_recomm_mid_category cascade constraint;
 CREATE TABLE blli_recomm_mid_category (
 	member_id            VARCHAR2(30) NOT NULL ,
 	mid_category         VARCHAR2(50) NOT NULL ,
+	mid_category_id          VARCHAR2(30) NOT NULL, -- 추가
 	constraint fk_recomm_mid_cate_mem_id foreign key(member_id) references blli_member(member_id),
-	constraint fk_recomm_mid_cate_mid_cate foreign key(mid_category) references blli_mid_category(mid_category),
+	constraint fk_recomm_mid_mid_cate foreign key(mid_category,mid_category_id) references blli_mid_category(mid_category,mid_category_id), --수정
 	constraint pk_recomm_mid_cate primary key (member_id, mid_category)
 );
+
+drop table BLLI_NOT_RECOMM_MID_CATEGORY cascade constraint;
+CREATE TABLE BLLI_NOT_RECOMM_MID_CATEGORY(
+	member_id            VARCHAR2(30) NOT NULL ,
+	mid_category         VARCHAR2(50) NOT NULL ,
+	mid_category_id          VARCHAR2(30) NOT NULL, -- 추가
+	constraint fk_NOT_recomm_mid_cate_mem_id foreign key(member_id) references blli_member(member_id),
+	constraint fk_NOT_recomm_mid_mid_cate foreign key(mid_category,mid_category_id) references blli_mid_category(mid_category,mid_category_id), --수정
+	constraint pk_NOT_recomm_mid_cate primary key (member_id, mid_category)
+)
 
 
 
 drop table blli_member_dibs cascade constraint;
 CREATE TABLE blli_member_dibs (
 	member_id            VARCHAR2(30) NOT NULL ,
-	small_product   VARCHAR2(100) NOT NULL ,
+	small_product_id   VARCHAR2(100) NOT NULL ,
+	--16.01.22 추가
+	dibs_time			DATE NOT NULL, 
 	constraint fk_member_dibs_member_id foreign key(member_id) references blli_member(member_id),
-	constraint fk_member_dibs_small_prod foreign key(small_product) references blli_small_product(small_product),
-	constraint pk_member_dibs primary key (member_id, small_product)
+	constraint fk_member_dibs_small_prod foreign key(small_product_id) references blli_small_product(small_product_id),
+	constraint pk_member_dibs primary key (member_id, small_product_id)
 );
 
 
@@ -173,10 +189,10 @@ CREATE TABLE blli_buy_link_click (
 	member_id            VARCHAR2(30) NOT NULL ,
 	click_time           DATE NOT NULL ,
 	buy_link             VARCHAR2(300) NOT NULL ,
-	small_product   VARCHAR2(100) NOT NULL ,
+	small_product_id   VARCHAR2(100) NOT NULL ,
 	constraint fk_buy_link_click_mem_id foreign key(member_id) references blli_member(member_id),
-	constraint fk_buy_link_click_buy_prod foreign key(buy_link, small_product) references blli_small_prod_buy_link(buy_link, small_product),
-	constraint pk_buy_link_click primary key (member_id, click_time, buy_link, small_product)
+	constraint fk_buy_link_click_buy_prod foreign key(buy_link, small_product_id) references blli_small_prod_buy_link(buy_link, small_product_id),
+	constraint pk_buy_link_click primary key (member_id, click_time, buy_link, small_product_id)
 );
 
 
@@ -185,9 +201,35 @@ drop table blli_member_scrap cascade constraint;
 CREATE TABLE blli_member_scrap (
 	member_id            VARCHAR2(30) NOT NULL ,
 	posting_url          VARCHAR2(300) NOT NULL ,
+	small_product_id   VARCHAR2(30) NOT NULL , -- 추가
+	scrap_time			DATE,
 	constraint fk_member_scrap_mem_id foreign key(member_id) references blli_member(member_id),
 	constraint fk_member_scrap_post_url foreign key(posting_url) references blli_posting(posting_url),
-	constraint pk_member_scrap primary key (member_id, posting_url)
+	constraint fk_member_scrap_small_p_id foreign key(small_product_id) references blli_small_product(small_product_id),
+	constraint pk_member_scrap primary key (member_id, posting_url,small_product_id)
+);
+
+drop table blli_posting_like cascade constraint;
+CREATE TABLE blli_posting_like (
+	member_id            VARCHAR2(30) NOT NULL ,
+	posting_url          VARCHAR2(300) NOT NULL ,
+	small_product_id   VARCHAR2(30) NOT NULL , -- 추가
+	LIKE_time			DATE,
+	constraint fk_member_LIKE_mem_id foreign key(member_id) references blli_member(member_id),
+	constraint fk_member_LIKE_post_url foreign key(posting_url) references blli_posting(posting_url),
+	constraint fk_member_LIKE_small_p_id foreign key(small_product_id) references blli_small_product(small_product_id),
+	constraint pk_member_LIKE primary key (member_id, posting_url,small_product_id)
+);
+drop table blli_posting_dislike cascade constraint;
+CREATE TABLE blli_posting_dislike (
+	member_id            VARCHAR2(30) NOT NULL ,
+	posting_url          VARCHAR2(300) NOT NULL ,
+	small_product_id   VARCHAR2(30) NOT NULL , -- 추가
+	DISLIKE_time			DATE,
+	constraint fk_member_DISLIKE_mem_id foreign key(member_id) references blli_member(member_id),
+	constraint fk_member_DISLIKE_post_url foreign key(posting_url) references blli_posting(posting_url),
+	constraint fk_member_DISLIKE_small_p_id foreign key(small_product_id) references blli_small_product(small_product_id),
+	constraint pk_member_DISLIKE primary key (member_id, posting_url,small_product_id)
 );
 
 

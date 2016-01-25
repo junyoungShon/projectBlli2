@@ -50,4 +50,15 @@ public class PostingDAOImpl implements PostingDAO{
 	public List<String> getAllPostingStatus(String postingUrl) {
 		return sqlSessionTemplate.selectList("posting.getAllPostingStatus",postingUrl);
 	}
+	/**
+	  * @Method Name : updatePostingViewCountAndResidenceTime
+	  * @Method 설명 : 체류시간과 포스팅 조회수를 업데이트 해줍니다.
+	  * @작성일 : 2016. 1. 22.
+	  * @작성자 : junyoung
+	  * @param blliPostingVO
+	 */
+	@Override
+	public void updatePostingViewCountAndResidenceTime(BlliPostingVO blliPostingVO) {
+		sqlSessionTemplate.update("posting.updatePostingViewCountAndResidenceTime",blliPostingVO);
+	}
 }

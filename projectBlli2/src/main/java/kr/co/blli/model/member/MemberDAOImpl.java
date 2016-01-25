@@ -98,17 +98,18 @@ public class MemberDAOImpl implements MemberDAO{
 		return sqlSessionTemplate.selectList("member.selectBabyListByMemberId", memberId);
 	}
 	/**
-	  * @Method Name : updateRecommendingBabyName
-	  * @Method 설명 : 회원이 추천 받고 있는 아이를 변경해줍니다.
+	  * @Method Name : changeRecommendingBaby
+	  * @Method 설명 : 추천 대상아이를 바꿔줍니다.
 	  * @작성일 : 2016. 1. 20.
 	  * @작성자 : junyoung
-	  * @param blliMemberVO
+	  * @param beforeblliBabyVO
 	 */
 	@Override
-	public void updateRecommendingBabyName(BlliMemberVO blliMemberVO) {
-		sqlSessionTemplate.update("member.updateRecommendingBabyName", blliMemberVO);
+	public void changeRecommendingBaby(BlliBabyVO blliBabyVO) {
+		sqlSessionTemplate.update("member.changeRecommendingBaby", blliBabyVO);
 	}
 	
+<<<<<<< HEAD
 	
 	
 	
@@ -138,4 +139,6 @@ public class MemberDAOImpl implements MemberDAO{
 		return sqlSessionTemplate.selectList("member.getBabyAgeChangedListOfMember", memberId);	
 	}
 
+=======
+>>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 }
