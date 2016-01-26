@@ -22,11 +22,8 @@ public interface MemberDAO {
 
 	public List<BlliBabyVO> selectBabyListByMemberId(String memberId);
 
-<<<<<<< HEAD
-	public void updateRecommendingBabyName(BlliMemberVO blliMemberVO);
-	
-	
-	
+	public void changeRecommendingBaby(BlliBabyVO blliBabyVO);
+
 	
 	//용호 메소드 영역
 	public BlliMemberVO findMemberInfoById(String memberId);
@@ -36,9 +33,6 @@ public interface MemberDAO {
 	public List<BlliMemberVO> getMemberHavingBabyAgeChangedList();
 	
 	public List<BlliBabyVO> getBabyAgeChangedListOfMember(String memberId);
-=======
-	public void changeRecommendingBaby(BlliBabyVO blliBabyVO);
 
 
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 }

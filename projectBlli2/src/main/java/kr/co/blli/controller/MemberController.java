@@ -16,14 +16,11 @@ import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
-<<<<<<< HEAD
-=======
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
 import kr.co.blli.model.vo.BlliPostingDisLikeVO;
 import kr.co.blli.model.vo.BlliPostingLikeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -284,9 +281,6 @@ public class MemberController {
 		return "redirect:member_proceedingToMain.do";
 	}
 	
-<<<<<<< HEAD
-	
-	
 	//용호 메소드 작성 영역
 	
 	@RequestMapping("memberCalender.do")
@@ -305,7 +299,9 @@ public class MemberController {
 		return mv;
 	}
 	
-=======
+	
+	
+	
 	/**
 	  * @Method Name : 사용자가 추천을 제외한 중분류 상품을 지워준다.
 	  * @Method 설명 :
@@ -395,8 +391,5 @@ public class MemberController {
 		result = productService.postingDisLike(blliPostingDisLikeVO);
 		return result;
 	}
-	
-		
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 	
 }

@@ -109,9 +109,6 @@ public class MemberDAOImpl implements MemberDAO{
 		sqlSessionTemplate.update("member.changeRecommendingBaby", blliBabyVO);
 	}
 	
-<<<<<<< HEAD
-	
-	
 	
 	
 	
@@ -124,12 +121,10 @@ public class MemberDAOImpl implements MemberDAO{
 	public BlliMemberVO findMemberInfoById(String memberId) {
 		return sqlSessionTemplate.selectOne("member.findMemberInfoById", memberId);
 	}
-	
 	@Override
 	public BlliMailVO findMailSubjectAndContentByMailForm(String mailForm) {
 		return sqlSessionTemplate.selectOne("member.findMailSubjectAndContentByMailForm", mailForm);
 	}
-	
 	@Override
 	public List<BlliMemberVO> getMemberHavingBabyAgeChangedList() {
 		return sqlSessionTemplate.selectList("member.getMemberHavingBabyAgeChangedList");	
@@ -139,6 +134,4 @@ public class MemberDAOImpl implements MemberDAO{
 		return sqlSessionTemplate.selectList("member.getBabyAgeChangedListOfMember", memberId);	
 	}
 
-=======
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 }

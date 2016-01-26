@@ -10,7 +10,7 @@ public class BlliBabyVO {
 	private String babyPhoto;
 	private int recommending;
 	//BlliBaby테이블의 1:N 관계 테이블 VO 추가
-	//private List<BlliScheduleVO> blliScheduleVOList;
+	private List<BlliScheduleVO> blliScheduleVOList;
 	//월령 계산 후 저장하기 위한 변수 설정
 	private int babyMonthAge;
 	//태어나고 지난 일 수
@@ -84,9 +84,6 @@ public class BlliBabyVO {
 		this.babyDayAge = babyDayAge;
 	}
 
-<<<<<<< HEAD
-	/*@Override
-=======
 	public int getRecommending() {
 		return recommending;
 	}
@@ -96,24 +93,14 @@ public class BlliBabyVO {
 
 
 	@Override
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 	public String toString() {
 		return "BlliBabyVO [memberId=" + memberId + ", babyName=" + babyName
 				+ ", babyBirthday=" + babyBirthday + ", babySex=" + babySex
-<<<<<<< HEAD
-				+ ", babyPhoto=" + babyPhoto + ", blliScheduleVOList="
-				+ blliScheduleVOList + ", babyMonthAge=" + babyMonthAge
-				+ ", babyDayAge=" + babyDayAge + "]";
-	}*/
-=======
 				+ ", babyPhoto=" + babyPhoto + ", recommending=" + recommending
 				+ ", blliScheduleVOList=" + blliScheduleVOList
 				+ ", babyMonthAge=" + babyMonthAge + ", babyDayAge="
 				+ babyDayAge + "]";
 	}
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
-
-	
 
 	
 }

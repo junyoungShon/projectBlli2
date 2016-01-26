@@ -41,6 +41,7 @@ public class MailScheduler {
 	  * @param memberId
 	  * @param mailForm
 	  */
+	//@Scheduled(cron = "00 00 00 * * *")
 	@Scheduled(cron = "00/03 * * * * *")
 	public void sendRecommendingMail()
 			throws FileNotFoundException, URISyntaxException, UnsupportedEncodingException, MessagingException {
@@ -76,32 +77,4 @@ public class MailScheduler {
 		
 	}
 	
-	
-	/*BlliMailVO mlvo = memberDAO.findMailSubjectAndContentByMailForm(mailForm);
-	BlliMemberVO mbvo = memberDAO.findMemberInfoById(memberId);
-	
-	String recipient = mbvo.getMemberEmail();
-	String subject = mlvo.getMailSubject();
-	String contentFile = mlvo.getMailContentFile();
-	
-	Map<String, Object> textParams = new HashMap<String, Object>();
-	
-	if(mailForm.equals("findPassword")) {
-		textParams.put("memberPassword", mbvo.getMemberPassword());
-		textParams.put("memberName", mbvo.getMemberName());
-	}
-	
-	MimeMessage message = mailSender.createMimeMessage();
-	
-	String mailText = null;
-	if(textParams != null) {
-		mailText = VelocityEngineUtils.mergeTemplateIntoString(velocityConfig.getVelocityEngine(), contentFile, "utf-8", textParams);
-	}
-	
-	message.setFrom(new InternetAddress("admin@blli.co.kr","블리", "utf-8"));
-	message.addRecipient(RecipientType.TO, new InternetAddress(recipient)); //import javax.mail.Message.RecipientType;
-	message.setSubject(subject);
-	message.setText(mailText, "utf-8", "html");
-	
-	mailSender.send(message);*/
 }

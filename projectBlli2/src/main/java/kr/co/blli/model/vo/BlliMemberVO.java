@@ -11,13 +11,8 @@ public class BlliMemberVO{
 	private String authority;
 	//blliMember테이블의 1:N 관계 테이블 VO 추가 - 자동로그인 테이블 제외
 	private List<BlliBabyVO> blliBabyVOList ;
-<<<<<<< HEAD
-	//private List<BlliScheduleVO> blliScheduleVOList;
-	//private List<BlliRecommendingMidCategoryVO> blliRecommendingMidCategoryVOList;
-=======
 	private List<BlliScheduleVO> blliScheduleVOList;
 	private List<BlliMidCategoryVO> blliRecommendingMidCategoryVOList;
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 
 	
 	public BlliMemberVO() {
@@ -91,7 +86,7 @@ public class BlliMemberVO{
 	}
 
 
-	/*public List<BlliScheduleVO> getBlliScheduleVOList() {
+	public List<BlliScheduleVO> getBlliScheduleVOList() {
 		return blliScheduleVOList;
 	}
 
@@ -109,15 +104,10 @@ public class BlliMemberVO{
 	public void setBlliRecommendingMidCategoryVOList(
 			List<BlliMidCategoryVO> blliRecommendingMidCategoryVOList) {
 		this.blliRecommendingMidCategoryVOList = blliRecommendingMidCategoryVOList;
-	}*/
+	}
 
 
-<<<<<<< HEAD
-	
-	/*@Override
-=======
 	@Override
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 	public String toString() {
 		return "BlliMemberVO [memberId=" + memberId + ", memberEmail="
 				+ memberEmail + ", memberPassword=" + memberPassword
@@ -125,13 +115,7 @@ public class BlliMemberVO{
 				+ ", authority=" + authority + ", blliBabyVOList="
 				+ blliBabyVOList + ", blliScheduleVOList=" + blliScheduleVOList
 				+ ", blliRecommendingMidCategoryVOList="
-<<<<<<< HEAD
-				+ blliRecommendingMidCategoryVOList + ", blliMemberDipsVOList="
-				+ "]";
-	}*/
-=======
 				+ blliRecommendingMidCategoryVOList + "]";
 	}
 	
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 }
