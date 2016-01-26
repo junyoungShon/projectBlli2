@@ -13,8 +13,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="midCategory" column="mid_category"/>
  		<result property="midCategoryInfo" column="mid_category_info"/>
  		<result property="midCategoryMainPhotoLink" column="mid_category_main_photo_link"/>
- 		<result property="midCategoryWhentouseMin" column="mid_category_whentouse_min"/>
- 		<result property="midCategoryWhentouseMax" column="mid_category_whentouse_max"/>
+ 		<result property="whenToUseMin" column="mid_category_whentouse_min"/>
+ 		<result property="whenToUseMax" column="mid_category_whentouse_max"/>
  		<result property="bigCategory" column="big_category"/>
  		<result property="midCategoryId" column="mid_category_id"/>
  	</resultMap>
@@ -24,8 +24,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="smallProduct" column="small_product"/>
  		<result property="midCategory" column="mid_category"/>
  		<result property="smallProductMaker" column="small_product_maker"/>
- 		<result property="smallPropductWhentouseMin" column="small_propduct_whentouse_min"/>
- 		<result property="smallPropductWhentouseMax" column="small_propduct_whentouse_max"/>
+ 		<result property="smallProductWhenToUseMin" column="small_propduct_whentouse_min"/>
+ 		<result property="smallProductWhenToUseMax" column="small_propduct_whentouse_max"/>
  		<result property="smallProductDibsCount" column="small_product_dibs_count"/>
  		<result property="smallProductMainPhotoLink" column="small_product_main_photo_link"/>
  		<result property="smallProductScore" column="small_product_score"/>
@@ -33,8 +33,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="naverShoppingOrder" column="naver_shopping_order"/>
  		<result property="productRegisterDay" column="product_register_day"/>
  		<result property="midCategoryId" column="mid_category_id"/>
+ 		<result property="smallProductId" column="small_product_id"/>
  	</resultMap>
- 	<!-- DB 누적을 위해 임시로 조건 지정 -->
+ 	
+ 	<resultMap type="blliNotRecommMidCategoryVO" id="bnrmcvRM">
+ 		<result property="midCategory" column="mid_category"/>
+ 		<result property="midCategoryId" column="mid_category_id"/>
+ 		<result property="memberId" column="member_id"/>
+ 	</resultMap>
+	
 	<select id="getSmallProduct" resultMap="bspvRM">
 		select small_product, small_product_id, small_product_posting_count from blli_small_product order by small_product_posting_count asc
 	</select>
@@ -52,7 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<update id="updateMidCategory">
-		update blli_mid_category set mid_category_id = #{midCategoryId}, mid_category_main_photo_link = #{midCategoryMainPhotoLink}, big_category = #{bigCategory} 
+		update blli_mid_category set mid_category_id = #{midCategoryId}, mid_category_main_photo_link = #{midCategoryMainPhotoLink}, big_category = #{bigCategory}
 		where mid_category = #{midCategory} and big_category = #{bigCategory}
 	</update>
 	
@@ -63,7 +70,57 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getMidCategory" resultMap="bmcvRM">
 		select mid_category_id, mid_category from blli_mid_category
 	</select>
+
+	<!-- 준영쿼리 시작 -->
+	<select id="selectRecommendingMidCategory" resultMap="bmcvRM">
+		select  mid_category,mid_category_info,mid_category_main_photo_link,mid_category_whentouse_min,mid_category_whentouse_max,big_category,mid_category_id
+		from BLLI_MID_CATEGORY
+		where #{babyMonthAge} <![CDATA[ >= mid_category_whentouse_min and #{babyMonthAge} <= ]]> mid_category_whentouse_min
+	</select>
+	<select id="selectNotRecommMidCategoryList" resultMap="bnrmcvRM">
+		select bnrmc.mid_category,bnrmc.mid_category_id,bnrmc.member_Id as noRecommendMidCategory
+		from blli_member bm , BLLI_NOT_RECOMM_MID_CATEGORY bnrmc
+		where #{memberId} = bnrmc.member_id
+	</select>
 	
+	<insert id="deleteRecommendMidCategory" >
+		insert into blli_not_recomm_mid_category (mid_category,member_id,mid_category_id) values (#{midCategory},#{memberId},#{midCategoryId})
+	</insert>
+	<select id="selectSameAgeMomBestPickedSmallProductList" parameterType="HashMap" resultMap="bspvRM">
+		<![CDATA[
+		select * from (select rownum as rn,SMALL_PRODUCT, MID_CATEGORY,mid_CATEGORY_ID, SMALL_PRODUCT_MAKER, SMALL_PROPDUCT_WHENTOUSE_MIN, SMALL_PROPDUCT_WHENTOUSE_MAX, SMALL_PRODUCT_DIBS_COUNT, 
+		SMALL_PRODUCT_MAIN_PHOTO_LINK, SMALL_PRODUCT_SCORE, SMALL_PRODUCT_POSTING_COUNT, NAVER_SHOPPING_ORDER, PRODUCT_REGISTER_DAY,small_product_id
+		from BLLI_SMALL_PRODUCT
+		where MID_CATEGORY = #{recommMid} and #{babyMonthAge}  >= SMALL_PROPDUCT_WHENTOUSE_MIN and #{babyMonthAge} <= SMALL_PROPDUCT_WHENTOUSE_MAX
+		order by SMALL_PRODUCT_DIBS_COUNT desc) where rn<3
+		]]> 
+	</select>
+	<select id="selectSameAgeMomBestPickedSmallProduct" parameterType="HashMap" resultMap="bspvRM">
+		<![CDATA[
+		select * from (select rownum as rn,SMALL_PRODUCT, MID_CATEGORY,mid_CATEGORY_ID, SMALL_PRODUCT_MAKER, SMALL_PROPDUCT_WHENTOUSE_MIN, SMALL_PROPDUCT_WHENTOUSE_MAX, SMALL_PRODUCT_DIBS_COUNT, 
+		SMALL_PRODUCT_MAIN_PHOTO_LINK, SMALL_PRODUCT_SCORE, SMALL_PRODUCT_POSTING_COUNT,  NAVER_SHOPPING_ORDER, PRODUCT_REGISTER_DAY,small_product_id
+		from BLLI_SMALL_PRODUCT
+		where MID_CATEGORY = #{recommMid} and #{babyMonthAge}  >= SMALL_PROPDUCT_WHENTOUSE_MIN and #{babyMonthAge} <= SMALL_PROPDUCT_WHENTOUSE_MAX
+		order by SMALL_PRODUCT_DIBS_COUNT desc) where rn=1
+		]]> 
+	</select>
+	<delete id="deleteDipsInfo">
+		delete from blli_member_dibs where member_id=#{memberId} and small_product_id = #{smallProductId}
+	</delete>
+	<insert id="insertDipsInfo">
+		insert into blli_member_dibs (member_id,small_product_id,dibs_time) values (#{memberId},#{smallProductId},sysdate)
+	</insert>
+	<update id="updatePlusSmallProductDibsCount">
+		update blli_small_product set small_product_dibs_count = small_product_dibs_count+1 where small_product_id=#{smallProductId}
+	</update>
+	<update id="updateMinusSmallProductDibsCount">
+		update blli_small_product set small_product_dibs_count = small_product_dibs_count-1 where small_product_id=#{smallProductId}
+	</update>
+	<!-- 회원이 소제품을 찜했는지 여부를 반환 -->
+	<select id="selectMemberDibsSmallProduct" resultType="Integer">
+		select count(*) from blli_member_dibs where member_Id=#{memberId} and small_product_id = #{smallProductId}
+	</select>
+	<!-- 끝 -->
 	<insert id="insertSmallProduct">
 		insert into blli_small_product(small_product_id, small_product, mid_category, small_product_maker, small_product_main_photo_link, small_product_posting_count, naver_shopping_order, product_register_day, mid_category_id)
 		values(#{smallProductId}, #{smallProduct}, #{midCategory}, #{smallProductMaker}, #{smallProductMainPhotoLink}, #{smallProductPostingCount}, #{naverShoppingOrder}, #{productRegisterDay}, #{midCategoryId})

@@ -450,7 +450,6 @@ public class PostingServiceImpl implements PostingService {
 	}
 
 	/**
-	 * 
 	 * @Method Name : selectProduct
 	 * @Method 설명 : 두개 이상의 소제품을 가지고 있는 포스팅을 한개의 소제품으로 변경해주는 메서드
 	 * @작성일 : 2016. 1. 19.
@@ -474,5 +473,16 @@ public class PostingServiceImpl implements PostingService {
 				postingDAO.deleteProduct(postingUrl);
 			}
 		}
+	}
+	/**
+	  * @Method Name : recordResidenceTime
+	  * @Method 설명 : 포스팅내에 얼마나 머물렀는지를 초단위로 기록하며, 포스팅의 조회수를 올려준다.
+	  * @작성일 : 2016. 1. 22.
+	  * @작성자 : junyoung
+	  * @param blliPostingVO
+	 */
+	@Override
+	public void recordResidenceTime(BlliPostingVO blliPostingVO) {
+		postingDAO.updatePostingViewCountAndResidenceTime(blliPostingVO);
 	}
 }

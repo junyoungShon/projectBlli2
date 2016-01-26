@@ -21,6 +21,7 @@ public interface MemberDAO {
 
 	public List<BlliBabyVO> selectBabyListByMemberId(String memberId);
 
-	public void updateRecommendingBabyName(BlliMemberVO blliMemberVO);
+	public void changeRecommendingBaby(BlliBabyVO blliBabyVO);
+
 
 }

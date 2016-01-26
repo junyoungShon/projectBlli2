@@ -98,7 +98,6 @@ public class MemberServiceImpl implements MemberService {
 		 blliMemberVO.setAuthority("ROLE_USER");
 		 memberDAO.updateMemberAuthority(blliMemberVO);
 		 //아이정보를 입력하며 첫째 아이로 아이정보를 수정해줌
-		 memberDAO.updateRecommendingBabyName(blliMemberVO);
 		 for(int i=0;i<list.size();i++){
 			 memberDAO.insertBabyInfo(list.get(i));
 		 }
@@ -203,5 +202,28 @@ public class MemberServiceImpl implements MemberService {
 		}
 		System.out.println(babyMonthAge);
 		return babyMonthAge;
+	}
+	/**
+	  * @Method Name : changeRecommendingBaby
+	  * @Method 설명 : 추천 대상아이를 바꿔줍니다.
+	  * @작성일 : 2016. 1. 20.
+	  * @작성자 : junyoung
+	  * @param blliBabyVO
+	 */
+	@Override
+	public void changeRecommendingBaby(BlliBabyVO blliBabyVO) {
+		//현재 추천 대상인 아이를 찾아내 추천 제외 시킴니다 0으로 변화
+		List<BlliBabyVO> blliBabyVOList = memberDAO.selectBabyListByMemberId(blliBabyVO.getMemberId());
+		for(int i=0;i<blliBabyVOList.size();i++){
+			if(blliBabyVOList.get(i).getRecommending()==1){
+				BlliBabyVO beforeblliBabyVO = blliBabyVOList.get(i);
+				beforeblliBabyVO.setRecommending(0);
+				memberDAO.changeRecommendingBaby(beforeblliBabyVO);
+			}
+		}
+		//새로운 추천 대상을 등록합니다.
+		blliBabyVO.setRecommending(1);
+		memberDAO.changeRecommendingBaby(blliBabyVO);
+		
 	}
 }

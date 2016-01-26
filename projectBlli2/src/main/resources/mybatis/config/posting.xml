@@ -14,6 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="postingDislikeCount" column="posting_dislike_count"/>
  		<result property="postingMediaCount" column="posting_media_count"/>
  		<result property="postingPhotoLink" column="posting_photo_link"/>
+ 		<result property="postingStatus" column="posting_status"/>
  		<result property="postingTotalResidenceTime" column="posting_total_residence_time"/>
  		<result property="postingViewCount" column="posting_view_count"/>
  		<result property="postingScrapeCount" column="posting_scrape_count"/>
@@ -92,6 +93,72 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update blli_posting set posting_status = 'dead' where posting_url = #{postingUrl}
 	</update>
 	
+	<!-- 준영쿼리 시작 -->
+	<select id="selectPostingBySmallProductList" resultMap="bpvRM">
+		select posting_url,small_product,small_product_id,posting_title,posting_summary,posting_content,posting_score,posting_like_count,
+		posting_dislike_count,posting_media_count,posting_photo_link,posting_total_residence_time,posting_view_count,posting_scrap_count,posting_author,posting_date
+		from blli_posting
+		where posting_status = 'confirmed' and small_product_id = #{value}
+		order by posting_score asc
+	</select>
+	<!-- 포스팅 스크랩관련 쿼리 -->
+	<delete id="deletePostingScrapInfo">
+		delete from blli_member_scrap where member_id=#{memberId} and small_product_id = #{smallProductId}
+	</delete>
+	<insert id="insertPostingScrap">
+		insert into blli_member_scrap (member_id,small_product_id,posting_url,scrap_time) values (#{memberId},#{smallProductId},#{postingUrl},sysdate)
+	</insert>
+	<update id="updatePlusPostingScrapCount">
+		update blli_posting set posting_scrap_count = posting_scrap_count+1 where small_product_id=#{smallProductId} and posting_url=#{postingUrl}
+	</update>
+	<update id="updateMinusPostingScrapCount">
+		update blli_posting set posting_scrap_count = posting_scrap_count-1 where small_product_id=#{smallProductId} and posting_url=#{postingUrl}
+	</update>
+	<!-- 포스팅 좋아요관련 쿼리 -->
+	<delete id="deletePostingLikeInfo">
+		delete from blli_posting_like where member_id=#{memberId} and small_product_id = #{smallProductId}
+	</delete>
+	<insert id="insertPostingLikeInfo">
+		insert into blli_posting_like (member_id,small_product_id,posting_url,like_time) values (#{memberId},#{smallProductId},#{postingUrl},sysdate)
+	</insert>
+	<update id="updatePlusPostingLikeCount">
+		update blli_posting set posting_like_count = posting_like_count+1 where small_product_id=#{smallProductId} and posting_url=#{postingUrl}
+	</update>
+	<update id="updateMinusPostingLikeCount">
+		update blli_posting set posting_like_count = posting_like_count-1 where small_product_id=#{smallProductId} and posting_url=#{postingUrl}
+	</update>
+	<!-- 포스팅 싫어요관련 쿼리 -->
+	<delete id="deletePostingDisLikeInfo">
+		delete from blli_posting_dislike where member_id=#{memberId} and small_product_id = #{smallProductId}
+	</delete>
+	<insert id="insertPostingDisLikeInfo">
+		insert into blli_posting_dislike (member_id,small_product_id,posting_url,dislike_time) values (#{memberId},#{smallProductId},#{postingUrl},sysdate)
+	</insert>
+	<update id="updatePlusPostingDisLikeCount">
+		update blli_posting set posting_dislike_count = posting_dislike_count+1 where small_product_id=#{smallProductId} and posting_url=#{postingUrl}
+	</update>
+	<update id="updateMinusPostingDisLikeCount">
+		update blli_posting set posting_dislike_count = posting_dislike_count-1 where small_product_id=#{smallProductId} and posting_url=#{postingUrl}
+	</update>
+	
+	<!-- 회원이 포스팅을  스크랩했는지 여부를 반환 -->
+	<select id="selectThisPostingScrap" resultType="Integer">
+		select count(*) from blli_member_scrap where member_Id=#{memberId} and small_product_id=#{smallProductId} and posting_url=#{postingUrl}
+	</select>
+	<!-- 회원이 포스팅을  좋아요 여부를 반환 -->
+	<select id="selectThisPostingLike" resultType="Integer">
+		select count(*) from blli_posting_like where member_Id=#{memberId} and small_product_id=#{smallProductId} and posting_url=#{postingUrl}
+	</select>
+	<!-- 회원이 포스팅을 싫어요여부를 반환 -->
+	<select id="selectThisPostingDisLike" resultType="Integer">
+		select count(*) from blli_posting_dislike where member_Id=#{memberId} and small_product_id=#{smallProductId} and posting_url=#{postingUrl}
+	</select>
+	
+	<!-- 준영 쿼리 끝 -->
+	<update id="updatePostingViewCountAndResidenceTime">
+		update blli_posting set posting_total_residence_time = posting_total_residence_time + #{postingTotalResidenceTime} , posting_view_count = posting_view_count+1
+ 		where posting_url = #{postingUrl} and small_product_id = #{smallProductId}
+	</update>
  </mapper> 		
  
  

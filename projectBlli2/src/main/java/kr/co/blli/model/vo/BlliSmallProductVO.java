@@ -15,17 +15,20 @@ public class BlliSmallProductVO {
 	private int smallProductPostingCount;
 	private String productRegisterDay;
 	private String smallProductId;
+	//16.01.22 추가
+	private int isDib;
+	
 	public BlliSmallProductVO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
+	
 	public BlliSmallProductVO(String smallProduct, String midCategory,
 			String midCategoryId, String smallProductMaker,
 			int smallProductWhenToUseMin, int smallProductWhenToUseMax,
 			int smallProductDibsCount, String smallProductMainPhotoLink,
 			int smallProductScore, String naverShoppingLink,
 			int naverShoppingOrder, int smallProductPostingCount,
-			String productRegisterDay, String smallProductId) {
+			String productRegisterDay, String smallProductId, int isDib) {
 		super();
 		this.smallProduct = smallProduct;
 		this.midCategory = midCategory;
@@ -41,7 +44,9 @@ public class BlliSmallProductVO {
 		this.smallProductPostingCount = smallProductPostingCount;
 		this.productRegisterDay = productRegisterDay;
 		this.smallProductId = smallProductId;
+		this.isDib = isDib;
 	}
+
 	public String getSmallProduct() {
 		return smallProduct;
 	}
@@ -126,6 +131,13 @@ public class BlliSmallProductVO {
 	public void setSmallProductId(String smallProductId) {
 		this.smallProductId = smallProductId;
 	}
+	
+	public int getIsDib() {
+		return isDib;
+	}
+	public void setIsDib(int isDib) {
+		this.isDib = isDib;
+	}
 	@Override
 	public String toString() {
 		return "BlliSmallProductVO [smallProduct=" + smallProduct
@@ -140,6 +152,7 @@ public class BlliSmallProductVO {
 				+ ", naverShoppingOrder=" + naverShoppingOrder
 				+ ", smallProductPostingCount=" + smallProductPostingCount
 				+ ", productRegisterDay=" + productRegisterDay
-				+ ", smallProductId=" + smallProductId + "]";
+				+ ", smallProductId=" + smallProductId + ", isDib=" + isDib
+				+ "]";
 	}
 }

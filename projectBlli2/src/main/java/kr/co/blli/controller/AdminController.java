@@ -17,7 +17,6 @@ public class AdminController {
 	public String sendMail(String memberId, String mailForm) {
 		
 		String viewName = "admin/sendMail_success";
-		
 		try {
 			adminService.sendMail(memberId, mailForm);
 		} catch (Exception e) {
@@ -28,3 +27,4 @@ public class AdminController {
 		return viewName;
 	}
 }
+ 

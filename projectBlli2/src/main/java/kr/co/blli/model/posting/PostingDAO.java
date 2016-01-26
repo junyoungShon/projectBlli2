@@ -33,5 +33,7 @@ public interface PostingDAO {
 	int totalPostingWithProducts();
 
 	void deletePosting(String postingUrl);
+	
+	void updatePostingViewCountAndResidenceTime(BlliPostingVO blliPostingVO);
 
 }
