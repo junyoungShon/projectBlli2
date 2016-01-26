@@ -14,7 +14,7 @@ import kr.co.blli.model.product.ProductDAO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 import kr.co.blli.model.vo.ListVO;
-import kr.co.blli.model.vo.PagingBeanOfPostingListWithProducts;
+import kr.co.blli.model.vo.BlliPagingBean;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -363,8 +363,15 @@ public class PostingServiceImpl implements PostingService {
 	 * @return
 	 */
 	@Override
-	public ArrayList<BlliPostingVO> searchJsoupTest(String searchWord) {
-		return (ArrayList<BlliPostingVO>)postingDAO.searchJsoupTest(searchWord);
+	public ArrayList<BlliPostingVO> searchJsoupTest(String pageNo, String searchWord) {
+		HashMap<String, String> map = new HashMap<String, String>();
+		if(pageNo == null || pageNo == ""){
+			pageNo = "1";
+		}
+		map.put("pageNo", pageNo);
+		map.put("searchWord", searchWord);
+		ArrayList<BlliPostingVO> list = (ArrayList<BlliPostingVO>)postingDAO.searchJsoupTest(map);
+		return list;
 	}
 	
 	/**
@@ -431,7 +438,7 @@ public class PostingServiceImpl implements PostingService {
 			if(imgTag.size() != 0){ //스마트에디터가 아닐 경우
 				for(Element e : imgTag){
 					String imgSrc = e.attr("src");
-					if(imgSrc.contains("postfiles")){
+					if(imgSrc.contains("postfiles") || imgSrc.contains("blogfiles")){
 						imgList.add(imgSrc);
 					}
 				}
@@ -444,7 +451,7 @@ public class PostingServiceImpl implements PostingService {
 			postingList.get(i).setImageList(imgList); //포스팅에 등록된 모든 이미지 vo에 저장
 		}
 		int total = postingDAO.totalPostingWithProducts();
-		PagingBeanOfPostingListWithProducts paging = new PagingBeanOfPostingListWithProducts(total, Integer.parseInt(pageNo));
+		BlliPagingBean paging = new BlliPagingBean(total, Integer.parseInt(pageNo));
 		ListVO lvo = new ListVO(postingList, paging);
 		return lvo;
 	}
@@ -457,6 +464,8 @@ public class PostingServiceImpl implements PostingService {
 	 */
 	@Override
 	public void selectProduct(List<Map<String, Object>> urlAndProduct) {
+		String prePostingUrl = "";
+		String preSmallProduct = "";
 		for(int i=0;i<urlAndProduct.size();i++){
 			String selectProduct = urlAndProduct.get(i).get("smallProduct").toString();
 			if(selectProduct.equals("")){ //선택하지 않은 포스팅에 대해서는 기능 적용X
@@ -467,11 +476,19 @@ public class PostingServiceImpl implements PostingService {
 			if(selectProduct.equals("삭제")){
 				postingDAO.deletePosting(postingUrl);
 			}else{
-				map.put("smallProduct", selectProduct);
 				map.put("postingUrl", postingUrl);
-				postingDAO.selectProduct(map);
-				postingDAO.deleteProduct(postingUrl);
+				if(prePostingUrl.equals(postingUrl)){
+					map.put("smallProduct", preSmallProduct+" / "+selectProduct);
+					map.put("preSmallProduct", preSmallProduct);
+					postingDAO.addProduct(map);
+				}else{
+					map.put("smallProduct", selectProduct);
+					postingDAO.selectProduct(map);
+					postingDAO.deleteProduct(postingUrl);
+				}
 			}
+			prePostingUrl = postingUrl;
+			preSmallProduct = selectProduct;
 		}
 	}
 	/**
@@ -484,5 +501,74 @@ public class PostingServiceImpl implements PostingService {
 	@Override
 	public void recordResidenceTime(BlliPostingVO blliPostingVO) {
 		postingDAO.updatePostingViewCountAndResidenceTime(blliPostingVO);
+	}
+
+	@Override
+	public ListVO unconfirmedPosting(String pageNo) throws IOException {
+		if(pageNo == null || pageNo == ""){
+			pageNo = "1";
+		}
+		ArrayList<BlliPostingVO> postingList = (ArrayList<BlliPostingVO>)postingDAO.unconfirmedPosting(pageNo);
+		for(int i=0;i<postingList.size();i++){
+			String url = postingList.get(i).getPostingUrl();
+			String smallProduct = postingList.get(i).getSmallProduct();
+			Document doc = Jsoup.connect("http://shopping.naver.com/search/all_search.nhn?query="+smallProduct+"&pagingIndex=1&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&frm=NVSHMDL").get();
+			Elements imgTag = doc.select("img");
+			HashMap<String, String> smallProductImage = new HashMap<String, String>();
+			for(Element e : imgTag){
+				if(e.attr("alt").equals(smallProduct)){
+					smallProductImage.put(smallProduct, e.attr("data-original"));
+					postingList.get(i).setSmallProductImage(smallProductImage);
+					break;
+				}
+			}
+			ArrayList<String> imgList = new ArrayList<String>(); 
+			doc = Jsoup.connect(url).get();
+			String frameSourceUrl = "http://blog.naver.com" + doc.select("#mainFrame").attr("src");
+			doc = Jsoup.connect(frameSourceUrl).get();
+			Elements imgTagList = doc.select("#postViewArea img");
+			if(imgTagList.size() != 0){ //스마트에디터가 아닐 경우
+				for(Element e : imgTagList){
+					String imgSrc = e.attr("src");
+					if(imgSrc.contains("postfiles") || imgSrc.contains("blogfiles")){
+						imgList.add(imgSrc);
+					}
+				}
+			}else{ //스마트에디터일 경우
+				imgTagList = doc.select(".se_mediaImage");
+				for(Element e : imgTagList){
+					imgList.add(e.attr("src"));
+				}
+			}
+			postingList.get(i).setImageList(imgList); //포스팅에 등록된 모든 이미지 vo에 저장
+		}
+		int total = postingDAO.totalUnconfirmedPosting();
+		BlliPagingBean paging = new BlliPagingBean(total, Integer.parseInt(pageNo));
+		ListVO lvo = new ListVO(postingList, paging);
+		return lvo;
+	}
+
+	@Override
+	public void registerPosting(List<Map<String, Object>> urlAndProduct) {
+		for(int i=0;i<urlAndProduct.size();i++){
+			String smallProduct = urlAndProduct.get(i).get("smallProduct").toString();
+			if(smallProduct.equals("")){ //선택하지 않은 포스팅에 대해서는 기능 적용X
+				continue;
+			}
+			String postingUrl = urlAndProduct.get(i).get("postingUrl").toString();
+			HashMap<String, String> map = new HashMap<String, String>();
+			if(smallProduct.equals("삭제")){
+				postingDAO.deletePosting(postingUrl);
+			}else{
+				map.put("smallProduct", smallProduct);
+				map.put("postingUrl", postingUrl);
+				postingDAO.registerPosting(map);
+			}
+		}
+	}
+
+	@Override
+	public int totalPageOfPosting(String searchWord) {
+		return postingDAO.totalPageOfPosting(searchWord);
 	}
 }

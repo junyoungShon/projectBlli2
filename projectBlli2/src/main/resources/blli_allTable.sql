@@ -118,7 +118,7 @@ CREATE TABLE blli_posting (
 	posting_photo_link   VARCHAR2(1000) NOT NULL , -- VARCHAR2(300)에서 VARCHAR2(1000)으로 수정
 	posting_total_residence_time NUMBER(8) default 0 ,
 	posting_view_count NUMBER(6) default 0 ,
-	posting_scrap_count NUMBER(3) default 0, -- 추가
+	posting_scrape_count NUMBER(3) default 0, -- 추가, 컬럼명 변경
 	posting_author           VARCHAR2(100) NOT NULL, -- 추가
 	posting_date             DATE NOT NULL, -- 추가
 	posting_order            NUMBER(3) NOT NULL, -- 추가

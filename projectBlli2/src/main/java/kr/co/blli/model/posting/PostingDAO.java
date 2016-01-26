@@ -14,7 +14,7 @@ public interface PostingDAO {
 
 	void insertPosting(BlliPostingVO postingVO);
 
-	List<BlliPostingVO> searchJsoupTest(String searchWord);
+	List<BlliPostingVO> searchJsoupTest(HashMap<String, String> map);
 
 	List<BlliPostingVO> postingListWithSmallProducts(String pageNo);
 
@@ -35,5 +35,15 @@ public interface PostingDAO {
 	void deletePosting(String postingUrl);
 	
 	void updatePostingViewCountAndResidenceTime(BlliPostingVO blliPostingVO);
+
+	List<BlliPostingVO> unconfirmedPosting(String pageNo);
+
+	int totalUnconfirmedPosting();
+
+	void registerPosting(HashMap<String, String> map);
+
+	void addProduct(HashMap<String, String> map);
+
+	int totalPageOfPosting(String searchWord);
 
 }

@@ -1,6 +1,6 @@
 package kr.co.blli.model.vo;
 
-public class PagingBeanOfPostingListWithProducts {
+public class BlliPagingBean {
 	private int totalPosting;
 	public int getNowPage() {
 		return nowPage;
@@ -10,7 +10,7 @@ public class PagingBeanOfPostingListWithProducts {
 	private int numberOfPostingPerPage=5;
 	
 	private int numberOfPageGroup=8;
-	public PagingBeanOfPostingListWithProducts(int totalPosting, int nowPage) {
+	public BlliPagingBean(int totalPosting, int nowPage) {
 		super();
 		this.totalPosting = totalPosting;
 		this.nowPage = nowPage;

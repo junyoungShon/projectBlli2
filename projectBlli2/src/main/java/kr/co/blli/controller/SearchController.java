@@ -1,6 +1,7 @@
 package kr.co.blli.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -31,8 +32,19 @@ public class SearchController {
 		return new ModelAndView("TestPosting", "result", result);
 	}
 	@RequestMapping("search_jsoupTest.do")
-	public ModelAndView JsoupTest2(String searchWord){
-		return new ModelAndView("searchResult","resultList",postingService.searchJsoupTest(searchWord));
+	public ModelAndView JsoupTest2(String pageNo, String searchWord){
+		ArrayList<BlliPostingVO> list = postingService.searchJsoupTest(pageNo, searchWord);
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("searchResult");
+		mav.addObject("resultList", list);
+		mav.addObject("searchWord", searchWord);
+		mav.addObject("totalPage", postingService.totalPageOfPosting(searchWord));
+		return mav;
+	}
+	@ResponseBody
+	@RequestMapping("getPostingList.do")
+	public ArrayList<BlliPostingVO> getPostingList(String pageNo, String searchWord){
+		return postingService.searchJsoupTest(pageNo, searchWord);
 	}
 	@RequestMapping("postingListWithSmallProducts.do")
 	public ModelAndView postingListWithSmallProducts(String pageNo) throws IOException{
@@ -57,6 +69,15 @@ public class SearchController {
 	public ModelAndView insertSmallProduct() throws IOException{
 		productService.insertSmallProduct();
 		return new ModelAndView("insertDataResult");
+	}
+	@RequestMapping("unconfirmedPosting.do")
+	public ModelAndView unconfirmedPosting(String pageNo) throws IOException{
+		return new ModelAndView("unconfirmedPosting","resultList",postingService.unconfirmedPosting(pageNo));
+	}	
+	@ResponseBody
+	@RequestMapping("registerPosting.do")
+	public void registerPosting(@RequestBody List<Map<String, Object>> urlAndProduct){
+		postingService.registerPosting(urlAndProduct);
 	}
 	/**
 	  * @Method Name : goPosting
