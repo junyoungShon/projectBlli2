@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="bigCategory" column="big_category"/>
  		<result property="bigCategoryId" column="big_category_id"/>
  	</resultMap>
+ 	
  	<resultMap type="blliMidCategoryVO" id="bmcvRM">
  		<result property="midCategory" column="mid_category"/>
  		<result property="midCategoryInfo" column="mid_category_info"/>
@@ -34,14 +35,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="midCategoryId" column="mid_category_id"/>
  		<result property="smallProductId" column="small_product_id"/>
  	</resultMap>
+ 	
  	<resultMap type="blliNotRecommMidCategoryVO" id="bnrmcvRM">
  		<result property="midCategory" column="mid_category"/>
  		<result property="midCategoryId" column="mid_category_id"/>
  		<result property="memberId" column="member_id"/>
  	</resultMap>
-	<select id="getSmallProduct" resultType="String">
-		select small_product from test_small_product
- 	</select>
+	
+	<select id="getSmallProduct" resultMap="bspvRM">
+		select small_product, small_product_id, small_product_posting_count from blli_small_product order by small_product_posting_count asc
+	</select>
 	
 	<update id="updateBigCategory">
 		update blli_big_category set big_category_id = #{bigCategoryId} where big_category = #{bigCategory}

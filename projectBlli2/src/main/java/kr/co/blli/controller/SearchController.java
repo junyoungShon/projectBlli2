@@ -35,8 +35,8 @@ public class SearchController {
 		return new ModelAndView("searchResult","resultList",postingService.searchJsoupTest(searchWord));
 	}
 	@RequestMapping("postingListWithSmallProducts.do")
-	public ModelAndView postingListWithSmallProducts() throws IOException{
-		return new ModelAndView("postingListWithSmallProducts","resultList",postingService.postingListWithSmallProducts());
+	public ModelAndView postingListWithSmallProducts(String pageNo) throws IOException{
+		return new ModelAndView("postingListWithSmallProducts","resultList",postingService.postingListWithSmallProducts(pageNo));
 	}
 	@ResponseBody
 	@RequestMapping("selectProduct.do")

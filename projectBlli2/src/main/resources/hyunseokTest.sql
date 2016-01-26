@@ -11,7 +11,69 @@ CREATE TABLE blli_small_product (
 	naver_shopping_link  VARCHAR2(300) NOT NULL ,
 	constraint fk_small_prod_mid_cate foreign key(mid_category) references blli_mid_category(mid_category)
 );
+select * from blli_small_product order by small_product_posting_count asc;
+select small_product, small_product_id, small_product_posting_count from blli_small_product order by small_product_posting_count asc
+select * from blli_small_product where 1496 > small_product_posting_count order by small_product_posting_count asc;
+select small_product_posting_count from blli_small_product where small_product = '대성토이즈 뉴 말하는 고가 사다리차';
+select count(*) from blli_small_product where small_product_posting_count = 0;
+select * from blli_posting where small_product = '대성토이즈 뉴 말하는 고가 사다리차';
+
 select * from blli_small_product;
+select count(*) from blli_small_product where small_product_posting_count = 0;
+select count(*) from blli_small_product where small_product_posting_count > 514;
+select * from blli_small_product where mid_category = '캐릭터/패션인형';
+
+select avg(small_product_posting_count) from blli_small_product where small_product_posting_count > 100
+select * from blli_small_product order by small_product_posting_count desc
+
+select count(*) from blli_small_product where small_product_posting_count > 100 order by small_product_posting_count asc
+
+select * from blli_posting;
+select count(posting_url) from blli_posting;
+
+select page, posting_url, posting_title, small_product from(
+	select ceil(rownum/10) as page, posting_url, posting_title, small_product from(
+		select count(*) over (partition by posting_url) as small_product_count, posting_url, posting_title, small_product from blli_posting where posting_status = 'unconfirmed'
+	) where small_product_count > 1
+) where page = '170';
+
+select * from(
+	select ceil(row_num/5) as page, posting_url, posting_title, small_product from(
+		select (dense_rank() over (order by posting_url)) row_num, posting_url, posting_title, small_product from(
+			select count(*) over (partition by posting_url) as small_product_count, posting_url, posting_title, small_product from blli_posting where posting_status = 'unconfirmed'
+		) where small_product_count > 1
+	)
+) where page = '168';
+
+select count(*) from(
+	select count(*) over (partition by posting_url) as small_product_count, posting_url from blli_posting where posting_status = 'unconfirmed'
+) where small_product_count > 1;
+
+select count(distinct(posting_url)) from(
+	select count(*) over (partition by posting_url) as small_product_count, posting_url from blli_posting where posting_status = 'unconfirmed'
+) where small_product_count > 1;
+
+select max(b.small_product_posting_count) from(
+	select small_product_id from blli_posting
+)a, blli_small_product b where a.small_product_id = b.small_product_id;
+
+select * from blli_posting where posting_title = '마이비&비앤비 세제 총망라';
+select * from blli_posting where posting_url = 'http://blog.naver.com/aaej0521/20144008359';
+update blli_posting set posting_status = 'unconfirmed' where posting_url = 'http://blog.naver.com/4lang2/60213053247';
+
+alter database datafile '/db03/mydata.dbf' resize 1024m;
+
+select * from blli_posting where small_product = '손가락인형 병아리';
+
+select * from blli_posting;
+
+select small_product, small_product_id, small_product_posting_count from blli_small_product where small_product_posting_count > 0 order by small_product_posting_count asc;
+
+SELECT b.posting_title
+FROM (SELECT rownum as rnum, posting_title FROM blli_posting) b
+WHERE b.rnum BETWEEN 1000 AND 2000;
+
+select * from blli_posting where small_product = 'C&H Creative 리락쿠마 인형 70cm';
 
 drop table blli_posting_test cascade constraint;
 CREATE TABLE blli_posting_test (
@@ -111,14 +173,26 @@ select * from blli_mid_category;
 
 select category_id, big_category from blli_big_category
 
-2011.03
 create table dayday_test(
 	dayday DATE primary key
 )
 insert into dayday_test(dayday) values('2011.03.01');
 select * from dayday_test;
 
-select * from blli_small_product;
+select * from blli_mid_category where mid_category = '수경';
+select mid_category from blli_mid_category;
+
+select * from blli_small_product order by small_product_posting_count desc;
+select small_product, small_product_posting_count from blli_small_product order by small_product_posting_count desc;
+select * from blli_small_product where small_product = '지구촌친구 뽀글이 가방걸이';
+select count(*) from blli_small_product;
+select distinct(mid_category) from blli_small_product;
+select * from blli_small_product where mid_category = '유아음료';
+
+조건1)
+select * from blli_small_product where small_product_posting_count > 1000;
+조건2)
+select * from blli_small_product where small_product_posting_count >= 20 and small_product_posting_count <= 50 and naver_shopping_order > 10;
 
 select * from blli_small_prod_buy_link;
 

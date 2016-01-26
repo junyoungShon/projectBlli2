@@ -62,18 +62,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="postingListWithSmallProducts" resultMap="bpvRM">
-		select posting_url, posting_title, small_product from(
-			select count(*) over (partition by posting_url) as small_product_count, posting_url, posting_title, small_product from blli_posting
-		)s where s.small_product_count > 1
+		select * from(
+			select ceil(row_num/5) as page, posting_url, posting_title, small_product from(
+				select (dense_rank() over (order by posting_url)) row_num, posting_url, posting_title, small_product from(
+					select count(*) over (partition by posting_url) as small_product_count, posting_url, posting_title, small_product from blli_posting where posting_status = 'unconfirmed'
+				) where small_product_count > 1 order by posting_url
+			)
+		) where page = #{pageNo}
 	</select>
 	
 	<select id="searchProducts" resultType="String">
 		select small_product from blli_posting where posting_url = #{postingUrl}
 	</select>
 	
-	<delete id="deleteProduct">
-		delete from blli_posting where posting_url = #{postingUrl} and small_product = #{smallProduct}
-	</delete>
+	<update id="deleteProduct">
+		update blli_posting set posting_status = 'dead' where posting_url = #{postingUrl} and posting_status = 'unconfirmed'
+	</update>
+	
+	<update id="selectProduct">
+		update blli_posting set posting_status = 'confirmed' where posting_url = #{postingUrl} and small_product = #{smallProduct}
+	</update>
+	
+	<select id="totalPostingWithProducts" resultType="int">
+		select count(distinct(posting_url)) from(
+			select count(*) over (partition by posting_url) as small_product_count, posting_url from blli_posting where posting_status = 'unconfirmed'
+		) where small_product_count > 1
+	</select>
+	
+	<update id="deletePosting">
+		update blli_posting set posting_status = 'dead' where posting_url = #{postingUrl}
+	</update>
+	
 	<!-- 준영쿼리 시작 -->
 	<select id="selectPostingBySmallProductList" resultMap="bpvRM">
 		select posting_url,small_product,small_product_id,posting_title,posting_summary,posting_content,posting_score,posting_like_count,

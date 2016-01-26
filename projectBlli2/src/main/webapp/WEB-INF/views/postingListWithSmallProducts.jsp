@@ -12,26 +12,42 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#confirmBtn").click(function(){
-		var array = [];
-		for(var i=0;i<"${fn:length(requestScope.resultList)}";i++){
-			// 선택한 소제품과 postingUrl을 배열에 저장
-			array.push({"smallProduct": $("input:radio[name='"+i+"']:checked").next().text(), "postingUrl": $("input:radio[name='"+i+"']:checked").val()});
+		if($("input:checkbox:checked").length == 0){
+			alert("체크 안했다");
+			return false;
 		}
-		var json_data=JSON.stringify(array);
-		$.ajax({
-			url:"selectProduct.do",
-			type:"POST",
-			dataType:"json",
-			data:json_data,
-			contentType:"application/json; charset=UTF-8",
-			success:function(){
-				alert("완료!");
-				location.href="${initParam.root}index.do";
-			},
-			error:function(jqXHR, textStatus, errorThrown){
-	            alert("에러 발생~~ \n" + textStatus + " : " + errorThrown);
-	        }
-		});
+		if(confirm("확실해?")){
+			var array = [];
+			var flag = false;
+			for(var i=0;i<"${fn:length(requestScope.resultList.postingList)}";i++){
+				// 선택한 소제품과 postingUrl을 배열에 저장
+				$("input:checkbox[name='"+i+"']:checked").each(function() { 
+					if($(this).next().text() == "삭제" && $("input:checkbox[name='"+i+"']:checked").length > 1){
+						flag = true;
+					}
+			        array.push({"smallProduct": $(this).next().text(), "postingUrl": $(this).val()});
+			   });
+			}
+			if(flag){
+				alert("상품 선택과 삭제 같이 체크했다\n다시 확인해");
+				return false;
+			}
+			var json_data=JSON.stringify(array);
+			$.ajax({
+				url:"selectProduct.do",
+				type:"POST",
+				dataType:"json",
+				data:json_data,
+				contentType:"application/json; charset=UTF-8",
+				success:function(){
+					alert("완료!");
+					location.reload(true);
+				},
+				error:function(jqXHR, textStatus, errorThrown){
+		            alert("에러 발생~~ \n" + textStatus + " : " + errorThrown);
+		        }
+			});
+		}
 	});
 	$("#cancel").click(function(){
 		location.href="${initParam.root}index.do";
@@ -40,8 +56,18 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
+<p align="center">
+<c:choose>
+<c:when test="${requestScope.resultList.pagingBean.nowPage < requestScope.resultList.pagingBean.totalPage }">
+<strong>포스팅</strong> ${requestScope.resultList.pagingBean.nowPage*5-4} - ${requestScope.resultList.pagingBean.nowPage*5} / ${requestScope.resultList.pagingBean.totalPosting}건
+</c:when>
+<c:otherwise>
+<strong>포스팅</strong> ${requestScope.resultList.pagingBean.nowPage*5-4} - ${requestScope.resultList.pagingBean.totalPage*5} / ${requestScope.resultList.pagingBean.totalPosting}건
+</c:otherwise>
+</c:choose>
+</p>
 <table border="1" width="70%" align="center" cellpadding="10">
-<c:forEach items="${requestScope.resultList}" var="postingList" varStatus="count">
+<c:forEach items="${requestScope.resultList.postingList}" var="postingList" varStatus="count">
 	<tr>
 		<td colspan="2"><h3><strong><a href="${postingList.postingUrl}" style="text-decoration:none; color: black;">${postingList.postingTitle}</a></strong></h3></td>
 	</tr>
@@ -53,7 +79,7 @@ $(document).ready(function(){
 		</td>
 		<td>
 		<c:forEach items="${postingList.smallProductList}" var="productList">
-			<input type="radio" name="${count.index}" value="${postingList.postingUrl}"><span>${productList}</span><br><br>
+			<input type="checkbox" name="${count.index}" value="${postingList.postingUrl}"><span>${productList}</span><br><br>
 			<c:forEach var="map" items="${postingList.smallProductImage}">
 				<!-- 해당 소제품의 대표 이미지 찾아서 보여줌 -->
 				<c:if test="${map.key == productList}">
@@ -61,12 +87,36 @@ $(document).ready(function(){
 				</c:if>
 			</c:forEach>
 		</c:forEach>
+		<hr>
+		<input type="checkbox" name="${count.index}" value="${postingList.postingUrl}"><span><strong>삭제</strong></span>
 		</td>
 	</tr>
 </c:forEach>
 </table>
-<p align="center"><input type="button" id="confirmBtn" value="소제품 확정" style="font-size:15px;width: 100px;height: 45px;">
+
+<p align="center">
+	<c:set var="pb" value="${requestScope.resultList.pagingBean}"></c:set>
+	<c:if test="${pb.previousPageGroup}">
+		<a href="${initParam.root}postingListWithSmallProducts.do?pageNo=${pb.startPageOfPageGroup-1}">Prev</a>
+	</c:if>
+	<c:forEach var="i" begin="${pb.startPageOfPageGroup}" end="${pb.endPageOfPageGroup}">
+		<c:choose>
+			<c:when test="${pb.nowPage!=i}">
+				<a href="${initParam.root}postingListWithSmallProducts.do?pageNo=${i}">${i}</a>
+			</c:when>
+			<c:otherwise>
+				${i}
+			</c:otherwise>
+		</c:choose>
+	</c:forEach>
+	<c:if test="${pb.nextPageGroup}">
+		<a href="${initParam.root}postingListWithSmallProducts.do?pageNo=${pb.endPageOfPageGroup+1}">Next</a>
+	</c:if>
+</p>
+
+<p align="right"><input type="button" id="confirmBtn" value="소제품 확정" style="font-size:15px;width: 100px;height: 45px;">
 <input type="button" id="cancel" value="취소" style="font-size:15px;width: 100px;height: 45px;">
 </p>
+
 </body>
 </html>
