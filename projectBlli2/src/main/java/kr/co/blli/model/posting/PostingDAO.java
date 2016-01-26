@@ -16,16 +16,22 @@ public interface PostingDAO {
 
 	List<BlliPostingVO> searchJsoupTest(String searchWord);
 
-	List<BlliPostingVO> postingListWithSmallProducts();
+	List<BlliPostingVO> postingListWithSmallProducts(String pageNo);
 
 	List<String> searchProducts(String postingUrl);
 
-	void deleteProduct(HashMap<String, String> map);
+	void deleteProduct(String postingUrl);
 
 	int countOfPostingUrl(String postingUrl);
 
 	String getPostingStatus(String postingUrl);
 
 	List<String> getAllPostingStatus(String postingUrl);
+
+	void selectProduct(HashMap<String, String> map);
+
+	int totalPostingWithProducts();
+
+	void deletePosting(String postingUrl);
 
 }

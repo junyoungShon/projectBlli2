@@ -34,9 +34,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="productRegisterDay" column="product_register_day"/>
  		<result property="midCategoryId" column="mid_category_id"/>
  	</resultMap>
- 
+ 	<!-- DB 누적을 위해 임시로 조건 지정 -->
 	<select id="getSmallProduct" resultMap="bspvRM">
-		select small_product, small_product_id from blli_small_product
+		select small_product, small_product_id, small_product_posting_count from blli_small_product order by small_product_posting_count asc
 	</select>
 	
 	<update id="updateBigCategory">
@@ -52,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<update id="updateMidCategory">
-		update blli_mid_category set mid_category_id = #{midCategoryId}, mid_category_main_photo_link = #{midCategoryMainPhotoLink}, big_category = #{bigCategory}, mid_category_id = #{midCategoryId} 
+		update blli_mid_category set mid_category_id = #{midCategoryId}, mid_category_main_photo_link = #{midCategoryMainPhotoLink}, big_category = #{bigCategory} 
 		where mid_category = #{midCategory} and big_category = #{bigCategory}
 	</update>
 	

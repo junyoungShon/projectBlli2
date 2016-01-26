@@ -27,16 +27,20 @@ public class PostingDAOImpl implements PostingDAO{
 		return sqlSessionTemplate.selectList("posting.searchJsoupTest", searchWord);
 	}
 	@Override
-	public List<BlliPostingVO> postingListWithSmallProducts() {
-		return sqlSessionTemplate.selectList("posting.postingListWithSmallProducts");
+	public List<BlliPostingVO> postingListWithSmallProducts(String pageNo) {
+		return sqlSessionTemplate.selectList("posting.postingListWithSmallProducts", pageNo);
 	}
 	@Override
 	public List<String> searchProducts(String postingUrl) {
 		return sqlSessionTemplate.selectList("posting.searchProducts", postingUrl);
 	}
 	@Override
-	public void deleteProduct(HashMap<String, String> map) {
-		sqlSessionTemplate.delete("posting.deleteProduct", map);
+	public void deleteProduct(String postingUrl) {
+		sqlSessionTemplate.update("posting.deleteProduct", postingUrl);
+	}
+	@Override
+	public void selectProduct(HashMap<String, String> map) {
+		sqlSessionTemplate.update("posting.selectProduct", map);
 	}
 	@Override
 	public int countOfPostingUrl(String postingUrl) {
@@ -49,5 +53,13 @@ public class PostingDAOImpl implements PostingDAO{
 	@Override
 	public List<String> getAllPostingStatus(String postingUrl) {
 		return sqlSessionTemplate.selectList("posting.getAllPostingStatus",postingUrl);
+	}
+	@Override
+	public int totalPostingWithProducts() {
+		return sqlSessionTemplate.selectOne("posting.totalPostingWithProducts");
+	}
+	@Override
+	public void deletePosting(String postingUrl) {
+		sqlSessionTemplate.update("posting.deletePosting", postingUrl);
 	}
 }

@@ -6,13 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 import kr.co.blli.model.vo.BlliPostingVO;
+import kr.co.blli.model.vo.ListVO;
 
 public interface PostingService {
 	abstract String jsoupTest() throws IOException;
 
 	abstract ArrayList<BlliPostingVO> searchJsoupTest(String searchWord);
 
-	abstract ArrayList<BlliPostingVO> postingListWithSmallProducts() throws IOException;
+	abstract ListVO postingListWithSmallProducts(String pageNo) throws IOException;
 
 	abstract void selectProduct(List<Map<String, Object>> urlAndProduct);
 

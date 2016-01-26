@@ -103,7 +103,7 @@ CREATE TABLE blli_small_product ( -- naver_shopping_link  VARCHAR2(300) NOT NULL
 
 drop table blli_posting cascade constraint;
 CREATE TABLE blli_posting (
-	posting_url          VARCHAR2(300) NOT NULL primary key,
+	posting_url          VARCHAR2(300) NOT NULL ,
 	small_product       VARCHAR2(200) NOT NULL ,
 	small_product_id   VARCHAR2(30) NOT NULL , -- 추가
 	posting_title        VARCHAR2(450) NOT NULL , -- VARCHAR2(100) 에서 VARCHAR2(450)으로 수정!
@@ -112,8 +112,8 @@ CREATE TABLE blli_posting (
 	posting_score        NUMBER(4) default 0 ,
 	posting_like_count   NUMBER(6) default 0 ,
 	posting_dislike_count NUMBER(6) default 0 ,
-	posting_media_count  NUMBER(3) NOT NULL , -- default 0 에서 NOT NULL로 수정!
-	posting_photo_link   VARCHAR2(300) NOT NULL ,
+	posting_media_count  NUMBER(4) NOT NULL , -- default 0 에서 NOT NULL로 수정!
+	posting_photo_link   VARCHAR2(1000) NOT NULL , -- VARCHAR2(300)에서 VARCHAR2(1000)으로 수정
 	posting_total_residence_time NUMBER(8) default 0 ,
 	posting_view_count NUMBER(6) default 0 ,
 	posting_scrap_count NUMBER(3) default 0, -- 추가
@@ -122,7 +122,8 @@ CREATE TABLE blli_posting (
 	posting_order            NUMBER(3) NOT NULL, -- 추가
 	posting_reply_count      NUMBER(4) NOT NULL, -- 추가
 	posting_status            VARCHAR2(30) NOT NULL, -- 추가
-	constraint fk_posting_small_prod_id foreign key(small_product_id) references blli_small_product(small_product_id)
+	constraint fk_posting_small_prod_id foreign key(small_product_id) references blli_small_product(small_product_id),
+	constraint pk_posting primary key(posting_url, small_product) -- 복합키로 변경
 );
 
 

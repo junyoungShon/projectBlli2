@@ -73,14 +73,10 @@ public class ProductServiceImpl implements ProductService{
 		long start = System.currentTimeMillis(); // 시작시간 
 		//System.out.println("시작시간 : "+start);
 		
-		//System.out.println(Jsoup.connect("http://cr2.shopping.naver.com/adcrNoti.nhn?x=vK2wx%2FkkeF3RxIGrb2K3Iv%2F%2F%2Fw%3D%3DshotYqpoRlc5RyW%2FEZ7xM1U5Ie4RBwlEhjxrTh3jqregck%2FteIRnv6xKR9eidiY9kMups5UjNXxG%2F%2FoH7KpPkRKAe51AOfyXHtwOr7JwaIPtNYkiqCN3qDml5ZEtXKBL%2F5H2y%2BjDxLRNT6MQKeYR28D0Sj43oDikpYRg3MFYOhk3HQu%2F2xkp2QF0w9tAYjXIGKU3pzTjydW0EJaZMR9IlCCVWiemc41DK%2Bso4QHLSz3VdqViG%2FK0ZiAcl5kz2oFpzW6BIbRUzvePtOBVZBnmnK6195C9CZhrP9GvjM2KyXr46otwoM8x204COnUi43W7PCquII3QhIWm1aXa3atmHsHW7wOxISDL%2BK949F2dg5N7h9YzdkmJNkP83FfQwfSye7DmSXS%2B%2F3e1SlPkkKiPAlNBqmnlldCizLsSCc6oTEfed7LgjMXoCAk%2B7srwm8%2BFCupC7HBW520J5IC5%2FUy7fns%2BJoywsz0E9M95tSZllCCWnkCkIkdEJkT49H%2BujIRxq5mA%2FChL8ZK7R0br2HJNcZ1w4zqDHnNYyXxSLl1dPbOK%2FWhzUcSEPMuX7ai17XECFpu917dyuhZv3Wh5P8ipSQOi3oAoHw4FK0B1ZJeGd6HffTYunXqmCpvPQvauuiaD%2B&nv_mid=9297500650&cat_id=50000217").get());
-		//System.out.println(Jsoup.connect("http://cr2.shopping.naver.com/adcr.nhn?x=vK2wx%2FkkeF3RxIGrb2K3Iv%2F%2F%2Fw%3D%3DshotYqpoRlc5RyW%2FEZ7xM1U5Ie4RBwlEhjxrTh3jqregck%2FteIRnv6xKR9eidiY9kMups5UjNXxG%2F%2FoH7KpPkRKAe51AOfyXHtwOr7JwaIPtNYkiqCN3qDml5ZEtXKBL%2F5H2y%2BjDxLRNT6MQKeYR28D0Sj43oDikpYRg3MFYOhk3HQu%2F2xkp2QF0w9tAYjXIGKU3pzTjydW0EJaZMR9IlCCVWiemc41DK%2Bso4QHLSz3VdqViG%2FK0ZiAcl5kz2oFpzW6BIbRUzvePtOBVZBnmnK6195C9CZhrP9GvjM2KyXr46otwoM8x204COnUi43W7PCquII3QhIWm1aXa3atmHsHW7wOxISDL%2BK949F2dg5N7h9YzdkmJNkP83FfQwfSye7DmSXS%2B%2F3e1SlPkkKiPAlNBqmnlldCizLsSCc6oTEfed7LgjMXoCAk%2B7srwm8%2BFCupC7HBW520J5IC5%2FUy7fns%2BJoywsz0E9M95tSZllCCWnkCkIkdEJkT49H%2BujIRxq5mA%2FChL8ZK7R0br2HJNcZ1w4zqDHnNYyXxSLl1dPbOK%2FWhzUcSEPMuX7ai17XECFpu917dyuhZv3Wh5P8ipSQOi3oAoHw4FK0B1ZJeGd6HffTYunXqmCpvPQvauuiaD%2B").get());
-		
-		String key = "6694c8294c8d04cdfe78262583a13052"; //네이버 검색API 이용하기 위해 발급받은 key값
+		//String key = "6694c8294c8d04cdfe78262583a13052"; //네이버 검색API 이용하기 위해 발급받은 key값
 		ArrayList<BlliMidCategoryVO> midCategory = (ArrayList<BlliMidCategoryVO>)productDAO.getMidCategory();
 		int countOfMidCategory = 0;
 		int countOfAllSmallProduct = 0;
-		
 		for(int i=0;i<midCategory.size();i++){
 			
 			BlliSmallProductVO blliSmallProductVO = new BlliSmallProductVO();
@@ -98,12 +94,39 @@ public class ProductServiceImpl implements ProductService{
 				Document doc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?pagingIndex="+page+"&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&cat_id="+midCategory.get(i).getMidCategoryId()+"&frm=NVSHMDL&oldModel=true").get();
 				int resultCount = Integer.parseInt(doc.select("#_resultCount").text().replace(",", ""));
 				lastPage = Math.ceil(resultCount/40.0);
+				double maxSmallProduct = 10.0;
+				if(resultCount > 10){
+					if(Math.ceil(resultCount/10.0) < 10){
+						maxSmallProduct = Math.ceil(resultCount/10.0);
+					}
+				}
 				Elements e = doc.select(".goods_list ._model_list");
 				for(Element el : e){
 					countOfSmallProduct++;
 					//System.out.println("*************** 소제품 ***************");
 					
 					String smallProduct = el.select(".info .tit").text();
+					smallProduct = smallProduct.replaceAll("&", "%26");
+					//Document docu = Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+smallProduct+"&display=1&start=1&target=blog&sort=sim").get();
+					Document docu = Jsoup.connect("https://search.naver.com/search.naver?where=post&sm=tab_jum&ie=utf8&query="+smallProduct).get();
+					String totalPostingText = docu.select(".blog .section_head .title_num").text();
+					if(totalPostingText.equals("")){
+						totalPostingText = "0";
+					}else{
+						totalPostingText = totalPostingText.substring(totalPostingText.indexOf("/")+1, totalPostingText.lastIndexOf("건")).replaceAll(",", "").trim();
+					}
+					int smallProductPostingCount = Integer.parseInt(totalPostingText);
+					
+					if(smallProductPostingCount >= 20 && smallProductPostingCount <= 50 && resultCount > 10){
+						if(countOfSmallProduct > maxSmallProduct){
+							countOfSmallProduct--;
+							continue;
+						}
+					}else if(smallProductPostingCount < 50 || smallProductPostingCount > 1000){
+						countOfSmallProduct--;
+						continue;
+					}
+					
 					String smallProductMainPhotoLink = el.select(".img_area ._productLazyImg").attr("data-original");
 					String smallProductMaker = el.select(".info_mall .mall_txt .mall_img").attr("title");
 					if(smallProductMaker.equals("")){
@@ -112,12 +135,8 @@ public class ProductServiceImpl implements ProductService{
 					String productRegisterDay = el.select(".etc .date").text();
 					productRegisterDay = productRegisterDay.substring(productRegisterDay.indexOf(" ")+1, productRegisterDay.lastIndexOf("."))+".01";
 					String smallProductId = el.select(".img_area .report").attr("product_id");
-					String totalPostingText = Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+smallProduct+"&display=1&start=1&target=blog&sort=sim").get().select("total").text();
-					if(totalPostingText.equals("")){
-						totalPostingText = "0";
-					}
-					int smallProductPostingCount = Integer.parseInt(totalPostingText);
-
+					
+					
 					/*System.out.println("중분류 : "+midCategory.get(i).getMidCategory());
 					System.out.println("제품명 : "+smallProduct);
 					System.out.println("이미지 : "+smallProductMainPhotoLink);
@@ -129,7 +148,7 @@ public class ProductServiceImpl implements ProductService{
 					
 					blliSmallProductVO.setMidCategory(midCategory.get(i).getMidCategory());
 					blliSmallProductVO.setMidCategoryId(midCategory.get(i).getMidCategoryId());
-					blliSmallProductVO.setSmallProduct(smallProduct);
+					blliSmallProductVO.setSmallProduct(smallProduct.replaceAll("%26", "&"));
 					blliSmallProductVO.setSmallProductMainPhotoLink(smallProductMainPhotoLink);
 					blliSmallProductVO.setSmallProductPostingCount(smallProductPostingCount);
 					blliSmallProductVO.setNaverShoppingOrder(naverShoppingOrder++);

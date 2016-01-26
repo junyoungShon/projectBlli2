@@ -1,6 +1,7 @@
 package kr.co.blli.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,8 @@ import javax.annotation.Resource;
 
 import kr.co.blli.model.posting.PostingService;
 import kr.co.blli.model.product.ProductService;
+import kr.co.blli.model.vo.BlliPostingVO;
+import kr.co.blli.model.vo.ListVO;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,8 +37,8 @@ public class SearchController {
 		return new ModelAndView("searchResult","resultList",postingService.searchJsoupTest(searchWord));
 	}
 	@RequestMapping("postingListWithSmallProducts.do")
-	public ModelAndView postingListWithSmallProducts() throws IOException{
-		return new ModelAndView("postingListWithSmallProducts","resultList",postingService.postingListWithSmallProducts());
+	public ModelAndView postingListWithSmallProducts(String pageNo) throws IOException{
+		return new ModelAndView("postingListWithSmallProducts","resultList",postingService.postingListWithSmallProducts(pageNo));
 	}
 	@ResponseBody
 	@RequestMapping("selectProduct.do")
