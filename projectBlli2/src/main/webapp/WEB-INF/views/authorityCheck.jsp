@@ -20,8 +20,12 @@
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <!-- modal script -->
 <script type="text/javascript">
-
-
+	//프로필 사진 업로드 
+	function openProfileUpdate(){
+		var updateForm = document.babyInfoInsertForm;
+		updateForm.add_file.click();
+		updateForm.file_path.value=updateForm.add_file_value;
+	}
 	//이메일 유효성 변수
 	var emailValidity = false;
 	//쌍둥이 선택 시 몇번째 칸 아이인지 저장하는 변수
@@ -248,7 +252,7 @@
 	</sec:authorize>
 
 	<!-- 회원가입하였으나 아이정보를 추가하지 않은 경우 경우 아이정보 추가 폼이 출력된다. -->
-	<sec:authorize access="hasAnyRole('ROLE_RESTRICTED')"><form action="insertBabyInfo.do" id="babyInfoForm" method="post"><div class="info_fr">
+	<sec:authorize access="hasAnyRole('ROLE_RESTRICTED')"><form action="insertBabyInfo.do" id="babyInfoForm" method="post" name="babyInfoInsertForm"><div class="info_fr">
 			<input type="hidden" name="memberId" value="${sessionScope.blliMemberVO.memberId}">
 			
 			<c:if test="${sessionScope.blliMemberVO.memberEmail=='needsYourEmail'}">
@@ -272,7 +276,9 @@
 			<div>
 				<div class="fl">
 					<div class="baby_foto">
-						<a href="#"><img src="./img/foto_plus.png" alt="사진추가하기" class="foto_plus"></a>
+						<a href="#" onclick="openProfileUpdate()">
+						<input type="file" name="BlliBabyVO[0].babyPhoto" style="display: none;">
+ 						<img src="./img/foto_plus.png" alt="사진추가하기" class="foto_plus"></a>
 					</div>
 				</div>
 				<div class="fr" style="width:190px;">
