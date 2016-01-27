@@ -29,8 +29,16 @@
 		<script type="text/javascript">
 			location.href='${initParam.root}member_proceedingToMain.do'
 		</script>
-	</sec:authorize>
-	
+</sec:authorize>
+
+<!-- 아이정보를 입력하지 않은 자동로그인 사용자 && 이미 로그인한 유저의 경우 authorityCheck.jsp로 가서 아이정보 입력 -->
+<sec:authorize access="hasAnyRole('ROLE_RESTRICTED')">
+	<script type="text/javascript">
+		location.href='${initParam.root}authorityCheck.do'
+	</script>
+</sec:authorize>
+
+
 	<!-- 아이정보를 입력하지 않은 자동로그인 사용자 && 이미 로그인한 유저의 경우 authorityCheck.jsp로 가서 아이정보 입력 -->
 	<sec:authorize access="hasAnyRole('ROLE_RESTRICTED')">
 		<script type="text/javascript">
@@ -45,7 +53,6 @@
 		</script>
 	</sec:authorize>
 	
-	<div>
 		<div class="login_bg2">
 			<img src="./img/login_logo.png" class="login_logo">
 			<img src="./img/login_ti.png" style="margin-top:20px; margin-bottom:20px;">
@@ -65,14 +72,13 @@
 				블리 3231개의 상품과, 3216400개의 블로그가 있습니다.
 			</div>
 			<div class="fr">
-				<a href="#"><img src="./img/bottom_app1.png" alt="안드로이드 다운로드받기"></a>
+				<a href="${initParam.root}adminIndex.do"><img src="./img/bottom_app1.png" alt="안드로이드 다운로드받기"></a>
 				<a href="#"><img src="./img/bottom_app2.png" alt="애플 다운로드받기"></a>
 			</div>
 		</div>
-	</div>
 	
 		<!-- 네이버 로그인 버튼 -->
-		<script type="text/javascript">
+	<script type="text/javascript">
 		
 		//sns 공통 로그인 function
 		function snsLogin(memberId,memberName,whichChannel){

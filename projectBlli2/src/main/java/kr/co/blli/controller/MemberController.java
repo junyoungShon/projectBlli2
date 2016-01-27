@@ -29,7 +29,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -290,6 +289,27 @@ public class MemberController {
 		return "redirect:member_proceedingToMain.do";
 	}
 	
+	//용호 메소드 작성 영역
+	
+	@RequestMapping("memberCalendar.do")
+	@ResponseBody
+	public ModelAndView calendar(BlliMemberVO blliMemberVO){
+		
+		ModelAndView mv = new ModelAndView();
+		
+		mv.setViewName("member_calender.do");
+		boolean result = false;
+		if(memberService.findMemberById(blliMemberVO)!=null){
+			result = true;
+		}else{
+			result = false;
+		}
+		return mv;
+	}
+	
+	
+	
+	
 	/**
 	  * @Method Name : 사용자가 추천을 제외한 중분류 상품을 지워준다.
 	  * @Method 설명 :
@@ -379,7 +399,5 @@ public class MemberController {
 		result = productService.postingDisLike(blliPostingDisLikeVO);
 		return result;
 	}
-	
-		
 	
 }

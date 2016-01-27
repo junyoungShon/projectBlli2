@@ -84,7 +84,6 @@ CREATE TABLE blli_mid_category (
 
 
 drop table blli_small_product cascade constraint;
-
 CREATE TABLE blli_small_product ( -- naver_shopping_link  VARCHAR2(300) NOT NULL 삭제
    small_product_id     VARCHAR2(30) NOT NULL primary key, -- 추가
    small_product   VARCHAR2(100) NOT NULL ,
@@ -118,7 +117,7 @@ CREATE TABLE blli_posting (
 	posting_photo_link   VARCHAR2(1000) NOT NULL , -- VARCHAR2(300)에서 VARCHAR2(1000)으로 수정
 	posting_total_residence_time NUMBER(8) default 0 ,
 	posting_view_count NUMBER(6) default 0 ,
-	posting_scrape_count NUMBER(3) default 0, -- 추가
+	posting_scrape_count NUMBER(3) default 0, -- 추가, 컬럼명 변경
 	posting_author           VARCHAR2(100) NOT NULL, -- 추가
 	posting_date             DATE NOT NULL, -- 추가
 	posting_order            NUMBER(3) NOT NULL, -- 추가
@@ -237,7 +236,7 @@ drop table blli_mailing cascade constraint;
 CREATE TABLE blli_mailing (
 	mail_form			VARCHAR2(20) NOT NULL primary key,
 	mail_subject		VARCHAR2(100) NOT NULL,
-	mail_form_file		VARCHAR2(30) NOT NULL
+	mail_content_file		VARCHAR2(30) NOT NULL
 );
 
 
