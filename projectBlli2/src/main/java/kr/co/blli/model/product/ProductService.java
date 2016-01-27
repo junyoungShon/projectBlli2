@@ -5,7 +5,7 @@ import java.util.List;
 
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
-import kr.co.blli.model.vo.BlliMemberScrapVO;
+import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
@@ -33,7 +33,7 @@ public interface ProductService {
 
 	public int smallProductDib(BlliMemberDibsVO blliMemberDibsVO);
 
-	public int postingScrap(BlliMemberScrapVO blliMemberScrapVO);
+	public int postingScrap(BlliMemberScrapeVO blliMemberScrapVO);
 
 	public int postingLike(BlliPostingLikeVO blliPostingLikeVO);
 

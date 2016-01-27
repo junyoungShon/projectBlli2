@@ -11,7 +11,7 @@ drop table blli_small_product_photo cascade constraint;
 drop table blli_recomm_mid_category cascade constraint;
 drop table blli_member_dibs cascade constraint;
 drop table blli_buy_link_click cascade constraint;
-drop table blli_member_scrap cascade constraint;
+drop table blli_member_scrape cascade constraint;
 drop table blli_mailing cascade constraint;
 
 
@@ -118,7 +118,7 @@ CREATE TABLE blli_posting (
 	posting_photo_link   VARCHAR2(1000) NOT NULL , -- VARCHAR2(300)에서 VARCHAR2(1000)으로 수정
 	posting_total_residence_time NUMBER(8) default 0 ,
 	posting_view_count NUMBER(6) default 0 ,
-	posting_scrap_count NUMBER(3) default 0, -- 추가
+	posting_scrape_count NUMBER(3) default 0, -- 추가
 	posting_author           VARCHAR2(100) NOT NULL, -- 추가
 	posting_date             DATE NOT NULL, -- 추가
 	posting_order            NUMBER(3) NOT NULL, -- 추가
@@ -197,12 +197,12 @@ CREATE TABLE blli_buy_link_click (
 
 
 
-drop table blli_member_scrap cascade constraint;
-CREATE TABLE blli_member_scrap (
+drop table blli_member_scrape cascade constraint;
+CREATE TABLE blli_member_scrape (
 	member_id            VARCHAR2(30) NOT NULL ,
 	posting_url          VARCHAR2(300) NOT NULL ,
 	small_product_id   VARCHAR2(30) NOT NULL , -- 추가
-	scrap_time			DATE,
+	scrape_time			DATE,
 	constraint fk_member_scrap_mem_id foreign key(member_id) references blli_member(member_id),
 	constraint fk_member_scrap_post_url foreign key(posting_url) references blli_posting(posting_url),
 	constraint fk_member_scrap_small_p_id foreign key(small_product_id) references blli_small_product(small_product_id),

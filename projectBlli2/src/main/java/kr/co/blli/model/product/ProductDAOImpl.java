@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliBigCategoryVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
-import kr.co.blli.model.vo.BlliMemberScrapVO;
+import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
 import kr.co.blli.model.vo.BlliPostingDisLikeVO;
@@ -225,7 +225,7 @@ public class ProductDAOImpl implements ProductDAO{
 	  * @return
 	 */
 	@Override
-	public int deletePostingScrapInfo(BlliMemberScrapVO blliMemberScrapVO) {
+	public int deletePostingScrapInfo(BlliMemberScrapeVO blliMemberScrapVO) {
 		return sqlSessionTemplate.delete("posting.deletePostingScrapInfo", blliMemberScrapVO);
 	}
 	/**
@@ -237,7 +237,7 @@ public class ProductDAOImpl implements ProductDAO{
 	  * @return
 	 */
 	@Override
-	public int insertPostingScrap(BlliMemberScrapVO blliMemberScrapVO) {
+	public int insertPostingScrap(BlliMemberScrapeVO blliMemberScrapVO) {
 		return sqlSessionTemplate.delete("posting.insertPostingScrap", blliMemberScrapVO);
 	}
 	/**
@@ -248,7 +248,7 @@ public class ProductDAOImpl implements ProductDAO{
 	  * @param blliMemberScrapVO
 	 */
 	@Override
-	public void updatePlusPostingScrapCount(BlliMemberScrapVO blliMemberScrapVO) {
+	public void updatePlusPostingScrapCount(BlliMemberScrapeVO blliMemberScrapVO) {
 		sqlSessionTemplate.update("posting.updatePlusPostingScrapCount", blliMemberScrapVO);
 	}
 	/**
@@ -259,7 +259,7 @@ public class ProductDAOImpl implements ProductDAO{
 	  * @param blliMemberScrapVO
 	 */
 	@Override
-	public void updateMinusPostingScrapCount(BlliMemberScrapVO blliMemberScrapVO) {
+	public void updateMinusPostingScrapCount(BlliMemberScrapeVO blliMemberScrapVO) {
 		sqlSessionTemplate.update("posting.updateMinusPostingScrapCount", blliMemberScrapVO);
 	}
 	/**
@@ -363,7 +363,7 @@ public class ProductDAOImpl implements ProductDAO{
 	  * @return
 	 */
 	@Override
-	public int selectThisPostingScrap(BlliMemberScrapVO blliMemberScrapVO) {
+	public int selectThisPostingScrap(BlliMemberScrapeVO blliMemberScrapVO) {
 		return sqlSessionTemplate.selectOne("posting.selectThisPostingScrap", blliMemberScrapVO);
 	}
 	/**

@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliBigCategoryVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
-import kr.co.blli.model.vo.BlliMemberScrapVO;
+import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
@@ -329,7 +329,7 @@ public class ProductServiceImpl implements ProductService{
 			}
 		}
 		//포스팅을 가져올 때 해당 회원이 포스팅을 스크램,좋아요,싫어요 했는지 여부를 파악해준다.
-		BlliMemberScrapVO blliMemberScrapVO = new BlliMemberScrapVO();
+		BlliMemberScrapeVO blliMemberScrapVO = new BlliMemberScrapeVO();
 		blliMemberScrapVO.setMemberId(memberId);
 		BlliPostingLikeVO blliPostingLikeVO = new BlliPostingLikeVO();
 		blliPostingLikeVO.setMemberId(memberId);
@@ -376,7 +376,7 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public int postingScrap(BlliMemberScrapVO blliMemberScrapVO) {
+	public int postingScrap(BlliMemberScrapeVO blliMemberScrapVO) {
 		int result = 0;
 		if(productDAO.deletePostingScrapInfo(blliMemberScrapVO)==0){
 			result = productDAO.insertPostingScrap(blliMemberScrapVO);
