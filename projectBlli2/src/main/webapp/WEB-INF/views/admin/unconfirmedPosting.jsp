@@ -62,6 +62,7 @@
 </c:otherwise>
 </c:choose>
 </p>
+
 <table border="1" width="70%" align="center" cellpadding="10">
 <c:forEach items="${requestScope.resultList.postingList}" var="postingList" varStatus="count">
 	<tr>

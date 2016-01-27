@@ -27,6 +27,7 @@ $(document).ready(function(){
 		var $screenHeight = window.innerHeight || document.documentElement.clientHeight || document.getElementsByTagName("body")[0].clientHeight; // 스크린 높이 구하기
 		if($scrollTop ==  $contentsHeight - $screenHeight) {
 			if(totalPage < count){
+				$("#loading").hide();
 				return false;
 			}
 			loadArticle(count);
@@ -42,7 +43,7 @@ $(document).ready(function(){
 			data: "pageNo="+pageNo+"&searchWord="+searchWord,
 			cache: false,
 			success: function(resultData){
-				$("#loading").show();
+				//$("#loading").show();
 				var table = "";
 				for(var i=0;i<resultData.length;i++){
 				    table += "<tr><td colspan='6' width='70%' style='text-overflow : ellipsis;overflow : hidden;'>";
@@ -61,7 +62,7 @@ $(document).ready(function(){
 				}
 				setTimeout(function(){ // 시간 지연
 					$("#body").append(table);
-					$("#loading").hide();
+					//$("#loading").hide();
 				}, 1000);
 			}
 	    });

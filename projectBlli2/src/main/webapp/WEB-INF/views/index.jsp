@@ -13,6 +13,13 @@
 <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 <!-- 네이버 로그인 용 스크립트 -->
 <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.2.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#fileUpload").click(function(){
+		$("#imageFile").click();
+	});
+});
+</script>
 </head>
 <body>
 <a href="iframeTest.do">아이프레임테스트</a>
@@ -36,7 +43,7 @@
 	</script>
 </sec:authorize>
 
-<form action="${initParam.root}search_jsoupTest.do">
+<form action="${initParam.root}searchSmallProduct.do">
 <h1>이곳은 인덱스입니다 비회원 및 비인증회원만 접근할 수 있어요.</h1>
 	<sec:authorize access="isAnonymous()">
 		저희 블리는 회원 가입 및 아이정보를 입력해야만 이용 하 실 수 있습니다. 소셜 계정 및 이메일 등을 통해서 가입해주세요
@@ -45,13 +52,16 @@
 		<li><a href="${initParam.root}member_goMain.do">goMain.do</a>
 		<li><a href="${initParam.root}admin_goAdminPage.do">goAdminPage.do</a>
 		<li><a href="${initParam.root}sendMail.do?memberId=sk159753&mailForm=findPassword">sendMail.do</a>
-		<li><a href="${initParam.root}insert_big_category.do">대분류 리스트 긁어모아</a>
-		<li><a href="${initParam.root}insert_mid_category.do">중분류 리스트 긁어모아</a>
-		<li><a href="${initParam.root}insert_small_product.do">소분류 리스트 긁어모아</a>
-		<li><a href="${initParam.root}schedule_jsoupTest.do">포스팅 리스트 긁어모아</a>
+		<li><a href="${initParam.root}insertBigCategory.do">대분류 리스트 긁어모아</a>
+		<li><a href="${initParam.root}insertMidCategory.do">중분류 리스트 긁어모아</a>
+		<li><a href="${initParam.root}insertSmallProduct.do">소분류 리스트 긁어모아</a>
+		<li><a href="${initParam.root}insertPosting.do">포스팅 리스트 긁어모아</a>
 		<li><input type = "text" name="searchWord"><input type="submit" value="검색">
 		<li><a href="${initParam.root}postingListWithSmallProducts.do">소제품 하나로 추려줘</a></li>
 		<li><a href="${initParam.root}unconfirmedPosting.do">포스팅 등록해줘</a></li>
+		<li><a href="${initParam.root}unconfirmedSmallProduct.do">소제품 등록해줘</a></li>
+	    <li><input type="file" name= "file" style="display: none;" id="imageFile"></li>
+	    <li><img src="${initParam.root}image/blliLogo_orange.jpg" width="100px" id="fileUpload"></li>
 	<sec:authorize access="isAuthenticated()">
 		<li><a href="${initParam.root}j_spring_security_logout">로그아웃</a>
 	</sec:authorize>
