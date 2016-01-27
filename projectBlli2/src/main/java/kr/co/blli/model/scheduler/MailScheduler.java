@@ -41,12 +41,19 @@ public class MailScheduler {
 	  * @param memberId
 	  * @param mailForm
 	  */
-	//@Scheduled(cron = "00 00 00 * * *")
-	@Scheduled(cron = "00/03 * * * * *")
+	@Scheduled(cron = "00 00 00 * * *")
+	//@Scheduled(cron = "00/03 * * * * *") //테스트용
 	public void sendRecommendingMail()
 			throws FileNotFoundException, URISyntaxException, UnsupportedEncodingException, MessagingException {
 		
+		//월령이 바뀐 아이를 가진 회원 목록을 불러온다.
 		List<BlliMemberVO> memberList = memberDAO.getMemberHavingBabyAgeChangedList();
+		
+		if(memberList.size()==0) {
+			System.out.println("월령이 바뀐 아기가 한명도 없습니다.");
+		}
+		
+		//해당 회원의 아이 중 월령이 바뀐 아이의 정보를 회원VO가 가진 회원아기VOList 변수에 set 해준다.
 		for(int i=0; i<memberList.size(); i++) {
 			memberList.get(i).setBlliBabyVOList(memberDAO.getBabyAgeChangedListOfMember(memberList.get(i).getMemberId()));
 		}
@@ -73,6 +80,7 @@ public class MailScheduler {
 			message.setText(mailText, "utf-8", "html");
 			
 			mailSender.send(message);
+			System.out.println(memberList.get(i).getMemberName()+"님의 메일주소 "+recipient+"로 메일 발송");
 		}
 		
 	}

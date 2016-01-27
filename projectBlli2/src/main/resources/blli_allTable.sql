@@ -84,7 +84,6 @@ CREATE TABLE blli_mid_category (
 
 
 drop table blli_small_product cascade constraint;
-
 CREATE TABLE blli_small_product ( -- naver_shopping_link  VARCHAR2(300) NOT NULL 삭제
    small_product_id     VARCHAR2(30) NOT NULL primary key, -- 추가
    small_product   VARCHAR2(100) NOT NULL ,

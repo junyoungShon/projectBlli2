@@ -98,6 +98,7 @@ CREATE TABLE blli_posting_test (
 	constraint fk_posting_small_prod_test foreign key(small_product) references test_small_product(small_product),
 	constraint pk_posting_test primary key(posting_url, small_product) 
 );
+
 select * from blli_posting_test;
 
 drop table test_small_product;

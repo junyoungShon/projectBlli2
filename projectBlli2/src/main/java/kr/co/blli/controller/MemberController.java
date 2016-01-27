@@ -283,9 +283,9 @@ public class MemberController {
 	
 	//용호 메소드 작성 영역
 	
-	@RequestMapping("memberCalender.do")
+	@RequestMapping("memberCalendar.do")
 	@ResponseBody
-	public ModelAndView findMemberBySNSId(BlliMemberVO blliMemberVO){
+	public ModelAndView calendar(BlliMemberVO blliMemberVO){
 		
 		ModelAndView mv = new ModelAndView();
 		

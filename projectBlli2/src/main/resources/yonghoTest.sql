@@ -36,15 +36,17 @@ CREATE TABLE blli_baby (
 
 insert into blli_baby(baby_name, baby_birthday, baby_sex, baby_photo, member_id) values('아기1', sysdate, '남', '사진', 'yongho');
 insert into blli_baby(baby_name, baby_birthday, baby_sex, baby_photo, member_id) values('아기2', sysdate, '남', '사진', 'yongho');
+insert into blli_baby(baby_name, baby_birthday, baby_sex, baby_photo, member_id) values('아기3', sysdate, '남', '사진', 'yongho');
 
 select babyt.baby_name, babyt.baby_birthday, babyt.baby_photo 
 	from (select bb.baby_name, bb.baby_birthday, bb.baby_photo from blli_baby bb where bb.member_id = 'yongho') babyt
 	where substr(to_char(babyt.baby_birthday), 7) = substr(to_char(sysdate), 7);
 	
-	select babyt.baby_name, babyt.baby_birthday, babyt.baby_photo 
-		from (select bb.baby_name, bb.baby_birthday, bb.baby_photo from blli_baby bb where bb.member_id = #{value}) babyt
-		where substr(to_char(babyt.baby_birthday), 7) = substr(to_char(sysdate), 7);
+select babyt.baby_name, babyt.baby_birthday, babyt.baby_photo 
+	from (select bb.baby_name, bb.baby_birthday, bb.baby_photo from blli_baby bb where bb.member_id = #{value}) babyt
+	where substr(to_char(babyt.baby_birthday), 7) = substr(to_char(sysdate), 7);
 
+		
 select * from blli_baby;
 
 
