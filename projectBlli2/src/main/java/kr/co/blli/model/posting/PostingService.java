@@ -11,12 +11,18 @@ import kr.co.blli.model.vo.ListVO;
 public interface PostingService {
 	abstract String jsoupTest() throws IOException;
 
-	abstract ArrayList<BlliPostingVO> searchJsoupTest(String searchWord);
+	abstract ArrayList<BlliPostingVO> searchJsoupTest(String pageNo, String searchWord);
 
 	abstract ListVO postingListWithSmallProducts(String pageNo) throws IOException;
 
 	abstract void selectProduct(List<Map<String, Object>> urlAndProduct);
 
 	abstract void recordResidenceTime(BlliPostingVO blliPostingVO);
+
+	abstract ListVO unconfirmedPosting(String pageNo) throws IOException;
+
+	abstract void registerPosting(List<Map<String, Object>> urlAndProduct);
+
+	abstract int totalPageOfPosting(String searchWord);
 
 }

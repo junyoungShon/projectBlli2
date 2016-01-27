@@ -23,8 +23,8 @@ public class PostingDAOImpl implements PostingDAO{
 		sqlSessionTemplate.insert("posting.insertPosting", postingVO);
 	}
 	@Override
-	public List<BlliPostingVO> searchJsoupTest(String searchWord) {
-		return sqlSessionTemplate.selectList("posting.searchJsoupTest", searchWord);
+	public List<BlliPostingVO> searchJsoupTest(HashMap<String, String> map) {
+		return sqlSessionTemplate.selectList("posting.searchJsoupTest", map);
 	}
 	@Override
 	public List<BlliPostingVO> postingListWithSmallProducts(String pageNo) {
@@ -72,5 +72,25 @@ public class PostingDAOImpl implements PostingDAO{
 	@Override
 	public void updatePostingViewCountAndResidenceTime(BlliPostingVO blliPostingVO) {
 		sqlSessionTemplate.update("posting.updatePostingViewCountAndResidenceTime",blliPostingVO);
+	}
+	@Override
+	public List<BlliPostingVO> unconfirmedPosting(String pageNo) {
+		return sqlSessionTemplate.selectList("posting.unconfirmedPosting", pageNo);
+	}
+	@Override
+	public int totalUnconfirmedPosting() {
+		return sqlSessionTemplate.selectOne("posting.totalUnconfirmedPosting");
+	}
+	@Override
+	public void registerPosting(HashMap<String, String> map) {
+		sqlSessionTemplate.update("posting.registerPosting", map);
+	}
+	@Override
+	public void addProduct(HashMap<String, String> map) {
+		sqlSessionTemplate.update("posting.addProduct", map);
+	}
+	@Override
+	public int totalPageOfPosting(String searchWord) {
+		return sqlSessionTemplate.selectOne("posting.totalPageOfPosting", searchWord);
 	}
 }

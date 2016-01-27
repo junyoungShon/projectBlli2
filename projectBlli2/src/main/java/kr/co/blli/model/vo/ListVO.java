@@ -4,14 +4,14 @@ import java.util.List;
 
 public class ListVO {
 	private List<BlliPostingVO> postingList;
-	private PagingBeanOfPostingListWithProducts pagingBean;
+	private BlliPagingBean pagingBean;
 
 	public ListVO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public ListVO(List<BlliPostingVO> postingList, PagingBeanOfPostingListWithProducts pagingBean) {
+	public ListVO(List<BlliPostingVO> postingList, BlliPagingBean pagingBean) {
 		super();
 		this.postingList = postingList;
 		this.pagingBean = pagingBean;
@@ -25,11 +25,11 @@ public class ListVO {
 		this.postingList = postingList;
 	}
 
-	public PagingBeanOfPostingListWithProducts getPagingBean() {
+	public BlliPagingBean getPagingBean() {
 		return pagingBean;
 	}
 
-	public void setPagingBean(PagingBeanOfPostingListWithProducts pagingBean) {
+	public void setPagingBean(BlliPagingBean pagingBean) {
 		this.pagingBean = pagingBean;
 	}
 

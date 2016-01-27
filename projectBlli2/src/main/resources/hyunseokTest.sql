@@ -18,6 +18,16 @@ select small_product_posting_count from blli_small_product where small_product =
 select count(*) from blli_small_product where small_product_posting_count = 0;
 select * from blli_posting where small_product = '대성토이즈 뉴 말하는 고가 사다리차';
 
+select posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, posting_scrape_count, posting_like_count, posting_dislike_count, posting_author, posting_date from(
+	select ceil(rownum/5) as page, posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, 
+	posting_scrape_count, posting_like_count, posting_dislike_count, posting_author, to_char(posting_date, 'YYYY.MM.DD') as posting_date 
+	from blli_posting where small_product like '%' || '' || '%' and posting_status = 'confirmed'
+) where page = '1'
+
+select max(ceil(rownum/5)) from blli_posting where small_product like '%' || '' || '%' and posting_status = 'confirmed'
+
+select * from 
+
 select * from blli_small_product;
 select count(*) from blli_small_product where small_product_posting_count = 0;
 select count(*) from blli_small_product where small_product_posting_count > 514;
@@ -57,8 +67,9 @@ select max(b.small_product_posting_count) from(
 	select small_product_id from blli_posting
 )a, blli_small_product b where a.small_product_id = b.small_product_id;
 
-select * from blli_posting where posting_title = '마이비&비앤비 세제 총망라';
-select * from blli_posting where posting_url = 'http://blog.naver.com/aaej0521/20144008359';
+select * from blli_posting where posting_title = '네추럴블라썸 프린세스라벨 구입 !! 핑크라벨과 비교 후기.';
+select * from blli_posting where posting_url = 'http://blog.naver.com/1339cat/70141939182';
+update blli_posting set small_product = #{smallProduct} where posting_url = 'http://blog.naver.com/1030yhm/220546395420';
 update blli_posting set posting_status = 'unconfirmed' where posting_url = 'http://blog.naver.com/4lang2/60213053247';
 
 alter database datafile '/db03/mydata.dbf' resize 1024m;
@@ -136,6 +147,25 @@ select bp.posting_url, bp.posting_title, bp.posting_photo_link, bp.posting_summa
 	)p, blli_posting_test b where b.posting_url = p.posting_url 
 )sp, blli_posting_test bp where sp.small_product_count = 1 and sp.posting_url = bp.posting_url;
 
+select bp.posting_url, bp.posting_title, bp.posting_photo_link, bp.posting_summary, bp.posting_score, bp.small_product, bp.posting_scrape_count,
+	bp.posting_like_count, bp.posting_dislike_count, bp.posting_author, to_char(bp.posting_date,'YYYY.MM.DD') as posting_date from(
+	select count(*) over (partition by b.posting_url) as small_product_count, b.posting_url from(		
+		select posting_url from blli_posting where small_product like '%' || '' || '%' and posting_status = 'confirmed'
+	)p, blli_posting b where b.posting_url = p.posting_url 
+)sp, blli_posting bp where sp.small_product_count = 1 and sp.posting_url = bp.posting_url;
+
+alter table blli_posting rename column posting_scrap_count to posting_scrape_count; 
+
+select posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, posting_scrape_count, posting_like_count, posting_dislike_count, posting_author, posting_date from(
+	select ceil((dense_rank() over (order by posting_url))/5) page, posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, 
+	posting_scrape_count, posting_like_count, posting_dislike_count, posting_author, to_char(posting_date, 'YYYY.MM.DD') as posting_date 
+	from blli_posting where small_product like '%' || '' || '%' and posting_status = 'confirmed'
+) where page = '3';
+
+update blli_posting set posting_status = 'unconfirmed';
+
+select * from blli_posting;
+
 select bp.posting_url, bp.posting_title, bp.posting_photo_link, bp.posting_summary, bp.posting_score, bp.small_product, bp.posting_scrape_count, 
 bp.posting_like_count, bp.posting_dislike_count, bp.posting_author, to_char(bp.posting_date,'YYYY.MM.DD') as posting_date from(
 	select count(*) over (partition by b.posting_url) as small_product_count, b.posting_url from(		
@@ -197,9 +227,15 @@ select * from blli_small_product where small_product_posting_count >= 20 and sma
 
 select * from blli_small_prod_buy_link;
 
+select posting_url, posting_title, posting_summary, small_product from(
+	select ceil(rownum/5) as page, posting_url, posting_title, posting_summary, small_product from(
+		select count(*) over (partition by posting_url) as count_posting_url, posting_url, posting_title, posting_summary, small_product from blli_posting where posting_status = 'unconfirmed'
+	) where count_posting_url = 1
+) where page = '10';
 
-
-
+select count(*) from(
+	select count(*) over (partition by posting_url) as count_posting_url from blli_posting where posting_status = 'unconfirmed'
+) where count_posting_url = 2
 
 
 
