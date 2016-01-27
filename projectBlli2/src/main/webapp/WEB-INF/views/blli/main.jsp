@@ -58,7 +58,7 @@
 		$('.postingScrapBtn').click(function(){
 			$.ajax({
 				type:"get",
-				url:"postingScrap.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(this).parent().parent().parent().siblings('.smallProductIdInfo').val()
+				url:"postingScrape.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(this).parent().parent().parent().siblings('.smallProductIdInfo').val()
 						+'&postingUrl='+$(this).parent().parent().parent().siblings('.postingUrlInfo').val(),
 				success:function(result){
 					if(result==1){
@@ -79,7 +79,7 @@
 					if(result==1){
 						alert('좋아요 성공!');
 					}else if(result==0){
-						alert('좋아요 해제!');
+						alert('좋아요 해제!');AKIAIXVJXVD7QC5UNTCQAKIAIXVJXVD7QC5UNTCQAKIAIXVJXVD7QC5UNTCQ
 					}
 				}
 			}); 

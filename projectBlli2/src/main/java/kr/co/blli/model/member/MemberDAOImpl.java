@@ -8,6 +8,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import kr.co.blli.model.vo.BlliBabyVO;
+import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 @Repository
 public class MemberDAOImpl implements MemberDAO{
@@ -108,4 +109,29 @@ public class MemberDAOImpl implements MemberDAO{
 		sqlSessionTemplate.update("member.changeRecommendingBaby", blliBabyVO);
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	//용호 메소드 영역
+	@Override
+	public BlliMemberVO findMemberInfoById(String memberId) {
+		return sqlSessionTemplate.selectOne("member.findMemberInfoById", memberId);
+	}
+	@Override
+	public BlliMailVO findMailSubjectAndContentByMailForm(String mailForm) {
+		return sqlSessionTemplate.selectOne("member.findMailSubjectAndContentByMailForm", mailForm);
+	}
+	@Override
+	public List<BlliMemberVO> getMemberHavingBabyAgeChangedList() {
+		return sqlSessionTemplate.selectList("member.getMemberHavingBabyAgeChangedList");	
+	}
+	@Override
+	public List<BlliBabyVO> getBabyAgeChangedListOfMember(String memberId) {
+		return sqlSessionTemplate.selectList("member.getBabyAgeChangedListOfMember", memberId);	
+	}
+
 }

@@ -60,13 +60,13 @@ public class BlliBabyVO {
 		this.babyPhoto = babyPhoto;
 	}
 
-	public List<BlliScheduleVO> getBlliScheduleVOList() {
+	/*public List<BlliScheduleVO> getBlliScheduleVOList() {
 		return blliScheduleVOList;
 	}
 
 	public void setBlliScheduleVOList(List<BlliScheduleVO> blliScheduleVOList) {
 		this.blliScheduleVOList = blliScheduleVOList;
-	}
+	}*/
 
 	public int getBabyMonthAge() {
 		return babyMonthAge;
@@ -101,8 +101,6 @@ public class BlliBabyVO {
 				+ ", babyMonthAge=" + babyMonthAge + ", babyDayAge="
 				+ babyDayAge + "]";
 	}
-
-	
 
 	
 }

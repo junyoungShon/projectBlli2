@@ -11,7 +11,7 @@ drop table blli_small_product_photo cascade constraint;
 drop table blli_recomm_mid_category cascade constraint;
 drop table blli_member_dibs cascade constraint;
 drop table blli_buy_link_click cascade constraint;
-drop table blli_member_scrap cascade constraint;
+drop table blli_member_scrape cascade constraint;
 drop table blli_mailing cascade constraint;
 
 
@@ -84,7 +84,6 @@ CREATE TABLE blli_mid_category (
 
 
 drop table blli_small_product cascade constraint;
-
 CREATE TABLE blli_small_product ( -- naver_shopping_link  VARCHAR2(300) NOT NULL 삭제
    small_product_id     VARCHAR2(30) NOT NULL primary key, -- 추가
    small_product   VARCHAR2(200) NOT NULL , -- VARCHAR2(100)을 VARCHAR2(200)으로 변경
@@ -198,12 +197,12 @@ CREATE TABLE blli_buy_link_click (
 
 
 
-drop table blli_member_scrap cascade constraint;
-CREATE TABLE blli_member_scrap (
+drop table blli_member_scrape cascade constraint;
+CREATE TABLE blli_member_scrape (
 	member_id            VARCHAR2(30) NOT NULL ,
 	posting_url          VARCHAR2(300) NOT NULL ,
 	small_product_id   VARCHAR2(30) NOT NULL , -- 추가
-	scrap_time			DATE,
+	scrape_time			DATE,
 	constraint fk_member_scrap_mem_id foreign key(member_id) references blli_member(member_id),
 	constraint fk_member_scrap_post_url foreign key(posting_url) references blli_posting(posting_url),
 	constraint fk_member_scrap_small_p_id foreign key(small_product_id) references blli_small_product(small_product_id),
@@ -238,7 +237,7 @@ drop table blli_mailing cascade constraint;
 CREATE TABLE blli_mailing (
 	mail_form			VARCHAR2(20) NOT NULL primary key,
 	mail_subject		VARCHAR2(100) NOT NULL,
-	mail_form_file		VARCHAR2(30) NOT NULL
+	mail_content_file		VARCHAR2(30) NOT NULL
 );
 
 

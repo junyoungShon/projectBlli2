@@ -13,7 +13,7 @@ import kr.co.blli.model.product.ProductService;
 import kr.co.blli.model.security.BlliUserDetailsService;
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
-import kr.co.blli.model.vo.BlliMemberScrapVO;
+import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
@@ -238,9 +238,30 @@ public class MemberController {
 		}
 		return result;
 	}
+	/**
+	 * 카카오톡 로그인 시도 시 sns로 가입한적 있는 회원인지 확인하는 메서드
+	 * @Method Name : findMemberBySNSId
+	 * @Method 설명 :
+	 * @작성일 : 2016. 1. 14.
+	 * @작성자 : junyoung 
+	 * @param blliMemberVO
+	 * @return
+	 */
+	@RequestMapping("findMemberByEmailId.do")
+	@ResponseBody
+	public boolean findMemberByEmailId(BlliMemberVO blliMemberVO){
+		System.out.println(blliMemberVO);
+		boolean result = false;
+		if(memberService.findMemberById(blliMemberVO)!=null){
+			result = true;
+		}else{
+			result = false;
+		}
+		return result;
+	}
 	
 	/**
-	  * @Method Name : insertBabyInfoForKakaoUser
+	  * @Method Name : insertBabyInfo
 	  * @Method 설명 : 아이 및 이메일을 등록하는 메서드
 	  * @작성일 : 2016. 1. 16.
 	  * @작성자 : junyoung
@@ -249,37 +270,45 @@ public class MemberController {
 	@RequestMapping("insertBabyInfo.do")
 	public String insertBabyInfo(HttpServletRequest request,BlliMemberVO blliMemberVO){
 		ArrayList<BlliBabyVO> list = new ArrayList<BlliBabyVO>();
-		if(request.getParameter("firstBabySex")!=null){
+		int targetAmount = Integer.parseInt(request.getParameter("targetAmount"));
+		System.out.println(targetAmount);
+		for(int i=0;i<targetAmount;i++){
 			BlliBabyVO blliBabyVO = new BlliBabyVO();
 			blliBabyVO.setMemberId(request.getParameter("memberId"));
-			blliBabyVO.setBabyName(request.getParameter("firstBabyName"));
-			blliBabyVO.setBabyBirthday(request.getParameter("firstBabyBirthday"));
-			blliBabyVO.setBabySex(request.getParameter("firstBabySex"));
-			blliBabyVO.setRecommending(1);
+			blliBabyVO.setBabyName(request.getParameter("BlliBabyVO["+i+"].babyName"));
+			blliBabyVO.setBabyBirthday(request.getParameter("BlliBabyVO["+i+"].babyBirthday"));
+			blliBabyVO.setBabySex(request.getParameter("BlliBabyVO["+i+"].babySex"));
+			if(i==0){
+				blliBabyVO.setRecommending(1);
+			}else{
+				blliBabyVO.setRecommending(0);
+			}
 			list.add(blliBabyVO);
 		}
-		if(request.getParameter("secondBabySex")!=null){
-			BlliBabyVO blliBabyVO = new BlliBabyVO();
-			blliBabyVO.setMemberId(request.getParameter("memberId"));
-			blliBabyVO.setBabyName(request.getParameter("secondBabyName"));
-			blliBabyVO.setBabyBirthday(request.getParameter("secondBabyBirthday"));
-			blliBabyVO.setBabySex(request.getParameter("secondBabySex"));
-			blliBabyVO.setRecommending(0);
-			list.add(blliBabyVO);
-		}
-		if(request.getParameter("thirdBabySex")!=null){
-			BlliBabyVO blliBabyVO = new BlliBabyVO();
-			blliBabyVO.setMemberId(request.getParameter("memberId"));
-			blliBabyVO.setBabyName(request.getParameter("thirdBabyName"));
-			blliBabyVO.setBabyBirthday(request.getParameter("thirdBabyBirthday"));
-			blliBabyVO.setBabySex(request.getParameter("thirdBabySex"));
-			blliBabyVO.setRecommending(0);
-			list.add(blliBabyVO);
-		}
-		//첫번째 아이로 추천아이를 선정해줌
 		memberService.insertBabyInfo(list,blliMemberVO);
 		return "redirect:member_proceedingToMain.do";
 	}
+	
+	//용호 메소드 작성 영역
+	
+	@RequestMapping("memberCalendar.do")
+	@ResponseBody
+	public ModelAndView calendar(BlliMemberVO blliMemberVO){
+		
+		ModelAndView mv = new ModelAndView();
+		
+		mv.setViewName("member_calender.do");
+		boolean result = false;
+		if(memberService.findMemberById(blliMemberVO)!=null){
+			result = true;
+		}else{
+			result = false;
+		}
+		return mv;
+	}
+	
+	
+	
 	
 	/**
 	  * @Method Name : 사용자가 추천을 제외한 중분류 상품을 지워준다.
@@ -325,16 +354,16 @@ public class MemberController {
 		return result;
 	}
 	/**
-	 * @Method Name : postingScrap
+	 * @Method Name : postingScrape
 	 * @Method 설명 : 블로그 스크랩 버튼에 대해 그 결과를 반환해주는 컨트롤러 메서드
 	 * @작성일 : 2016. 1. 22.
 	 * @작성자 : junyoung
 	 * @param blliMemberDibsVO
 	 * @return
 	 */
-	@RequestMapping("postingScrap.do")
+	@RequestMapping("postingScrape.do")
 	@ResponseBody
-	public int postingScrap(BlliMemberScrapVO blliMemberScrapVO){
+	public int postingScrap(BlliMemberScrapeVO blliMemberScrapVO){
 		System.out.println(blliMemberScrapVO);
 		int result=0;
 		result = productService.postingScrap(blliMemberScrapVO);
@@ -370,7 +399,5 @@ public class MemberController {
 		result = productService.postingDisLike(blliPostingDisLikeVO);
 		return result;
 	}
-	
-		
 	
 }

@@ -1,10 +1,10 @@
 package kr.co.blli.model.vo;
-public class BlliMemberScrapVO {
+public class BlliMemberScrapeVO {
 	private String memberId;
 	private String postingUrl;
 	private String smallProductId;
-	private String scrapTime;
-	public BlliMemberScrapVO() {
+	private String scrapeTime;
+	public BlliMemberScrapeVO() {
 		super();
 	}
 	public String getMemberId() {
@@ -25,17 +25,17 @@ public class BlliMemberScrapVO {
 	public void setSmallProductId(String smallProductId) {
 		this.smallProductId = smallProductId;
 	}
-	public String getScrapTime() {
-		return scrapTime;
+	public String getScrapeTime() {
+		return scrapeTime;
 	}
-	public void setScrapTime(String scrapTime) {
-		this.scrapTime = scrapTime;
+	public void setScrapeTime(String scrapTime) {
+		this.scrapeTime = scrapTime;
 	}
 	@Override
 	public String toString() {
 		return "BlliMemberScrapVO [memberId=" + memberId + ", postingUrl="
 				+ postingUrl + ", smallProductId=" + smallProductId
-				+ ", scrapTime=" + scrapTime + "]";
+				+ ", scrapeTime=" + scrapeTime + "]";
 	}
 	
 }
