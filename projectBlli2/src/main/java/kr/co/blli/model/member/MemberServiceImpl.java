@@ -1,17 +1,22 @@
 package kr.co.blli.model.member;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import kr.co.blli.model.security.BlliUserDetails;
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMemberVO;
+import kr.co.blli.utility.BlliFileUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +24,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -27,6 +34,8 @@ public class MemberServiceImpl implements MemberService {
 	private MemberDAO memberDAO ;
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	@Resource
+	private BlliFileUtils blliFileUtils;
 
 	/**
 	  * @Method Name : joinMemberByEmail
@@ -88,9 +97,33 @@ public class MemberServiceImpl implements MemberService {
 	  * @작성자 : junyoung
 	  * @param list
 	  * @param memberEmail
+	 * @throws Exception 
 	 */
 	@Override
-	public void insertBabyInfo(ArrayList<BlliBabyVO> list,BlliMemberVO blliMemberVO) {
+	public void insertBabyInfo(BlliMemberVO blliMemberVO,HttpServletRequest request) throws Exception {
+	    ArrayList<BlliBabyVO> list = new ArrayList<BlliBabyVO>();
+		int targetAmount = Integer.parseInt(request.getParameter("targetAmount"));
+		for(int i=0;i<targetAmount;i++){
+			System.out.println(targetAmount);
+			BlliBabyVO blliBabyVO = new BlliBabyVO();
+			blliBabyVO.setMemberId(request.getParameter("memberId"));
+			blliBabyVO.setBabyName(request.getParameter("BlliBabyVO["+i+"].babyName"));
+			blliBabyVO.setBabyBirthday(request.getParameter("BlliBabyVO["+i+"].babyBirthday"));
+			blliBabyVO.setBabySex(request.getParameter("BlliBabyVO["+i+"].babySex"));
+				//파일을 업로드 하고, 저장한 파일명을 반환해준다.
+			String storedFileName = blliFileUtils.parseInsertFileInfo(request,blliBabyVO);
+			if(storedFileName!=null){
+				blliBabyVO.setBabyPhoto(storedFileName);
+			}else{
+				blliBabyVO.setBabyPhoto("default");
+			}
+			if(i==0){
+				blliBabyVO.setRecommending(1);
+			}else{
+				blliBabyVO.setRecommending(0);
+			}
+			list.add(blliBabyVO);
+		}
 		if(blliMemberVO.getMemberEmail()!=null){ 
 			memberDAO.updateMemberEmail(blliMemberVO);
 		}

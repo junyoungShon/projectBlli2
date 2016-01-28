@@ -20,16 +20,17 @@
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <!-- modal script -->
 <script type="text/javascript">
-	//프로필 사진 업로드 
-	function openProfileUpdate(){
-		var updateForm = document.babyInfoInsertForm;
-		updateForm.add_file.click();
-		updateForm.file_path.value=updateForm.add_file_value;
-	}
+		
 	//이메일 유효성 변수
 	var emailValidity = false;
 	//쌍둥이 선택 시 몇번째 칸 아이인지 저장하는 변수
 	var selectBabyNum ;
+	//최근 업로드된 사진번호 저장 변수
+	var updateBabyPhotoNum;
+	
+	function setUpdateBabyPhotoNum(updateBabyPhotoNum){
+		this.updateBabyPhotoNum = updateBabyPhotoNum;
+	}
 	
 	function setChildValue(twinsName){
 		if(twinsName=="exit" || twinsName==""){
@@ -46,6 +47,63 @@
 		window.open("${initParam.root}addTwinsName.do","popup",popOption);
 	}
 	$(document).ready(function(){
+		//사진 업로드 시 실시간 미리보기 및 용량 체크
+		$('.babyPhoto').change(function(){
+			var fileName = $(this).val(); //파일을 추가한 input 박스의 값
+			fileName = fileName.slice(fileName.indexOf('.') + 1).toLowerCase(); //파일 확장자를 잘라내고, 비교를 위해 소문자로 만듭니다.
+			if(fileName != "jpg" && fileName != "png" &&  fileName != "gif" &&  fileName != "bmp"){ //확장자를 확인합니다.
+				alert('프로필 사진은 이미지 파일(jpg, png, gif, bmp)만 등록 가능합니다.');
+				$('#babyPhoto'+updateBabyPhotoNum).attr("src","${initParam.root}img/foto_plus.png");
+				$('#babyPhoto'+updateBabyPhotoNum).css("width","");
+				$('#babyPhoto'+updateBabyPhotoNum).css("height","");
+				return false;
+			}else{
+				var data = new FormData();
+				$.each($('#babyPhotoInput0')[0].files, function(i, file) {          
+		   			data.append('file-' + i, file);
+		        });
+		        $.ajax({
+			        url: 'fileCapacityCheck.do',
+			        type: "post",
+			        dataType: "text",
+			        data: data,
+			        // cache: false,
+			        processData: false,
+			        contentType: false,
+			        success: function(data, textStatus, jqXHR) {
+				        alert(data);
+				        var input = this;
+				        if(data=="true"){
+				        	
+				        }else{
+				        	var fileName = $(this).val("");
+					        alert('프로필 사진은 2mb 이하로 올려주세요 ^^');
+					        $('#babyPhoto'+updateBabyPhotoNum).attr("src","${initParam.root}img/foto_plus.png");
+							$('#babyPhoto'+updateBabyPhotoNum).css("width","");
+							$('#babyPhoto'+updateBabyPhotoNum).css("height","");
+
+					        return false;
+					    }
+		            }, 
+		            error: function(jqXHR, textStatus, errorThrown) {}
+		        });
+		        if(fileName!=""){
+				var input = this;
+				 if (input.files && input.files[0]) {
+	                    var reader = new FileReader(); //파일을 읽기 위한 FileReader객체 생성
+	                    reader.onload = function (e) {
+	                    //파일 읽어들이기를 성공했을때 호출되는 이벤트 핸들러
+	                        //$('#babyPhoto0').css({"background":"url("+e.target.result+")"});
+	                    	$('#babyPhoto'+updateBabyPhotoNum).attr("src",e.target.result);
+	                    	$('#babyPhoto'+updateBabyPhotoNum).css("width","116px");
+	                    	$('#babyPhoto'+updateBabyPhotoNum).css("height","116px");
+	                    }                   
+	                    reader.readAsDataURL(input.files[0]);
+	             }
+			}
+			}
+		});
+		
 		$('.babyName').keyup(function(){
 			var userWritingBabyName = $(this).val();
 			$(this).val(userWritingBabyName.substring(0,5));
@@ -252,7 +310,9 @@
 	</sec:authorize>
 
 	<!-- 회원가입하였으나 아이정보를 추가하지 않은 경우 경우 아이정보 추가 폼이 출력된다. -->
-	<sec:authorize access="hasAnyRole('ROLE_RESTRICTED')"><form action="insertBabyInfo.do" id="babyInfoForm" method="post" name="babyInfoInsertForm"><div class="info_fr">
+	<sec:authorize access="hasAnyRole('ROLE_RESTRICTED')">
+	<form action="insertBabyInfo.do" id="babyInfoForm" method="post" name="babyInfoInsertForm" enctype="multipart/form-data">
+	<div class="info_fr">
 			<input type="hidden" name="memberId" value="${sessionScope.blliMemberVO.memberId}">
 			
 			<c:if test="${sessionScope.blliMemberVO.memberEmail=='needsYourEmail'}">
@@ -275,11 +335,12 @@
 			</div>
 			<div>
 				<div class="fl">
-					<div class="baby_foto">
-						<a href="#" onclick="openProfileUpdate()">
-						<input type="file" name="BlliBabyVO[0].babyPhoto" style="display: none;">
- 						<img src="./img/foto_plus.png" alt="사진추가하기" class="foto_plus"></a>
+					<label>
+					<div class="baby_foto" >
+						<input type="file" class="babyPhoto" name="BlliBabyVO[0].babyPhoto" id="babyPhotoInput0" style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(0)">
+ 						<img src="./img/foto_plus.png" alt="사진추가하기" class="foto_plus" id="babyPhoto0">
 					</div>
+					</label>
 				</div>
 				<div class="fr" style="width:190px;">
 						<span class="fl" style="margin-bottom: 7px;">
@@ -300,9 +361,12 @@
 		<div class="info_bg2" style="display: none;">
 			<div>
 				<div class="fl">
-					<div class="baby_foto" style="margin-top:10px;">
-						<a href="#"><img src="./img/foto_plus.png" alt="사진추가하기" class="foto_plus"></a>
-					</div>
+					<label>
+						<div class="baby_foto" >
+							<input type="file" class="babyPhoto" name="BlliBabyVO[1].babyPhoto" style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(1)">
+	 						<img src="./img/foto_plus.png" alt="사진추가하기" class="foto_plus" id="babyPhoto1">
+						</div>
+					</label>
 				</div>
 				<div class="fr" style="width:190px;">
 					<span class="fl" style="margin-bottom: 7px; margin-top:11px;">
@@ -324,9 +388,12 @@
 		<div class="info_bg3" style="display: none;">
 			<div>
 				<div class="fl">
-					<div class="baby_foto" style="margin-top:10px;">
-						<a href="#"><img src="./img/foto_plus.png" alt="사진추가하기" class="foto_plus"></a>
+				<label>
+					<div class="baby_foto" >
+						<input type="file" class="babyPhoto" name="BlliBabyVO[2].babyPhoto" style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(2)">
+ 						<img src="./img/foto_plus.png" alt="사진추가하기" class="foto_plus" id="babyPhoto2">
 					</div>
+				</label>
 				</div>
 				<div class="fr" style="width:190px;">
 					<span class="fl" style="margin-bottom: 7px; margin-top:11px;">

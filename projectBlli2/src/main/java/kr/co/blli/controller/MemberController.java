@@ -1,11 +1,13 @@
 package kr.co.blli.controller;
 
+import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import kr.co.blli.model.member.MemberService;
@@ -30,7 +32,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -266,26 +271,12 @@ public class MemberController {
 	  * @작성일 : 2016. 1. 16.
 	  * @작성자 : junyoung
 	  * @param request
+	 * @throws Exception 
 	 */
 	@RequestMapping("insertBabyInfo.do")
-	public String insertBabyInfo(HttpServletRequest request,BlliMemberVO blliMemberVO){
-		ArrayList<BlliBabyVO> list = new ArrayList<BlliBabyVO>();
-		int targetAmount = Integer.parseInt(request.getParameter("targetAmount"));
-		System.out.println(targetAmount);
-		for(int i=0;i<targetAmount;i++){
-			BlliBabyVO blliBabyVO = new BlliBabyVO();
-			blliBabyVO.setMemberId(request.getParameter("memberId"));
-			blliBabyVO.setBabyName(request.getParameter("BlliBabyVO["+i+"].babyName"));
-			blliBabyVO.setBabyBirthday(request.getParameter("BlliBabyVO["+i+"].babyBirthday"));
-			blliBabyVO.setBabySex(request.getParameter("BlliBabyVO["+i+"].babySex"));
-			if(i==0){
-				blliBabyVO.setRecommending(1);
-			}else{
-				blliBabyVO.setRecommending(0);
-			}
-			list.add(blliBabyVO);
-		}
-		memberService.insertBabyInfo(list,blliMemberVO);
+	public String insertBabyInfo(HttpServletRequest request,BlliMemberVO blliMemberVO) throws Exception{
+		
+		memberService.insertBabyInfo(blliMemberVO,request);
 		return "redirect:member_proceedingToMain.do";
 	}
 	
@@ -399,5 +390,23 @@ public class MemberController {
 		result = productService.postingDisLike(blliPostingDisLikeVO);
 		return result;
 	}
+	
+	@RequestMapping("fileCapacityCheck.do")
+	@ResponseBody
+	public String upload(MultipartHttpServletRequest request, 
+	    HttpServletResponse response) throws IOException {
+		String result = "true";
+		Iterator<String> itr =  request.getFileNames();
+	    MultipartFile mpf = request.getFile(itr.next());
+	    String originFileName = mpf.getOriginalFilename();
+	    mpf.getBytes();
+	    System.out.println(mpf.getSize());
+	    if(mpf.getSize()>=2000000){
+	    	result = "fail";
+	    }
+	     
+	    return result;
+	}
+
 	
 }

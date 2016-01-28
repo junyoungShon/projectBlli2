@@ -50,7 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 회원의 아이정보를 삽입합니다. -->
 	<insert id="insertBabyInfo" parameterType="blliBabyVO">
 		insert into BLLI_baby (member_Id,baby_name,baby_birthday,baby_sex,baby_photo,recommending)
-		values (#{memberId},#{babyName},#{babyBirthday},#{babySex},'default',#{recommending})
+		values (#{memberId},#{babyName},#{babyBirthday},#{babySex},#{babyPhoto},#{recommending})
 	</insert>
 	
 	<!-- 회원의 이메일로 회원의 정보를 찾아온다. -->
