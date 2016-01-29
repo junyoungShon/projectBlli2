@@ -14,13 +14,9 @@ public interface PostingDAO {
 
 	void insertPosting(BlliPostingVO postingVO);
 
-	List<BlliPostingVO> searchJsoupTest(HashMap<String, String> map);
-
-	List<BlliPostingVO> postingListWithSmallProducts(String pageNo);
+	List<BlliPostingVO> searchSmallProduct(HashMap<String, String> map);
 
 	List<String> searchProducts(String postingUrl);
-
-	void deleteProduct(String postingUrl);
 
 	int countOfPostingUrl(String postingUrl);
 
@@ -28,21 +24,7 @@ public interface PostingDAO {
 
 	List<String> getAllPostingStatus(String postingUrl);
 
-	void selectProduct(HashMap<String, String> map);
-
-	int totalPostingWithProducts();
-
-	void deletePosting(String postingUrl);
-	
 	void updatePostingViewCountAndResidenceTime(BlliPostingVO blliPostingVO);
-
-	List<BlliPostingVO> unconfirmedPosting(String pageNo);
-
-	int totalUnconfirmedPosting();
-
-	void registerPosting(HashMap<String, String> map);
-
-	void addProduct(HashMap<String, String> map);
 
 	int totalPageOfPosting(String searchWord);
 

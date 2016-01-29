@@ -1,11 +1,13 @@
 package kr.co.blli.controller;
 
+import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import kr.co.blli.model.member.MemberService;
@@ -13,7 +15,7 @@ import kr.co.blli.model.product.ProductService;
 import kr.co.blli.model.security.BlliUserDetailsService;
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
-import kr.co.blli.model.vo.BlliMemberScrapVO;
+import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
@@ -30,7 +32,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -238,46 +243,40 @@ public class MemberController {
 		}
 		return result;
 	}
+	/**
+	 * 카카오톡 로그인 시도 시 sns로 가입한적 있는 회원인지 확인하는 메서드
+	 * @Method Name : findMemberBySNSId
+	 * @Method 설명 :
+	 * @작성일 : 2016. 1. 14.
+	 * @작성자 : junyoung 
+	 * @param blliMemberVO
+	 * @return
+	 */
+	@RequestMapping("findMemberByEmailId.do")
+	@ResponseBody
+	public boolean findMemberByEmailId(BlliMemberVO blliMemberVO){
+		System.out.println(blliMemberVO);
+		boolean result = false;
+		if(memberService.findMemberById(blliMemberVO)!=null){
+			result = true;
+		}else{
+			result = false;
+		}
+		return result;
+	}
 	
 	/**
-	  * @Method Name : insertBabyInfoForKakaoUser
+	  * @Method Name : insertBabyInfo
 	  * @Method 설명 : 아이 및 이메일을 등록하는 메서드
 	  * @작성일 : 2016. 1. 16.
 	  * @작성자 : junyoung
 	  * @param request
+	 * @throws Exception 
 	 */
 	@RequestMapping("insertBabyInfo.do")
-	public String insertBabyInfo(HttpServletRequest request,BlliMemberVO blliMemberVO){
-		ArrayList<BlliBabyVO> list = new ArrayList<BlliBabyVO>();
-		if(request.getParameter("firstBabySex")!=null){
-			BlliBabyVO blliBabyVO = new BlliBabyVO();
-			blliBabyVO.setMemberId(request.getParameter("memberId"));
-			blliBabyVO.setBabyName(request.getParameter("firstBabyName"));
-			blliBabyVO.setBabyBirthday(request.getParameter("firstBabyBirthday"));
-			blliBabyVO.setBabySex(request.getParameter("firstBabySex"));
-			blliBabyVO.setRecommending(1);
-			list.add(blliBabyVO);
-		}
-		if(request.getParameter("secondBabySex")!=null){
-			BlliBabyVO blliBabyVO = new BlliBabyVO();
-			blliBabyVO.setMemberId(request.getParameter("memberId"));
-			blliBabyVO.setBabyName(request.getParameter("secondBabyName"));
-			blliBabyVO.setBabyBirthday(request.getParameter("secondBabyBirthday"));
-			blliBabyVO.setBabySex(request.getParameter("secondBabySex"));
-			blliBabyVO.setRecommending(0);
-			list.add(blliBabyVO);
-		}
-		if(request.getParameter("thirdBabySex")!=null){
-			BlliBabyVO blliBabyVO = new BlliBabyVO();
-			blliBabyVO.setMemberId(request.getParameter("memberId"));
-			blliBabyVO.setBabyName(request.getParameter("thirdBabyName"));
-			blliBabyVO.setBabyBirthday(request.getParameter("thirdBabyBirthday"));
-			blliBabyVO.setBabySex(request.getParameter("thirdBabySex"));
-			blliBabyVO.setRecommending(0);
-			list.add(blliBabyVO);
-		}
-		//첫번째 아이로 추천아이를 선정해줌
-		memberService.insertBabyInfo(list,blliMemberVO);
+	public String insertBabyInfo(HttpServletRequest request,BlliMemberVO blliMemberVO) throws Exception{
+		
+		memberService.insertBabyInfo(blliMemberVO,request);
 		return "redirect:member_proceedingToMain.do";
 	}
 	
@@ -346,16 +345,16 @@ public class MemberController {
 		return result;
 	}
 	/**
-	 * @Method Name : postingScrap
+	 * @Method Name : postingScrape
 	 * @Method 설명 : 블로그 스크랩 버튼에 대해 그 결과를 반환해주는 컨트롤러 메서드
 	 * @작성일 : 2016. 1. 22.
 	 * @작성자 : junyoung
 	 * @param blliMemberDibsVO
 	 * @return
 	 */
-	@RequestMapping("postingScrap.do")
+	@RequestMapping("postingScrape.do")
 	@ResponseBody
-	public int postingScrap(BlliMemberScrapVO blliMemberScrapVO){
+	public int postingScrap(BlliMemberScrapeVO blliMemberScrapVO){
 		System.out.println(blliMemberScrapVO);
 		int result=0;
 		result = productService.postingScrap(blliMemberScrapVO);
@@ -391,5 +390,23 @@ public class MemberController {
 		result = productService.postingDisLike(blliPostingDisLikeVO);
 		return result;
 	}
+	
+	@RequestMapping("fileCapacityCheck.do")
+	@ResponseBody
+	public String upload(MultipartHttpServletRequest request, 
+	    HttpServletResponse response) throws IOException {
+		String result = "true";
+		Iterator<String> itr =  request.getFileNames();
+	    MultipartFile mpf = request.getFile(itr.next());
+	    String originFileName = mpf.getOriginalFilename();
+	    mpf.getBytes();
+	    System.out.println(mpf.getSize());
+	    if(mpf.getSize()>=2000000){
+	    	result = "fail";
+	    }
+	     
+	    return result;
+	}
+
 	
 }

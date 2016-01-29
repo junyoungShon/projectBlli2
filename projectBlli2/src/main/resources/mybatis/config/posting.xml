@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  <mapper namespace="posting"> 
- 
+ 	<!-- BlliPostingVO Result Map 설정 -->
  	<resultMap type="blliPostingVO" id="bpvRM">
  		<result property="postingUrl" column="posting_url"/>
  		<result property="postingTitle" column="posting_title"/>
@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="smallProduct" column="small_product"/>
  		<result property="smallProductId" column="small_product_id"/>
  	</resultMap>
- 	
+ 	<!-- 현석 쿼리 시작 -->
  	<select id="countOfPostingUrl" resultType="int">
  		select count(posting_url) from blli_posting where posting_url = #{postingUrl}
  	</select>
@@ -39,20 +39,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	</select>
  	
  	<update id="updatePosting">
- 		update blli_posting set posting_title = #{postingTitle}, posting_photo_link = #{postingPhotoLink}, posting_media_count = #{postingMediaCount},
- 		posting_content = #{postingContent}, posting_summary = #{postingSummary}, posting_author = #{postingAuthor}, 
- 		posting_date = #{postingDate}, posting_order = #{postingOrder}, posting_reply_count = #{postingReplyCount} 
+ 		update blli_posting set posting_title = #{postingTitle}, posting_photo_link = #{postingPhotoLink}, 
+ 		posting_media_count = #{postingMediaCount}, posting_content = #{postingContent}, 
+ 		posting_summary = #{postingSummary}, posting_author = #{postingAuthor}, posting_date = #{postingDate}, 
+ 		posting_order = #{postingOrder}, posting_reply_count = #{postingReplyCount} 
  		where posting_url = #{postingUrl} and small_product = #{smallProduct}
  	</update>
  	
  	<insert id="insertPosting">
- 		insert into blli_posting(small_product_id, posting_url, small_product, posting_title, posting_photo_link, posting_media_count, posting_content, posting_summary,
- 		posting_author, posting_date, posting_order, posting_reply_count, posting_status)
- 		values(#{smallProductId}, #{postingUrl}, #{smallProduct}, #{postingTitle}, #{postingPhotoLink}, #{postingMediaCount}, #{postingContent}, #{postingSummary},
- 		#{postingAuthor}, #{postingDate}, #{postingOrder}, #{postingReplyCount}, 'unconfirmed')
+ 		insert into blli_posting(small_product_id, posting_url, small_product, posting_title, posting_photo_link, posting_media_count, 
+ 		posting_content, posting_summary, posting_author, posting_date, posting_order, posting_reply_count, posting_status)
+ 		values(#{smallProductId}, #{postingUrl}, #{smallProduct}, #{postingTitle}, #{postingPhotoLink}, #{postingMediaCount}, 
+ 		#{postingContent}, #{postingSummary}, #{postingAuthor}, #{postingDate}, #{postingOrder}, #{postingReplyCount}, 'unconfirmed')
  	</insert>
 
-	<select id="searchJsoupTest" resultMap="bpvRM">
+	<select id="searchSmallProduct" resultMap="bpvRM">
 		select posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, posting_scrape_count, posting_like_count, posting_dislike_count, posting_author, posting_date from(
 			select ceil(rownum/5) as page, posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, 
 			posting_scrape_count, posting_like_count, posting_dislike_count, posting_author, to_char(posting_date, 'YYYY.MM.DD') as posting_date 
@@ -64,59 +65,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select max(ceil(rownum/5)) from blli_posting where small_product like '%' || #{searchWord} || '%' and posting_status = 'confirmed'
 	</select>
 	
-	<select id="postingListWithSmallProducts" resultMap="bpvRM">
-		select * from(
-			select ceil(row_num/5) as page, posting_url, posting_title, small_product, posting_summary from(
-				select (dense_rank() over (order by posting_url)) row_num, posting_url, posting_title, small_product, posting_summary from(
-					select count(*) over (partition by posting_url) as small_product_count, posting_url, posting_title, small_product, posting_summary from blli_posting where posting_status = 'unconfirmed'
-				) where small_product_count > 1 order by posting_url
-			)
-		) where page = #{pageNo}
-	</select>
-	
 	<select id="searchProducts" resultType="String">
 		select small_product from blli_posting where posting_url = #{postingUrl}
 	</select>
-	
-	<update id="deleteProduct">
-		update blli_posting set posting_status = 'dead' where posting_url = #{postingUrl} and posting_status = 'unconfirmed'
-	</update>
-	
-	<update id="selectProduct">
-		update blli_posting set posting_status = 'confirmed' where posting_url = #{postingUrl} and small_product = #{smallProduct}
-	</update>
-	
-	<update id="addProduct">
-		update blli_posting set small_product = #{smallProduct} where posting_url = #{postingUrl} and small_product = #{preSmallProduct}
-	</update>
-	
-	<select id="totalPostingWithProducts" resultType="int">
-		select count(*) from(
-			select count(*) over (partition by posting_url) as small_product_count from blli_posting where posting_status = 'unconfirmed'
-		) where small_product_count > 1
-	</select>
-	
-	<update id="deletePosting">
-		update blli_posting set posting_status = 'dead' where posting_url = #{postingUrl}
-	</update>
-	
-	<select id="unconfirmedPosting" resultMap="bpvRM">
-		select posting_url, posting_title, posting_summary, small_product from(
-			select ceil(rownum/5) as page, posting_url, posting_title, posting_summary, small_product from(
-				select count(*) over (partition by posting_url) as count_posting_url, posting_url, posting_title, posting_summary, small_product from blli_posting where posting_status = 'unconfirmed'
-			) where count_posting_url = 1
-		) where page = #{pageNo}
-	</select>
-	
-	<select id="totalUnconfirmedPosting" resultType="int">
-		select count(*) from(
-			select count(*) over (partition by posting_url) as count_posting_url from blli_posting where posting_status = 'unconfirmed'
-		) where count_posting_url = 1
-	</select>
-	
-	<update id="registerPosting">
-		update blli_posting set posting_status = 'confirmed' where posting_url = #{postingUrl} and small_product = #{smallProduct}
-	</update>
+	<!-- 현석 쿼리 끝 -->
 	
 	<!-- 준영쿼리 시작 -->
 	<select id="selectPostingBySmallProductList" resultMap="bpvRM">

@@ -7,6 +7,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<style type="text/css">
+	.product_text{
+		width:800px;
+		height:150px;
+		background:#f7f7f7;
+		padding:10px;
+		font-family:'Nanum Barun Gothic';
+		margin-left:10px;
+		line-height:20px;
+		overflow-y:scroll;
+	}
+</style>
 <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script type="text/javascript">
@@ -52,28 +64,32 @@
 </head>
 <body>
 
-<p align="center">
-<c:choose>
-<c:when test="${requestScope.resultList.pagingBean.nowPage < requestScope.resultList.pagingBean.totalPage }">
-<strong>포스팅</strong> ${requestScope.resultList.pagingBean.nowPage*5-4} - ${requestScope.resultList.pagingBean.nowPage*5} / ${requestScope.resultList.pagingBean.totalPosting}건
-</c:when>
-<c:otherwise>
-<strong>포스팅</strong> ${requestScope.resultList.pagingBean.nowPage*5-4} - ${requestScope.resultList.pagingBean.totalPage*5} / ${requestScope.resultList.pagingBean.totalPosting}건
-</c:otherwise>
-</c:choose>
-</p>
-<table border="1" width="70%" align="center" cellpadding="10">
+<table width="70%" align="center" cellpadding="10">
+<tr>
+	<td colspan="2">
+		<c:choose>
+		<c:when test="${requestScope.resultList.pagingBean.nowPage < requestScope.resultList.pagingBean.totalPage }">
+		<strong>포스팅</strong> ${requestScope.resultList.pagingBean.nowPage*5-4} - ${requestScope.resultList.pagingBean.nowPage*5} / ${requestScope.resultList.pagingBean.totalPosting}건
+		</c:when>
+		<c:otherwise>
+		<strong>포스팅</strong> ${requestScope.resultList.pagingBean.nowPage*5-4} - ${requestScope.resultList.pagingBean.totalPosting} / ${requestScope.resultList.pagingBean.totalPosting}건
+		</c:otherwise>
+		</c:choose>
+	</td>
+</tr>
 <c:forEach items="${requestScope.resultList.postingList}" var="postingList" varStatus="count">
 	<tr>
-		<td colspan="2"><h3><strong><a href="${postingList.postingUrl}" style="text-decoration:none; color: black;">${postingList.postingTitle}</a></strong></h3></td>
+		<td style="border-bottom: dotted; border-bottom-color: silver;"><h3><strong><a href="${postingList.postingUrl}" style="text-decoration:none; color: black;">${postingList.postingTitle}</a></strong></h3></td>
+		<td><p align="right"><input type="radio" name="${count.index}" value="${postingList.postingUrl}"><span><strong>삭제</strong></span></p></td>
 	</tr>
 	<tr>
 		<td>
 			<c:forEach items="${postingList.imageList}" var="imgList">
-			<img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${imgList}" width="200px" height="150px">
+			<img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${imgList}" width="190px" height="150px">
 			</c:forEach>
+			<div class="product_text">${postingList.postingContent}</div>
 		</td>
-		<td rowspan="2">
+		<td style="background-color: #f7f7f7;">
 			<input type="radio" name="${count.index}" value="${postingList.postingUrl}"><span>${postingList.smallProduct}</span>
 			<br><br>
 			<c:forEach var="map" items="${postingList.smallProductImage}">
@@ -82,12 +98,7 @@
 					<img src="${map.value}"><br><br>
 				</c:if>
 			</c:forEach>
-			<hr>
-			<input type="radio" name="${count.index}" value="${postingList.postingUrl}"><span><strong>삭제</strong></span>
 		</td>
-	</tr>
-	<tr>
-		<td>${postingList.postingSummary}</td>
 	</tr>
 </c:forEach>
 </table>

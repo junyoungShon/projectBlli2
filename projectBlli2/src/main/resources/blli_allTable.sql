@@ -11,7 +11,7 @@ drop table blli_small_product_photo cascade constraint;
 drop table blli_recomm_mid_category cascade constraint;
 drop table blli_member_dibs cascade constraint;
 drop table blli_buy_link_click cascade constraint;
-drop table blli_member_scrap cascade constraint;
+drop table blli_member_scrape cascade constraint;
 drop table blli_mailing cascade constraint;
 
 
@@ -86,11 +86,15 @@ CREATE TABLE blli_mid_category (
 drop table blli_small_product cascade constraint;
 CREATE TABLE blli_small_product ( -- naver_shopping_link  VARCHAR2(300) NOT NULL 삭제
    small_product_id     VARCHAR2(30) NOT NULL primary key, -- 추가
+<<<<<<< HEAD
    small_product   VARCHAR2(200) NOT NULL ,
+=======
+   small_product   VARCHAR2(200) NOT NULL , -- VARCHAR2(100)을 VARCHAR2(200)으로 변경
+>>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
    mid_category         VARCHAR2(50) NOT NULL ,
    small_product_maker  VARCHAR2(50) NOT NULL ,
-   small_propduct_whentouse_min NUMBER(20) NULL , -- 컬럼명 변경, NOT NULL을 NULL로 변경
-   small_propduct_whentouse_max NUMBER(20) NULL , -- 추가
+   small_product_whentouse_min NUMBER(20) NULL , -- 컬럼명 변경, NOT NULL을 NULL로 변경, 컬럼명 다시 변경
+   small_product_whentouse_max NUMBER(20) NULL , -- 추가, 컬럼명 변경
    small_product_dibs_count NUMBER(10) default 0 ,
    small_product_main_photo_link VARCHAR2(300) NOT NULL ,
    small_product_score  NUMBER(4) default 0 ,
@@ -98,6 +102,8 @@ CREATE TABLE blli_small_product ( -- naver_shopping_link  VARCHAR2(300) NOT NULL
    naver_shopping_order NUMBER(5) NOT NULL, -- 추가
    product_register_day DATE NOT NULL, -- 추가
    mid_category_id      VARCHAR2(30) NOT NULL, -- 추가
+   small_product_status VARCHAR2(30) NOT NULL, -- 추가
+   search_time DATE NULL, -- 추가
    constraint fk_small_prod_mid_cate foreign key(mid_category, mid_category_id) references blli_mid_category(mid_category, mid_category_id) -- mid_category_id 추가
 );
 
@@ -196,12 +202,12 @@ CREATE TABLE blli_buy_link_click (
 
 
 
-drop table blli_member_scrap cascade constraint;
-CREATE TABLE blli_member_scrap (
+drop table blli_member_scrape cascade constraint;
+CREATE TABLE blli_member_scrape (
 	member_id            VARCHAR2(30) NOT NULL ,
 	posting_url          VARCHAR2(300) NOT NULL ,
 	small_product_id   VARCHAR2(30) NOT NULL , -- 추가
-	scrap_time			DATE,
+	scrape_time			DATE,
 	constraint fk_member_scrap_mem_id foreign key(member_id) references blli_member(member_id),
 	constraint fk_member_scrap_post_url foreign key(posting_url) references blli_posting(posting_url),
 	constraint fk_member_scrap_small_p_id foreign key(small_product_id) references blli_small_product(small_product_id),

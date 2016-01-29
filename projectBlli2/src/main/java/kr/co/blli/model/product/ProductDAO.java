@@ -1,14 +1,12 @@
 package kr.co.blli.model.product;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliBigCategoryVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
-import kr.co.blli.model.vo.BlliMemberScrapVO;
-import kr.co.blli.model.vo.BlliMemberVO;
+import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
 import kr.co.blli.model.vo.BlliPostingDisLikeVO;
@@ -63,13 +61,13 @@ public interface ProductDAO {
 
 	void updateMinusSmallProductDibsCount(BlliMemberDibsVO blliMemberDibsVO);
 
-	int deletePostingScrapInfo(BlliMemberScrapVO blliMemberScrapVO);
+	int deletePostingScrapInfo(BlliMemberScrapeVO blliMemberScrapVO);
 
-	int insertPostingScrap(BlliMemberScrapVO blliMemberScrapVO);
+	int insertPostingScrap(BlliMemberScrapeVO blliMemberScrapVO);
 
-	void updatePlusPostingScrapCount(BlliMemberScrapVO blliMemberScrapVO);
+	void updatePlusPostingScrapCount(BlliMemberScrapeVO blliMemberScrapVO);
 
-	void updateMinusPostingScrapCount(BlliMemberScrapVO blliMemberScrapVO);
+	void updateMinusPostingScrapCount(BlliMemberScrapeVO blliMemberScrapVO);
 
 	int deletePostingLikeInfo(BlliPostingLikeVO blliPostingLikeVO);
 
@@ -89,10 +87,12 @@ public interface ProductDAO {
 
 	int selectMemberDibsSmallProduct(BlliMemberDibsVO blliMemberDibsVO);
 
-	int selectThisPostingScrap(BlliMemberScrapVO blliMemberScrapVO);
+	int selectThisPostingScrap(BlliMemberScrapeVO blliMemberScrapVO);
 
 	int selectThisPostingLike(BlliPostingLikeVO blliPostingLikeVO);
 
 	int selectThisPostingDisLike(BlliPostingDisLikeVO blliPostingDisLikeVO);
+
+	void updateSearchTime(String smallProductId);
 
 }

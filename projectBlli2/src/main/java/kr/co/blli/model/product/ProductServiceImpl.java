@@ -1,6 +1,5 @@
 package kr.co.blli.model.product;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,22 +7,15 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import kr.co.blli.model.vo.BlliBabyVO;
-import kr.co.blli.model.vo.BlliBigCategoryVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
-import kr.co.blli.model.vo.BlliMemberScrapVO;
-import kr.co.blli.model.vo.BlliMemberVO;
+import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
 import kr.co.blli.model.vo.BlliPostingDisLikeVO;
 import kr.co.blli.model.vo.BlliPostingLikeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
-import kr.co.blli.model.vo.BlliSmallProductBuyLinkVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,6 +23,7 @@ public class ProductServiceImpl implements ProductService{
 	@Resource
 	private ProductDAO productDAO;
 	
+<<<<<<< HEAD
 	@Override
 	public void insertBigCategory() throws IOException {
 		Document doc = Jsoup.connect("http://shopping.naver.com/category/category.nhn?cat_id=50000005").timeout(10*1000).get();
@@ -221,6 +214,8 @@ public class ProductServiceImpl implements ProductService{
 		System.out.println("실행시간  : "+(end-start)/1000.0+"초");
 	}
 
+=======
+>>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 	/**
 	  * @Method Name : selectRecommendingMidCategory
 	  * @Method 설명 : 회원의 추천받을 아이이름과 , 아이디를 이용해 추천대상인 중분류 제품을 선정한다.(회원이 추천을 기피했던 중제품 제외)
@@ -329,7 +324,7 @@ public class ProductServiceImpl implements ProductService{
 			}
 		}
 		//포스팅을 가져올 때 해당 회원이 포스팅을 스크램,좋아요,싫어요 했는지 여부를 파악해준다.
-		BlliMemberScrapVO blliMemberScrapVO = new BlliMemberScrapVO();
+		BlliMemberScrapeVO blliMemberScrapVO = new BlliMemberScrapeVO();
 		blliMemberScrapVO.setMemberId(memberId);
 		BlliPostingLikeVO blliPostingLikeVO = new BlliPostingLikeVO();
 		blliPostingLikeVO.setMemberId(memberId);
@@ -376,7 +371,7 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public int postingScrap(BlliMemberScrapVO blliMemberScrapVO) {
+	public int postingScrap(BlliMemberScrapeVO blliMemberScrapVO) {
 		int result = 0;
 		if(productDAO.deletePostingScrapInfo(blliMemberScrapVO)==0){
 			result = productDAO.insertPostingScrap(blliMemberScrapVO);
@@ -410,4 +405,5 @@ public class ProductServiceImpl implements ProductService{
 		}
 		return result;
 	}
+
 }

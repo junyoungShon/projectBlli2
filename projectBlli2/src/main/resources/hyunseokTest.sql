@@ -21,12 +21,46 @@ select * from blli_posting where small_product = '대성토이즈 뉴 말하는 
 select posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, posting_scrape_count, posting_like_count, posting_dislike_count, posting_author, posting_date from(
 	select ceil(rownum/5) as page, posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, 
 	posting_scrape_count, posting_like_count, posting_dislike_count, posting_author, to_char(posting_date, 'YYYY.MM.DD') as posting_date 
-	from blli_posting where small_product like '%' || '' || '%' and posting_status = 'confirmed'
-) where page = '1'
+	from blli_posting where small_product like '%' || '아이' || '%' and posting_status = 'confirmed'
+) where page = '2'
 
 select max(ceil(rownum/5)) from blli_posting where small_product like '%' || '' || '%' and posting_status = 'confirmed'
 
-select * from 
+update blli_small_product set small_product_status = 'unconfirmed';
+
+select * from blli_big_category;
+
+select count(*) from blli_small_product;
+
+update blli_small_product set search_time = '2016.01.26' where small_product_id = '6845396598';
+
+select * from blli_small_prod_buy_link;
+
+select * from blli_mid_category;
+
+select * from blli_posting;
+
+select * from blli_small_product where small_product_status = 'confirmed';
+
+select small_product, small_product_id, small_product_posting_count, search_time from blli_small_product where small_product_status = 'unconfirmed' or small_product_status = 'confirmed' order by search_time asc nulls first;
+
+select count(*) from blli_small_product;
+
+select mid_category_id from blli_mid_category where mid_category = '유아동전집';
+
+select * from blli_small_product where small_product_id = '8582539413';
+
+select count(distinct(mid_category)) from blli_small_product;
+
+select * from blli_small_product where small_product = '미미월드 똘똘이 울보 내동생';
+select * from blli_small_product where small_product_id = '5666293165';
+
+select small_product, mid_category, small_propduct_whentouse_min, small_propduct_whentouse_max, small_product_main_photo_link from(
+	select ceil(rownum/5) as page, small_product, mid_category, small_propduct_whentouse_min, small_propduct_whentouse_max, small_product_main_photo_link 
+	from blli_small_product where small_product_status = 'unconfirmed'
+) where page = '100'
+
+select max(ceil(rownum/5)) from blli_small_product where small_product_status = 'unconfirmed'
 
 select * from blli_small_product;
 select count(*) from blli_small_product where small_product_posting_count = 0;

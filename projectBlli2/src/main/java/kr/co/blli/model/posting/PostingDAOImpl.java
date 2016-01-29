@@ -23,24 +23,12 @@ public class PostingDAOImpl implements PostingDAO{
 		sqlSessionTemplate.insert("posting.insertPosting", postingVO);
 	}
 	@Override
-	public List<BlliPostingVO> searchJsoupTest(HashMap<String, String> map) {
-		return sqlSessionTemplate.selectList("posting.searchJsoupTest", map);
-	}
-	@Override
-	public List<BlliPostingVO> postingListWithSmallProducts(String pageNo) {
-		return sqlSessionTemplate.selectList("posting.postingListWithSmallProducts", pageNo);
+	public List<BlliPostingVO> searchSmallProduct(HashMap<String, String> map) {
+		return sqlSessionTemplate.selectList("posting.searchSmallProduct", map);
 	}
 	@Override
 	public List<String> searchProducts(String postingUrl) {
 		return sqlSessionTemplate.selectList("posting.searchProducts", postingUrl);
-	}
-	@Override
-	public void deleteProduct(String postingUrl) {
-		sqlSessionTemplate.update("posting.deleteProduct", postingUrl);
-	}
-	@Override
-	public void selectProduct(HashMap<String, String> map) {
-		sqlSessionTemplate.update("posting.selectProduct", map);
 	}
 	@Override
 	public int countOfPostingUrl(String postingUrl) {
@@ -54,14 +42,6 @@ public class PostingDAOImpl implements PostingDAO{
 	public List<String> getAllPostingStatus(String postingUrl) {
 		return sqlSessionTemplate.selectList("posting.getAllPostingStatus",postingUrl);
 	}
-	@Override
-	public int totalPostingWithProducts() {
-		return sqlSessionTemplate.selectOne("posting.totalPostingWithProducts");
-	}
-	@Override
-	public void deletePosting(String postingUrl) {
-		sqlSessionTemplate.update("posting.deletePosting", postingUrl);
-	}
 	/**
 	  * @Method Name : updatePostingViewCountAndResidenceTime
 	  * @Method 설명 : 체류시간과 포스팅 조회수를 업데이트 해줍니다.
@@ -72,22 +52,6 @@ public class PostingDAOImpl implements PostingDAO{
 	@Override
 	public void updatePostingViewCountAndResidenceTime(BlliPostingVO blliPostingVO) {
 		sqlSessionTemplate.update("posting.updatePostingViewCountAndResidenceTime",blliPostingVO);
-	}
-	@Override
-	public List<BlliPostingVO> unconfirmedPosting(String pageNo) {
-		return sqlSessionTemplate.selectList("posting.unconfirmedPosting", pageNo);
-	}
-	@Override
-	public int totalUnconfirmedPosting() {
-		return sqlSessionTemplate.selectOne("posting.totalUnconfirmedPosting");
-	}
-	@Override
-	public void registerPosting(HashMap<String, String> map) {
-		sqlSessionTemplate.update("posting.registerPosting", map);
-	}
-	@Override
-	public void addProduct(HashMap<String, String> map) {
-		sqlSessionTemplate.update("posting.addProduct", map);
 	}
 	@Override
 	public int totalPageOfPosting(String searchWord) {

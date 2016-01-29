@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 
@@ -13,7 +15,7 @@ public interface MemberService {
 
 	public BlliMemberVO findMemberById(BlliMemberVO blliMemberVO);
 
-	public void insertBabyInfo(ArrayList<BlliBabyVO> list,BlliMemberVO blliMemberVO);
+	public void insertBabyInfo(BlliMemberVO blliMemberVO, HttpServletRequest request) throws Exception;
 
 	public BlliMemberVO selectBlliMemberInfoByMemberId(String memberId);
 

@@ -2,17 +2,16 @@ package kr.co.blli.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
 import kr.co.blli.model.posting.PostingService;
 import kr.co.blli.model.product.ProductService;
+import kr.co.blli.model.scheduler.CategoryAndProductScheduler;
+import kr.co.blli.model.scheduler.PostingScheduler;
 import kr.co.blli.model.vo.BlliPostingVO;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,14 +25,32 @@ public class SearchController {
 	@Resource
 	private ProductService productService;
 	
-	@RequestMapping("schedule_jsoupTest.do")
-	public ModelAndView JsoupTest() throws IOException{
-		String result = postingService.jsoupTest();
-		return new ModelAndView("TestPosting", "result", result);
+	//스케줄러 완성 전까지 임시 사용
+	@Resource
+	private CategoryAndProductScheduler categoryAndProductScheduler;
+	//스케줄러 완성 전까지 임시 사용
+	@Resource
+	private PostingScheduler postingScheduler;
+	
+	//스케줄러 완성 전까지 임시 사용
+	@RequestMapping("insertPosting.do")
+	public ModelAndView insertPosting() throws IOException{
+		postingScheduler.insertPosting();
+		return new ModelAndView("insertDataResult");
 	}
-	@RequestMapping("search_jsoupTest.do")
-	public ModelAndView JsoupTest2(String pageNo, String searchWord){
-		ArrayList<BlliPostingVO> list = postingService.searchJsoupTest(pageNo, searchWord);
+	/**
+	 * 
+	 * @Method Name : searchSmallProduct
+	 * @Method 설명 : 검색어(소제품)에 해당하는 포스팅 리스트 중 첫 페이지만 반환해주는 메서드
+	 * @작성일 : 2016. 1. 27.
+	 * @작성자 : hyunseok
+	 * @param pageNo
+	 * @param searchWord
+	 * @return
+	 */
+	@RequestMapping("searchSmallProduct.do")
+	public ModelAndView searchSmallProduct(String pageNo, String searchWord){
+		ArrayList<BlliPostingVO> list = postingService.searchSmallProduct(pageNo, searchWord);
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("searchResult");
 		mav.addObject("resultList", list);
@@ -41,43 +58,38 @@ public class SearchController {
 		mav.addObject("totalPage", postingService.totalPageOfPosting(searchWord));
 		return mav;
 	}
+	/**
+	 * 
+	 * @Method Name : getPostingList
+	 * @Method 설명 : 검색어(소제품)에 해당하는 포스팅 리스트의 두번째 페이지 이상에서 해당 페이지를 반환해주는 메서드
+	 * @작성일 : 2016. 1. 27.
+	 * @작성자 : hyunseok
+	 * @param pageNo
+	 * @param searchWord
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping("getPostingList.do")
 	public ArrayList<BlliPostingVO> getPostingList(String pageNo, String searchWord){
-		return postingService.searchJsoupTest(pageNo, searchWord);
+		return postingService.searchSmallProduct(pageNo, searchWord);
 	}
-	@RequestMapping("postingListWithSmallProducts.do")
-	public ModelAndView postingListWithSmallProducts(String pageNo) throws IOException{
-		return new ModelAndView("postingListWithSmallProducts","resultList",postingService.postingListWithSmallProducts(pageNo));
-	}
-	@ResponseBody
-	@RequestMapping("selectProduct.do")
-	public void selectProduct(@RequestBody List<Map<String, Object>> urlAndProduct){
-		postingService.selectProduct(urlAndProduct);
-	}
-	@RequestMapping("insert_big_category.do")
+	//스케줄러 완성 전까지 임시 사용
+	@RequestMapping("insertBigCategory.do")
 	public ModelAndView insertBigCategory() throws IOException{
-		productService.insertBigCategory();
+		categoryAndProductScheduler.insertBigCategory();
 		return new ModelAndView("insertDataResult");
 	}
-	@RequestMapping("insert_mid_category.do")
-	public ModelAndView insertMidCategory() throws IOException{
-		productService.insertMidCategory();
+	//스케줄러 완성 전까지 임시 사용
+	@RequestMapping("insertMidCategory.do")
+	public ModelAndView insertMidCategory() {
+		categoryAndProductScheduler.insertMidCategory();
 		return new ModelAndView("insertDataResult");
 	}
-	@RequestMapping("insert_small_product.do")
-	public ModelAndView insertSmallProduct() throws IOException{
-		productService.insertSmallProduct();
+	//스케줄러 완성 전까지 임시 사용
+	@RequestMapping("insertSmallProduct.do")
+	public ModelAndView insertSmallProduct() {
+		categoryAndProductScheduler.insertSmallProduct();
 		return new ModelAndView("insertDataResult");
-	}
-	@RequestMapping("unconfirmedPosting.do")
-	public ModelAndView unconfirmedPosting(String pageNo) throws IOException{
-		return new ModelAndView("unconfirmedPosting","resultList",postingService.unconfirmedPosting(pageNo));
-	}	
-	@ResponseBody
-	@RequestMapping("registerPosting.do")
-	public void registerPosting(@RequestBody List<Map<String, Object>> urlAndProduct){
-		postingService.registerPosting(urlAndProduct);
 	}
 	/**
 	  * @Method Name : goPosting

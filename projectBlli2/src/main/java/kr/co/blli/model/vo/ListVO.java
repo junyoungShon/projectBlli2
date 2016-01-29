@@ -4,6 +4,7 @@ import java.util.List;
 
 public class ListVO {
 	private List<BlliPostingVO> postingList;
+	private List<BlliSmallProductVO> smallProductList;
 	private BlliPagingBean pagingBean;
 
 	public ListVO() {
@@ -15,6 +16,14 @@ public class ListVO {
 		super();
 		this.postingList = postingList;
 		this.pagingBean = pagingBean;
+	}
+	
+	public List<BlliSmallProductVO> getSmallProductList() {
+		return smallProductList;
+	}
+
+	public void setSmallProductList(List<BlliSmallProductVO> smallProductList) {
+		this.smallProductList = smallProductList;
 	}
 
 	public List<BlliPostingVO> getPostingList() {
