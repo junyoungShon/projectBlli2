@@ -86,11 +86,7 @@ CREATE TABLE blli_mid_category (
 drop table blli_small_product cascade constraint;
 CREATE TABLE blli_small_product ( -- naver_shopping_link  VARCHAR2(300) NOT NULL 삭제
    small_product_id     VARCHAR2(30) NOT NULL primary key, -- 추가
-<<<<<<< HEAD
-   small_product   VARCHAR2(200) NOT NULL ,
-=======
    small_product   VARCHAR2(200) NOT NULL , -- VARCHAR2(100)을 VARCHAR2(200)으로 변경
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
    mid_category         VARCHAR2(50) NOT NULL ,
    small_product_maker  VARCHAR2(50) NOT NULL ,
    small_product_whentouse_min NUMBER(20) NULL , -- 컬럼명 변경, NOT NULL을 NULL로 변경, 컬럼명 다시 변경
