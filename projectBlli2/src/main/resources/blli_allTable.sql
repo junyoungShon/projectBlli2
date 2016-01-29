@@ -67,7 +67,7 @@ CREATE TABLE blli_big_category (
 	big_category         VARCHAR2(50) NOT NULL primary key,
 	big_category_id          VARCHAR2(30) NOT NULL -- 추가
 );
-
+select * from BLLI_BIG_CATEGORY;
 
 drop table blli_mid_category cascade constraint;
 CREATE TABLE blli_mid_category (
@@ -86,7 +86,7 @@ CREATE TABLE blli_mid_category (
 drop table blli_small_product cascade constraint;
 CREATE TABLE blli_small_product ( -- naver_shopping_link  VARCHAR2(300) NOT NULL 삭제
    small_product_id     VARCHAR2(30) NOT NULL primary key, -- 추가
-   small_product   VARCHAR2(100) NOT NULL ,
+   small_product   VARCHAR2(200) NOT NULL ,
    mid_category         VARCHAR2(50) NOT NULL ,
    small_product_maker  VARCHAR2(50) NOT NULL ,
    small_propduct_whentouse_min NUMBER(20) NULL , -- 컬럼명 변경, NOT NULL을 NULL로 변경
