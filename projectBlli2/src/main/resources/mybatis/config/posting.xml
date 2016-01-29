@@ -39,17 +39,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	</select>
  	
  	<update id="updatePosting">
- 		update blli_posting set posting_title = #{postingTitle}, posting_photo_link = #{postingPhotoLink}, posting_media_count = #{postingMediaCount},
- 		posting_content = #{postingContent}, posting_summary = #{postingSummary}, posting_author = #{postingAuthor}, 
- 		posting_date = #{postingDate}, posting_order = #{postingOrder}, posting_reply_count = #{postingReplyCount} 
+ 		update blli_posting set posting_title = #{postingTitle}, posting_photo_link = #{postingPhotoLink}, 
+ 		posting_media_count = #{postingMediaCount}, posting_content = #{postingContent}, 
+ 		posting_summary = #{postingSummary}, posting_author = #{postingAuthor}, posting_date = #{postingDate}, 
+ 		posting_order = #{postingOrder}, posting_reply_count = #{postingReplyCount} 
  		where posting_url = #{postingUrl} and small_product = #{smallProduct}
  	</update>
  	
  	<insert id="insertPosting">
- 		insert into blli_posting(small_product_id, posting_url, small_product, posting_title, posting_photo_link, posting_media_count, posting_content, posting_summary,
- 		posting_author, posting_date, posting_order, posting_reply_count, posting_status)
- 		values(#{smallProductId}, #{postingUrl}, #{smallProduct}, #{postingTitle}, #{postingPhotoLink}, #{postingMediaCount}, #{postingContent}, #{postingSummary},
- 		#{postingAuthor}, #{postingDate}, #{postingOrder}, #{postingReplyCount}, 'unconfirmed')
+ 		insert into blli_posting(small_product_id, posting_url, small_product, posting_title, posting_photo_link, posting_media_count, 
+ 		posting_content, posting_summary, posting_author, posting_date, posting_order, posting_reply_count, posting_status)
+ 		values(#{smallProductId}, #{postingUrl}, #{smallProduct}, #{postingTitle}, #{postingPhotoLink}, #{postingMediaCount}, 
+ 		#{postingContent}, #{postingSummary}, #{postingAuthor}, #{postingDate}, #{postingOrder}, #{postingReplyCount}, 'unconfirmed')
  	</insert>
 
 	<select id="searchSmallProduct" resultMap="bpvRM">

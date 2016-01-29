@@ -9,6 +9,13 @@ public class BlliPagingBean {
 	
 	private int numberOfPostingPerPage=5;
 	
+	
+	public int getNumberOfPostingPerPage() {
+		return numberOfPostingPerPage;
+	}
+	public void setNumberOfPostingPerPage(int numberOfPostingPerPage) {
+		this.numberOfPostingPerPage = numberOfPostingPerPage;
+	}
 	private int numberOfPageGroup=8;
 	public BlliPagingBean(int totalPosting, int nowPage) {
 		super();

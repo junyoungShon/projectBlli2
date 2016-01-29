@@ -93,4 +93,6 @@ public interface ProductDAO {
 
 	int selectThisPostingDisLike(BlliPostingDisLikeVO blliPostingDisLikeVO);
 
+	void updateSearchTime(String smallProductId);
+
 }

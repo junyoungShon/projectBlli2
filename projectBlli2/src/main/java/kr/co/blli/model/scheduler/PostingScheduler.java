@@ -16,6 +16,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,20 +31,19 @@ public class PostingScheduler {
 	/**
 	 * 
 	 * @Method Name : insertPosting
-	 * @Method 설명 : 스케줄러에의해 실행되어 소제품 리스트 목록을 불러와 해당 소제품 관련 블로그 포스팅을 insert or update하는 메서드
+	 * @Method 설명 : 매일 오전 4시에 소제품 리스트 목록을 불러와 해당 소제품 관련 블로그 포스팅을 insert or update하는 메서드
 	 * @작성일 : 2016. 1. 16.
 	 * @작성자 : hyunseok
 	 * @return
 	 * @throws IOException
 	 */
+	//@Scheduled(cron = "00 00 04 * * *")
 	public void insertPosting() throws IOException {
 		long start = System.currentTimeMillis(); // 시작시간 
 		
-		//String key = "6694c8294c8d04cdfe78262583a13052"; //네이버 검색API 이용하기 위해 발급받은 key값 첫번째
-		String key = "2a636a785d0e03f7048319f8adb3d912"; //네이버 검색API 이용하기 위해 발급받은 key값 두번째
-		//String key = "0a044dc7c63b8f3b9394e1a5e49db7ab"; //네이버 검색API 이용하기 위해 발급받은 key값 세번째
-		
-		ArrayList<BlliSmallProductVO> smallProductList = (ArrayList<BlliSmallProductVO>)productDAO.getSmallProduct(); //소제품 리스트를 불러와 변수에 할당
+		String key = "0a044dc7c63b8f3b9394e1a5e49db7ab"; //네이버 검색API 이용하기 위해 발급받은 key값 세번째
+		//소제품 리스트를 불러와 변수에 할당
+		ArrayList<BlliSmallProductVO> smallProductList = (ArrayList<BlliSmallProductVO>)productDAO.getSmallProduct(); 
 		String postingUrl = ""; //포스팅 주소
 		String smallProduct = ""; //검색할 소제품
 		String frameSourceUrl = ""; //프레임 소스 주소
@@ -59,6 +59,7 @@ public class PostingScheduler {
 		boolean flag = true;
 		int count = 0;
 		
+		label:
 		while(flag){
 			try{
 				for(int i=count;i<smallProductList.size();i++){ //소제품들 한개씩 뽑아서 포스팅 검색
@@ -74,7 +75,8 @@ public class PostingScheduler {
 					smallProduct = smallProductList.get(i).getSmallProduct().replaceAll("&", "%26");
 					int totalPosting = 0;
 					
-					Document doc = Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+smallProduct+"&display=100&start=1&target=blog&sort=sim").timeout(0).get();
+					Document doc = Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+
+									smallProduct+"&display=100&start=1&target=blog&sort=sim").timeout(0).get();
 					if(doc.select("message").text().contains("Query limit exceeded")){
 						key = "0a044dc7c63b8f3b9394e1a5e49db7ab";
 						continue;
@@ -85,7 +87,8 @@ public class PostingScheduler {
 						totalPostingText = "0";
 					}
 					totalPosting = Integer.parseInt(totalPostingText);
-					if(Math.ceil(totalPosting*0.3) < maxPosting){ //총 포스팅 개수의 30%가 50개 미만일 경우 포스팅 최대 개수를 총 포스팅의 30%로 설정
+					if(Math.ceil(totalPosting*0.3) < maxPosting){ //총 포스팅 개수의 30%가 50개 미만일 경우 
+																	 //포스팅 최대 개수를 총 포스팅의 30%로 설정
 						maxPosting = Math.ceil(totalPosting*0.3);
 					}
 					Elements item = doc.select("item"); //포스팅 간략 정보
@@ -95,18 +98,22 @@ public class PostingScheduler {
 						}
 						
 						String bloggerLink = e.select("bloggerlink").text();
-						if(!bloggerLink.contains("http://blog.naver.com")){ //네이버 블로그 포스팅이 아닐 경우 -> countOfPosting을 한개 늘려주고 while문 처음으로 이동(네이버 블로그가 아닐 경우 DB에 저장X)
+						//네이버 블로그 포스팅이 아닐 경우 
+						//countOfPosting을 한개 늘려주고 while문 처음으로 이동(네이버 블로그가 아닐 경우 DB에 저장X)
+						if(!bloggerLink.contains("http://blog.naver.com")){ 
 							countOfPosting++;
 							continue;
 						}
 						
 						try{
-							doc = Jsoup.connect(e.select("link").html()).timeout(5000).get(); //openAPI를 통해 얻은 포스팅URL 연결
+							//openAPI를 통해 얻은 포스팅URL 연결
+							doc = Jsoup.connect(e.select("link").html()).timeout(5000).get(); 
 						}catch(SocketTimeoutException exception){
 							exception.printStackTrace();
 							continue;
 						}
-						frameSourceUrl = "http://blog.naver.com" + doc.select("#mainFrame").attr("src"); //frameSourceURL 불러와 설정
+						//frameSourceURL 불러와 설정
+						frameSourceUrl = "http://blog.naver.com" + doc.select("#mainFrame").attr("src"); 
 						doc = Jsoup.parse(new URL(frameSourceUrl).openStream(),"ms949",frameSourceUrl);
 						
 						if(doc.select("#post-area script").html().contains("삭제되었거나 존재하지 않는 게시물입니다")){
@@ -137,10 +144,12 @@ public class PostingScheduler {
 						
 						Elements postingDate = doc.select(".post-top tbody tr .date");
 						if(postingDate.size() == 0){ //스마트에디터일 경우
-							postingVO.setPostingDate(doc.select(".se_publishDate").text().substring(0, doc.select(".se_publishDate").text().lastIndexOf(".")));
+							postingVO.setPostingDate(doc.select(".se_publishDate").text().
+									substring(0, doc.select(".se_publishDate").text().lastIndexOf(".")));
 						}else{ //스마트에디터가 아닐 경우
 							if(postingDate.attr("class").equals("date fil5 pcol2 _postAddDate")){
-								postingVO.setPostingDate(postingDate.text().substring(0, postingDate.text().lastIndexOf("."))); //포스팅 작성일을 vo에 저장
+								//포스팅 작성일을 vo에 저장
+								postingVO.setPostingDate(postingDate.text().substring(0, postingDate.text().lastIndexOf("."))); 
 							}
 						}
 						
@@ -158,10 +167,12 @@ public class PostingScheduler {
 								postingVO.setPostingPhotoLink(postingPhotoLink); //postingPhotoLink를 vo에 저장
 							}else if(property.contains("author")){
 								postingAuthor = el.attr("content");
-								postingVO.setPostingAuthor(postingAuthor.substring(postingAuthor.lastIndexOf("|")+2)); //포스팅 작성자를 vo에 저장
+								//포스팅 작성자를 vo에 저장
+								postingVO.setPostingAuthor(postingAuthor.substring(postingAuthor.lastIndexOf("|")+2)); 
 							}
 						}
-						//본문에 등록된 이미지가 없을 시 포스팅 개수 한개 줄이고 while문 처음으로 이동(이미지가 없을 시 네이버 기본 이미지가 들어가 있음)
+						//본문에 등록된 이미지가 없을 시 포스팅 개수 한개 줄이고 while문 처음으로 이동
+						//(이미지가 없을 시 네이버 기본 이미지가 들어가 있음)
 						if(postingPhotoLink.equals("http://blogimgs.naver.net/nblog/mylog/post/og_default_image2.png")){
 							countOfPosting++;
 							continue;
@@ -186,7 +197,7 @@ public class PostingScheduler {
 									}
 								}
 							}
-							//영상 갯수
+							//영상 개수
 							Elements playerInfo = doc.select("#postViewArea iframe");
 							for(Element el : playerInfo){
 								String mediaName = el.attr("name");
@@ -312,17 +323,19 @@ public class PostingScheduler {
 					}
 					System.out.println("포스팅 카운트 : "+countOfPosting);
 					countOfAllPosting += countOfPosting;
+					productDAO.updateSearchTime(smallProductList.get(i).getSmallProductId());
+					long end = System.currentTimeMillis();  //종료시간
+					//종료-시작=실행시간		
+					if((end-start)/1000.0*60*60 > 3){ //3시간을 초과하면 실행 중지
+						break label;
+					}
 				} //for
 				System.out.println("*****************************************");
 				System.out.println("총 소제품 개수 : "+countOfSmallProduct);
 				System.out.println("총 포스팅 개수 : "+countOfAllPosting);
 				flag = false;
-				long end = System.currentTimeMillis();  //종료시간
-				//종료-시작=실행시간		
-				System.out.println("실행시간  : "+(end-start)/1000.0+"초");
 			}catch(Exception e){
 				e.printStackTrace();
-				System.out.println(postingTitle);
 			}
 		}
 	}

@@ -7,6 +7,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<style type="text/css">
+    .h-div {width:70%; margin-left: auto; margin-right: auto; position: relative; height: 100%;}
+</style>
 <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script type="text/javascript">
@@ -77,54 +80,84 @@
 </head>
 <body>
 
-<p align="center">
-<c:choose>
-<c:when test="${requestScope.resultList.pagingBean.nowPage < requestScope.resultList.pagingBean.totalPage }">
-<strong>소제품</strong> ${requestScope.resultList.pagingBean.nowPage*5-4} - ${requestScope.resultList.pagingBean.nowPage*5} / ${requestScope.resultList.pagingBean.totalPosting}건
-</c:when>
-<c:otherwise>
-<strong>소제품</strong> ${requestScope.resultList.pagingBean.nowPage*5-4} - ${requestScope.resultList.pagingBean.totalPage*5} / ${requestScope.resultList.pagingBean.totalPosting}건
-</c:otherwise>
-</c:choose>
-</p>
-
-<table border="1" width="70%" align="center" cellpadding="10">
-<c:forEach items="${requestScope.resultList.smallProductList}" var="smallProductList" varStatus="count">
-<tr>
-	<td>${smallProductList.midCategory} > <input type="text" name="smallProduct" placeholder="${smallProductList.smallProduct}" size="${fn:length(smallProductList.smallProduct)+15}" style="padding: 5px"></td>
-	<td><input type="checkbox" name="delete" value="${smallProductList.smallProductId}"><strong>삭제</strong></td>
-</tr>
-<tr>
-	<td><img src="${smallProductList.smallProductMainPhotoLink}" width="300px"></td>
-	<td>최소 연령 : <input type="text" name="min" size="1px"> 개월<br><br>
-	최대 연령 : <input type="text" name="max" size="1px"> 개월</td>
-</tr>
-</c:forEach>
-</table>
-
-<p align="center">
-	<c:set var="pb" value="${requestScope.resultList.pagingBean}"></c:set>
-	<c:if test="${pb.previousPageGroup}">
-		<a href="${initParam.root}unconfirmedSmallProduct.do?pageNo=${pb.startPageOfPageGroup-1}">Prev</a>
-	</c:if>
-	<c:forEach var="i" begin="${pb.startPageOfPageGroup}" end="${pb.endPageOfPageGroup}">
+<div class="h-div">
+	<div>
 		<c:choose>
-			<c:when test="${pb.nowPage!=i}">
-				<a href="${initParam.root}unconfirmedSmallProduct.do?pageNo=${i}">${i}</a>
+		<c:when test="${requestScope.resultList.pagingBean.nowPage < requestScope.resultList.pagingBean.totalPage }">
+		<strong>소제품</strong> ${requestScope.resultList.pagingBean.nowPage*10-9} - ${requestScope.resultList.pagingBean.nowPage*10} / ${requestScope.resultList.pagingBean.totalPosting}건
+		</c:when>
+		<c:otherwise>
+		<strong>소제품</strong> ${requestScope.resultList.pagingBean.nowPage*10-9} - ${requestScope.resultList.pagingBean.totalPosting} / ${requestScope.resultList.pagingBean.totalPosting}건
+		</c:otherwise>
+		</c:choose>
+	</div>
+	<br>
+<c:forEach items="${requestScope.resultList.smallProductList}" var="smallProductList" varStatus="count">
+	<c:choose>
+		<c:when test="${count.index%2 == 0}">
+			<c:choose>
+			<c:when test="${count.index%4 == 0}">
+			<div style="width:47%; float: left; background-color: #f7f7f7; padding: 10px;">
 			</c:when>
 			<c:otherwise>
-				${i}
+			<div style="width:47%; float: left; padding: 10px;">
 			</c:otherwise>
-		</c:choose>
-	</c:forEach>
-	<c:if test="${pb.nextPageGroup}">
-		<a href="${initParam.root}unconfirmedSmallProduct.do?pageNo=${pb.endPageOfPageGroup+1}">Next</a>
-	</c:if>
-</p>
+			</c:choose>
+				<div style="float: left;">${smallProductList.midCategory} > ${smallProductList.smallProduct}</div>
+				<div style="float: right;"><input type="checkbox" name="delete" value="${smallProductList.smallProductId}"><strong>삭제</strong></div><br>
+				<div><p align="center"><img src="${smallProductList.smallProductMainPhotoLink}" width="300px" height="400px"><br><br>
+				<input type="text" name="smallProduct" placeholder="${smallProductList.smallProduct}" size="${fn:length(smallProductList.smallProduct)+15}" style="padding: 5px"><br>
+				최소 연령 : <input type="text" name="min" size="1px"> 개월<br>
+				최대 연령 : <input type="text" name="max" size="1px"> 개월</p></div>
+			</div>
+		</c:when>
+		<c:otherwise>
+			<c:choose>
+			<c:when test="${count.index%4 == 3}">
+			<div style="width:47%; float: right; background-color: #f7f7f7; padding: 10px;">
+			</c:when>
+			<c:otherwise>
+			<div style="width:47%; float: right; padding: 10px;">
+			</c:otherwise>
+			</c:choose>
+				<div style="float: left;">${smallProductList.midCategory} > ${smallProductList.smallProduct}</div>
+				<div style="float: right;"><input type="checkbox" name="delete" value="${smallProductList.smallProductId}"><strong>삭제</strong></div><br>
+				<div><p align="center"><img src="${smallProductList.smallProductMainPhotoLink}" width="300px" height="400px"><br><br>
+				<input type="text" name="smallProduct" placeholder="${smallProductList.smallProduct}" size="${fn:length(smallProductList.smallProduct)+15}" style="padding: 5px"><br>
+				최소 연령 : <input type="text" name="min" size="1px"> 개월<br>
+				최대 연령 : <input type="text" name="max" size="1px"> 개월</p></div>
+			</div>
+		</c:otherwise>
+	</c:choose>
+</c:forEach>
+</div>
 
-<p align="right"><input type="button" id="confirmBtn" value="소제품 등록" style="font-size:15px;width: 100px;height: 45px;">
-<input type="button" id="cancel" value="취소" style="font-size:15px;width: 100px;height: 45px;">
-</p>
-
+<table width="70%" align="center">
+	<tr>
+		<td>
+		<div align="center">
+		<c:set var="pb" value="${requestScope.resultList.pagingBean}"></c:set>
+		<c:if test="${pb.previousPageGroup}">
+			<a href="${initParam.root}unconfirmedSmallProduct.do?pageNo=${pb.startPageOfPageGroup-1}">Prev</a>
+		</c:if>
+		<c:forEach var="i" begin="${pb.startPageOfPageGroup}" end="${pb.endPageOfPageGroup}">
+			<c:choose>
+				<c:when test="${pb.nowPage!=i}">
+					<a href="${initParam.root}unconfirmedSmallProduct.do?pageNo=${i}">${i}</a>
+				</c:when>
+				<c:otherwise>
+					${i}
+				</c:otherwise>
+			</c:choose>
+		</c:forEach>
+		<c:if test="${pb.nextPageGroup}">
+			<a href="${initParam.root}unconfirmedSmallProduct.do?pageNo=${pb.endPageOfPageGroup+1}">Next</a>
+		</c:if>
+		</div>
+		<div style="float: right;"><input type="button" id="confirmBtn" value="소제품 등록" style="font-size:15px;width: 100px;height: 45px;">
+		<input type="button" id="cancel" value="취소" style="font-size:15px;width: 100px;height: 45px;"></div>
+		</td>
+	</tr>
+</table>
 </body>
 </html>

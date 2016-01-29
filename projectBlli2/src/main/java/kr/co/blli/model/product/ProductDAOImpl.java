@@ -407,4 +407,9 @@ public class ProductDAOImpl implements ProductDAO{
 		return sqlSessionTemplate.selectOne("product.selectMemberDibsSmallProduct", blliMemberDibsVO);
 	}
 
+	@Override
+	public void updateSearchTime(String smallProductId) {
+		sqlSessionTemplate.update("product.updateSearchTime", smallProductId);
+	}
+
 }

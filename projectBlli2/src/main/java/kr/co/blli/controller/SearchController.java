@@ -81,13 +81,13 @@ public class SearchController {
 	}
 	//스케줄러 완성 전까지 임시 사용
 	@RequestMapping("insertMidCategory.do")
-	public ModelAndView insertMidCategory() throws IOException{
+	public ModelAndView insertMidCategory() {
 		categoryAndProductScheduler.insertMidCategory();
 		return new ModelAndView("insertDataResult");
 	}
 	//스케줄러 완성 전까지 임시 사용
 	@RequestMapping("insertSmallProduct.do")
-	public ModelAndView insertSmallProduct() throws IOException{
+	public ModelAndView insertSmallProduct() {
 		categoryAndProductScheduler.insertSmallProduct();
 		return new ModelAndView("insertDataResult");
 	}

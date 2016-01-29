@@ -72,9 +72,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 현석 쿼리 시작 -->
 	<select id="unconfirmedPosting" resultMap="bpvRM">
-		select posting_url, posting_title, posting_summary, small_product from(
-			select ceil(rownum/5) as page, posting_url, posting_title, posting_summary, small_product from(
-				select count(*) over (partition by posting_url) as count_posting_url, posting_url, posting_title, posting_summary, small_product from blli_posting where posting_status = 'unconfirmed'
+		select posting_url, posting_title, posting_content, small_product from(
+			select ceil(rownum/5) as page, posting_url, posting_title, posting_content, small_product from(
+				select count(*) over (partition by posting_url) as count_posting_url, posting_url, posting_title, posting_content, small_product from blli_posting where posting_status = 'unconfirmed'
 			) where count_posting_url = 1
 		) where page = #{pageNo}
 	</select>
@@ -87,9 +87,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="postingListWithSmallProducts" resultMap="bpvRM">
 		select * from(
-			select ceil(row_num/5) as page, posting_url, posting_title, small_product, posting_summary from(
-				select (dense_rank() over (order by posting_url)) row_num, posting_url, posting_title, small_product, posting_summary from(
-					select count(*) over (partition by posting_url) as small_product_count, posting_url, posting_title, small_product, posting_summary from blli_posting where posting_status = 'unconfirmed'
+			select ceil(row_num/5) as page, posting_url, posting_title, small_product, posting_content from(
+				select (dense_rank() over (order by posting_url)) row_num, posting_url, posting_title, small_product, posting_content from(
+					select count(*) over (partition by posting_url) as small_product_count, posting_url, posting_title, small_product, posting_content from blli_posting where posting_status = 'unconfirmed'
 				) where small_product_count > 1 order by posting_url
 			)
 		) where page = #{pageNo}
@@ -103,13 +103,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="unconfirmedSmallProduct" resultMap="bspvRM">
 		select small_product, mid_category, small_product_whentouse_min, small_product_whentouse_max, small_product_main_photo_link, small_product_id from(
-			select ceil(rownum/5) as page, small_product, mid_category, small_product_whentouse_min, small_product_whentouse_max, small_product_main_photo_link, small_product_id
+			select ceil(rownum/10) as page, small_product, mid_category, small_product_whentouse_min, small_product_whentouse_max, small_product_main_photo_link, small_product_id
 			from blli_small_product where small_product_status = 'unconfirmed'
 		) where page = #{pageNo}
 	</select>
 	
 	<select id="totalUnconfirmedSmallProduct" resultType="int">
-		select max(ceil(rownum/5)) from blli_small_product where small_product_status = 'unconfirmed'
+		select count(*) from blli_small_product where small_product_status = 'unconfirmed'
 	</select>
 	
 	<update id="deletePosting">

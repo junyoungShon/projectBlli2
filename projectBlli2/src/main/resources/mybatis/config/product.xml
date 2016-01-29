@@ -43,7 +43,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	</resultMap>
 	<!-- 현석 쿼리 시작 -->
 	<select id="getSmallProduct" resultMap="bspvRM">
-		select small_product, small_product_id, small_product_posting_count from blli_small_product where small_product_status = 'unconfirmed' order by small_product_posting_count asc
+		select small_product, small_product_id, small_product_posting_count, search_time from blli_small_product 
+		where small_product_status = 'unconfirmed' or small_product_status = 'confirmed' order by search_time asc nulls first
 	</select>
 	
 	<update id="updateBigCategory">
@@ -59,12 +60,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<update id="updateMidCategory">
-		update blli_mid_category set mid_category_id = #{midCategoryId}, mid_category_main_photo_link = #{midCategoryMainPhotoLink}, big_category = #{bigCategory}
+		update blli_mid_category set mid_category_id = #{midCategoryId}, mid_category_main_photo_link = #{midCategoryMainPhotoLink}
 		where mid_category = #{midCategory} and big_category = #{bigCategory}
 	</update>
 	
 	<insert id="insertMidCategory">
-		insert into blli_mid_category(mid_category, mid_category_main_photo_link, big_category, mid_category_id) values(#{midCategory}, #{midCategoryMainPhotoLink}, #{bigCategory}, #{midCategoryId})
+		insert into blli_mid_category(mid_category, mid_category_main_photo_link, big_category, mid_category_id) 
+		values(#{midCategory}, #{midCategoryMainPhotoLink}, #{bigCategory}, #{midCategoryId})
 	</insert>
 	
 	<select id="getMidCategory" resultMap="bmcvRM">
@@ -72,13 +74,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<insert id="insertSmallProduct">
-		insert into blli_small_product(small_product_id, small_product, mid_category, small_product_maker, small_product_main_photo_link, small_product_posting_count, naver_shopping_order, product_register_day, mid_category_id, small_product_status)
-		values(#{smallProductId}, #{smallProduct}, #{midCategory}, #{smallProductMaker}, #{smallProductMainPhotoLink}, #{smallProductPostingCount}, #{naverShoppingOrder}, #{productRegisterDay}, #{midCategoryId}, 'unconfirmed')
+		insert into blli_small_product(small_product_id, small_product, mid_category, small_product_maker, small_product_main_photo_link, 
+		small_product_posting_count, naver_shopping_order, product_register_day, mid_category_id, small_product_status)
+		values(#{smallProductId}, #{smallProduct}, #{midCategory}, #{smallProductMaker}, #{smallProductMainPhotoLink}, 
+		#{smallProductPostingCount}, #{naverShoppingOrder}, #{productRegisterDay}, #{midCategoryId}, 'unconfirmed')
 	</insert>
 	
 	<update id="updateSmallProduct">
-		update blli_small_product set small_product = #{smallProduct}, mid_category = #{midCategory}, small_product_maker = #{smallProductMaker}, small_product_main_photo_link = #{smallProductMainPhotoLink},
-		small_product_posting_count = #{smallProductPostingCount}, naver_shopping_order = #{naverShoppingOrder}, product_register_day = #{productRegisterDay}
+		update blli_small_product set small_product = #{smallProduct}, mid_category = #{midCategory}, small_product_maker = #{smallProductMaker}, 
+		small_product_main_photo_link = #{smallProductMainPhotoLink},
+		small_product_posting_count = #{smallProductPostingCount}, naver_shopping_order = #{naverShoppingOrder}, 
+		product_register_day = #{productRegisterDay}
 		where small_product_id = #{smallProductId}
 	</update>
 	
@@ -88,8 +94,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<update id="updateSmallProductBuyLink">
-		update blli_small_prod_buy_link set buy_link = #{buyLink}, buy_link_price = #{buyLinkPrice}, buy_link_delivery_cost = #{buyLinkDeliveryCost}, buy_link_option = #{buyLinkOption}, seller = #{seller}
+		update blli_small_prod_buy_link set buy_link = #{buyLink}, buy_link_price = #{buyLinkPrice}, 
+		buy_link_delivery_cost = #{buyLinkDeliveryCost}, buy_link_option = #{buyLinkOption}, seller = #{seller}
 		where small_product_id = #{smallProductId}
+	</update>
+	
+	<update id="updateSearchTime">
+		update blli_small_product set search_time = sysdate where small_product_id = #{smallProductId}
 	</update>
 	<!-- 현석 쿼리 끝 -->
 

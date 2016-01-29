@@ -241,6 +241,7 @@ public class AdminServiceImpl implements AdminService{
 		ArrayList<BlliSmallProductVO> smallProductList = (ArrayList<BlliSmallProductVO>)adminDAO.unconfirmedSmallProduct(pageNo);
 		int total = adminDAO.totalUnconfirmedSmallProduct();
 		BlliPagingBean paging = new BlliPagingBean(total, Integer.parseInt(pageNo));
+		paging.setNumberOfPostingPerPage(10);
 		ListVO lvo = new ListVO();
 		lvo.setSmallProductList(smallProductList);
 		lvo.setPagingBean(paging);

@@ -16,6 +16,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,11 +28,13 @@ public class CategoryAndProductScheduler {
 	/**
 	 * 
 	 * @Method Name : insertBigCategory
-	 * @Method 설명 : 네이버 쇼핑에 있는 출산/육아 카테고리에 있는 대분류 리스트를 받아와 DB에 insert or update해주는 메서드 
-	 * @작성일 : 2016. 1. 27.
+	 * @Method 설명 : 매일 오전 1시에 네이버 쇼핑에 있는 출산/육아 카테고리에 있는 대분류 리스트를 받아와 
+	 * 					  DB에 insert or update해주는 메서드 
+	 * @작성일 : 2016. 1. 20.
 	 * @작성자 : hyunseok
 	 * @throws IOException
 	 */
+	//@Scheduled(cron = "00 00 01 * * *")
 	public void insertBigCategory() throws IOException {
 		Document doc = Jsoup.connect("http://shopping.naver.com/category/category.nhn?cat_id=50000005").timeout(0).get();
 		Elements bigCategories = doc.select(".category_cell h3 a");
@@ -50,12 +53,14 @@ public class CategoryAndProductScheduler {
 	/**
 	 * 
 	 * @Method Name : insertMidCategory
-	 * @Method 설명 : 네이버 쇼핑에 있는 출산/육아 카테고리에 있는 중분류 리스트를 받아와 DB에 insert or update해주는 메서드 
-	 * @작성일 : 2016. 1. 27.
+	 * @Method 설명 : 매일 오전 1시 10분에 네이버 쇼핑에 있는 출산/육아 카테고리에 있는 중분류 리스트를 받아와 
+	 * 					  DB에 insert or update해주는 메서드 
+	 * @작성일 : 2016. 1. 20.
 	 * @작성자 : hyunseok
 	 * @throws IOException
 	 */
-	public void insertMidCategory() throws IOException {
+	//@Scheduled(cron = "00 10 01 * * *")
+	public void insertMidCategory() {
 		int index = 1;
 		int count = 0;
 		boolean flag = true;
@@ -65,13 +70,15 @@ public class CategoryAndProductScheduler {
 		while(flag){
 			try{
 				for(int i=count;i<bigCategory.size();i++){
-					if(exceptionCount > 5){
+					if(exceptionCount > 5){ //Exception이 발생하면 다섯번까지는 재실행해보고 여전히 Exception이
+											  //발생하게 되면 다음 대분류에 대해 실행하게 된다
 						count = i+1;
 						exceptionCount = 0;
 					}else{
 						count = i;
 					}
-					Document doc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?cat_id="+bigCategory.get(i).getBigCategoryId()).timeout(0).get();
+					Document doc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?cat_id="+bigCategory.
+									  get(i).getBigCategoryId()).timeout(0).get();
 					Elements midCategoriesHtml = doc.select(".finder .finder_row .finder_list a");
 					for(Element e : midCategoriesHtml){
 						if(e.attr("title").contains("출산/육아>"+bigCategory.get(i).getBigCategory())){
@@ -82,9 +89,11 @@ public class CategoryAndProductScheduler {
 							blliMidCategoryVO.setMidCategory(midCategory);
 							blliMidCategoryVO.setMidCategoryId(categoryId);
 							blliMidCategoryVO.setBigCategory(bigCategory.get(i).getBigCategory());
-							String imgSrc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?cat_id="+categoryId).timeout(0).get().select("._model_list .img_area img").attr("data-original");
+							String imgSrc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?cat_id="+categoryId).
+									          timeout(0).get().select("._model_list .img_area img").attr("data-original");
 							if(imgSrc == null || imgSrc.equals("")){
-								imgSrc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?cat_id="+categoryId).timeout(0).get().select("._product_list .img_area img").attr("data-original");
+								imgSrc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?cat_id="+categoryId).timeout(0).
+										  get().select("._product_list .img_area img").attr("data-original");
 							}
 							blliMidCategoryVO.setMidCategoryMainPhotoLink(imgSrc);
 							System.out.println((index++) + " " + blliMidCategoryVO);
@@ -106,23 +115,23 @@ public class CategoryAndProductScheduler {
 	/**
 	 * 
 	 * @Method Name : insertSmallProduct
-	 * @Method 설명 : 네이버 쇼핑에 있는 출산/육아 카테고리에 있는 소제품 리스트를 받아와 DB에 insert or update해주는 메서드 
-	 * @작성일 : 2016. 1. 27.
+	 * @Method 설명 : 매일 오전 2시에 네이버 쇼핑에 있는 출산/육아 카테고리에 있는 소제품 리스트를 받아와
+	 * 					 DB에 insert or update해주는 메서드 
+	 * @작성일 : 2016. 1. 21.
 	 * @작성자 : hyunseok
 	 * @throws IOException
 	 */
-	public void insertSmallProduct() throws IOException {
+	//@Scheduled(cron = "00 00 02 * * *")
+	public void insertSmallProduct() {
 		long start = System.currentTimeMillis(); // 시작시간 
 		
-		int count = 0;
-		boolean flag = true;
-		int exceptionCount = 0;
 		int countOfMidCategory = 0;
 		int countOfAllSmallProduct = 0;
 		ArrayList<BlliMidCategoryVO> midCategory = (ArrayList<BlliMidCategoryVO>)productDAO.getMidCategory();
-		//String key = "6694c8294c8d04cdfe78262583a13052"; //네이버 검색API 이용하기 위해 발급받은 key값 첫번째
-		String key = "2a636a785d0e03f7048319f8adb3d912"; //네이버 검색API 이용하기 위해 발급받은 key값 두번째
-		//String key = "0a044dc7c63b8f3b9394e1a5e49db7ab"; //네이버 검색API 이용하기 위해 발급받은 key값 세번째
+		String key = "6694c8294c8d04cdfe78262583a13052"; //네이버 검색API 이용하기 위해 발급받은 key값
+		int count = 0;
+		int exceptionCount = 0;
+		boolean flag = true;
 		
 		while(flag){
 			try{	
@@ -145,7 +154,9 @@ public class CategoryAndProductScheduler {
 					}
 					int countOfSmallProduct = 0;
 					do{
-						Document doc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?pagingIndex="+page+"&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&cat_id="+midCategory.get(i).getMidCategoryId()+"&frm=NVSHMDL&oldModel=true").timeout(0).get();
+						Document doc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?pagingIndex="+
+								page+"&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&cat_id="+
+								midCategory.get(i).getMidCategoryId()+"&frm=NVSHMDL&oldModel=true").timeout(0).get();
 						int resultCount = Integer.parseInt(doc.select("#_resultCount").text().replace(",", ""));
 						lastPage = Math.ceil(resultCount/40.0);
 						double maxSmallProduct = 10.0;
@@ -163,7 +174,8 @@ public class CategoryAndProductScheduler {
 							String smallProduct = el.select(".info .tit").text();
 							smallProduct = smallProduct.replaceAll("&", "%26");
 							try{
-								doc = Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+smallProduct+"&display=1&start=1&target=blog&sort=sim").timeout(5000).get();
+								doc = Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+smallProduct+
+										"&display=1&start=1&target=blog&sort=sim").timeout(5000).get();
 								if(doc.select("message").text().contains("Query limit exceeded")){
 									key = "0a044dc7c63b8f3b9394e1a5e49db7ab";
 									continue;

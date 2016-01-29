@@ -30,9 +30,19 @@ update blli_small_product set small_product_status = 'unconfirmed';
 
 select * from blli_big_category;
 
-select * from blli_small_product;
+select count(*) from blli_small_product;
+
+update blli_small_product set search_time = '2016.01.26' where small_product_id = '6845396598';
+
+select * from blli_small_prod_buy_link;
 
 select * from blli_mid_category;
+
+select * from blli_posting;
+
+select * from blli_small_product where small_product_status = 'confirmed';
+
+select small_product, small_product_id, small_product_posting_count, search_time from blli_small_product where small_product_status = 'unconfirmed' or small_product_status = 'confirmed' order by search_time asc nulls first;
 
 select count(*) from blli_small_product;
 
