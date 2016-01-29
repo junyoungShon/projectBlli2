@@ -13,18 +13,20 @@
 <body>
 <a href="iframeTest.do">아이프레임테스트</a>
 
-<form action="${initParam.root}search_jsoupTest.do">
+<form action="${initParam.root}searchSmallProduct.do">
 <h1>이곳은 관리자 페이지 인덱스입니다 관리자만 접근할 수 있어요.</h1>
 	<ul>
-		<li><a href="${initParam.root}member_goMain.do">goMain.do</a>
-		<li><a href="${initParam.root}sendMail.do?memberId=sk159753&mailForm=findPassword">sendMail.do</a>
-		<li><a href="${initParam.root}insert_big_category.do">대분류 리스트 긁어모아</a>
-		<li><a href="${initParam.root}insert_mid_category.do">중분류 리스트 긁어모아</a>
-		<li><a href="${initParam.root}insert_small_product.do">소분류 리스트 긁어모아</a>
-		<li><a href="${initParam.root}schedule_jsoupTest.do">포스팅 리스트 긁어모아</a>
-		<li><input type = "text" name="searchWord"><input type="submit" value="검색">
+		<li><a href="${initParam.root}member_goMain.do">goMain.do</a></li>
+		<li><a href="${initParam.root}sendMail.do?memberId=sk159753&mailForm=findPassword">sendMail.do</a></li>
+		<li><a href="${initParam.root}insertBigCategory.do">대분류 리스트 긁어모아</a></li>
+		<li><a href="${initParam.root}insertMidCategory.do">중분류 리스트 긁어모아</a></li>
+		<li><a href="${initParam.root}insertSmallProduct.do">소분류 리스트 긁어모아</a></li>
+		<li><a href="${initParam.root}insertPosting.do">포스팅 리스트 긁어모아</a></li>
+		<li><input type = "text" name="searchWord"><input type="submit" value="검색"></li>
 		<li><a href="${initParam.root}postingListWithSmallProducts.do">소제품 하나로 추려줘</a></li>
-		<li><a href="${initParam.root}j_spring_security_logout">로그아웃</a>
+		<li><a href="${initParam.root}unconfirmedSmallProduct.do">소제품 등록해줘</a></li>
+		<li><a href="${initParam.root}unconfirmedPosting.do">포스팅 등록해줘</a></li>
+		<li><a href="${initParam.root}j_spring_security_logout">로그아웃</a></li>
 	</ul>
 	
 </form>
