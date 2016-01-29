@@ -46,35 +46,6 @@ $(document).ready(function(){
 </sec:authorize>
 
 
-<form action="${initParam.root}searchSmallProduct.do">
-<h1>이곳은 인덱스입니다 비회원 및 비인증회원만 접근할 수 있어요.</h1>
-	<sec:authorize access="isAnonymous()">
-		저희 블리는 회원 가입 및 아이정보를 입력해야만 이용 하 실 수 있습니다. 소셜 계정 및 이메일 등을 통해서 가입해주세요
-	</sec:authorize> <!-- 이거 없어져서 일단 여기 넣어놈 -->
-	<!-- 아이정보를 입력하지 않은 자동로그인 사용자 && 이미 로그인한 유저의 경우 authorityCheck.jsp로 가서 아이정보 입력 -->
-	<sec:authorize access="hasAnyRole('ROLE_RESTRICTED')">
-		<script type="text/javascript">
-			location.href='${initParam.root}authorityCheck.do'
-		</script>
-	</sec:authorize>
-	<ul>
-		<li><a href="${initParam.root}member_goMain.do">goMain.do</a>
-		<li><a href="${initParam.root}admin_goAdminPage.do">goAdminPage.do</a>
-		<li><a href="${initParam.root}sendMail.do?memberId=sk159753&mailForm=findPassword">sendMail.do</a>
-		<li><a href="${initParam.root}insertBigCategory.do">대분류 리스트 긁어모아</a>
-		<li><a href="${initParam.root}insertMidCategory.do">중분류 리스트 긁어모아</a>
-		<li><a href="${initParam.root}insertSmallProduct.do">소분류 리스트 긁어모아</a>
-		<li><a href="${initParam.root}insertPosting.do">포스팅 리스트 긁어모아</a>
-		<li><input type = "text" name="searchWord"><input type="submit" value="검색">
-		<li><a href="${initParam.root}postingListWithSmallProducts.do">소제품 하나로 추려줘</a></li>
-		<li><a href="${initParam.root}unconfirmedPosting.do">포스팅 등록해줘</a></li>
-		<li><a href="${initParam.root}unconfirmedSmallProduct.do">소제품 등록해줘</a></li>
-	    <li><input type="file" name= "file" style="display: none;" id="imageFile"></li>
-	    <li><img src="${initParam.root}image/blliLogo_orange.jpg" width="100px" id="fileUpload"></li>
-	<sec:authorize access="isAuthenticated()">
-		<li><a href="${initParam.root}j_spring_security_logout">로그아웃</a>
-	</sec:authorize> <!-- 이거 없어져서 일단 여기 넣어놈 -->
-
 	<!-- 자동로그인 된 관리자의 경우 관리자 페이지로 이동합니다. -->
 	<sec:authorize access="hasRole('ROLE_ADMIN')">
 		<script type="text/javascript">
