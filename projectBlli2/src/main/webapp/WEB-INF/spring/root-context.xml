@@ -57,8 +57,11 @@
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 		
 	<!-- 스프링 시큐리티 설정 -  -->
+	<!-- 크리덴셜 기반의 인증을 통해 권한을 제공해준다.(비밀번호를 직접 저장하고, 컨트롤해야할 때  구현해야함)-->
 	<bean id="blliAuthenticationProvider" class="kr.co.blli.model.security.BlliAuthenticationProvider"/>
+	<!-- 비밀번호 이외의, user의 아이디와 oAuth,쿠키를 통한 로그인을 필요로 할때 사용되는 객체 -->
 	<bean id="blliUserDetailsService" class="kr.co.blli.model.security.BlliUserDetailsService"/>
+	<!-- Spring security가 db에 접근할 수 있도록 도와주는 클래스로서 dataSource객체를 멤버로 가진다. -->
 	<bean id="persistentTokenRepository" 
 	class="org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl">
 		<property name="dataSource" ref="dataSource"/>
@@ -77,9 +80,9 @@
 		<security:form-login
 			username-parameter="memberId"
 			password-parameter="memberPassword"
-			login-page="/authorityCheck.do"
+			login-page="/loginPage.do"
 			default-target-url="/member_proceedingToMain.do"
-			authentication-failure-url="/authorityCheck.do?loginFail=true"
+			authentication-failure-url="/loginPage.do?loginFail=true"
 			authentication-success-handler-ref="blliAuthenticationSuccessHandler"
 		/>                
 		<security:logout
@@ -87,16 +90,19 @@
 			logout-success-url="/index.do"
 			delete-cookies="JSESSIONID"
 		/>
-		<security:remember-me services-ref="rememberMeServices" key="blli" authentication-success-handler-ref="blliAuthenticationSuccessHandler"/>
+		<security:remember-me services-ref="rememberMeServices" key="blli" 
+		authentication-success-handler-ref="blliAuthenticationSuccessHandler"/>
 	</security:http>	
-		<bean id="blliAuthenticationSuccessHandler" class="kr.co.blli.model.security.BlliAuthenticationSuccessHandler"/>
-	  <bean id="rememberMeServices"
+	
+	<bean id="blliAuthenticationSuccessHandler" 
+		class="kr.co.blli.model.security.BlliAuthenticationSuccessHandler"/>
+	<bean id="rememberMeServices"
 	   class="org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices"> 
-	   <property name="tokenRepository" ref="persistentTokenRepository" /> 
-	   <property name="userDetailsService" ref="blliUserDetailsService" /> 
-	   <property name="key" value="blli" /> 
-	   <property name="alwaysRemember" value="true" /> 
-	   </bean> 
+		<property name="tokenRepository" ref="persistentTokenRepository" /> 
+	    <property name="userDetailsService" ref="blliUserDetailsService" /> 
+	    <property name="key" value="blli" /> 
+	    <property name="alwaysRemember" value="true" /> 
+	</bean> 
 	   
 	<!-- velocity 설정 -->
 	<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">

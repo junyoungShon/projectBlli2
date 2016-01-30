@@ -60,6 +60,17 @@ public class MemberController {
 	public String goAnyWhere(@PathVariable String viewId){
 		return viewId;
 	}
+	@RequestMapping("loginPage.do")
+	public ModelAndView goLoginPage(Boolean loginFail){
+		ModelAndView mav = new ModelAndView();
+		if(loginFail!=null){
+			if(loginFail == true){
+				mav.addObject("loginFail", "true");
+			}
+		}
+		mav.setViewName("loginPage");
+		return mav;
+	}
 	/**
 	  * @Method Name : proceedingToMain
 	  * @Method 설명 : 로그인 혹은 회원 가입 후 메인으로 진입하기 위한 중간페이지로서 세션 처리를 담당한다.
@@ -120,7 +131,7 @@ public class MemberController {
 		//회원에게 추천될 소분류 관련 포스팅 리스트 삽입
 		request.setAttribute("blliPostingVOList", blliPostingVOList);
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("/blli/main");
+		mav.setViewName("home");
 		return mav;
 	}
 	/**
@@ -134,15 +145,18 @@ public class MemberController {
 	 */
 	@RequestMapping("loginBySNSId.do")
 	public String loginBySNSId(HttpServletRequest request,BlliMemberVO blliMemberVO){
-		UserDetails userInfo = (UserDetails) blliUserDetailsService.loadUserByUsername(blliMemberVO.getMemberId());
-		Authentication authentication = new UsernamePasswordAuthenticationToken(userInfo, "protected",userInfo.getAuthorities());
+		UserDetails userInfo 
+		= (UserDetails) blliUserDetailsService.loadUserByUsername(blliMemberVO.getMemberId());
+		Authentication authentication = 
+				new UsernamePasswordAuthenticationToken(userInfo, "protected",userInfo.getAuthorities());
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		securityContext.setAuthentication(authentication);
 		blliMemberVO = memberService.findMemberById(blliMemberVO);
 		blliMemberVO.setMemberPassword("PROTECTED");
 		HttpSession session = request.getSession(true);
 		session.setAttribute("blliMemberVO", blliMemberVO);
-		session.setAttribute("SPRING_SECURITY_CONTEXT",securityContext);   // 세션에 spring security context 넣음
+		// 세션에 spring security context 넣음
+		session.setAttribute("SPRING_SECURITY_CONTEXT",securityContext);   
 		return "redirect:member_proceedingToMain.do";
 	}
 	
@@ -200,7 +214,8 @@ public class MemberController {
 	  * @return
 	 */
 	@RequestMapping("joinMemberBySNS.do")
-	public ModelAndView joinMemberByKakaoId(HttpServletRequest request, BlliMemberVO blliMemberVO){
+	public ModelAndView joinMemberByKakaoId
+	(HttpServletRequest request, BlliMemberVO blliMemberVO){
 		if(blliMemberVO.getMemberId().startsWith("naver")){
 			String memberId = blliMemberVO.getMemberId();
 			blliMemberVO.setMemberEmail(blliMemberVO.getMemberId());
@@ -274,7 +289,8 @@ public class MemberController {
 	 * @throws Exception 
 	 */
 	@RequestMapping("insertBabyInfo.do")
-	public String insertBabyInfo(HttpServletRequest request,BlliMemberVO blliMemberVO) throws Exception{
+	public String insertBabyInfo
+	(HttpServletRequest request,BlliMemberVO blliMemberVO) throws Exception{
 		
 		memberService.insertBabyInfo(blliMemberVO,request);
 		return "redirect:member_proceedingToMain.do";
@@ -354,10 +370,10 @@ public class MemberController {
 	 */
 	@RequestMapping("postingScrape.do")
 	@ResponseBody
-	public int postingScrap(BlliMemberScrapeVO blliMemberScrapVO){
+	public int postingScrape(BlliMemberScrapeVO blliMemberScrapVO){
 		System.out.println(blliMemberScrapVO);
 		int result=0;
-		result = productService.postingScrap(blliMemberScrapVO);
+		result = productService.postingScrape(blliMemberScrapVO);
 		return result;
 	}
 	/**
@@ -398,15 +414,10 @@ public class MemberController {
 		String result = "true";
 		Iterator<String> itr =  request.getFileNames();
 	    MultipartFile mpf = request.getFile(itr.next());
-	    String originFileName = mpf.getOriginalFilename();
-	    mpf.getBytes();
-	    System.out.println(mpf.getSize());
-	    if(mpf.getSize()>=2000000){
+	    if(mpf.getSize()>=200000){
 	    	result = "fail";
 	    }
-	     
 	    return result;
 	}
-
 	
 }

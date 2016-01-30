@@ -49,9 +49,12 @@
 	$(document).ready(function(){
 		//사진 업로드 시 실시간 미리보기 및 용량 체크
 		$('.babyPhoto').change(function(){
-			var fileName = $(this).val(); //파일을 추가한 input 박스의 값
-			fileName = fileName.slice(fileName.indexOf('.') + 1).toLowerCase(); //파일 확장자를 잘라내고, 비교를 위해 소문자로 만듭니다.
-			if(fileName != "jpg" && fileName != "png" &&  fileName != "gif" &&  fileName != "bmp"){ //확장자를 확인합니다.
+			var fileName = $(this).val(); 
+			//파일을 추가한 input 박스의 값
+			fileName = fileName.slice(fileName.indexOf('.') + 1).toLowerCase(); 
+			//파일 확장자를 잘라내고, 비교를 위해 소문자로 만듭니다.
+			if(fileName != "jpg" && fileName != "png" &&  fileName != "gif" &&  fileName != "bmp")
+			{ //확장자를 확인합니다.
 				alert('프로필 사진은 이미지 파일(jpg, png, gif, bmp)만 등록 가능합니다.');
 				$('#babyPhoto'+updateBabyPhotoNum).attr("src","${initParam.root}img/foto_plus.png");
 				$('#babyPhoto'+updateBabyPhotoNum).css("width","");
@@ -71,7 +74,6 @@
 			        processData: false,
 			        contentType: false,
 			        success: function(data, textStatus, jqXHR) {
-				        alert(data);
 				        var input = this;
 				        if(data=="true"){
 				        	
@@ -285,28 +287,9 @@
 	
 	<!-- 미인증 유저에게는 로그인 폼이 제공된다. -->
 	<sec:authorize access="isAnonymous()">
-		<form id="loginfrm" name="loginfrm" method="POST" action="${initParam.root}j_spring_security_check">
-			<table>
-			    <tr>
-			        <td style="width:50px;">id</td>
-			        <td style="width:150px;">
-			            <input style="width:145px;" type="text" id="loginid" name="memberId" value="" />
-			        </td>
-			    </tr>
-			    <tr>
-			        <td>pwd</td>
-			        <td>
-			            <input style="width:145px;" type="text" id="loginpwd" name="memberPassword" value="" />
-			        </td>
-			    </tr>
-			    <tr>
-			        <td>
-			            <input type="submit" id="loginbtn" value="로그인" />
-			        </td>
-			    <td>Remember Me: <input type="checkbox" name="remember-me" /></td>
-			    </tr>
-			</table> 
-		</form>
+		<script type="text/javascript">
+			location.replace('${initParam.root}loginPage.do');
+		</script>
 	</sec:authorize>
 
 	<!-- 회원가입하였으나 아이정보를 추가하지 않은 경우 경우 아이정보 추가 폼이 출력된다. -->

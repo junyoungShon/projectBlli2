@@ -61,13 +61,13 @@ public interface ProductDAO {
 
 	void updateMinusSmallProductDibsCount(BlliMemberDibsVO blliMemberDibsVO);
 
-	int deletePostingScrapInfo(BlliMemberScrapeVO blliMemberScrapVO);
+	int deletePostingScrapeInfo(BlliMemberScrapeVO blliMemberScrapVO);
 
-	int insertPostingScrap(BlliMemberScrapeVO blliMemberScrapVO);
+	int insertPostingScrape(BlliMemberScrapeVO blliMemberScrapVO);
 
-	void updatePlusPostingScrapCount(BlliMemberScrapeVO blliMemberScrapVO);
+	void updatePlusPostingScrapeCount(BlliMemberScrapeVO blliMemberScrapVO);
 
-	void updateMinusPostingScrapCount(BlliMemberScrapeVO blliMemberScrapVO);
+	void updateMinusPostingScrapeCount(BlliMemberScrapeVO blliMemberScrapVO);
 
 	int deletePostingLikeInfo(BlliPostingLikeVO blliPostingLikeVO);
 
@@ -87,7 +87,7 @@ public interface ProductDAO {
 
 	int selectMemberDibsSmallProduct(BlliMemberDibsVO blliMemberDibsVO);
 
-	int selectThisPostingScrap(BlliMemberScrapeVO blliMemberScrapVO);
+	int selectThisPostingScrape(BlliMemberScrapeVO blliMemberScrapVO);
 
 	int selectThisPostingLike(BlliPostingLikeVO blliPostingLikeVO);
 

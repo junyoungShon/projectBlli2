@@ -1,3 +1,4 @@
+
 /*! Flickity v1.1.1
 http://flickity.metafizzy.co
 ---------------------------------------------- */
@@ -138,4 +139,3 @@ http://flickity.metafizzy.co
 .flickity-page-dots .dot.is-selected {
   filter: alpha(opacity=100); /* IE8 */
   opacity: 1;
-}

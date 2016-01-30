@@ -16,8 +16,6 @@ public class PostingServiceImpl implements PostingService {
 	@Resource
 	private PostingDAO postingDAO;
 	
-	@Resource
-	private ProductDAO productDAO;
 	
 	/**
 	 * 

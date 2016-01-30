@@ -73,23 +73,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 준영쿼리 시작 -->
 	<select id="selectPostingBySmallProductList" resultMap="bpvRM">
 		select posting_url,small_product,small_product_id,posting_title,posting_summary,posting_content,posting_score,posting_like_count,
-		posting_dislike_count,posting_media_count,posting_photo_link,posting_total_residence_time,posting_view_count,posting_scrap_count,posting_author,posting_date
+		posting_dislike_count,posting_media_count,posting_photo_link,posting_total_residence_time,posting_view_count,posting_scrape_count,posting_author,posting_date
 		from blli_posting
 		where posting_status = 'confirmed' and small_product_id = #{value}
 		order by posting_score asc
 	</select>
 	<!-- 포스팅 스크랩관련 쿼리 -->
-	<delete id="deletePostingScrapInfo">
-		delete from blli_member_scrap where member_id=#{memberId} and small_product_id = #{smallProductId}
+	<delete id="deletePostingScrapeInfo">
+		delete from blli_member_scrape where member_id=#{memberId} and small_product_id = #{smallProductId}
 	</delete>
-	<insert id="insertPostingScrap">
-		insert into blli_member_scrap (member_id,small_product_id,posting_url,scrap_time) values (#{memberId},#{smallProductId},#{postingUrl},sysdate)
+	<insert id="insertPostingScrape">
+		insert into blli_member_scrap (member_id,small_product_id,posting_url,scrape_time) values (#{memberId},#{smallProductId},#{postingUrl},sysdate)
 	</insert>
-	<update id="updatePlusPostingScrapCount">
-		update blli_posting set posting_scrap_count = posting_scrap_count+1 where small_product_id=#{smallProductId} and posting_url=#{postingUrl}
+	<update id="updatePlusPostingScrapeCount">
+		update blli_posting set posting_scrape_count = posting_scrape_count+1 where small_product_id=#{smallProductId} and posting_url=#{postingUrl}
 	</update>
-	<update id="updateMinusPostingScrapCount">
-		update blli_posting set posting_scrap_count = posting_scrap_count-1 where small_product_id=#{smallProductId} and posting_url=#{postingUrl}
+	<update id="updateMinusPostingScrapeCount">
+		update blli_posting set posting_scrape_count = posting_scrape_count-1 where small_product_id=#{smallProductId} and posting_url=#{postingUrl}
 	</update>
 	<!-- 포스팅 좋아요관련 쿼리 -->
 	<delete id="deletePostingLikeInfo">
@@ -119,8 +119,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<!-- 회원이 포스팅을  스크랩했는지 여부를 반환 -->
-	<select id="selectThisPostingScrap" resultType="Integer">
-		select count(*) from blli_member_scrap where member_Id=#{memberId} and small_product_id=#{smallProductId} and posting_url=#{postingUrl}
+	<select id="selectThisPostingScrape" resultType="Integer">
+		select count(*) from blli_member_scrape where member_Id=#{memberId} and small_product_id=#{smallProductId} and posting_url=#{postingUrl}
 	</select>
 	<!-- 회원이 포스팅을  좋아요 여부를 반환 -->
 	<select id="selectThisPostingLike" resultType="Integer">

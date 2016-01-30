@@ -87,31 +87,35 @@ $(document).ready(function(){
             	url:"findMemberBySNSId.do?memberId="+whichChannel+"_"+memberId,
             	success:function(result){
             		if(result==true){
-            			location.href="${initParam.root}loginBySNSId.do?memberId="+whichChannel+"_"+memberId
+            			location.href="${initParam.root}loginBySNSId.do?memberId="
+            					+whichChannel+"_"+memberId
             		}else{
             			location.href=
-            				"${initParam.root}joinMemberBySNS.do?memberId="+whichChannel+"_"+memberId+"&memberName="+memberName
+            				"${initParam.root}joinMemberBySNS.do?memberId="
+            						+whichChannel+"_"+memberId+"&memberName="+memberName
             		}
             	}
             });
 		}
 		
 		//네이버 아이디로 로그인 시작
-			var naver_id_login = new naver_id_login("vy4NpIx3E_02LT8vXvkh", "http://bllidev.dev/projectBlli2/");
-			naver_id_login.setButton("green", 3,47);
-			naver_id_login.setState("abcdefghijkmnopqrst");
-			naver_id_login.init_naver_id_login();
-			//get_naver_userprofile 동작후 callback 될 function
-			function naverUserInfoCallBack(){
-				var naverMail = naver_id_login.getProfileData('email')
-				var naverName = naver_id_login.getProfileData('name');
-				snsLogin(naverMail,naverName,'naver');
-			}
-			naver_id_login.get_naver_userprofile("naverUserInfoCallBack()");
-			//네이버 아이디로 로그인 끝
-      //카카오 아이디로 로그인 시작
+		var naver_id_login = new naver_id_login("vy4NpIx3E_02LT8vXvkh", 
+				"http://bllidev.dev/projectBlli2/");
+		naver_id_login.setButton("green", 3,47);
+		naver_id_login.setState("abcdefghijkmnopqrst");
+		naver_id_login.init_naver_id_login();
+		//get_naver_userprofile 동작후 callback 될 function
+		function naverUserInfoCallBack(){
+			var naverMail = naver_id_login.getProfileData('email')
+			var naverName = naver_id_login.getProfileData('name');
+			snsLogin(naverMail,naverName,'naver');
+		}
+		naver_id_login.get_naver_userprofile("naverUserInfoCallBack()");
+		//네이버 아이디로 로그인 끝
+      
+		//카카오 아이디로 로그인 시작
      	Kakao.init('7e613c0241d9f07553638f04b7df66ef');
-      function kakaoLogin(){
+     	function kakaoLogin(){
         // 로그인 성공시, API를 호출합니다.
         Kakao.Auth.login({
 	        success: function(authObj) {
@@ -135,18 +139,17 @@ $(document).ready(function(){
       //카카오 아이디로 로그인 끝
     
 	//페이스북 로그인 시작    
-  
-		  function checkLoginState() {
-			  FB.login(function(response) {
-				    if (response.authResponse) {
-				     FB.api('/me', function(response) {
-				    	 snsLogin(response.id, response.name, 'fb');
-				     });
-				    } else {
-				     alert('페이스북으로 로그인하기를 취소하셨습니다!');
-				    }
-				}, {scope: 'email,user_likes'});
-		  }
+	function checkLoginState() {
+		FB.login(function(response) {
+			if (response.authResponse) {
+				FB.api('/me', function(response) {
+					snsLogin(response.id, response.name, 'fb');
+				});
+			} else {
+				alert('페이스북으로 로그인하기를 취소하셨습니다!');
+			}
+		}, {scope: 'email,user_likes'});
+	}
 			  window.fbAsyncInit = function() {
 			  FB.init({
 			    appId      : '{476938162497817}',
@@ -160,15 +163,15 @@ $(document).ready(function(){
 			    });
 			    
 				};
-		  // SDK를 비동기적으로 호출
-		(function(d, s, id) {
+	// SDK를 비동기적으로 호출
+	(function(d, s, id) {
 		var js, fjs = d.getElementsByTagName(s)[0];
 		    if (d.getElementById(id)) return;
 		    js = d.createElement(s); js.id = id;
-		    js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=476938162497817";
+		    js.src = 
+		    	"//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=476938162497817";
 		    fjs.parentNode.insertBefore(js, fjs);
 		}(document, 'script', 'facebook-jssdk'));
-	
     </script>
     
 <!--

@@ -59,76 +59,32 @@ public class ProductDAOImpl implements ProductDAO{
 	public List<BlliMidCategoryVO> getMidCategory() {
 		return sqlSessionTemplate.selectList("product.getMidCategory");
 	}
-	/**
-	  * @Method Name : selectRecommendingMidCategory
-	  * @Method 설명 : 추천 상품 리스트를 출력한다.
-	  * @작성일 : 2016. 1. 20.
-	  * @작성자 : junyoung
-	  * @param blliBabyVO
-	  * @return
-	 */
 	@Override
 	public List<BlliMidCategoryVO> selectRecommendingMidCategory(
 			BlliBabyVO blliBabyVO) {
 		return sqlSessionTemplate.selectList("product.selectRecommendingMidCategory",blliBabyVO);
 	}
-	/**
-	  * @Method Name : selectNotRecommMidCategoryList
-	  * @Method 설명 : 사용자가 제거 요청한 카테고리를 가져온다.
-	  * @작성일 : 2016. 1. 20.
-	  * @작성자 : junyoung
-	  * @param blliBabyVO
-	  * @return
-	 */
 	@Override
 	public List<BlliNotRecommMidCategoryVO> selectNotRecommMidCategoryList(
 			BlliBabyVO blliBabyVO) {
 		return sqlSessionTemplate.selectList("product.selectNotRecommMidCategoryList",blliBabyVO);
 	}
-	/**
-	  * @Method Name : deleteRecommendMidCategory
-	  * @Method 설명 : 회원이 중분류 카테고리를 추천받고 싶지않을 때 추천 받지 않을 중분류 제품을 삭제해준다.
-	  * @작성일 : 2016. 1. 20.
-	  * @작성자 : junyoung
-	  * @param blliNotRecommMidCategoryVO
-	 */
 	@Override
 	public void deleteRecommendMidCategory(BlliNotRecommMidCategoryVO blliNotRecommMidCategoryVO) {
 		sqlSessionTemplate.insert("product.deleteRecommendMidCategory", blliNotRecommMidCategoryVO);
 	}
-	/**
-	  * @Method Name : selectSameAgeMomBestPickedSmallProductList
-	  * @Method 설명 : 현재 
-	  * @작성일 : 2016. 1. 21.
-	  * @작성자 : junyoung
-	  * @param put
-	 */
 	@Override
 	public void selectSameAgeMomBestPickedSmallProductList(Integer put) {
 		// TODO Auto-generated method stub
 		
 	}
-	/**
-	  * @Method Name : selectSameAgeMomBestPickedSmallProductList
-	  * @Method 설명 : 추천받고 있는 중분류 제품에 속하는 소분류 중 찜수가 많은 제품들을 가져온다.(두개씩 가져온다.) 
-	  * @작성일 : 2016. 1. 21.
-	  * @작성자 : junyoung
-	  * @param paraMap
-	  * @return
-	 */
+
 	@Override
 	public List<BlliSmallProductVO> selectSameAgeMomBestPickedSmallProductList(
 			HashMap<String, String> paraMap) {
 		return sqlSessionTemplate.selectList("product.selectSameAgeMomBestPickedSmallProductList", paraMap);
 	}
-	/**
-	  * @Method Name : selectSameAgeMomBestPickedSmallProduct
-	  * @Method 설명 : 추천 받고 있는 중분류 제품에 속하는 소분류 중 찜수가 많은 제품들 중 찜수가 가장많은 1개만 가져온다.
-	  * @작성일 : 2016. 1. 21.
-	  * @작성자 : junyoung
-	  * @param paraMap
-	  * @return
-	 */
+
 	@Override
 	public BlliSmallProductVO selectSameAgeMomBestPickedSmallProduct(
 			HashMap<String, String> paraMap) {
@@ -154,61 +110,23 @@ public class ProductDAOImpl implements ProductDAO{
 	public int updateSmallProductBuyLink(BlliSmallProductBuyLinkVO blliSmallProductBuyLinkVO) {
 		return sqlSessionTemplate.update("product.updateSmallProductBuyLink", blliSmallProductBuyLinkVO);
 	}
-	/**
-	  * @Method Name : selectPostingBySmallProductList
-	  * @Method 설명 : 점수순 노출 , 상태(confirmed) , 포스팅 대상 소제품 등을 기준으로 출력<!극혐주의!> 포스팅 관련 이므로 여기있으면 안되지만 구조상 여기왔다 . 상의해보자
-	  * @작성일 : 2016. 1. 21.
-	  * @작성자 : junyoung
-	  * @param midCategoryId
-	  * @return
-	 */
 	@Override
 	public List<BlliPostingVO> selectPostingBySmallProductList(String smallProductId) {
 		System.out.println("DAO"+smallProductId);
 		return sqlSessionTemplate.selectList("posting.selectPostingBySmallProductList", smallProductId);
 	}
-	/**
-	  * @Method Name : deleteDipsInfo
-	  * @Method 설명 : 찜 정보가 있을 경우 삭제한다.
-	  * @작성일 : 2016. 1. 22.
-	  * @작성자 : junyoung
-	  * @param blliMemberDibsVO
-	  * @return
-	 */
 	@Override
 	public int deleteDipsInfo(BlliMemberDibsVO blliMemberDibsVO) {
 		return sqlSessionTemplate.delete("product.deleteDipsInfo", blliMemberDibsVO);
 	}
-	/**
-	  * @Method Name : insertDipsInfo
-	  * @Method 설명 : 찜정보가 없을 경우 삽입한다.
-	  * @작성일 : 2016. 1. 22.
-	  * @작성자 : junyoung
-	  * @param blliMemberDibsVO
-	  * @return
-	 */
 	@Override
 	public int insertDipsInfo(BlliMemberDibsVO blliMemberDibsVO) {
 		return sqlSessionTemplate.delete("product.insertDipsInfo", blliMemberDibsVO);
 	}
-	/**
-	  * @Method Name : updatePlusSmallProductDibsCount
-	  * @Method 설명 : 찜횟수를 올려줍니다.
-	  * @작성일 : 2016. 1. 22.
-	  * @작성자 : junyoung
-	  * @param blliMemberDibsVO
-	 */
 	@Override
 	public void updatePlusSmallProductDibsCount(BlliMemberDibsVO blliMemberDibsVO) {
 		sqlSessionTemplate.update("product.updatePlusSmallProductDibsCount", blliMemberDibsVO);
 	}
-	/**
-	  * @Method Name : updateMinusSmallProductDibsCount
-	  * @Method 설명 : 찜횟수를 줄여줍니다.
-	  * @작성일 : 2016. 1. 22.
-	  * @작성자 : junyoung
-	  * @param blliMemberDibsVO
-	 */
 	@Override
 	public void updateMinusSmallProductDibsCount(BlliMemberDibsVO blliMemberDibsVO) {
 		sqlSessionTemplate.update("product.updateMinusSmallProductDibsCount", blliMemberDibsVO);
@@ -216,17 +134,9 @@ public class ProductDAOImpl implements ProductDAO{
 	
 	
 	// 포스팅 스크랩, 좋아요 , 싫어요 관련 메서드 시작
-	/**
-	  * @Method Name : deletePostingScrapInfo
-	  * @Method 설명 : 회원이 포스팅한 정보가 있을 경우 지워줍니다.
-	  * @작성일 : 2016. 1. 22.
-	  * @작성자 : junyoung
-	  * @param blliMemberScrapVO
-	  * @return
-	 */
 	@Override
-	public int deletePostingScrapInfo(BlliMemberScrapeVO blliMemberScrapVO) {
-		return sqlSessionTemplate.delete("posting.deletePostingScrapInfo", blliMemberScrapVO);
+	public int deletePostingScrapeInfo(BlliMemberScrapeVO blliMemberScrapeVO) {
+		return sqlSessionTemplate.delete("posting.deletePostingScrapInfo", blliMemberScrapeVO);
 	}
 	/**
 	  * @Method Name : insertPostingScrap
@@ -237,8 +147,8 @@ public class ProductDAOImpl implements ProductDAO{
 	  * @return
 	 */
 	@Override
-	public int insertPostingScrap(BlliMemberScrapeVO blliMemberScrapVO) {
-		return sqlSessionTemplate.delete("posting.insertPostingScrap", blliMemberScrapVO);
+	public int insertPostingScrape(BlliMemberScrapeVO blliMemberScrapeVO) {
+		return sqlSessionTemplate.delete("posting.insertPostingScrape", blliMemberScrapeVO);
 	}
 	/**
 	  * @Method Name : updatePlusPostingScrapCount
@@ -248,8 +158,8 @@ public class ProductDAOImpl implements ProductDAO{
 	  * @param blliMemberScrapVO
 	 */
 	@Override
-	public void updatePlusPostingScrapCount(BlliMemberScrapeVO blliMemberScrapVO) {
-		sqlSessionTemplate.update("posting.updatePlusPostingScrapCount", blliMemberScrapVO);
+	public void updatePlusPostingScrapeCount(BlliMemberScrapeVO blliMemberScrapeVO) {
+		sqlSessionTemplate.update("posting.updatePlusPostingScrapeCount", blliMemberScrapeVO);
 	}
 	/**
 	  * @Method Name : updateMinusPostingScrapCount
@@ -259,8 +169,8 @@ public class ProductDAOImpl implements ProductDAO{
 	  * @param blliMemberScrapVO
 	 */
 	@Override
-	public void updateMinusPostingScrapCount(BlliMemberScrapeVO blliMemberScrapVO) {
-		sqlSessionTemplate.update("posting.updateMinusPostingScrapCount", blliMemberScrapVO);
+	public void updateMinusPostingScrapeCount(BlliMemberScrapeVO blliMemberScrapeVO) {
+		sqlSessionTemplate.update("posting.updateMinusPostingScrapeCount", blliMemberScrapeVO);
 	}
 	/**
 	  * @Method Name : deletePostingLikeInfo
@@ -363,8 +273,8 @@ public class ProductDAOImpl implements ProductDAO{
 	  * @return
 	 */
 	@Override
-	public int selectThisPostingScrap(BlliMemberScrapeVO blliMemberScrapVO) {
-		return sqlSessionTemplate.selectOne("posting.selectThisPostingScrap", blliMemberScrapVO);
+	public int selectThisPostingScrape(BlliMemberScrapeVO blliMemberScrapeVO) {
+		return sqlSessionTemplate.selectOne("posting.selectThisPostingScrap", blliMemberScrapeVO);
 	}
 	/**
 	  * @Method Name : selectThisPostingLike

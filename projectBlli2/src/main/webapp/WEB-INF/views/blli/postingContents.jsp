@@ -26,16 +26,18 @@
 				var residenceTime = Math.round((exitTime - connectTime)/1000);
 				$.ajax({
 					type:"get",
-					url:"recordResidenceTime.do?postingUrl=${requestScope.blliPostingVO.postingUrl}&smallProductId=${requestScope.blliPostingVO.smallProductId}&postingTotalResidenceTime="+residenceTime,
+					url:"recordResidenceTime.do?postingUrl="
+						+"${requestScope.blliPostingVO.postingUrl}&smallProductId="
+							+"${requestScope.blliPostingVO.smallProductId}&postingTotalResidenceTime="
+							+residenceTime,
 					success:function(){
 						history.back();
 					}
 				});
 		 });
-		
-		     
-		  
 	});
+	
+	
 </script>
 <body style="height: 900px;">
 <div class="topMenu" style="width: 100%;height: 10%">

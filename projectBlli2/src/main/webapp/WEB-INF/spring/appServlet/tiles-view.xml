@@ -5,12 +5,25 @@
        "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 <!-- 컨트롤러에서 view name을 아래 definition name으로 반환하면 TilesViewResolver에 의해 include 
 	된 여러 페이지 조합결과 화면이 반환된다. -->
+
 <tiles-definitions>
-	<definition name="home" template="/WEB-INF/views/templates/layout.jsp">
-		<put-attribute name="header"
-			value="/WEB-INF/views/templates/header.jsp" />
-		<put-attribute name="footer"
-			value="/WEB-INF/views/templates/footer.jsp" />
-		<put-attribute name="main" value="/WEB-INF/views/main.jsp" />
+	<definition name="home" template="/WEB-INF/views/tilesTemplates/layout.jsp">
+		<put-attribute name="header"  value="/WEB-INF/views/tilesTemplates/header.jsp"  />
+		<put-attribute name="footer"  value="/WEB-INF/views/tilesTemplates/footer.jsp"  />
+		<put-attribute name="main"  value="/WEB-INF/views/blli/main.jsp"  />
 	</definition>
+	
+	<definition name="mainPage" extends="home">
+		<put-attribute name="main"  value="/WEB-INF/views/blli/main.jsp" />
+	</definition>	
+	
+	<definition name="midCategoryDetailPage" extends="home">
+		<put-attribute name="main"  value="/WEB-INF/views/blli/midCategoryDetailPage.jsp" />
+	</definition>	
+	
+	<definition name="smallProductDetailPage" extends="home">
+		<put-attribute name="main"  value="/WEB-INF/views/blli/smallProductDetailPage.jsp" />
+	</definition>	
+	
+	
 </tiles-definitions>

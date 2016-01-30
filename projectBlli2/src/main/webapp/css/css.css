@@ -1,10 +1,11 @@
 html {
+	margin: 0px;
+    padding: 0px;
 	overflow-y:auto;
 	overflow-x:hidden;
 }
 body {
 	font-size:12px;
-	line-height:120%;
 	font-family:"돋움",Dotum,tahoma,Helvetica,AppleGothic,Sans-serif,'Nanum Barun Gothic';
 }
 
@@ -48,7 +49,15 @@ img {
 	overflow-y:hidden;
 	position:relative;
 }
-
+.loginPage_bg{
+	width:100%;
+	min-width:100%;
+	height:968px;
+	background:url(../img/loginBg.jpg) no-repeat;
+	background-size:cover;
+	overflow-y:hidden;
+	position:relative;
+}
 .login_bg2{
 	width:720px;
 	height:525px;
@@ -148,7 +157,41 @@ img {
 	font-size:13px;
 	line-height:30px;
 }
+/*로그인 페이지 css 시작*/
+.loginComp_bg{
+	width:320px;
+	background-color: rgba( 0, 0, 0, 0.5 );
+	opacity:0.8;
+	padding:25px;
+	padding-top:5px;
+	position:absolute;
+	left:38%;
+/* 	margin-left:-175px; */
+	border-radius:10px;
+	top:90px;
+	text-align:center;
+	color:#fff;
+}
 
+.loginComp_bg input{
+	width:190px;
+	height:35px;
+}
+
+.loginButton {
+    background-color: #ffc91d; /* Green */
+    border: none;
+    color: black;
+    padding: 8px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    font-family:'Nanum Barun Gothic';
+    border-radius: 5px;
+    width: 250px;
+}
+/*로그인 페이지 css 끝*/
 .info_bg{
 	width:320px;
 	background:#000;
@@ -293,4 +336,253 @@ img {
 	font-family:'Nanum Barun Gothic';
 	font-size:13px;
 	line-height:30px;
+}
+/* 
+//2016,01,29추가
+
+
+.yellow{
+	color:#febf00;
+	text-decoration:underline;
+}
+ */
+.jbMenu {
+	background-color: #2d2d2d;
+	width: 100%;
+	height:82px;
+	border-bottom:2px solid #fee04a;
+	position:relative;
+	z-index:1;
+}
+
+.jbMenu2 {
+	background-color: #fee04a;
+	width: 100%;
+	height:155px;
+	position:fixed;
+	z-index:1;
+	bottom:0;
+	padding:20px;
+}
+
+.jbMenu2 li{
+	width:155px;
+	padding:10px;
+	float:left;
+	text-align:center;
+}
+
+.yellow_foto{
+	width:115px;
+	height:115px;
+	background:#fff;
+	border-radius:5px;
+	margin:auto;
+}
+
+.yellow_foto:hover{
+	border:2px solid #000;
+}
+
+.yellow_ti{
+	font-family:'Nanum Barun Gothic';
+	text-align:center;
+	font-size:14px;
+	padding-top:10px;
+}
+
+.jbContent {
+	height:1000px;
+
+}
+.jbFixed {
+	position: fixed;
+	top: 0px;
+}
+
+.in_fr{
+	width:1040px;
+	margin:auto;
+}
+
+.logo{
+	float:left;
+}
+
+.search_text{
+	width:320px;
+	height:33px;
+	border-radius:5px;
+	border:none;
+}
+
+.top_search{
+	margin-left:40px;
+	margin-top:24px;
+	float:left;
+}
+
+.top_nav{
+	color:#fff;
+	font-size:16px;
+	float:right;
+	font-family:'Nanum Barun Gothic';
+	line-height:80px;
+}
+
+.top_nav a{
+	text-decoration:none;
+	color:#fff;
+}
+
+.top_nav a:hover{
+	color:#fee04a;
+}
+
+.result_bg1{
+	height:330px;
+}
+
+.result_bg2{
+	height:330px;
+	background:#f5f5f5;
+}
+
+.result_num{
+	width:175px;
+	float:left;
+	font-size:135px;
+	font-family:'Nanum Barun Gothic';
+	font-weight:bold;
+	text-align:center;
+	line-height:300px;
+}
+
+.result_con{
+	width:660px;
+	height:290px;
+	float:left;
+	padding:20px;
+}
+
+.result_ti{
+	height:45px;
+	background:url(../img/title_dot.png) no-repeat 5px ;
+	font-family:'Nanum Barun Gothic';
+	padding-left:25px;
+	font-weight:bold;
+	font-size:24px;
+	line-height:40px;
+}
+
+.result_foto{
+	width:340px;
+	height:235px;
+	border:1px solid #ccc;
+	position:relative;
+}
+
+.product_month{
+	width:46px;
+	height:36px;
+	background:#000;
+	color:#fff;
+	text-align:center;
+	font-family:'Nanum Barun Gothic';
+	padding-top:10px;
+	bottom:0px;
+	position:absolute;
+}
+
+.product_text{
+	width:280px;
+	height:160px;
+	background:#f7f7f7;
+	padding:10px;
+	font-family:'Nanum Barun Gothic';
+	margin-left:10px;
+	line-height:20px;
+	overflow-y:scroll;
+}
+
+.result_gray{
+	font-size:14px;
+	color:#b9b9b9;
+	font-family:'Nanum Barun Gothic';
+}
+
+.result_price{
+	font-size:16px;
+	font-weight:bold;
+	color:#ff1418;
+}
+
+.product_price{
+	height:55px;
+	margin-left:10px;
+	margin-top:10px;
+	line-height:20px;
+}
+
+.result_sns{
+	font-family:'Nanum Barun Gothic';
+	font-size:24px;
+	font-weight:bold;
+}
+
+.result_sns_text{
+	font-family:'Nanum Barun Gothic';
+	text-align:center;
+}
+
+.result_last{
+	width:162px;
+}
+
+.result_last ul{
+	width:100%;
+	margin-top:130px;
+	margin-bottom:10px;
+}
+
+.result_last li{
+	float:left;
+	padding:5px;
+}
+
+.detail_list{
+	width:45%;
+	padding:20px;
+}
+	
+.detail_list table{
+	width:100%;
+}
+
+.detail_list th{
+	height:30px;
+	background:#000;
+	color:#fff;
+	border-top:2px solid #fee04a;
+	font-family:'Nanum Barun Gothic';
+	text-align:center;
+	vertical-align:middle;
+	padding:5px;
+}
+
+.detail_list td{
+	height:30px;
+	padding:5px;
+	font-family:'Nanum Barun Gothic';
+	text-align:center;
+	vertical-align:middle;
+	border-bottom:1px solid #000;
+
+}
+
+.detail_slide{
+	height:225px;
+	background:#fee04a;
+	position:fixed;
+	bottom:0px;
 }

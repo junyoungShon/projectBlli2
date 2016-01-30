@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%> 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,6 +21,7 @@
 	여기가 상단바 
 	<input type="button" value="이전페이지가기" class="backBtn"><input type="hidden" >
 </div>
-<iframe id="socialbar-frame" name="socialbar-frame" height="90%" width="100%" src="http://blog.naver.com/open8370/50184783151" frameborder="0"></iframe>
+<iframe id="socialbar-frame" name="socialbar-frame" 
+height="90%" width="100%" src="http://blog.naver.com/open8370/50184783151" frameborder="0"></iframe>
 </body>
 </html>

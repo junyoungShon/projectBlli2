@@ -1,15 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<!-- 개발시 두었다가 개발 종료 시 선언해제 할 것! -->
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-<script src="${initParam.root}js/flickity.pkgd.min.js"></script>
-<link rel="stylesheet" href="${initParam.root}css/flickity.css" media="screen">
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		//중분류 추천 제거 클릭 시 추천 대상에서 제외
@@ -108,8 +101,7 @@
 		});
 	});
 </script>
-</head>
-<body>
+
 여기는 메인페이쟈
 ${sessionScope.blliMemberVO.memberName}님 환영합니다.<br>
 <hr>
@@ -233,16 +225,5 @@ ${sessionScope.blliMemberVO.memberName}님 환영합니다.<br>
 </c:forEach>
 </table>
 
-</body>
-<script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-ga('create', 'UA-72734813-1', {'cookieDomain': 'none'});
-ga('send', 'pageview');
-
-</script>
 
 </html>
