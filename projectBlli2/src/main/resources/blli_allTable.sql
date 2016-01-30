@@ -67,7 +67,7 @@ CREATE TABLE blli_big_category (
 	big_category         VARCHAR2(50) NOT NULL primary key,
 	big_category_id          VARCHAR2(30) NOT NULL -- 추가
 );
-
+select * from BLLI_BIG_CATEGORY;
 
 drop table blli_mid_category cascade constraint;
 CREATE TABLE blli_mid_category (

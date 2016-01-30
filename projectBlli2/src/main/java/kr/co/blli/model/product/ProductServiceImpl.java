@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 public class ProductServiceImpl implements ProductService{
 	@Resource
 	private ProductDAO productDAO;
-	
+
 	/**
 	  * @Method Name : selectRecommendingMidCategory
 	  * @Method 설명 : 회원의 추천받을 아이이름과 , 아이디를 이용해 추천대상인 중분류 제품을 선정한다.(회원이 추천을 기피했던 중제품 제외)
