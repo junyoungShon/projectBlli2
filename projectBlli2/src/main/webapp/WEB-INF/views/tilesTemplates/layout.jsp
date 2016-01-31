@@ -62,7 +62,7 @@
 </script>
 
 
-<script>
+<!-- <script>
 $( document ).ready( function() {
 	var jbOffset = $( '.jbMenu' ).offset();
 	$( window ).scroll( function() {
@@ -74,15 +74,14 @@ $( document ).ready( function() {
 	  }
 	});
   } );
-</script>
+</script> -->
 </head>
 
 
 <body>
-      <div class="jbMenu">
+   
       <!-- Header -->
       <tiles:insertAttribute name="header"/>
-    </div>
  	 <div class="jbContent">
  	<!-- main -->
  	<tiles:insertAttribute name="main"/>

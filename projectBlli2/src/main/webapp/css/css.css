@@ -347,6 +347,7 @@ img {
 }
  */
 .jbMenu {
+	display : none;
 	background-color: #2d2d2d;
 	width: 100%;
 	height:82px;
@@ -398,6 +399,14 @@ img {
 .jbFixed {
 	position: fixed;
 	top: 0px;
+}
+
+.jbFixedSmallProduct {
+	position: fixed;
+	top: 0px;
+}
+.jbFixedSmallProduct *{
+	position: fixed;
 }
 
 .in_fr{
@@ -496,6 +505,16 @@ img {
 
 .product_text{
 	width:280px;
+	height:160px;
+	background:#f7f7f7;
+	padding:10px;
+	font-family:'Nanum Barun Gothic';
+	margin-left:10px;
+	line-height:20px;
+	overflow-y:scroll;
+}
+.product_text2{
+	width:215px;
 	height:160px;
 	background:#f7f7f7;
 	padding:10px;
@@ -771,6 +790,11 @@ img {
 	line-height:50px;
 	margin-left:10px;
 	float:left;
+}
+#wrapper {
+  width: 841px; /* MUST HAVE WIDTH SET, should be the sidebar width + main width */
+  margin-left: auto;
+  margin-right: auto;
 }
 /*demo.css 01.30일 추가 메인관련*/
 

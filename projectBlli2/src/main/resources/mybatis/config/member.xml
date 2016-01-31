@@ -59,7 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<!-- 회원의 이메일로 아이들의 정보를 받아온다. -->
 	<select id="selectBabyListByMemberId" resultMap="bbvRM">
-		select member_id , baby_name , baby_birthday,baby_sex,baby_photo,member_id,recommending from blli_baby where member_id = #{value}
+		select member_id , baby_name , baby_birthday,baby_sex,baby_photo,member_id,recommending ,baby_photo from blli_baby where member_id = #{value}
 	</select>
 	<!-- 회원의 추천 대상 아이를 바꿔줍니다. -->
 	<update id="changeRecommendingBaby">

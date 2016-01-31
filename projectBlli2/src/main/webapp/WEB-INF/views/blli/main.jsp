@@ -2,47 +2,79 @@
     pageEncoding="UTF-8"%>
 <!-- 개발시 두었다가 개발 종료 시 선언해제 할 것! -->
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <script type="text/javascript">
+	//현재 스크롤바의 위치를 저장하는 변수 (px)
+	var currentScrollTop = 0;
+	     
+	// 비동기식 jQuery이므로 window load 후 jQuery를 실행해야 함
+	window.onload = function() {
+	    // 새로고침 했을 경우를 대비한 메소드 실행
+	    scrollController();
+	    // 스크롤을 하는 경우에만 실행됨
+	    $(window).on('scroll', function() {
+	        scrollController();
+	    });
+	}
+	     
+	// 메인 메뉴의 위치를 제어하는 함수
+	function scrollController() {
+	    currentScrollTop = $(window).scrollTop();
+	    if (currentScrollTop < 500) {
+	    	$('.jbMenu').css("display","none");
+			$( '.jbMenu' ).removeClass( 'jbFixed' );
+	    } else {
+	        $('.jbMenu').css("display","block");
+	        $( '.jbMenu' ).addClass( 'jbFixed' );
+	    }
+	    //사이드의 소분류 제품 리스트를 고정시켜줌
+	    if(currentScrollTop>1080){
+	    	 $('.main_right_list').css("margin-top",currentScrollTop-1080);
+	    }
+	}
+
 	$(document).ready(function(){
+		//사이드 소제품 추천 리스트 고정
+		
 		//중분류 추천 제거 클릭 시 추천 대상에서 제외
 		$('.recommendMidDelete').click(function(){
 			if(confirm('정말 삭제하시겠어요??')){
-				//alert($(this).parent().siblings('.midCategory').text());
+				//alert($(this).parent().parent().parent().html());
 				//alert($(this).siblings('.midCategoryId').val());
 				$.ajax({
 					type:"get",
-					url:"deleteRecommendMidCategory.do?midCategory="+$(this).parent().siblings('.midCategory').text()
-							+"&memberId=${sessionScope.blliMemberVO.memberId}&midCategoryId="+$(this).siblings('.midCategoryI d').val(),
+					url:"deleteRecommendMidCategory.do?midCategory="+$(this).children('.midCategoryValue').val()
+							+"&memberId=${sessionScope.blliMemberVO.memberId}&midCategoryId="+$(this).children('.midCategoryIdValue').val(),
 					success:function(){
-						alert("삭제완료!");
+						$(this).parent().parent().parent().css("display","none");
 					}
 				}); 
 			}
 		});
 		//추천 받을 아이 바꾸기 메서드
 		$('.babyChanger').change(function(){
-			//alert($(this).val());
 			$.ajax({
 				type:"get",
 				url:"changeRecommendingBaby.do?babyName="+$(this).val()
 						+"&memberId=${sessionScope.blliMemberVO.memberId}",
 				success:function(){
-					alert("변경완료!");
 					location.href='${initParam.root}member_goMain.do'
 				}
 			});
 		});
 		//소제품 찜하기 스크립트
 		$('.smallProductDibBtn').click(function(){
+			alert($(this).children('.jjimImage').attr("src"));
 			$.ajax({
 				type:"get",
 				url:"smallProductDib.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(this).next('.smallProductId').val(),
 				success:function(result){
+					alert(result);
 					if(result==1){
-						alert('찜하기 성공!');
+						$(this).children('.jjimImage').attr({"src":"./img/jjim_ov.png"});
 					}else if(result==0){
-						alert('찜하기 해제!');
+						$(this).children('.jjimImage').attr({"src":"./img/jjim.png"});
 					}
 				}
 			});
@@ -102,18 +134,6 @@
 		});
 	});
 </script>
-<div class="main_top">
-		<div class="in_fr">
-			<div class="top_nav">
-				<a href="#">회원정보수정</a>   ㅣ   <a href="#">아이정보수정</a>   ㅣ   <a href="#">스크랩</a>   ㅣ   <a href="#">알림</a>   ㅣ   <a href="#">아이일정</a>
-			</div>
-			<div class="main_logo">
-				<a href="#"><img src="./img/main_logo.png" alt="로고"></a>
-				<input type="text" class="search_text2" placeholder="검색어를 입력하세요">
-			<a href="#"><img src="./img/search.png" alt="검색"></a>
-			</div>
-		</div>
-</div>
 
 	
 
@@ -121,32 +141,27 @@
 		<div class="in_fr">
 			<div class="main_yellow_in">
 			
-<select class="babyChanger">
+				<select class="babyChanger">
 				<c:forEach items="${requestScope.blliMemberVO.blliBabyVOList}" var="babyList">
-		<c:choose>
-			<c:when test="${babyList.recommending==1}">
-				<option value="${babyList.babyName}" selected="selected">${babyList.babyName}</option>
-			</c:when>
-			<c:otherwise>
-				<option value="${babyList.babyName}" >${babyList.babyName}</option>
-			</c:otherwise>		
-		</c:choose>
-	</c:forEach>
-	</select>
-	
-		
-		
-				<div class="main_baby_foto">
+					<c:choose>
+						<c:when test="${babyList.recommending==1}">
+							<option value="${babyList.babyName}" selected="selected">${babyList.babyName}</option>
+						</c:when>
+						<c:otherwise>
+							<option value="${babyList.babyName}" >${babyList.babyName}</option>
+						</c:otherwise>		
+					</c:choose>
+				</c:forEach>
+				</select>
+				<c:forEach items="${requestScope.blliMemberVO.blliBabyVOList}" var="babyList">
+					<c:if test="${babyList.recommending==1}">
+				<div class="main_baby_foto" style="background-image: url('${initParam.root}babyphoto/${babyList.babyPhoto}'); ">
 				</div>
 				<div class="main_baby_name">
-				<c:forEach items="${requestScope.blliMemberVO.blliBabyVOList}" var="babyList">
-				<c:choose>
-			<c:when test="${babyList.recommending==1}">
-					 ${babyList.babyName } ${babyList.babyMonthAge} 개월 입니다.
-					 	</c:when>
-		</c:choose>
-	</c:forEach>
+						 ${babyList.babyName } ${babyList.babyMonthAge} 개월 입니다.
 				</div>
+					</c:if>
+				</c:forEach>
 			</div>
 			<div class="main_yellow_in2">
 				<div class="main_ti">
@@ -173,10 +188,12 @@
 									<ul class="items">
 										<li class="main_yellow_ti">샴푸의자</li>
 										<li style="height:100px; font-weight:normal;">
-											샴푸의자에 대한 설명이 들어갑니다.
+											${recommProductList.midCategoryInfo }
 										</li>
-										<li>
-											[제품보러가기]
+										<li class="recommendMidDelete">
+											[추천제외]
+											<input type="text" value="${recommProductList.midCategory}" class="midCategoryValue" style="display: none"> 
+											<input type="text" value="${recommProductList.midCategoryId}" class="midCategoryIdValue" style="display: none"> 
 										</li>
 									</ul>
 								</div>
@@ -197,33 +214,21 @@
 			또래 자녀를 둔 엄마가 선택한 상품 
 		</div>
 		<div class="main_product">
-		<!-- 	<div class="fl">
-				<a href="#"><img src="./img/allow_lgray.jpg" alt="왼쪽화살표" style="margin-top:150px;"></a>
-			</div> -->
-				
-				<%-- 		<td></td><td>개월~개월</td>
-						
-							<td>
-							<input type="button" value="찜하기" class="smallProductDibBtn"><input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId"></td>
-					
-						
-						<td></td>
-						<td>${blliSmallProductVOList.smallProductScore}</td>
-					</tr> --%>
-			
 			<ul class="midRecommProduct">
 			<c:forEach items="${requestScope.blliSmallProductVOList}" var="blliSmallProductVOList">
 				<li class="gallery-cell">
 				<%-- ${blliSmallProductVOList.midCategoryId} --%>
 					<div class="foto205">
-						<img src="${blliSmallProductVOList.smallProductMainPhotoLink}">
+						<img src="${blliSmallProductVOList.smallProductMainPhotoLink}" style="height: 207px; width: 207px;">
 						<div class="product_month">
 							${blliSmallProductVOList.smallProductWhenToUseMin}~${blliSmallProductVOList.smallProductWhenToUseMax}<br/>
 							개월
 						</div>
 					</div>
 					<div class="main_product_ti">
-						${blliSmallProductVOList.smallProduct} / ${blliSmallProductVOList.smallProductMaker}
+						<div style='width:205px; overflow:hidden;white-space:nowrap; text-overflow:ellipsis;'>
+							${blliSmallProductVOList.smallProduct} / ${blliSmallProductVOList.smallProductMaker}
+						</div>
 					</div>
 					<div class="product_price" style="margin:0px;">
 						<div class="fl">
@@ -231,40 +236,44 @@
 							<p class="result_price">25,000원</p>
 						</div>
 						<div class="fr">
-						<c:if test="${blliSmallProductVOList.isDib==0}">
-						${blliSmallProductVOList.smallProductDibsCount}
-							
+							<c:if test="${blliSmallProductVOList.isDib==0}">
+								<a href="#" class="smallProductDibBtn">
+								<span style="font-size: 12px">${blliSmallProductVOList.smallProductDibsCount}</span>
+								<img src="./img/jjim.png" alt="찜" style="margin-top:10px;" class="jjimImage"></a>
+								<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
 							</c:if>
 							<c:if test="${blliSmallProductVOList.isDib==1}">
-							${blliSmallProductVOList.smallProductDibsCount}
-							<a href="#"><img src="./img/jjim.png" alt="찜" style="margin-top:10px;"></a>
-						</c:if>
+								<a href="#" class="smallProductDibBtn">
+									<span style="font-size: 12px">${blliSmallProductVOList.smallProductDibsCount}</span>
+									<img src="./img/jjim_ov.png" alt="찜" style="margin-top:10px;" class="jjimImage"></a>
+								<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
+							</c:if>
 						</div>
 					</div>
 				</li>
 					</c:forEach>
 			</ul>
-		<!-- 	<div class="fr">
-				<a href="#"><img src="./img/allow_rgray.jpg" alt="오른쪽화살표" style="margin-top:150px;"></a>
-			</div> -->
 		</div>
-		
-		
 	</div>
 
 
 
 <div class="in_fr" style="margin-top:20px; border-top:1px solid #ccc; clear:both;">
 		<div class="main_left_product">
+			<c:forEach items="${requestScope.blliPostingVOList}" var="postingList">
+				<c:forEach items="${requestScope.blliSmallProductVOList}" var="blliSmallProductVOList">
+				<c:if test="${postingList.smallProductId==blliSmallProductVOList.smallProductId}">
 			<div style="height:356px;">
 				<div class="foto170">
 					<div class="product_month">
-						12~34<br/>
+							${blliSmallProductVOList.smallProductWhenToUseMin}~${blliSmallProductVOList.smallProductWhenToUseMax}<br/>
 						개월
 					</div>
 				</div>
 				<div class="main_product_ti">
-					하은맘 프라임 샴푸의자
+						<div style='width:175px; overflow:hidden;white-space:nowrap; text-overflow:ellipsis;'>
+							${blliSmallProductVOList.smallProduct} / ${blliSmallProductVOList.smallProductMaker}
+						</div>
 				</div>
 				<div class="product_price" style="margin:0px;">
 					<div class="fl">
@@ -272,58 +281,98 @@
 						<p class="result_price">25,000원</p>
 					</div>
 					<div class="fr">
-						<a href="#"><img src="./img/jjim.png" alt="찜" style="margin-top:10px;"></a>
+						<c:if test="${blliSmallProductVOList.isDib==0}">
+								<a href="#" class="smallProductDibBtn">
+								<span style="font-size: 12px">${blliSmallProductVOList.smallProductDibsCount}</span>
+								<img src="./img/jjim.png" alt="찜" style="margin-top:10px;" class="jjimImage"></a>
+								<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
+							</c:if>
+							<c:if test="${blliSmallProductVOList.isDib==1}">
+								<a href="#" class="smallProductDibBtn">
+									<span style="font-size: 12px">${blliSmallProductVOList.smallProductDibsCount}</span>
+									<img src="./img/jjim_ov.png" alt="찜" style="margin-top:10px;" class="jjimImage"></a>
+								<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
+						</c:if>
 					</div>
 				</div>
 			</div>
-			
+			</c:if>
+				</c:forEach>
+			</c:forEach>
 		</div>
+	
+
 		<div class="main_left_con">
+			<c:forEach items="${requestScope.blliPostingVOList}" var="postingList">
+						
+			<input type="hidden" class="smallProductIdInfo" value="${postingList.smallProductId}">
+			<input type="hidden" class="postingUrlInfo" value="${postingList.postingUrl}">
+						
 			<div style="height:356px;">
 				<div class="result_ti">
-					머리감기가 한결쉬워요~
+					${postingList.postingTitle}
 				</div>
 				<div style="height:245px;">
 					<div class="result_foto fl">
+						<a href="goPosting.do?postingUrl=${postingList.postingUrl}&smallProductId=${postingList.smallProductId}">
+							<img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${postingList.postingPhotoLink}" style="width: 342px; max-height: 247px;">
+						</a>
 					</div>
 					<div class="fl">
 						<div class="product_text2">
-							하은맘 프라임 샴푸 의자 이젠 32개월 모야 안고 머리감기는 일 너무 힘들어요~ 무게도 덩치도
-							발육이 남다른 모야 ~ 구상도를보면 참 많은 생각을 하시고 제작하신것 같아요
+							${postingList.postingSummary}
 						</div>
 						<div class="product_id">
-							라니모야
+							${postingList.postingAuthor}
 						</div>
 					</div>
 				</div>
 				<div class="product_sns">
 					<div class="fl score">
-						87점
+						${postingList.postingScore}점
 					</div>
 					<div class="fr sns">
-						<img src="./img/icon_share.jpg" alt="공유아이콘">
-						250
-						<img src="./img/icon_like.jpg" alt="좋아요아이콘">
-						250
-						<img src="./img/icon_hate.jpg" alt="싫어요아이콘">
-						250
+						<c:if test="${postingList.isScrapped==0}">
+							<img src="./img/icon_share.jpg" alt="공유아이콘">
+							${postingList.postingScrapeCount}
+						</c:if>
+						<c:if test="${postingList.isScrapped==1}">
+							<img src="./img/icon_share.jpg" alt="공유아이콘">
+							${postingList.postingScrapeCount}
+						</c:if>		
+						<c:if test="${postingList.isLike==0}">
+							<img src="./img/icon_like.jpg" alt="좋아요아이콘">
+							${postingList.postingLikeCount}
+						</c:if>
+						<c:if test="${postingList.isLike==1}">
+							<img src="./img/icon_like.jpg" alt="좋아요아이콘">
+							${postingList.postingLikeCount}
+						</c:if>
+						<c:if test="${postingList.isDisLike==0}">
+							<img src="./img/icon_hate.jpg" alt="싫어요아이콘">
+							${postingList.postingLikeCount}
+						</c:if>
+						<c:if test="${postingList.isDisLike==1}">
+							<img src="./img/icon_hate.jpg" alt="싫어요아이콘">
+							${postingList.postingLikeCount}
+						</c:if>
 					</div>
 				</div>
 			</div>
-			
-			
+			</c:forEach>
 		</div>
 		<div class="main_right_list">
 			<div class="main_right_ti">
 				월령별 추천상품
 			</div>
 			<div class="accordion accordion1">
+				<c:forEach items="${requestScope.blliMidCategoryVOList}" var="recommProductList">
 				<div class="accordion-section">
 					<a class="accordion-section-header" data-target="#accordion-1">
-						<div class="foto50">
+						<div class="foto50" style="background-image: url('${recommProductList.midCategoryMainPhotoLink}');">
 						</div>
 						<div class="main_right_name">
-							샴푸의자
+							${recommProductList.midCategory }
 						</div>
 					</a>
 					<div id="accordion-1" class="accordion-section-content">
@@ -374,234 +423,10 @@
 						</table>
 					</div>
 				</div>
-				<div class="accordion-section">
-					<a class="accordion-section-header" data-target="#accordion-2">
-						<div class="foto50">
-						</div>
-						<div class="main_right_name">
-							샴푸의자
-						</div>
-					</a>
-					<div id="accordion-2" class="accordion-section-content">
-						<table>
-							<colgroup>
-								<col width="20%">
-							</colgroup>
-							<tr>
-								<th>
-									1위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-							<tr>
-								<th>
-									2위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-							<tr>
-								<th>
-									3위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-							<tr>
-								<th>
-									4위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-							<tr>
-								<th>
-									5위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-						</table>
-					</div>
-				</div>
-				<div class="accordion-section">
-					<a class="accordion-section-header" data-target="#accordion-2">
-						<div class="foto50">
-						</div>
-						<div class="main_right_name">
-							샴푸의자
-						</div>
-					</a>
-					<div id="accordion-2" class="accordion-section-content">
-						<table>
-							<colgroup>
-								<col width="20%">
-							</colgroup>
-							<tr>
-								<th>
-									1위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-							<tr>
-								<th>
-									2위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-							<tr>
-								<th>
-									3위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-							<tr>
-								<th>
-									4위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-							<tr>
-								<th>
-									5위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-						</table>
-					</div>
-				</div>
-				<div class="accordion-section">
-					<a class="accordion-section-header" data-target="#accordion-2">
-						<div class="foto50">
-						</div>
-						<div class="main_right_name">
-							샴푸의자
-						</div>
-					</a>
-					<div id="accordion-2" class="accordion-section-content">
-						<table>
-							<colgroup>
-								<col width="20%">
-							</colgroup>
-							<tr>
-								<th>
-									1위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-							<tr>
-								<th>
-									2위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-							<tr>
-								<th>
-									3위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-							<tr>
-								<th>
-									4위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-							<tr>
-								<th>
-									5위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-						</table>
-					</div>
-				</div>
-				<div class="accordion-section">
-					<a class="accordion-section-header" data-target="#accordion-2">
-						<div class="foto50">
-						</div>
-						<div class="main_right_name">
-							샴푸의자
-						</div>
-					</a>
-					<div id="accordion-2" class="accordion-section-content">
-						<table>
-							<colgroup>
-								<col width="20%">
-							</colgroup>
-							<tr>
-								<th>
-									1위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-							<tr>
-								<th>
-									2위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-							<tr>
-								<th>
-									3위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-							<tr>
-								<th>
-									4위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-							<tr>
-								<th>
-									5위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-						</table>
-					</div>
-				</div>
+				</c:forEach>
 			</div>
 		</div>
-	</div>
-
+</div>
 
 
 
@@ -622,45 +447,7 @@
 </table>
 <h1>현재 추천되고 있는 소제품관련 블로그!</h1>
 <table align="center" width="50%" border="1" bordercolor="silver" style="border-collapse: collapse; table-layout: fixed;" cellpadding="10" rules="none">
-<c:forEach items="${requestScope.blliPostingVOList}" var="postingList">
-<tr>
-	<td colspan="6" width="70%" style="text-overflow : ellipsis;overflow : hidden;">
-	<strong><a href="${postingList.postingUrl}" style="text-decoration:none; color: black;"><NOBR>${postingList.postingTitle}</NOBR></a></strong></td>
-	<td colspan="3" align="right" width="30%"><font size="2" color="silver">${postingList.postingDate}</font></td>
-</tr>
-<tr>
-	<td colspan="6" rowspan="2" align="center" width="70%"><div style="width: 400px; height: 300px; border: 1px solid; border-color: silver; display: table-cell; vertical-align: middle;">
-	<a href="goPosting.do?postingUrl=${postingList.postingUrl}&smallProductId=${postingList.smallProductId}"><img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${postingList.postingPhotoLink}" style="max-width: 100%; max-height: 100%;"></a></div></td>
-	<td colspan="3" width="30%" style="word-break:break-all;"><font size="2">${postingList.postingSummary}</font></td>
-</tr>
-<tr>
-	<td colspan="3" width="30%" align="right"><font size="3" color="orange">${postingList.postingAuthor}</font></td>
-</tr>
-<tr style="border: 1px solid silver;">
-	<td colspan="2" align="center" width="20%"><strong><font size="4" color="red">${postingList.postingScore}점</font></strong></td>
-	<td colspan="4" width="40%"><font size="3" color="silver">${postingList.smallProduct}</font></td>
-	<c:if test="${postingList.isScrapped==0}">
-		<td align="center" width="10%"><font color="silver"><img src="${initParam.root}image/스크랩.PNG" class="postingScrapBtn" width="20px"> ${postingList.postingScrapeCount}스크랩하기</font></td>
-	</c:if>
-	<c:if test="${postingList.isScrapped==1}">
-		<td align="center" width="10%"><font color="silver"><img src="${initParam.root}image/스크랩.PNG" class="postingScrapBtn" width="20px"> ${postingList.postingScrapeCount}스크랩취소</font></td>
-	</c:if>
-	<c:if test="${postingList.isLike==0}">
-		<td align="center" width="10%"><font color="silver"><img src="${initParam.root}image/좋아요.PNG" class="postingLikeBtn" width="15px">좋아요 ${postingList.postingLikeCount}</font></td>
-	</c:if>
-	<c:if test="${postingList.isLike==1}">
-		<td align="center" width="10%"><font color="silver"><img src="${initParam.root}image/좋아요.PNG" class="postingLikeBtn" width="15px">좋아요 취소${postingList.postingLikeCount}</font></td>
-	</c:if>
-	<c:if test="${postingList.isDisLike==0}">
-		<td align="center" width="10%"><font color="silver"><img src="${initParam.root}image/좋아요.PNG" class="postingLikeBtn" width="15px">싫어요 ${postingList.postingLikeCount}</font></td>
-	</c:if>
-	<c:if test="${postingList.isDisLike==1}">
-		<td align="center" width="10%"><font color="silver"><img src="${initParam.root}image/싫어요.PNG" class="postingDisLikeBtn" width="15px">싫어요 취소${postingList.postingDislikeCount}</font></td>
-	</c:if>
-</tr>
-<input type="hidden" class="smallProductIdInfo" value="${postingList.smallProductId}">
-<input type="hidden" class="postingUrlInfo" value="${postingList.postingUrl}">
-</c:forEach>
+
 </table>
 <h1>추천 중분류 상품 입니다.</h1>
 <table border="1" >
