@@ -586,3 +586,235 @@ img {
 	position:fixed;
 	bottom:0px;
 }
+/*main.css*/
+
+.main_top{
+	height:520px;
+	background:url(../img/main_img.jpg) center no-repeat;
+}
+
+.search_text2{
+	width:480px;
+	height:33px;
+	border-radius:5px;
+	border:none;
+}
+.main_logo{
+	width:575px;
+	margin:auto;
+	text-align:center;
+	padding-top:190px;
+}
+
+.main_yellow{
+	height:250px;
+	background:#fee04a;
+}
+
+.main_yellow_in{
+	width:150px;
+	height:230px;
+	background:#2d2d2d;
+	padding:10px;
+	text-align:center;
+	float:left;
+}
+
+.main_yellow_in select{
+	margin-top:10px;
+}
+
+.main_baby_foto{
+	width:116px;
+	height:116px;
+	border-radius:70px;
+	background:#fff;
+	margin:auto;
+	margin-top:20px;
+}
+
+.main_baby_name{
+	color:#fff;
+	font-size:16px;
+	text-align:center;
+	font-family:'Nanum Barun Gothic';
+	margin-top:20px;
+}
+
+.main_yellow_in2{
+	float:left;
+}
+
+.main_yellow_in2 ul{
+	margin-top:20px;
+}
+
+.main_yellow_in2 li{
+	float:left;
+}
+
+.main_ti{
+	height:45px;
+	background:url(../img/main_tibg.png) no-repeat 25px;
+	font-family:'Nanum Barun Gothic';
+	padding-left:25px;
+	font-weight:bold;
+	font-size:24px;
+	line-height:40px;
+	margin-top:20px;
+}
+
+.main_product li{
+	float:left;
+	width:205px;
+	height:270px;
+	border:1px solid #ccc;
+	padding:10px;
+	margin:10px;
+}
+
+.foto205{
+	width:205px;
+	height:205px;
+	border:1px solid #ccc;
+	margin:auto;
+	position:relative;
+}
+
+.main_product_ti{
+	height:28px;
+	text-align:center;
+	font-weight:bold;
+	font-size:14px;
+	font-family:'Nanum Barun Gothic';
+	line-height:30px;
+}
+
+.main_left_product{
+	width:175px;
+	float:left;
+	border-right:1px solid #ccc;
+	padding:10px;
+}
+
+.main_left_con{
+	width:590px;
+	float:left;
+	padding:10px;
+	border-right:1px solid #ccc;
+}
+
+.foto170{
+	width:170px;
+	height:170px;
+	border:1px solid #ccc;
+	margin:auto;
+	position:relative;
+}
+
+.product_id{
+	font-size:20px;
+	color:#ffcb08;
+	font-weight:bold;
+	text-align:right;
+	font-family:'Nanum Barun Gothic';
+	line-height:60px;
+}
+
+.product_sns{
+	height:25px;
+	border-top:1px solid #ccc;
+	border-bottom:1px solid #ccc;
+	padding:10px;
+}
+
+.score{
+	font-size:20px;
+	font-family:'Nanum Barun Gothic';
+	font-weight:bold;
+	color:#ff1418;
+	clear:both;
+}
+
+.sns{
+	font-size:20px;
+	font-family:'Nanum Barun Gothic';
+}
+
+.main_yellow_ti{
+	font-size:12px;
+	text-align:center;
+}
+
+.main_right_list{
+	width:230px;
+	float:right;
+}
+
+.main_right_ti{
+	height:55px;
+	font-size:16px;
+	font-weight:bold;
+	text-align:center;
+	font-family:'Nanum Barun Gothic';
+	line-height:60px;
+}
+
+.foto50{
+	width:50px;
+	height:50px;
+	background:#fff;
+	float:left;
+}
+
+.main_right_name{
+	line-height:50px;
+	margin-left:10px;
+	float:left;
+}
+/*demo.css 01.30일 추가 메인관련*/
+
+.items
+{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    margin-top: 16px;
+    margin-left: 10px;
+	font-family:'Nanum Barun Gothic';
+
+}
+.items li
+{
+    text-align: center;
+    font-size: 11px !important;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-weight: bold;
+	width:110px;
+}
+.items li a, .items li a:visited, .items li a:active
+{
+    color: #443901;
+    text-decoration: none;
+}
+.items li a:hover
+{
+    /*text-decoration: underline;*/
+    color: #7C6300;
+    -webkit-text-shadow: 1px 1px 2px #ffffff; /* Saf3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+    -moz-text-shadow: 1px 1px 2px #ffffff; /* FF3.5 - 3.6 */
+    text-shadow: 1px 1px 2px #ffffff; /* Opera 10.5, IE9, FF4+, Chrome 6+, iOS 5 */
+}
+
+#inline-content
+{
+    height: 100px;
+    margin-top: 100px;
+    margin: 0 auto;
+    color: #000;
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+}
+/*demo.css 01.30일 추가 메인관련 끝*/

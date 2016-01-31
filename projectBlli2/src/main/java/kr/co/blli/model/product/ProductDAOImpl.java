@@ -274,7 +274,7 @@ public class ProductDAOImpl implements ProductDAO{
 	 */
 	@Override
 	public int selectThisPostingScrape(BlliMemberScrapeVO blliMemberScrapeVO) {
-		return sqlSessionTemplate.selectOne("posting.selectThisPostingScrap", blliMemberScrapeVO);
+		return sqlSessionTemplate.selectOne("posting.selectThisPostingScrape", blliMemberScrapeVO);
 	}
 	/**
 	  * @Method Name : selectThisPostingLike
