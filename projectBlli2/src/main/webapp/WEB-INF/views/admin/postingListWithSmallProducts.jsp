@@ -78,19 +78,26 @@ $(document).ready(function(){
 	<td colspan="2">
 		<c:choose>
 		<c:when test="${requestScope.resultList.pagingBean.nowPage < requestScope.resultList.pagingBean.totalPage }">
-		<strong>포스팅</strong> ${requestScope.resultList.pagingBean.nowPage*5-4} - ${requestScope.resultList.pagingBean.nowPage*5} / ${requestScope.resultList.pagingBean.totalPosting}건
+		<strong>포스팅</strong> 
+		${requestScope.resultList.pagingBean.nowPage*5-4} - ${requestScope.resultList.pagingBean.nowPage*5} / 
+		${requestScope.resultList.pagingBean.totalPosting}건
 		</c:when>
 		<c:otherwise>
-		<strong>포스팅</strong> ${requestScope.resultList.pagingBean.nowPage*5-4} - ${requestScope.resultList.pagingBean.totalPosting} / ${requestScope.resultList.pagingBean.totalPosting}건
+		<strong>포스팅</strong> 
+		${requestScope.resultList.pagingBean.nowPage*5-4} - ${requestScope.resultList.pagingBean.totalPosting} / 
+		${requestScope.resultList.pagingBean.totalPosting}건
 		</c:otherwise>
 		</c:choose>
 	</td>
 </tr>
 <c:forEach items="${requestScope.resultList.postingList}" var="postingList" varStatus="count">
 	<tr>
-		<td style="border-bottom: dotted; border-bottom-color: silver;"><h3><strong><a href="${postingList.postingUrl}" style="text-decoration:none; color: black;">${postingList.postingTitle}</a></strong></h3></td>
+		<td style="border-bottom: dotted; border-bottom-color: silver;"><h3><strong>
+		<a href="${postingList.postingUrl}" style="text-decoration:none; color: black;">${postingList.postingTitle}</a>
+		</strong></h3></td>
 		<td>
-			<p align="right"><input type="checkbox" name="${count.index}" value="${postingList.postingUrl}"><span><strong>삭제</strong></span></p>
+			<p align="right"><input type="checkbox" name="${count.index}" value="${postingList.postingUrl}">
+			<span><strong>삭제</strong></span></p>
 		</td>
 	</tr>
 	<tr>

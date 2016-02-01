@@ -24,19 +24,43 @@ select posting_url, posting_title, posting_photo_link, posting_summary, posting_
 	from blli_posting where small_product like '%' || '아이' || '%' and posting_status = 'confirmed'
 ) where page = '2'
 
+create table test_log(
+	category varchar2(300) not null
+)
+drop table test_log
+insert into test_log values('a')
+select * from test_log
+
 select max(ceil(rownum/5)) from blli_posting where small_product like '%' || '' || '%' and posting_status = 'confirmed'
 
 update blli_small_product set small_product_status = 'unconfirmed';
 
 select * from blli_big_category;
 
+select * from blli_posting;
+
 select count(*) from blli_small_product;
 
 update blli_small_product set search_time = '2016.01.26' where small_product_id = '6845396598';
 
+select * from blli_posting where small_product like '%' || '아이팜' || '%';
+
+update blli_posting set posting_status = 'confirmed' where small_product like '%' || '아이팜' || '%';
+
 select * from blli_small_prod_buy_link;
 
 select * from blli_mid_category;
+
+update blli_posting set posting_score = 83, posting_like_count = 15, posting_dislike_count = 3, posting_scrape_count = 5 where posting_title = '아기욕조 아이팜 즐거운목욕시간';
+
+select posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, posting_scrape_count, posting_like_count, posting_dislike_count, posting_author, posting_date from(
+	select ceil(rownum/5) as page, posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, 
+	posting_scrape_count, posting_like_count, posting_dislike_count, posting_author, posting_date from(
+		select posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, 
+		posting_scrape_count, posting_like_count, posting_dislike_count, posting_author, to_char(posting_date, 'YYYY.MM.DD') as posting_date 
+		from blli_posting where small_product like '%' || '' || '%' and posting_status = 'confirmed' order by posting_score desc
+	)
+) where page = 1;
 
 select * from blli_posting;
 

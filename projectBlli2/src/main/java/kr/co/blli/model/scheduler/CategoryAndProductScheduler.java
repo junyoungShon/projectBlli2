@@ -12,13 +12,15 @@ import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliSmallProductBuyLinkVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.chainsaw.Main;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+//@Component
 @Service
 public class CategoryAndProductScheduler {
 	
@@ -36,6 +38,7 @@ public class CategoryAndProductScheduler {
 	 */
 	//@Scheduled(cron = "00 00 01 * * *")
 	public void insertBigCategory() throws IOException {
+		Logger logger = Logger.getLogger(Main.class.getName());
 		Document doc = Jsoup.connect("http://shopping.naver.com/category/category.nhn?cat_id=50000005").timeout(0).get();
 		Elements bigCategories = doc.select(".category_cell h3 a");
 		for(Element e : bigCategories){
@@ -47,6 +50,8 @@ public class CategoryAndProductScheduler {
 			if(updateResult == 0){
 				productDAO.insertBigCategory(blliBigCategoryVO);
 			}
+			System.out.println(bigCategory);
+			logger.warn("대분류명 : "+bigCategory);
 		}
 	}
 	
@@ -143,7 +148,7 @@ public class CategoryAndProductScheduler {
 						count = i;
 					}
 					BlliSmallProductVO blliSmallProductVO = new BlliSmallProductVO();
-					int naverShoppingOrder = 0;
+					int naverShoppingRank = 0;
 					int page = 1;
 					double lastPage = 0;
 					
@@ -168,7 +173,7 @@ public class CategoryAndProductScheduler {
 						Elements e = doc.select(".goods_list ._model_list");
 						for(Element el : e){
 							countOfSmallProduct++;
-							naverShoppingOrder++;
+							naverShoppingRank++;
 							//System.out.println("*************** 소제품 ***************");
 							
 							String smallProduct = el.select(".info .tit").text();
@@ -214,7 +219,7 @@ public class CategoryAndProductScheduler {
 							System.out.println("제품명 : "+smallProduct);
 							System.out.println("이미지 : "+smallProductMainPhotoLink);
 							System.out.println("포스팅 개수 : "+smallProductPostingCount);
-							System.out.println("네이버 쇼핑 검색 순서 : "+(naverShoppingOrder));
+							System.out.println("네이버 쇼핑 검색 순서 : "+(naverShoppingRank));
 							System.out.println("제조사 : "+smallProductMaker);
 							System.out.println("제조일 : "+productRegisterDay);
 							System.out.println("제품ID : "+smallProductId);*/
@@ -224,7 +229,7 @@ public class CategoryAndProductScheduler {
 							blliSmallProductVO.setSmallProduct(smallProduct.replaceAll("%26", "&"));
 							blliSmallProductVO.setSmallProductMainPhotoLink(smallProductMainPhotoLink);
 							blliSmallProductVO.setSmallProductPostingCount(smallProductPostingCount);
-							blliSmallProductVO.setNaverShoppingOrder(naverShoppingOrder);
+							blliSmallProductVO.setNaverShoppingRank(naverShoppingRank);
 							blliSmallProductVO.setSmallProductMaker(smallProductMaker);
 							blliSmallProductVO.setProductRegisterDay(productRegisterDay);
 							blliSmallProductVO.setSmallProductId(smallProductId);

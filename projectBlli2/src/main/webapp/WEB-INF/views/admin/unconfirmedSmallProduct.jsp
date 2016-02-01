@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>소제품 등록</title>
 <style type="text/css">
     .h-div {width:70%; margin-left: auto; margin-right: auto; position: relative; height: 100%;}
 </style>
@@ -15,21 +15,21 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		$("#confirmBtn").click(function(){
-			if(confirm("확실해?")){
+			if(confirm("확실합니까?")){
 				for(var i=0;i<"${fn:length(requestScope.resultList.smallProductList)}";i++){
 					if($("input:checkbox[name=delete]")[i].value != "삭제"){
 						if($("input:text[name=min]")[i].value > 36 || $("input:text[name=min]")[i].value < 0){
-							alert("최소 연령은 0개월부터 36개월까지 입력해");
+							alert("최소 연령은 0개월부터 36개월까지 입력해주세요");
 							$("input:text[name=min]")[i].focus();
 							return false;
 						}
 						if($("input:text[name=max]")[i].value != "" && $("input:text[name=max]")[i].value < 1){
-							alert("최대 연령은 1개월 이상 입력해");
+							alert("최대 연령은 1개월 이상 입력해주세요");
 							$("input:text[name=max]")[i].focus();
 							return false;
 						}
 						if($("input:text[name=min]")[i].value > $("input:text[name=max]")[i].value){
-							alert("최소 연령이 최대 연령을 초과했다");
+							alert("최소 연령이 최대 연령을 초과했습니다");
 							$("input:text[name=min]")[i].focus();
 							return false;
 						}
@@ -37,15 +37,20 @@
 				}
 				var array = [];
 				for(var i=0;i<"${fn:length(requestScope.resultList.smallProductList)}";i++){
-					if($("input:text[name=smallProduct]")[i].value == "" && $("input:text[name=min]")[i].value == "" && $("input:text[name=max]")[i].value == "" && $("input:checkbox[name=delete]")[i].checked == false){
+					if($("input:text[name=smallProduct]")[i].value == "" && $("input:text[name=min]")[i].value == "" && 
+					$("input:text[name=max]")[i].value == "" && $("input:checkbox[name=delete]")[i].checked == false){
 						
 					}else if($("input:checkbox[name=delete]")[i].checked == true){
-					    array.push({"smallProductId": $("input:checkbox[name=delete]")[i].value, "smallProduct": $("input:text[name=smallProduct]")[i].value,
-					    	"smallProductWhenToUseMin": $("input:text[name=min]")[i].value, "smallProductWhenToUseMax": $("input:text[name=max]")[i].value, 
+					    array.push({"smallProductId": $("input:checkbox[name=delete]")[i].value, 
+					    	"smallProduct": $("input:text[name=smallProduct]")[i].value,
+					    	"smallProductWhenToUseMin": $("input:text[name=min]")[i].value, 
+					    	"smallProductWhenToUseMax": $("input:text[name=max]")[i].value, 
 					    	"delete": "삭제"});
 					}else if($("input:checkbox[name=delete]")[i].checked == false){
-						array.push({"smallProductId": $("input:checkbox[name=delete]")[i].value, "smallProduct": $("input:text[name=smallProduct]")[i].value,
-					    	"smallProductWhenToUseMin": $("input:text[name=min]")[i].value, "smallProductWhenToUseMax": $("input:text[name=max]")[i].value, 
+						array.push({"smallProductId": $("input:checkbox[name=delete]")[i].value, 
+							"smallProduct": $("input:text[name=smallProduct]")[i].value,
+					    	"smallProductWhenToUseMin": $("input:text[name=min]")[i].value, 
+					    	"smallProductWhenToUseMax": $("input:text[name=max]")[i].value, 
 					    	"delete": ""});
 					}
 				}
@@ -71,7 +76,7 @@
 		});
 		
 		$("#cancel").click(function(){
-			if(confirm("취소할거니?")){
+			if(confirm("취소하겠습니까?")){
 				location.href="${initParam.root}index.do";
 			}
 		});
@@ -84,10 +89,14 @@
 	<div>
 		<c:choose>
 		<c:when test="${requestScope.resultList.pagingBean.nowPage < requestScope.resultList.pagingBean.totalPage }">
-		<strong>소제품</strong> ${requestScope.resultList.pagingBean.nowPage*10-9} - ${requestScope.resultList.pagingBean.nowPage*10} / ${requestScope.resultList.pagingBean.totalPosting}건
+		<strong>소제품</strong> 
+		${requestScope.resultList.pagingBean.nowPage*10-9} - ${requestScope.resultList.pagingBean.nowPage*10} / 
+		${requestScope.resultList.pagingBean.totalPosting}건
 		</c:when>
 		<c:otherwise>
-		<strong>소제품</strong> ${requestScope.resultList.pagingBean.nowPage*10-9} - ${requestScope.resultList.pagingBean.totalPosting} / ${requestScope.resultList.pagingBean.totalPosting}건
+		<strong>소제품</strong> 
+		${requestScope.resultList.pagingBean.nowPage*10-9} - ${requestScope.resultList.pagingBean.totalPosting} / 
+		${requestScope.resultList.pagingBean.totalPosting}건
 		</c:otherwise>
 		</c:choose>
 	</div>
@@ -103,10 +112,13 @@
 			<div style="width:47%; float: left; padding: 10px;">
 			</c:otherwise>
 			</c:choose>
-				<div style="float: left;">${smallProductList.midCategory} > ${smallProductList.smallProduct}</div>
-				<div style="float: right;"><input type="checkbox" name="delete" value="${smallProductList.smallProductId}"><strong>삭제</strong></div><br>
-				<div><p align="center"><img src="${smallProductList.smallProductMainPhotoLink}" width="300px" height="400px"><br><br>
-				<input type="text" name="smallProduct" placeholder="${smallProductList.smallProduct}" size="${fn:length(smallProductList.smallProduct)+15}" style="padding: 5px"><br>
+				<div style="float: left; height: 50px; width: 85%;">
+				${smallProductList.midCategory} > ${smallProductList.smallProduct}</div>
+				<div style="float: right; height: 50px; width: 15%;">
+				<input type="checkbox" name="delete" value="${smallProductList.smallProductId}"><strong>삭제</strong></div><br>
+				<div><p align="center"><img src="${smallProductList.smallProductMainPhotoLink}" width="250px" height="350px"><br><br>
+				<input type="text" name="smallProduct" placeholder="${smallProductList.smallProduct}" 
+				size="${fn:length(smallProductList.smallProduct)+15}" style="padding: 5px"><br>
 				최소 연령 : <input type="text" name="min" size="1px"> 개월<br>
 				최대 연령 : <input type="text" name="max" size="1px"> 개월</p></div>
 			</div>
@@ -120,10 +132,13 @@
 			<div style="width:47%; float: right; padding: 10px;">
 			</c:otherwise>
 			</c:choose>
-				<div style="float: left;">${smallProductList.midCategory} > ${smallProductList.smallProduct}</div>
-				<div style="float: right;"><input type="checkbox" name="delete" value="${smallProductList.smallProductId}"><strong>삭제</strong></div><br>
-				<div><p align="center"><img src="${smallProductList.smallProductMainPhotoLink}" width="300px" height="400px"><br><br>
-				<input type="text" name="smallProduct" placeholder="${smallProductList.smallProduct}" size="${fn:length(smallProductList.smallProduct)+15}" style="padding: 5px"><br>
+				<div style="float: left; height: 50px; width: 85%;">
+				${smallProductList.midCategory} > ${smallProductList.smallProduct}</div>
+				<div style="float: right; height: 50px; width: 15%;">
+				<input type="checkbox" name="delete" value="${smallProductList.smallProductId}"><strong>삭제</strong></div><br>
+				<div><p align="center"><img src="${smallProductList.smallProductMainPhotoLink}" width="250px" height="350px"><br><br>
+				<input type="text" name="smallProduct" placeholder="${smallProductList.smallProduct}" 
+				size="${fn:length(smallProductList.smallProduct)+15}" style="padding: 5px"><br>
 				최소 연령 : <input type="text" name="min" size="1px"> 개월<br>
 				최대 연령 : <input type="text" name="max" size="1px"> 개월</p></div>
 			</div>

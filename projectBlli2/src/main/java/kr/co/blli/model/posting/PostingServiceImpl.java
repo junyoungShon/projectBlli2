@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import javax.annotation.Resource;
 
-import kr.co.blli.model.product.ProductDAO;
 import kr.co.blli.model.vo.BlliPostingVO;
 
 import org.springframework.stereotype.Service;
@@ -15,9 +14,6 @@ public class PostingServiceImpl implements PostingService {
 	
 	@Resource
 	private PostingDAO postingDAO;
-	
-	@Resource
-	private ProductDAO productDAO;
 	
 	/**
 	 * 

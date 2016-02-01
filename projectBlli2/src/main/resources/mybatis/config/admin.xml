@@ -36,7 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="postingScrapeCount" column="posting_scrape_count"/>
  		<result property="postingAuthor" column="posting_author"/>
  		<result property="postingDate" column="posting_date"/>
- 		<result property="postingOrder" column="posting_order"/>
+ 		<result property="postingRank" column="posting_rank"/>
  		<result property="postingReplyCount" column="posting_reply_count"/>
  		<result property="smallProduct" column="small_product"/>
  		<result property="smallProductId" column="small_product_id"/>
@@ -53,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="smallProductMainPhotoLink" column="small_product_main_photo_link"/>
  		<result property="smallProductScore" column="small_product_score"/>
  		<result property="smallProductPostingCount" column="small_product_posting_count"/>
- 		<result property="naverShoppingOrder" column="naver_shopping_order"/>
+ 		<result property="naverShoppingRank" column="naver_shopping_rank"/>
  		<result property="productRegisterDay" column="product_register_day"/>
  		<result property="midCategoryId" column="mid_category_id"/>
  		<result property="smallProductId" column="small_product_id"/>
@@ -74,7 +74,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="unconfirmedPosting" resultMap="bpvRM">
 		select posting_url, posting_title, posting_content, small_product from(
 			select ceil(rownum/5) as page, posting_url, posting_title, posting_content, small_product from(
-				select count(*) over (partition by posting_url) as count_posting_url, posting_url, posting_title, posting_content, small_product from blli_posting where posting_status = 'unconfirmed'
+				select count(*) over (partition by posting_url) as count_posting_url, posting_url, posting_title, 
+				posting_content, small_product from blli_posting where posting_status = 'unconfirmed'
 			) where count_posting_url = 1
 		) where page = #{pageNo}
 	</select>
@@ -89,7 +90,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from(
 			select ceil(row_num/5) as page, posting_url, posting_title, small_product, posting_content from(
 				select (dense_rank() over (order by posting_url)) row_num, posting_url, posting_title, small_product, posting_content from(
-					select count(*) over (partition by posting_url) as small_product_count, posting_url, posting_title, small_product, posting_content from blli_posting where posting_status = 'unconfirmed'
+					select count(*) over (partition by posting_url) as small_product_count, posting_url, posting_title, small_product, 
+					posting_content from blli_posting where posting_status = 'unconfirmed'
 				) where small_product_count > 1 order by posting_url
 			)
 		) where page = #{pageNo}
@@ -102,8 +104,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="unconfirmedSmallProduct" resultMap="bspvRM">
-		select small_product, mid_category, small_product_whentouse_min, small_product_whentouse_max, small_product_main_photo_link, small_product_id from(
-			select ceil(rownum/10) as page, small_product, mid_category, small_product_whentouse_min, small_product_whentouse_max, small_product_main_photo_link, small_product_id
+		select small_product, mid_category, small_product_whentouse_min, small_product_whentouse_max, 
+		small_product_main_photo_link, small_product_id from(
+			select ceil(rownum/10) as page, small_product, mid_category, small_product_whentouse_min, 
+			small_product_whentouse_max, small_product_main_photo_link, small_product_id
 			from blli_small_product where small_product_status = 'unconfirmed'
 		) where page = #{pageNo}
 	</select>
@@ -137,12 +141,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<update id="registerSmallProduct">
-		update blli_small_product set small_product_status = 'confirmed', small_product_whentouse_min = #{smallProductWhenToUseMin}, small_product_whentouse_max = #{smallProductWhenToUseMax}
+		update blli_small_product set small_product_status = 'confirmed', small_product_whentouse_min = #{smallProductWhenToUseMin}, 
+		small_product_whentouse_max = #{smallProductWhenToUseMax}
 		where small_product_id = #{smallProductId}
 	</update>
 	
 	<update id="registerAndUpdateSmallProduct">
-		update blli_small_product set small_product_status = 'confirmed', small_product_whentouse_min = #{smallProductWhenToUseMin}, small_product_whentouse_max = #{smallProductWhenToUseMax}, small_product = #{smallProduct}
+		update blli_small_product set small_product_status = 'confirmed', small_product_whentouse_min = #{smallProductWhenToUseMin}, 
+		small_product_whentouse_max = #{smallProductWhenToUseMax}, small_product = #{smallProduct}
 		where small_product_id = #{smallProductId}
 	</update>
 	

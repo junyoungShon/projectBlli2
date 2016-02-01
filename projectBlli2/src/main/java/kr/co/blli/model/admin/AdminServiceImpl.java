@@ -107,7 +107,8 @@ public class AdminServiceImpl implements AdminService{
 		for(int i=0;i<postingList.size();i++){
 			String url = postingList.get(i).getPostingUrl();
 			String smallProduct = postingList.get(i).getSmallProduct();
-			Document doc = Jsoup.connect("http://shopping.naver.com/search/all_search.nhn?query="+smallProduct+"&pagingIndex=1&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&frm=NVSHMDL").get();
+			Document doc = Jsoup.connect("http://shopping.naver.com/search/all_search.nhn?query="+smallProduct+
+					"&pagingIndex=1&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&frm=NVSHMDL").get();
 			Elements imgTag = doc.select("img");
 			HashMap<String, String> smallProductImage = new HashMap<String, String>();
 			for(Element e : imgTag){
@@ -156,20 +157,23 @@ public class AdminServiceImpl implements AdminService{
 		if(pageNo == null || pageNo == ""){
 			pageNo = "1";
 		}
-		ArrayList<BlliPostingVO> postingList = (ArrayList<BlliPostingVO>)adminDAO.postingListWithSmallProducts(pageNo); // 두개 이상의 소제품을 가지고 있는 포스팅 할당
+		// 두개 이상의 소제품을 가지고 있는 포스팅 할당
+		ArrayList<BlliPostingVO> postingList = (ArrayList<BlliPostingVO>)adminDAO.postingListWithSmallProducts(pageNo); 
 		String url = "";
 		String imgSource = "";
 		HashMap<String, String> smallProductImageList = new HashMap<String, String>();
 		for(int i=0;i<postingList.size();i++){
 			ArrayList<String> smallProductList = new ArrayList<String>();
-			if(postingList.get(i).getPostingUrl().equals(url)){ //이전 postingUrl과 현재 postingUrl이 같을 경우 해당 포스팅VO를 지우고 인덱스를 -1 해줌
+			//이전 postingUrl과 현재 postingUrl이 같을 경우 해당 포스팅VO를 지우고 인덱스를 -1 해줌
+			if(postingList.get(i).getPostingUrl().equals(url)){ 
 				postingList.remove(i);
 				i--;
 				continue;
 			}else{ //이전 postingUrl과 현재 postingUrl이 다를 경우 현재 postingUrl에 해당하는 소제품 목록과 대표 이미지 vo에 저장
 				url = postingList.get(i).getPostingUrl();
 				smallProductList.add(postingList.get(i).getSmallProduct());
-				Document doc = Jsoup.connect("http://shopping.naver.com/search/all_search.nhn?query="+postingList.get(i).getSmallProduct()+"&pagingIndex=1&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&frm=NVSHMDL").get();
+				Document doc = Jsoup.connect("http://shopping.naver.com/search/all_search.nhn?query="+postingList.get(i).getSmallProduct()+
+						"&pagingIndex=1&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&frm=NVSHMDL").get();
 				Elements imgTag = doc.select("img");
 				for(Element e : imgTag){
 					if(e.attr("alt").equals(postingList.get(i).getSmallProduct())){
@@ -182,7 +186,8 @@ public class AdminServiceImpl implements AdminService{
 					if(url.equals(postingList.get(j).getPostingUrl())){
 						smallProductList.add(postingList.get(j).getSmallProduct());
 						if(!smallProductImageList.containsKey(postingList.get(j).getSmallProduct())){
-							doc = Jsoup.connect("http://shopping.naver.com/search/all_search.nhn?query="+postingList.get(j).getSmallProduct()+"&pagingIndex=1&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&frm=NVSHMDL").get();
+							doc = Jsoup.connect("http://shopping.naver.com/search/all_search.nhn?query="+postingList.get(j).getSmallProduct()+
+									"&pagingIndex=1&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&frm=NVSHMDL").get();
 							imgTag = doc.select("img");
 							for(Element e : imgTag){
 								if(e.attr("alt").equals(postingList.get(j).getSmallProduct())){
@@ -250,7 +255,7 @@ public class AdminServiceImpl implements AdminService{
 	
 	/**
 	 * @Method Name : selectProduct
-	 * @Method 설명 : 두개 이상의 소제품을 가지고 있는 포스팅을 한개의 소제품으로 변경해주는 메서드
+	 * @Method 설명 : 두개 이상의 소제품을 가지고 있는 포스팅을 한개 또는 두개 이상의 소제품으로 변경해주는 메서드
 	 * @작성일 : 2016. 1. 19.
 	 * @param urlAndProduct
 	 */
@@ -329,7 +334,8 @@ public class AdminServiceImpl implements AdminService{
 			}else{
 				String smallProductWhenToUseMin = smallProductInfo.get(i).get("smallProductWhenToUseMin").toString();
 				String smallProductWhenToUseMax = smallProductInfo.get(i).get("smallProductWhenToUseMax").toString();
-				if((smallProductWhenToUseMin == null || smallProductWhenToUseMin == "") && (smallProductWhenToUseMax == null || smallProductWhenToUseMax == "")){
+				if((smallProductWhenToUseMin == null || smallProductWhenToUseMin == "") && 
+						(smallProductWhenToUseMax == null || smallProductWhenToUseMax == "")){
 					adminDAO.updateSmallProductName(vo);
 				}else{
 					if(smallProductWhenToUseMin == null || smallProductWhenToUseMin == ""){

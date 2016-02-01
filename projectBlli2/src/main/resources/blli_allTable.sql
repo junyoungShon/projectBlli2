@@ -95,7 +95,7 @@ CREATE TABLE blli_small_product ( -- naver_shopping_link  VARCHAR2(300) NOT NULL
    small_product_main_photo_link VARCHAR2(300) NOT NULL ,
    small_product_score  NUMBER(4) default 0 ,
    small_product_posting_count NUMBER(8) NOT NULL , -- default 0을 NOT NULL로 변경
-   naver_shopping_order NUMBER(5) NOT NULL, -- 추가
+   naver_shopping_rank NUMBER(5) NOT NULL, -- 추가, naver_shopping_order를 naver_shopping_rank로 변경
    product_register_day DATE NOT NULL, -- 추가
    mid_category_id      VARCHAR2(30) NOT NULL, -- 추가
    small_product_status VARCHAR2(30) NOT NULL, -- 추가
@@ -122,7 +122,7 @@ CREATE TABLE blli_posting (
 	posting_scrape_count NUMBER(3) default 0, -- 추가, 컬럼명 변경
 	posting_author           VARCHAR2(100) NOT NULL, -- 추가
 	posting_date             DATE NOT NULL, -- 추가
-	posting_order            NUMBER(3) NOT NULL, -- 추가
+	posting_rank            NUMBER(3) NOT NULL, -- 추가, posting_order를 posting_rank로 변경
 	posting_reply_count      NUMBER(4) NOT NULL, -- 추가
 	posting_status            VARCHAR2(30) NOT NULL, -- 추가
 	constraint fk_posting_small_prod_id foreign key(small_product_id) references blli_small_product(small_product_id),

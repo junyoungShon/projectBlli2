@@ -11,7 +11,7 @@ public class BlliSmallProductVO {
 	private String smallProductMainPhotoLink;
 	private int smallProductScore;
 	private String naverShoppingLink;
-	private int naverShoppingOrder;
+	private int naverShoppingRank;
 	private int smallProductPostingCount;
 	private String productRegisterDay;
 	private String smallProductId;
@@ -27,7 +27,7 @@ public class BlliSmallProductVO {
 			int smallProductWhenToUseMin, int smallProductWhenToUseMax,
 			int smallProductDibsCount, String smallProductMainPhotoLink,
 			int smallProductScore, String naverShoppingLink,
-			int naverShoppingOrder, int smallProductPostingCount,
+			int naverShoppingRank, int smallProductPostingCount,
 			String productRegisterDay, String smallProductId, int isDib) {
 		super();
 		this.smallProduct = smallProduct;
@@ -40,7 +40,7 @@ public class BlliSmallProductVO {
 		this.smallProductMainPhotoLink = smallProductMainPhotoLink;
 		this.smallProductScore = smallProductScore;
 		this.naverShoppingLink = naverShoppingLink;
-		this.naverShoppingOrder = naverShoppingOrder;
+		this.naverShoppingRank = naverShoppingRank;
 		this.smallProductPostingCount = smallProductPostingCount;
 		this.productRegisterDay = productRegisterDay;
 		this.smallProductId = smallProductId;
@@ -107,11 +107,11 @@ public class BlliSmallProductVO {
 	public void setNaverShoppingLink(String naverShoppingLink) {
 		this.naverShoppingLink = naverShoppingLink;
 	}
-	public int getNaverShoppingOrder() {
-		return naverShoppingOrder;
+	public int getNaverShoppingRank() {
+		return naverShoppingRank;
 	}
-	public void setNaverShoppingOrder(int naverShoppingOrder) {
-		this.naverShoppingOrder = naverShoppingOrder;
+	public void setNaverShoppingRank(int naverShoppingRank) {
+		this.naverShoppingRank = naverShoppingRank;
 	}
 	public int getSmallProductPostingCount() {
 		return smallProductPostingCount;
@@ -149,7 +149,7 @@ public class BlliSmallProductVO {
 				+ ", smallProductMainPhotoLink=" + smallProductMainPhotoLink
 				+ ", smallProductScore=" + smallProductScore
 				+ ", naverShoppingLink=" + naverShoppingLink
-				+ ", naverShoppingOrder=" + naverShoppingOrder
+				+ ", naverShoppingRank=" + naverShoppingRank
 				+ ", smallProductPostingCount=" + smallProductPostingCount
 				+ ", productRegisterDay=" + productRegisterDay
 				+ ", smallProductId=" + smallProductId + ", isDib=" + isDib

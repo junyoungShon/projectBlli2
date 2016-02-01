@@ -19,6 +19,7 @@ import org.jsoup.select.Elements;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+//@Component
 @Service
 public class PostingScheduler {
 	
@@ -37,7 +38,7 @@ public class PostingScheduler {
 	 * @return
 	 * @throws IOException
 	 */
-	//@Scheduled(cron = "00 00 04 * * *")
+	@Scheduled(cron = "00 00 04 * * *")
 	public void insertPosting() throws IOException {
 		long start = System.currentTimeMillis(); // 시작시간 
 		
@@ -129,7 +130,7 @@ public class PostingScheduler {
 						postingMediaCount = 0; //이미지 갯수 초기화
 						postingVO.setSmallProductId(smallProductList.get(i).getSmallProductId()); //소제품ID를 vo에 저장
 						postingVO.setSmallProduct(smallProduct.replaceAll("%26", "&")); //소제품을 vo에 저장
-						postingVO.setPostingOrder(countOfPosting+1); //포스팅 검색시 배열 순서(검색 순위)를 vo에 저장
+						postingVO.setPostingRank(countOfPosting+1); //포스팅 검색시 배열 순서(검색 순위)를 vo에 저장
 						
 						Elements reply = doc.select(".postre .pcol2");
 						for(Element el : reply){

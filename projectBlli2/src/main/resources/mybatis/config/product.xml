@@ -30,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="smallProductMainPhotoLink" column="small_product_main_photo_link"/>
  		<result property="smallProductScore" column="small_product_score"/>
  		<result property="smallProductPostingCount" column="small_product_posting_count"/>
- 		<result property="naverShoppingOrder" column="naver_shopping_order"/>
+ 		<result property="naverShoppingRank" column="naver_shopping_rank"/>
  		<result property="productRegisterDay" column="product_register_day"/>
  		<result property="midCategoryId" column="mid_category_id"/>
  		<result property="smallProductId" column="small_product_id"/>
@@ -75,15 +75,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<insert id="insertSmallProduct">
 		insert into blli_small_product(small_product_id, small_product, mid_category, small_product_maker, small_product_main_photo_link, 
-		small_product_posting_count, naver_shopping_order, product_register_day, mid_category_id, small_product_status)
+		small_product_posting_count, naver_shopping_rank, product_register_day, mid_category_id, small_product_status)
 		values(#{smallProductId}, #{smallProduct}, #{midCategory}, #{smallProductMaker}, #{smallProductMainPhotoLink}, 
-		#{smallProductPostingCount}, #{naverShoppingOrder}, #{productRegisterDay}, #{midCategoryId}, 'unconfirmed')
+		#{smallProductPostingCount}, #{naverShoppingRank}, #{productRegisterDay}, #{midCategoryId}, 'unconfirmed')
 	</insert>
 	
 	<update id="updateSmallProduct">
 		update blli_small_product set small_product = #{smallProduct}, mid_category = #{midCategory}, small_product_maker = #{smallProductMaker}, 
 		small_product_main_photo_link = #{smallProductMainPhotoLink},
-		small_product_posting_count = #{smallProductPostingCount}, naver_shopping_order = #{naverShoppingOrder}, 
+		small_product_posting_count = #{smallProductPostingCount}, naver_shopping_rank = #{naverShoppingRank}, 
 		product_register_day = #{productRegisterDay}
 		where small_product_id = #{smallProductId}
 	</update>
@@ -122,7 +122,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectSameAgeMomBestPickedSmallProductList" parameterType="HashMap" resultMap="bspvRM">
 		<![CDATA[
 		select * from (select rownum as rn,SMALL_PRODUCT, MID_CATEGORY,mid_CATEGORY_ID, SMALL_PRODUCT_MAKER, SMALL_PRODUCT_WHENTOUSE_MIN, SMALL_PRODUCT_WHENTOUSE_MAX, SMALL_PRODUCT_DIBS_COUNT, 
-		SMALL_PRODUCT_MAIN_PHOTO_LINK, SMALL_PRODUCT_SCORE, SMALL_PRODUCT_POSTING_COUNT, NAVER_SHOPPING_ORDER, PRODUCT_REGISTER_DAY,small_product_id
+		SMALL_PRODUCT_MAIN_PHOTO_LINK, SMALL_PRODUCT_SCORE, SMALL_PRODUCT_POSTING_COUNT, NAVER_SHOPPING_RANK, PRODUCT_REGISTER_DAY,small_product_id
 		from BLLI_SMALL_PRODUCT
 		where MID_CATEGORY = #{recommMid} and #{babyMonthAge}  >= SMALL_PRODUCT_WHENTOUSE_MIN and #{babyMonthAge} <= SMALL_PRODUCT_WHENTOUSE_MAX
 		order by SMALL_PRODUCT_DIBS_COUNT desc) where rn<3
@@ -131,7 +131,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectSameAgeMomBestPickedSmallProduct" parameterType="HashMap" resultMap="bspvRM">
 		<![CDATA[
 		select * from (select rownum as rn,SMALL_PRODUCT, MID_CATEGORY,mid_CATEGORY_ID, SMALL_PRODUCT_MAKER, SMALL_PRODUCT_WHENTOUSE_MIN, SMALL_PRODUCT_WHENTOUSE_MAX, SMALL_PRODUCT_DIBS_COUNT, 
-		SMALL_PRODUCT_MAIN_PHOTO_LINK, SMALL_PRODUCT_SCORE, SMALL_PRODUCT_POSTING_COUNT,  NAVER_SHOPPING_ORDER, PRODUCT_REGISTER_DAY,small_product_id
+		SMALL_PRODUCT_MAIN_PHOTO_LINK, SMALL_PRODUCT_SCORE, SMALL_PRODUCT_POSTING_COUNT,  NAVER_SHOPPING_RANK, PRODUCT_REGISTER_DAY,small_product_id
 		from BLLI_SMALL_PRODUCT
 		where MID_CATEGORY = #{recommMid} and #{babyMonthAge}  >= SMALL_PRODUCT_WHENTOUSE_MIN and #{babyMonthAge} <= SMALL_PRODUCT_WHENTOUSE_MAX
 		order by SMALL_PRODUCT_DIBS_COUNT desc) where rn=1

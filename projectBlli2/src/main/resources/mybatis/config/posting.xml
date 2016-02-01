@@ -20,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="postingScrapeCount" column="posting_scrape_count"/>
  		<result property="postingAuthor" column="posting_author"/>
  		<result property="postingDate" column="posting_date"/>
- 		<result property="postingOrder" column="posting_order"/>
+ 		<result property="postingRank" column="posting_rank"/>
  		<result property="postingReplyCount" column="posting_reply_count"/>
  		<result property="smallProduct" column="small_product"/>
  		<result property="smallProductId" column="small_product_id"/>
@@ -42,22 +42,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		update blli_posting set posting_title = #{postingTitle}, posting_photo_link = #{postingPhotoLink}, 
  		posting_media_count = #{postingMediaCount}, posting_content = #{postingContent}, 
  		posting_summary = #{postingSummary}, posting_author = #{postingAuthor}, posting_date = #{postingDate}, 
- 		posting_order = #{postingOrder}, posting_reply_count = #{postingReplyCount} 
+ 		posting_rank = #{postingRank}, posting_reply_count = #{postingReplyCount} 
  		where posting_url = #{postingUrl} and small_product = #{smallProduct}
  	</update>
  	
  	<insert id="insertPosting">
  		insert into blli_posting(small_product_id, posting_url, small_product, posting_title, posting_photo_link, posting_media_count, 
- 		posting_content, posting_summary, posting_author, posting_date, posting_order, posting_reply_count, posting_status)
+ 		posting_content, posting_summary, posting_author, posting_date, posting_rank, posting_reply_count, posting_status)
  		values(#{smallProductId}, #{postingUrl}, #{smallProduct}, #{postingTitle}, #{postingPhotoLink}, #{postingMediaCount}, 
- 		#{postingContent}, #{postingSummary}, #{postingAuthor}, #{postingDate}, #{postingOrder}, #{postingReplyCount}, 'unconfirmed')
+ 		#{postingContent}, #{postingSummary}, #{postingAuthor}, #{postingDate}, #{postingRank}, #{postingReplyCount}, 'unconfirmed')
  	</insert>
 
 	<select id="searchSmallProduct" resultMap="bpvRM">
-		select posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, posting_scrape_count, posting_like_count, posting_dislike_count, posting_author, posting_date from(
+		select posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, posting_scrape_count, 
+		posting_like_count, posting_dislike_count, posting_author, posting_date from(
 			select ceil(rownum/5) as page, posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, 
-			posting_scrape_count, posting_like_count, posting_dislike_count, posting_author, to_char(posting_date, 'YYYY.MM.DD') as posting_date 
-			from blli_posting where small_product like '%' || #{searchWord} || '%' and posting_status = 'confirmed'
+			posting_scrape_count, posting_like_count, posting_dislike_count, posting_author, posting_date from(
+				select posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, 
+				posting_scrape_count, posting_like_count, posting_dislike_count, posting_author, to_char(posting_date, 'YYYY.MM.DD') as posting_date 
+				from blli_posting where small_product like '%' || #{searchWord} || '%' and posting_status = 'confirmed' order by posting_score desc
+			)
 		) where page = #{pageNo}
 	</select>
 	

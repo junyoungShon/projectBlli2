@@ -21,7 +21,7 @@ public class BlliPostingVO {
 	private int postingScrapeCount;
 	private String postingAuthor;
 	private String postingDate;
-	private int postingOrder;
+	private int postingRank;
 	private int postingReplyCount;
 	private String postingStatus;
 	//16.01.22 추가
@@ -48,7 +48,7 @@ public class BlliPostingVO {
 			int postingDislikeCount, int postingMediaCount,
 			String postingPhotoLink, int postingTotalResidenceTime,
 			int postingViewCount, int postingScrapeCount, String postingAuthor,
-			String postingDate, int postingOrder, int postingReplyCount,
+			String postingDate, int postingRank, int postingReplyCount,
 			String postingStatus, int isLike, int isDisLike, int isScrapped,
 			ArrayList<String> imageList,
 			HashMap<String, String> smallProductImage,
@@ -70,7 +70,7 @@ public class BlliPostingVO {
 		this.postingScrapeCount = postingScrapeCount;
 		this.postingAuthor = postingAuthor;
 		this.postingDate = postingDate;
-		this.postingOrder = postingOrder;
+		this.postingRank = postingRank;
 		this.postingReplyCount = postingReplyCount;
 		this.postingStatus = postingStatus;
 		this.isLike = isLike;
@@ -208,12 +208,12 @@ public class BlliPostingVO {
 		this.postingDate = postingDate;
 	}
 
-	public int getPostingOrder() {
-		return postingOrder;
+	public int getPostingRank() {
+		return postingRank;
 	}
 
-	public void setPostingOrder(int postingOrder) {
-		this.postingOrder = postingOrder;
+	public void setPostingRank(int postingRank) {
+		this.postingRank = postingRank;
 	}
 
 	public int getPostingReplyCount() {
@@ -298,7 +298,7 @@ public class BlliPostingVO {
 				+ ", postingViewCount=" + postingViewCount
 				+ ", postingScrapeCount=" + postingScrapeCount
 				+ ", postingAuthor=" + postingAuthor + ", postingDate="
-				+ postingDate + ", postingOrder=" + postingOrder
+				+ postingDate + ", postingRank=" + postingRank
 				+ ", postingReplyCount=" + postingReplyCount
 				+ ", postingStatus=" + postingStatus + ", isLike=" + isLike
 				+ ", isDisLike=" + isDisLike + ", isScrapped=" + isScrapped
