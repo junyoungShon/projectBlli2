@@ -9,6 +9,7 @@ import kr.co.blli.model.posting.PostingService;
 import kr.co.blli.model.product.ProductService;
 import kr.co.blli.model.scheduler.CategoryAndProductScheduler;
 import kr.co.blli.model.scheduler.PostingScheduler;
+import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 
 import org.springframework.stereotype.Controller;
@@ -115,8 +116,22 @@ public class SearchController {
 	 */
 	@RequestMapping("recordResidenceTime.do")
 	public void recordResidenceTime(BlliPostingVO blliPostingVO){
-		System.out.println(blliPostingVO);
 		postingService.recordResidenceTime(blliPostingVO);
 	}
 	
+	@RequestMapping("goMidCategoryDetailView.do")
+	public ModelAndView goMidCategoryDetailView(BlliMidCategoryVO blliMidCategoryVO){
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("midCategoryDetailPage");
+		blliMidCategoryVO.getMidCategoryId();
+		return mav;
+	}
+
+	@RequestMapping("goSmallProductDetailView.do")
+	public ModelAndView goSmallProductDetailView(BlliMidCategoryVO blliMidCategoryVO){
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("smallProductDetailPage");
+		blliMidCategoryVO.getMidCategoryId();
+		return mav;
+	}
 }

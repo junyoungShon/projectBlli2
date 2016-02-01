@@ -25,7 +25,7 @@ public interface ProductService {
 
 	public int smallProductDib(BlliMemberDibsVO blliMemberDibsVO);
 
-	public int postingScrap(BlliMemberScrapeVO blliMemberScrapVO);
+	public int postingScrape(BlliMemberScrapeVO blliMemberScrapVO);
 
 	public int postingLike(BlliPostingLikeVO blliPostingLikeVO);
 

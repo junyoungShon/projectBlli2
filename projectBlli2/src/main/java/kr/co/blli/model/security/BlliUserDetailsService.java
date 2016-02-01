@@ -13,7 +13,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 public class BlliUserDetailsService implements UserDetailsService{
 	@Resource
 	private MemberDAO memberDAO;
-	
+	/**
+	 * User의 정보를 담는 User객체를 멤버의 이름만으로 생성해준다.
+	 */
 	@Override
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
@@ -21,8 +23,11 @@ public class BlliUserDetailsService implements UserDetailsService{
 		if(blliMemberVO==null)
 			throw new UsernameNotFoundException(username);	
 		BlliUserDetails blliUserDetails = 
-				new BlliUserDetails(blliMemberVO.getMemberId(),blliMemberVO.getMemberPassword(),blliMemberVO.getAuthority());
-		User user = new User(blliMemberVO.getMemberId(),blliMemberVO.getMemberPassword(), blliUserDetails.getAuthorities());
+				new BlliUserDetails
+				(blliMemberVO.getMemberId(),blliMemberVO.getMemberPassword(),
+						blliMemberVO.getAuthority());
+		User user = new User(blliMemberVO.getMemberId(),
+				blliMemberVO.getMemberPassword(), blliUserDetails.getAuthorities());
 		return user;
 	}
 }

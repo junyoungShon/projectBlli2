@@ -197,3 +197,6 @@ select posting_url,small_product,small_product_id,posting_title,posting_summary,
 		from blli_posting
 		where posting_status = 'confirmed'
 		order by posting_score asc;
+		
+		
+		create table persistent_logins (username varchar(64) not null, series varchar(64) primary key, token varchar(64) not null, last_used timestamp not null)

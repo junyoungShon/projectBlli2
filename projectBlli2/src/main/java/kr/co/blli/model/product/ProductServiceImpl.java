@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 public class ProductServiceImpl implements ProductService{
 	@Resource
 	private ProductDAO productDAO;
-	
+
 	/**
 	  * @Method Name : selectRecommendingMidCategory
 	  * @Method 설명 : 회원의 추천받을 아이이름과 , 아이디를 이용해 추천대상인 중분류 제품을 선정한다.(회원이 추천을 기피했던 중제품 제외)
@@ -146,7 +146,7 @@ public class ProductServiceImpl implements ProductService{
 			blliPostingDisLikeVO.setPostingUrl(blliPostingVOList.get(i).getPostingUrl());
 			blliPostingDisLikeVO.setSmallProductId(blliPostingVOList.get(i).getSmallProductId());
 			//스크랩 여부 판단.
-			if(productDAO.selectThisPostingScrap(blliMemberScrapVO)!=0)
+			if(productDAO.selectThisPostingScrape(blliMemberScrapVO)!=0)
 				blliPostingVOList.get(i).setIsScrapped(1);
 			else
 				blliPostingVOList.get(i).setIsScrapped(0);
@@ -178,13 +178,13 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public int postingScrap(BlliMemberScrapeVO blliMemberScrapVO) {
+	public int postingScrape(BlliMemberScrapeVO blliMemberScrapVO) {
 		int result = 0;
-		if(productDAO.deletePostingScrapInfo(blliMemberScrapVO)==0){
-			result = productDAO.insertPostingScrap(blliMemberScrapVO);
-			productDAO.updatePlusPostingScrapCount(blliMemberScrapVO);
+		if(productDAO.deletePostingScrapeInfo(blliMemberScrapVO)==0){
+			result = productDAO.insertPostingScrape(blliMemberScrapVO);
+			productDAO.updatePlusPostingScrapeCount(blliMemberScrapVO);
 		}else{
-			productDAO.updateMinusPostingScrapCount(blliMemberScrapVO);
+			productDAO.updateMinusPostingScrapeCount(blliMemberScrapVO);
 		}
 		return result;
 	}

@@ -71,13 +71,12 @@ public class MemberServiceImpl implements MemberService {
 		memberDAO.insertMemberInfo(blliMemberVO);
 		//회원 가입 직후 권한을 부여하여 로그인을 시킨 뒤 페이지 이동 시켜줌
 		BlliUserDetails blliUserDetails = new BlliUserDetails
-				(blliMemberVO.getMemberId(), blliMemberVO.getMemberPassword(), blliMemberVO.getAuthority());
-		Authentication authentication = new UsernamePasswordAuthenticationToken(blliUserDetails, null,blliUserDetails.getAuthorities());
+				(blliMemberVO.getMemberId(), 
+						blliMemberVO.getMemberPassword(), blliMemberVO.getAuthority());
+		Authentication authentication = new UsernamePasswordAuthenticationToken
+				(blliUserDetails, null,blliUserDetails.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	};
-	
-
-	
 	/**
 	 * 
 	  * @Method Name : findMemberById
@@ -110,7 +109,7 @@ public class MemberServiceImpl implements MemberService {
 			blliBabyVO.setBabyName(request.getParameter("BlliBabyVO["+i+"].babyName"));
 			blliBabyVO.setBabyBirthday(request.getParameter("BlliBabyVO["+i+"].babyBirthday"));
 			blliBabyVO.setBabySex(request.getParameter("BlliBabyVO["+i+"].babySex"));
-				//파일을 업로드 하고, 저장한 파일명을 반환해준다.
+			//파일을 업로드 하고, 저장한 파일명을 반환해준다.
 			String storedFileName = blliFileUtils.parseInsertFileInfo(request,blliBabyVO);
 			if(storedFileName!=null){
 				blliBabyVO.setBabyPhoto(storedFileName);
