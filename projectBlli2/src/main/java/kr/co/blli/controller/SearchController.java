@@ -142,6 +142,7 @@ public class SearchController {
 	@RequestMapping("selectSmallProductRank.do")
 	@ResponseBody
 	public List<BlliSmallProductVO> selectSmallProductRank(String midCategoryId){
+		System.out.println(productService.selectSmallProductRank(midCategoryId));
 		return productService.selectSmallProductRank(midCategoryId);
 	}
 	@RequestMapping("selectPostingBySmallProduct.do")

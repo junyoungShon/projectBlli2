@@ -102,7 +102,7 @@ CREATE TABLE blli_small_product ( -- naver_shopping_link  VARCHAR2(300) NOT NULL
    search_time DATE NULL, -- 추가
    constraint fk_small_prod_mid_cate foreign key(mid_category, mid_category_id) references blli_mid_category(mid_category, mid_category_id) -- mid_category_id 추가
 );
-
+ALTER TABLE  blli_small_product  RENAME COLUMN naver_shopping_rank TO naver_shopping_rank
 
 drop table blli_posting cascade constraint;
 CREATE TABLE blli_posting (

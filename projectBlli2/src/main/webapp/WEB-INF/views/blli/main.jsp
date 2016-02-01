@@ -41,8 +41,6 @@
 		//중분류 추천 제거 클릭 시 추천 대상에서 제외
 		$('.recommendMidDelete').click(function(){
 			if(confirm('정말 삭제하시겠어요??')){
-				//alert($(this).parent().parent().parent().html());
-				//alert($(this).siblings('.midCategoryId').val());
 				$.ajax({
 					type:"get",
 					url:"deleteRecommendMidCategory.do?midCategory="+$(this).children('.midCategoryValue').val()
@@ -65,23 +63,23 @@
 			});
 		});
 		//소제품 찜하기 스크립트
-		$('.smallProductDibBtn').click(function(){
-			alert($(this).children('.jjimImage').attr("src"));
+		$('.jbContent').on("click", ".smallProductDibBtn",function(){
 			$.ajax({
 				type:"get",
-				url:"smallProductDib.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(this).next('.smallProductId').val(),
+				url:"smallProductDib.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(this).siblings('.smallProductId').val(),
 				success:function(result){
 					alert(result);
 					if(result==1){
-						$(this).children('.jjimImage').attr({"src":"./img/jjim_ov.png"});
+						$(this).removeClass("fa-heart-o");
+						$(this).addClass("fa-heart");
 					}else if(result==0){
-						$(this).children('.jjimImage').attr({"src":"./img/jjim.png"});
+						$(this).removeClass("fa-heart-o").addClass("fa-heart");
 					}
 				}
 			});
 		});
 		//포스팅 스크랩 스크립트
-		$('.postingScrapBtn').click(function(){
+		$('.postingScrapeBtn').click(function(){
 			$.ajax({
 				type:"get",
 				url:"postingScrape.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(this).parent().parent().parent().siblings('.smallProductIdInfo').val()
@@ -105,7 +103,7 @@
 					if(result==1){
 						alert('좋아요 성공!');
 					}else if(result==0){
-						alert('좋아요 해제!');AKIAIXVJXVD7QC5UNTCQAKIAIXVJXVD7QC5UNTCQAKIAIXVJXVD7QC5UNTCQ
+						alert('좋아요 해제!');
 					}
 				}
 			}); 
@@ -142,6 +140,7 @@
 				success:function(data){
 					var accordionDetailHTML = '<table><colgroup><col width="20%"></colgroup>';
 					for(var i=0;i<data.length;i++){
+						alert(data[i].smallProduct);
 						accordionDetailHTML += '<tr><th>'+(i+1)+'위</th><td>'+data[i].smallProduct+' </td></tr>'
 					}
 					accordionDetailHTML += '</table>';
@@ -149,7 +148,7 @@
 				}
 			}); 
 		});
-		$(window).scroll(function(){ // ① 스크롤 이벤트 최초 발생
+		$(window).scroll(function(){ 
 		    if($(window).scrollTop() >= $(document).height() - $(window).height()){  
 		    	pageNum++;
 	    		var smallProductId;
@@ -162,21 +161,66 @@
 			    		}
 		    		} 
 		    	});
-		    	alert(smallProductId);
 		    	$.ajax({
 		    		type : "get",
 		    		url : "selectPostingBySmallProduct.do?pageNum="+pageNum+"&smallProductIdList="+smallProductId+"&memberId=${sessionScope.blliMemberVO.memberId}",
 		    		success : function(data){
-		    			alert(data);
-		    			data﻿
+		    			var leftProductAjaxHTML = "";
+		    			var rightPostingAjaxHTML = "";
+		    			var postingScrapeAjaxHTML = '<i class="fa fa-bookmark-o postingScrapeBtn" style="color: gray"></i> ';
+		    			var postingLikeAjaxHTML = '<i class="fa fa-thumbs-up postingLikeBtn" style="color: gray"></i> ';
+		    			var postingDisLikeAjaxHTML = '<i class="fa fa-thumbs-down postingDisLikeBtn" style="color: gray"></i> ';
+		    			for(var i=0;i<data.length;i++){
+		    				if(data[i].isScrapped==1){
+		    					postingScrapeAjaxHTML = '<i class="fa fa-bookmark postingScrapeBtn" style="color: orange"></i>';
+		    				}
+		    				if(data[i].isLike==1){
+		    					postingLikeAjaxHTML = '<i class="fa fa-thumbs-up postingLikeBtn" style="color: orange"></i>';
+		    				}
+		    				if(data[i].isDisLike==1){
+		    					postingDisLikeAjaxHTML = '<i class="fa fa-thumbs-down postingDisLikeBtn" style="color: orange"></i>';
+		    				}
+		    				$('.postingForSmallProduct').each(function(index){
+		    						if(data[i].smallProductId==$($('.postingForSmallProduct').get(index)).children('.product_price').children('.fr').children().children('.smallProductId').val()){
+			    						leftProductAjaxHTML += '<div style="height:356px;" class="postingForSmallProduct">';
+			    						leftProductAjaxHTML += $($('.postingForSmallProduct').get(index)).html();
+			    						leftProductAjaxHTML += '</div>';
+			    						return false;
+				    				}
+		    				})
+							rightPostingAjaxHTML +=
+							'<input type="hidden" class="smallProductIdInfo" value="${postingList.smallProductId}">'+
+							'<input type="hidden" class="postingUrlInfo" value="${postingList.postingUrl}"><div style="height:356px;"><div class="result_ti">'+
+							'<div style="width:450px; overflow:hidden;white-space:nowrap; text-overflow:ellipsis;">'+
+							data[i].postingTitle+
+							'</div></div><div style="height:245px;"><div class="result_foto fl"><a href="goPosting.do?postingUrl='+
+							data[i].postingUrl+
+							'&smallProductId='+
+							data[i].smallProductId+'"><img src="http://t1.daumcdn.net/thumb/R1024x0/?fname='+
+							data[i].postingPhotoLink+
+							'" style="width: 342px; max-height: 247px;"></a></div><div class="fl"><div class="product_text2">'+
+							data[i].postingSummary+
+							'</div><div class="product_id"><div style="width:180px; overflow:hidden;white-space:nowrap; text-overflow:ellipsis;">'+
+							data[i].postingAuthor+
+							'</div></div></div></div><div class="product_sns"><div class="fl score">'+
+							data[i].postingScore+
+							'점</div><div class="fr sns">'+
+							postingScrapeAjaxHTML+
+							data[i].postingScrapeCount+' '+
+							postingLikeAjaxHTML+
+							data[i].postingLikeCount+' '+
+							postingDisLikeAjaxHTML+
+							data[i].postingLikeCount+' '+
+							'</div></div></div>'
+		    			}
+		    			
+		    			$('.main_left_product').append(leftProductAjaxHTML);
+		    			$('.main_left_con').append(rightPostingAjaxHTML);
+		    			leftProductAjaxHTML = "";
 		    		}
 		   		});
 		    }
 		});
-		/* 
-		<div class="main_product_ti">
-		<div style='width:205px; overflow:hidden;white-space:nowrap; text-overflow:ellipsis;'>
-				<span id="smallProductName-${smallProductIndex.index}"> */
 		
 	});
 </script>
@@ -200,7 +244,8 @@
 				</select>
 				<c:forEach items="${requestScope.blliMemberVO.blliBabyVOList}" var="babyList">
 					<c:if test="${babyList.recommending==1}">
-				<div class="main_baby_foto" style="background-image: url('${initParam.root}babyphoto/${babyList.babyPhoto}'); ">
+				<div class="main_baby_foto">
+					<img alt="아이 프사" src="${initParam.root}babyphoto/${babyList.babyPhoto}" style="border-radius:67px;width: 118px;height: 118px">
 				</div>
 				<div class="main_baby_name">
 						 ${babyList.babyName } ${babyList.babyMonthAge} 개월 입니다.
@@ -223,7 +268,7 @@
 							<li>
 								<div class="boxy-menu-item-top gallery-cell">
 									<div class="yellow_foto">
-									<img src='${recommProductList.midCategoryMainPhotoLink}'>
+									<img src='${recommProductList.midCategoryMainPhotoLink}' style="width: 115px;height: 115px;border-radius:20px">
 									</div>
 									<div class="yellow_ti">
 										${recommProductList.midCategory }
@@ -284,16 +329,18 @@
 						</div>
 						<div class="fr">
 							<c:if test="${blliSmallProductVOList.isDib==0}">
-								<a href="#" class="smallProductDibBtn">
-								<span style="font-size: 12px">${blliSmallProductVOList.smallProductDibsCount}</span>
-								<img src="./img/jjim.png" alt="찜" style="margin-top:10px;" class="jjimImage"></a>
-								<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
+								<div style="margin-top: 15px">
+									<i class="fa fa-heart-o fa-2x smallProductDibBtn" style="color: red"></i>
+									<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
+									<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
+								</div>
 							</c:if>
 							<c:if test="${blliSmallProductVOList.isDib==1}">
-								<a href="#" class="smallProductDibBtn">
-									<span style="font-size: 12px">${blliSmallProductVOList.smallProductDibsCount}</span>
-									<img src="./img/jjim_ov.png" alt="찜" style="margin-top:10px;" class="jjimImage"></a>
-								<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
+								<div style="margin-top: 15px">
+									<i class="fa fa-heart fa-2x smallProductDibBtn" style="color: red"></i>
+										<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
+									<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
+								</div>
 							</c:if>
 						</div>
 					</div>
@@ -310,7 +357,7 @@
 			<c:forEach items="${requestScope.blliPostingVOList}" var="postingList">
 				<c:forEach items="${requestScope.blliSmallProductVOList}" var="blliSmallProductVOList">
 				<c:if test="${postingList.smallProductId==blliSmallProductVOList.smallProductId}">
-			<div style="height:356px;">
+			<div style="height:356px;" class="postingForSmallProduct">
 				<div class="foto170">
 					<img src="${blliSmallProductVOList.smallProductMainPhotoLink}" style="height: 170px; width: 170px;">
 					<div class="product_month">
@@ -329,17 +376,20 @@
 						<p class="result_price">25,000원</p>
 					</div>
 					<div class="fr">
+						
 						<c:if test="${blliSmallProductVOList.isDib==0}">
-								<a href="#" class="smallProductDibBtn">
-								<span style="font-size: 12px">${blliSmallProductVOList.smallProductDibsCount}</span>
-								<img src="./img/jjim.png" alt="찜" style="margin-top:10px;" class="jjimImage"></a>
-								<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
-							</c:if>
-							<c:if test="${blliSmallProductVOList.isDib==1}">
-								<a href="#" class="smallProductDibBtn">
-									<span style="font-size: 12px">${blliSmallProductVOList.smallProductDibsCount}</span>
-									<img src="./img/jjim_ov.png" alt="찜" style="margin-top:10px;" class="jjimImage"></a>
-								<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
+								<div style="margin-top: 15px">
+									<i class="fa fa-heart-o fa-2x smallProductDibBtn" style="color: red"></i>
+									<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
+									<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
+								</div>
+						</c:if>
+						<c:if test="${blliSmallProductVOList.isDib==1}">
+								<div style="margin-top: 15px">
+									<i class="fa fa-heart fa-2x smallProductDibBtn" style="color: red"></i>
+										<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
+									<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
+								</div>
 						</c:if>
 					</div>
 				</div>
@@ -377,7 +427,6 @@
 							<div style='width:180px; overflow:hidden;white-space:nowrap; text-overflow:ellipsis;'>
 								${postingList.postingAuthor}
 							</div>
-							
 						</div>
 					</div>
 				</div>
@@ -387,27 +436,27 @@
 					</div>
 					<div class="fr sns">
 						<c:if test="${postingList.isScrapped==0}">
-							<img src="./img/icon_share.jpg" alt="공유아이콘">
+							<i class="fa fa-bookmark-o postingScrapeBtn" style="color: gray"></i>
 							${postingList.postingScrapeCount}
 						</c:if>
 						<c:if test="${postingList.isScrapped==1}">
-							<img src="./img/icon_share.jpg" alt="공유아이콘">
+							<i class="fa fa-bookmark postingScrapeBtn" style="color: orange"></i>
 							${postingList.postingScrapeCount}
 						</c:if>		
 						<c:if test="${postingList.isLike==0}">
-							<img src="./img/icon_like.jpg" alt="좋아요아이콘">
+							<i class="fa fa-thumbs-up postingLikeBtn" style="color: gray"></i>
 							${postingList.postingLikeCount}
 						</c:if>
 						<c:if test="${postingList.isLike==1}">
-							<img src="./img/icon_like.jpg" alt="좋아요아이콘">
+							<i class="fa fa-thumbs-up postingLikeBtn" style="color: gray"></i>
 							${postingList.postingLikeCount}
 						</c:if>
 						<c:if test="${postingList.isDisLike==0}">
-							<img src="./img/icon_hate.jpg" alt="싫어요아이콘">
+							<i class="fa fa-thumbs-down postingDisLikeBtn" style="color: gray"></i>
 							${postingList.postingLikeCount}
 						</c:if>
 						<c:if test="${postingList.isDisLike==1}">
-							<img src="./img/icon_hate.jpg" alt="싫어요아이콘">
+							<i class="fa fa-thumbs-down postingDisLikeBtn" style="color: gray"></i>
 							${postingList.postingLikeCount}
 						</c:if>
 					</div>
@@ -424,7 +473,8 @@
 				<div class="accordion-section">
 					<input type="hidden" value="${recommProductList.midCategoryId}" class="midCategoryIdValue"> 
 					<a class="accordion-section-header" data-target="#accordion-${midProductNum.index}">
-						<div class="foto50" style="background-image: url('${recommProductList.midCategoryMainPhotoLink}');">
+						<div class="foto50">
+							<img alt="" src="${recommProductList.midCategoryMainPhotoLink}" style="width: 50px;height: 50px;">
 						</div>
 						<div class="main_right_name">
 							${recommProductList.midCategory }
@@ -447,42 +497,5 @@
 
 
 
-
-<%-- 
-
-<h1>또래 엄마들이 많이 찜한 상품들입니다.</h1>
-<table border="1" >
-	<tr>
-		<td>제품명</td><td>중분류</td><td>중분류id</td><td>제조사</td><td>사용시기</td><td>찜수</td><td>사진</td><td>점수</td>
-	</tr>
-
-	
-</table>
-<h1>현재 추천되고 있는 소제품관련 블로그!</h1>
-<table align="center" width="50%" border="1" bordercolor="silver" style="border-collapse: collapse; table-layout: fixed;" cellpadding="10" rules="none">
-
-</table>
-<h1>추천 중분류 상품 입니다.</h1>
-<table border="1" >
-	<tr>
-		<td>제품명</td><td>설명</td><td>이미지</td><td>누구꺼</td><td>사용시기</td><td>대분류</td><td>추천제외</td>
-	</tr>
-	<c:forEach items="${requestScope.blliMidCategoryVOList}" var="recommProductList">
-		<tr>
-			<td class="midCategory">${recommProductList.midCategory }</td><td>${recommProductList.midCategoryInfo}</td><td><img src='${recommProductList.midCategoryMainPhotoLink}'></td>
-			<td>
-				<c:forEach items="${requestScope.blliMemberVO.blliBabyVOList}" var="babyList">
-					<c:if test="${babyList.babyMonthAge>=recommProductList.whenToUseMin && babyList.babyMonthAge<=recommProductList.whenToUseMax}">
-						${babyList.babyName}
-					</c:if>
-				</c:forEach>
-			</td>
-			<td>${recommProductList.whenToUseMin}개월~${recommProductList.whenToUseMax}</td>
-			<td>${recommProductList.bigCategory}</td>
-			<td><input type="button" class="recommendMidDelete" value="삭제"><input type="hidden" value="${recommProductList.midCategoryId}" class="midCategoryId"></td>
-		</tr>
-	</c:forEach>
-	
-</table> --%>
 
 </html>
