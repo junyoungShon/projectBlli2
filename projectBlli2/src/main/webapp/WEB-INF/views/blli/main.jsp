@@ -7,7 +7,8 @@
 <script type="text/javascript">
 	//현재 스크롤바의 위치를 저장하는 변수 (px)
 	var currentScrollTop = 0;
-	     
+	//무한 스크롤의 현재 페이지 넘버를 저장
+	var pageNum = 1;
 	// 비동기식 jQuery이므로 window load 후 jQuery를 실행해야 함
 	window.onload = function() {
 	    // 새로고침 했을 경우를 대비한 메소드 실행
@@ -132,9 +133,53 @@
 			  wrapAround: true,
 			  pageDots: false
 		});
+		
+		$('.accordion-section').click(function(){
+			var accodionindex = $(this).index();
+			$.ajax({
+				type:"get",
+				url:"selectSmallProductRank.do?midCategoryId="+$(this).children('.midCategoryIdValue').val(),
+				success:function(data){
+					var accordionDetailHTML = '<table><colgroup><col width="20%"></colgroup>';
+					for(var i=0;i<data.length;i++){
+						accordionDetailHTML += '<tr><th>'+(i+1)+'위</th><td>'+data[i].smallProduct+' </td></tr>'
+					}
+					accordionDetailHTML += '</table>';
+					$('#accordion-'+accodionindex).html(accordionDetailHTML);
+				}
+			}); 
+		});
+		$(window).scroll(function(){ // ① 스크롤 이벤트 최초 발생
+		    if($(window).scrollTop() >= $(document).height() - $(window).height()){  
+		    	pageNum++;
+	    		var smallProductId;
+		    	$('.main_product_ti').each(function(index){
+		    		if($('#smallProductId-'+index).val()!=undefined){
+			    		if(index==0){
+			    			smallProductId = $('#smallProductId-'+index).val();
+			    		}else{
+			    			smallProductId += "/"+$('#smallProductId-'+index).val();
+			    		}
+		    		} 
+		    	});
+		    	alert(smallProductId);
+		    	$.ajax({
+		    		type : "get",
+		    		url : "selectPostingBySmallProduct.do?pageNum="+pageNum+"&smallProductIdList="+smallProductId+"&memberId=${sessionScope.blliMemberVO.memberId}",
+		    		success : function(data){
+		    			alert(data);
+		    			data﻿
+		    		}
+		   		});
+		    }
+		});
+		/* 
+		<div class="main_product_ti">
+		<div style='width:205px; overflow:hidden;white-space:nowrap; text-overflow:ellipsis;'>
+				<span id="smallProductName-${smallProductIndex.index}"> */
+		
 	});
 </script>
-
 	
 
 <div class="main_yellow">
@@ -215,19 +260,21 @@
 		</div>
 		<div class="main_product">
 			<ul class="midRecommProduct">
-			<c:forEach items="${requestScope.blliSmallProductVOList}" var="blliSmallProductVOList">
+			<c:forEach items="${requestScope.blliSmallProductVOList}" var="blliSmallProductVOList" varStatus="smallProductIndex">
 				<li class="gallery-cell">
 				<%-- ${blliSmallProductVOList.midCategoryId} --%>
 					<div class="foto205">
 						<img src="${blliSmallProductVOList.smallProductMainPhotoLink}" style="height: 207px; width: 207px;">
 						<div class="product_month">
-							${blliSmallProductVOList.smallProductWhenToUseMin}~${blliSmallProductVOList.smallProductWhenToUseMax}<br/>
+						${blliSmallProductVOList.smallProductWhenToUseMin}~${blliSmallProductVOList.smallProductWhenToUseMax}<br/>
 							개월
 						</div>
 					</div>
 					<div class="main_product_ti">
 						<div style='width:205px; overflow:hidden;white-space:nowrap; text-overflow:ellipsis;'>
-							${blliSmallProductVOList.smallProduct} / ${blliSmallProductVOList.smallProductMaker}
+								<input type="hidden" id="smallProductId-${smallProductIndex.index}" value="${blliSmallProductVOList.smallProductId}">
+								${blliSmallProductVOList.smallProduct}
+								 / ${blliSmallProductVOList.smallProductMaker}
 						</div>
 					</div>
 					<div class="product_price" style="margin:0px;">
@@ -265,6 +312,7 @@
 				<c:if test="${postingList.smallProductId==blliSmallProductVOList.smallProductId}">
 			<div style="height:356px;">
 				<div class="foto170">
+					<img src="${blliSmallProductVOList.smallProductMainPhotoLink}" style="height: 170px; width: 170px;">
 					<div class="product_month">
 							${blliSmallProductVOList.smallProductWhenToUseMin}~${blliSmallProductVOList.smallProductWhenToUseMax}<br/>
 						개월
@@ -310,7 +358,10 @@
 						
 			<div style="height:356px;">
 				<div class="result_ti">
-					${postingList.postingTitle}
+					<div style='width:450px; overflow:hidden;white-space:nowrap; text-overflow:ellipsis;'>
+							${postingList.postingTitle}
+					</div>
+					
 				</div>
 				<div style="height:245px;">
 					<div class="result_foto fl">
@@ -323,7 +374,10 @@
 							${postingList.postingSummary}
 						</div>
 						<div class="product_id">
-							${postingList.postingAuthor}
+							<div style='width:180px; overflow:hidden;white-space:nowrap; text-overflow:ellipsis;'>
+								${postingList.postingAuthor}
+							</div>
+							
 						</div>
 					</div>
 				</div>
@@ -366,60 +420,19 @@
 				월령별 추천상품
 			</div>
 			<div class="accordion accordion1">
-				<c:forEach items="${requestScope.blliMidCategoryVOList}" var="recommProductList">
+				<c:forEach items="${requestScope.blliMidCategoryVOList}" var="recommProductList" varStatus="midProductNum">
 				<div class="accordion-section">
-					<a class="accordion-section-header" data-target="#accordion-1">
+					<input type="hidden" value="${recommProductList.midCategoryId}" class="midCategoryIdValue"> 
+					<a class="accordion-section-header" data-target="#accordion-${midProductNum.index}">
 						<div class="foto50" style="background-image: url('${recommProductList.midCategoryMainPhotoLink}');">
 						</div>
 						<div class="main_right_name">
 							${recommProductList.midCategory }
 						</div>
 					</a>
-					<div id="accordion-1" class="accordion-section-content">
+					<div id="accordion-${midProductNum.index}" class="accordion-section-content">
 						<table>
-							<colgroup>
-								<col width="20%">
-							</colgroup>
-							<tr>
-								<th>
-									1위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-							<tr>
-								<th>
-									2위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-							<tr>
-								<th>
-									3위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-							<tr>
-								<th>
-									4위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
-							<tr>
-								<th>
-									5위
-								</th>
-								<td>
-									하은맘 프라임샴푸 의자 
-								</td>
-							</tr>
+							
 						</table>
 					</div>
 				</div>

@@ -51,7 +51,7 @@ public interface ProductDAO {
 
 	int updateSmallProductBuyLink(BlliSmallProductBuyLinkVO blliSmallProductBuyLinkVO);
 
-	List<BlliPostingVO> selectPostingBySmallProductList(String midCategoryId);
+	List<BlliPostingVO> selectPostingBySmallProductList(HashMap<String, String> paraMap);
 
 	int deleteDipsInfo(BlliMemberDibsVO blliMemberDibsVO);
 
@@ -94,5 +94,7 @@ public interface ProductDAO {
 	int selectThisPostingDisLike(BlliPostingDisLikeVO blliPostingDisLikeVO);
 
 	void updateSearchTime(String smallProductId);
+
+	List<BlliSmallProductVO> selectSmallProductRank(String midCategoryId);
 
 }

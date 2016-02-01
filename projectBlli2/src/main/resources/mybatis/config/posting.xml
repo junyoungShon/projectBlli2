@@ -75,12 +75,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 현석 쿼리 끝 -->
 	
 	<!-- 준영쿼리 시작 -->
-	<select id="selectPostingBySmallProductList" resultMap="bpvRM">
+	<select id="selectPostingBySmallProductList" resultMap="bpvRM" parameterType="map">
+		select * from(
+		select rownum rn ,posting_url,small_product,small_product_id,posting_title,posting_summary,posting_content,posting_score,posting_like_count,
+		posting_dislike_count,posting_media_count,posting_photo_link,posting_total_residence_time,posting_view_count,posting_scrape_count,posting_author,posting_date
+		from(
 		select posting_url,small_product,small_product_id,posting_title,posting_summary,posting_content,posting_score,posting_like_count,
 		posting_dislike_count,posting_media_count,posting_photo_link,posting_total_residence_time,posting_view_count,posting_scrape_count,posting_author,posting_date
 		from blli_posting
-		where posting_status = 'confirmed' and small_product_id = #{value}
-		order by posting_score asc
+		where posting_status = 'confirmed' and small_product_id = #{smallProductId}
+		order by posting_score desc)
+		) where rn = #{pageNum}
 	</select>
 	<!-- 포스팅 스크랩관련 쿼리 -->
 	<delete id="deletePostingScrapeInfo">
