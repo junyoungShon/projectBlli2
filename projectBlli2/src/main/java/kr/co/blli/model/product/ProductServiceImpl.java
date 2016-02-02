@@ -106,7 +106,6 @@ public class ProductServiceImpl implements ProductService{
 				blliSmallProductVOList.get(i).setIsDib(0);
 			}
 		}
-		System.out.println(blliSmallProductVOList);
 		return blliSmallProductVOList;
 	}
 	/**
@@ -118,12 +117,15 @@ public class ProductServiceImpl implements ProductService{
 	  * @return
 	 */
 	@Override
-	public List<BlliPostingVO> selectPostingBySmallProductList(List<BlliSmallProductVO> blliSmallProductVOList,String memberId) {
+	public List<BlliPostingVO> selectPostingBySmallProductList(List<BlliSmallProductVO> blliSmallProductVOList,String memberId,String pageNum) {
 		List<BlliPostingVO> blliPostingVOList = new ArrayList<BlliPostingVO>();
+		//파라미터로 사용할 맵을 생성하고, 페이지 번호를 넣는다.
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		paraMap.put("pageNum", pageNum);
 		//점수순 노출 , 상태(confirmed) , 포스팅 대상 소제품 등을 기준으로 출력<!극혐주의!> 포스팅 관련 이므로 여기있으면 안되지만 구조상 여기왔다 . 상의해보자
 		for(int i=0;i<blliSmallProductVOList.size();i++){
-			List<BlliPostingVO> tempList = productDAO.selectPostingBySmallProductList(blliSmallProductVOList.get(i).getSmallProductId());
-			System.out.println(blliSmallProductVOList.get(i).getMidCategoryId());
+			paraMap.put("smallProductId", blliSmallProductVOList.get(i).getSmallProductId());
+			List<BlliPostingVO> tempList = productDAO.selectPostingBySmallProductList(paraMap);
 			if(tempList!=null){
 				for(int j=0;j<tempList.size();j++){
 					blliPostingVOList.add(tempList.get(j));
@@ -211,6 +213,10 @@ public class ProductServiceImpl implements ProductService{
 			productDAO.updateMinusPostingDisLikeCount(blliPostingDisLikeVO);
 		}
 		return result;
+	}
+	@Override
+	public List<BlliSmallProductVO> selectSmallProductRank(String midCategoryId) {
+		return productDAO.selectSmallProductRank(midCategoryId);
 	}
 
 }

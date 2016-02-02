@@ -2,6 +2,8 @@ package kr.co.blli.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -11,9 +13,12 @@ import kr.co.blli.model.scheduler.CategoryAndProductScheduler;
 import kr.co.blli.model.scheduler.PostingScheduler;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliPostingVO;
+import kr.co.blli.model.vo.BlliSmallProductVO;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -133,5 +138,27 @@ public class SearchController {
 		mav.setViewName("smallProductDetailPage");
 		blliMidCategoryVO.getMidCategoryId();
 		return mav;
+	}
+	@RequestMapping("selectSmallProductRank.do")
+	@ResponseBody
+	public List<BlliSmallProductVO> selectSmallProductRank(String midCategoryId){
+		System.out.println(productService.selectSmallProductRank(midCategoryId));
+		return productService.selectSmallProductRank(midCategoryId);
+	}
+	@RequestMapping("selectPostingBySmallProduct.do")
+	@ResponseBody
+	public List<BlliPostingVO> selectPostingBySmallProduct(String smallProductIdList ,String pageNum,String memberId){
+		//return productService.selectSmallProductRank(midCategoryId);
+		System.out.println(smallProductIdList);
+		System.out.println(pageNum);
+		String list[] = smallProductIdList.split("/");
+		List<BlliSmallProductVO> blliSmallProductVOList = new ArrayList<BlliSmallProductVO>();
+		for(int i=0;i<list.length;i++){
+			BlliSmallProductVO blliSmallProductVO = new BlliSmallProductVO(); 
+			blliSmallProductVO.setSmallProductId(list[i]);
+			blliSmallProductVOList.add(blliSmallProductVO);
+		}
+		System.out.println(productService.selectPostingBySmallProductList(blliSmallProductVOList, memberId, pageNum));
+		return productService.selectPostingBySmallProductList(blliSmallProductVOList, memberId, pageNum);
 	}
 }

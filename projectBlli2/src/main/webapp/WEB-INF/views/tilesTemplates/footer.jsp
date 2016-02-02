@@ -1,7 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<footer>
-	<p><font color="black">&copy;Blli Company 2016</font></p>
+<footer style="width: 100% ; float: left; text-align: center; background-color: gold;">
+	<div class="fl login_bottom_ft">
+			</div>
+				블리는 3231개의 육아관련 상품과 이에대한 3216400개의 블로그를 소개합니다.
+	<p style="margin-top: 10px; margin-bottom: 10px"><font color="black" size="2px">&copy;Blli Company 2016
+				· 블로그리스트 소개 · 이용약관 · 개인정보취급방침 · 문의</font></p>
+			<%-- <div class="fr">
+				<a href="${initParam.root}adminIndex.do"><img src="./img/bottom_app1.png" alt="안드로이드 다운로드받기"></a>
+				<a href="#"><img src="./img/bottom_app2.png" alt="애플 다운로드받기"></a>
+			</div> --%>
 </footer>
 
 <script>

@@ -23,6 +23,8 @@
 <link rel="stylesheet" href="${initParam.root}css/flickity.css" media="screen">
  <!-- 아이콘 만들기 api font-awesome -->
 <link href="${initParam.root}css/font-awesome.min.css" rel="stylesheet" />
+<!-- 구글 웹 폰트 -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
  <!-- 초기화 css -->
 <link href="${initParam.root}css/reset.css" rel="stylesheet" />
  <!-- 메인 css -->
