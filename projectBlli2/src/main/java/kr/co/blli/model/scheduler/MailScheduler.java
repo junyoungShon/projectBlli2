@@ -41,8 +41,8 @@ public class MailScheduler {
 	  * @param memberId
 	  * @param mailForm
 	  */
-	@Scheduled(cron = "00 00 00 * * *")
-	//@Scheduled(cron = "00/03 * * * * *") //테스트용
+	//@Scheduled(cron = "00 00 00 * * *")
+	@Scheduled(cron = "00/03 * * * * *") //테스트용
 	public void sendRecommendingMail()
 			throws FileNotFoundException, URISyntaxException, UnsupportedEncodingException, MessagingException {
 		
@@ -51,36 +51,38 @@ public class MailScheduler {
 		
 		if(memberList.size()==0) {
 			System.out.println("월령이 바뀐 아기가 한명도 없습니다.");
-		}
+		} else {
 		
-		//해당 회원의 아이 중 월령이 바뀐 아이의 정보를 회원VO가 가진 회원아기VOList 변수에 set 해준다.
-		for(int i=0; i<memberList.size(); i++) {
-			memberList.get(i).setBlliBabyVOList(memberDAO.getBabyAgeChangedListOfMember(memberList.get(i).getMemberId()));
-		}
+			//해당 회원의 아이 중 월령이 바뀐 아이의 정보를 회원VO가 가진 회원아기VOList 변수에 set 해준다.
+			for(int i=0; i<memberList.size(); i++) {
+				memberList.get(i).setBlliBabyVOList(memberDAO.getBabyAgeChangedListOfMember(memberList.get(i).getMemberId()));
+			}
+				
+			Map<String, Object> textParams = new HashMap<String, Object>();
 			
-		Map<String, Object> textParams = new HashMap<String, Object>();
-		
-		BlliMailVO mlvo = memberDAO.findMailSubjectAndContentByMailForm("recommendingMail");
-		
-		String subject = mlvo.getMailSubject();
-		String contentFile = mlvo.getMailContentFile();
-		
-		MimeMessage message = mailSender.createMimeMessage();
-		
-		message.setFrom(new InternetAddress("admin@blli.co.kr","블리", "utf-8"));
-		message.setSubject(subject);
-		
-		String mailText = null;
-		for(int i=0; i<memberList.size(); i++) {
-			String recipient = memberList.get(i).getMemberEmail();
-			textParams.put("memberName", memberList.get(i).getMemberName());
-			textParams.put("memberBabyName", memberList.get(i).getBlliBabyVOList().get(0).getBabyName());
-			message.addRecipient(RecipientType.TO, new InternetAddress(recipient)); //import javax.mail.Message.RecipientType;
-			mailText = VelocityEngineUtils.mergeTemplateIntoString(velocityConfig.getVelocityEngine(), contentFile, "utf-8", textParams);
-			message.setText(mailText, "utf-8", "html");
+			BlliMailVO mlvo = memberDAO.findMailSubjectAndContentByMailForm("recommendingMail");
 			
-			mailSender.send(message);
-			System.out.println(memberList.get(i).getMemberName()+"님의 메일주소 "+recipient+"로 메일 발송");
+			String subject = mlvo.getMailSubject();
+			String contentFile = mlvo.getMailContentFile();
+			
+			MimeMessage message = mailSender.createMimeMessage();
+			
+			message.setFrom(new InternetAddress("admin@blli.co.kr","블리", "utf-8"));
+			message.setSubject(subject);
+			
+			String mailText = null;
+			for(int i=0; i<memberList.size(); i++) {
+				String recipient = memberList.get(i).getMemberEmail();
+				textParams.put("memberName", memberList.get(i).getMemberName());
+				textParams.put("memberBabyName", memberList.get(i).getBlliBabyVOList().get(0).getBabyName());
+				message.addRecipient(RecipientType.TO, new InternetAddress(recipient)); //import javax.mail.Message.RecipientType;
+				mailText = VelocityEngineUtils.mergeTemplateIntoString(velocityConfig.getVelocityEngine(), contentFile, "utf-8", textParams);
+				message.setText(mailText, "utf-8", "html");
+				
+				mailSender.send(message);
+				System.out.println(memberList.get(i).getMemberName()+"님의 메일주소 "+recipient+"로 메일 발송");
+			}
+		
 		}
 		
 	}
