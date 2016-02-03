@@ -1,10 +1,8 @@
 package kr.co.blli.model.vo;
 
-import java.util.List;
 
 public class ListVO {
-	private List<BlliPostingVO> postingList;
-	private List<BlliSmallProductVO> smallProductList;
+	private Object list;
 	private BlliPagingBean pagingBean;
 
 	public ListVO() {
@@ -12,26 +10,18 @@ public class ListVO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ListVO(List<BlliPostingVO> postingList, BlliPagingBean pagingBean) {
+	public ListVO(Object list, BlliPagingBean pagingBean) {
 		super();
-		this.postingList = postingList;
+		this.list = list;
 		this.pagingBean = pagingBean;
 	}
-	
-	public List<BlliSmallProductVO> getSmallProductList() {
-		return smallProductList;
+
+	public Object getList() {
+		return list;
 	}
 
-	public void setSmallProductList(List<BlliSmallProductVO> smallProductList) {
-		this.smallProductList = smallProductList;
-	}
-
-	public List<BlliPostingVO> getPostingList() {
-		return postingList;
-	}
-
-	public void setPostingList(List<BlliPostingVO> postingList) {
-		this.postingList = postingList;
+	public void setList(Object list) {
+		this.list = list;
 	}
 
 	public BlliPagingBean getPagingBean() {

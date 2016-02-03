@@ -1,5 +1,6 @@
 package kr.co.blli.model.product;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,10 +12,13 @@ import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
+import kr.co.blli.model.vo.BlliPagingBean;
 import kr.co.blli.model.vo.BlliPostingDisLikeVO;
 import kr.co.blli.model.vo.BlliPostingLikeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
+import kr.co.blli.model.vo.BlliSmallProductBuyLinkVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
+import kr.co.blli.model.vo.ListVO;
 
 import org.springframework.stereotype.Service;
 
@@ -212,5 +216,86 @@ public class ProductServiceImpl implements ProductService{
 		}
 		return result;
 	}
-
+	@Override
+	public ArrayList<BlliSmallProductVO> searchMidCategory(String pageNo, String searchWord) {
+		if(pageNo == null || pageNo == ""){
+			pageNo = "1";
+		}
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("pageNo", pageNo);
+		map.put("searchWord", searchWord);
+		ArrayList<BlliSmallProductVO> smallProductList = (ArrayList<BlliSmallProductVO>)productDAO.searchMidCategory(map);
+		for(int i=0;i<smallProductList.size();i++){
+			DecimalFormat df = new DecimalFormat("#,##0");
+			smallProductList.get(i).setMinPrice(df.format(Integer.parseInt(smallProductList.get(i).getMinPrice())));
+		}
+		return smallProductList;
+	}
+	@Override
+	public HashMap<String, Object> searchSmallProduct(String searchWord) {
+		HashMap<String, Object> smallProductInfo = new HashMap<String, Object>();
+		BlliSmallProductVO smallProduct = productDAO.searchSmallProduct(searchWord);
+		ArrayList<BlliSmallProductBuyLinkVO> buyLink = null;
+		ArrayList<BlliSmallProductVO> otherSmallProductList = null;
+		String midCategory = "";
+		if(smallProduct != null){
+			midCategory = smallProduct.getMidCategory();
+			DecimalFormat df = new DecimalFormat("#,##0");
+			smallProduct.setMinPrice(df.format(Integer.parseInt(smallProduct.getMinPrice())));
+			buyLink = (ArrayList<BlliSmallProductBuyLinkVO>)productDAO.getSmallProductBuyLink(smallProduct.getSmallProductId());
+			if(!buyLink.isEmpty()){
+				for(int i=0;i<buyLink.size();i++){
+					buyLink.get(i).setBuyLinkPrice(df.format(Integer.parseInt(buyLink.get(i).getBuyLinkPrice())));
+				}
+			}
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("midCategory", midCategory);
+			map.put("smallProduct", searchWord);
+			//map.put("pageNo", 1);
+			otherSmallProductList = (ArrayList<BlliSmallProductVO>)productDAO.getOtherSmallProductList(map);
+		}
+		smallProductInfo.put("smallProduct", smallProduct);
+		smallProductInfo.put("buyLink", buyLink);
+		smallProductInfo.put("otherSmallProductList", otherSmallProductList);
+		//smallProductInfo.put("totalOtherSmallProduct", productDAO.totalOtherSmallProduct(midCategory));
+		return smallProductInfo;
+	}
+	@Override
+	public ArrayList<BlliSmallProductVO> searchSmallProductList(String pageNo, String searchWord) {
+		if(pageNo == null || pageNo == ""){
+			pageNo = "1";
+		}
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("pageNo", pageNo);
+		map.put("searchWord", searchWord);
+		ArrayList<BlliSmallProductVO> smallProductList = (ArrayList<BlliSmallProductVO>)productDAO.searchSmallProductList(map);
+		for(int i=0;i<smallProductList.size();i++){
+			DecimalFormat df = new DecimalFormat("#,##0");
+			smallProductList.get(i).setMinPrice(df.format(Integer.parseInt(smallProductList.get(i).getMinPrice())));
+		}
+		return smallProductList;
+	}
+	@Override
+	public ListVO getOtherProductList(String pageNo, String smallProduct) {
+		BlliSmallProductVO smallProductVO = productDAO.searchSmallProduct(smallProduct);
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		String midCategory = smallProductVO.getMidCategory();
+		map.put("midCategory", midCategory);
+		map.put("smallProduct", smallProduct);
+		map.put("pageNo", pageNo);
+		ArrayList<BlliSmallProductVO> smallProductList = (ArrayList<BlliSmallProductVO>)productDAO.getOtherSmallProductList(map);
+		int total = productDAO.totalOtherSmallProduct(midCategory);
+		BlliPagingBean paging = new BlliPagingBean(total, Integer.parseInt(pageNo));
+		paging.setNumberOfPageGroup(1);
+		ListVO lvo = new ListVO(smallProductList, paging);
+		return lvo;
+	}
+	@Override
+	public int totalPageOfSmallProductOfMidCategory(String searchWord) {
+		return productDAO.totalPageOfSmallProductOfMidCategory(searchWord);
+	}
+	@Override
+	public int totalPageOfSmallProductRelatedSearchWord(String searchWord) {
+		return productDAO.totalPageOfSmallProductRelatedSearchWord(searchWord);
+	}
 }

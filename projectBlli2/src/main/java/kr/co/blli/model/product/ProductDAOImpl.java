@@ -322,4 +322,44 @@ public class ProductDAOImpl implements ProductDAO{
 		sqlSessionTemplate.update("product.updateSearchTime", smallProductId);
 	}
 
+	@Override
+	public List<BlliSmallProductVO> searchMidCategory(HashMap<String, String> map) {
+		return sqlSessionTemplate.selectList("product.searchMidCategory", map);
+	}
+
+	@Override
+	public BlliSmallProductVO searchSmallProduct(String searchWord) {
+		return sqlSessionTemplate.selectOne("product.searchSmallProduct", searchWord);
+	}
+
+	@Override
+	public List<BlliSmallProductBuyLinkVO> getSmallProductBuyLink(String smallProductId) {
+		return sqlSessionTemplate.selectList("product.getSmallProductBuyLink", smallProductId);
+	}
+
+	@Override
+	public List<BlliSmallProductVO> getOtherSmallProductList(HashMap<String, Object> map) {
+		return sqlSessionTemplate.selectList("product.getOtherSmallProductList", map);
+	}
+
+	@Override
+	public List<BlliSmallProductVO> searchSmallProductList(HashMap<String, String> map) {
+		return sqlSessionTemplate.selectList("product.searchSmallProductList", map);
+	}
+
+	@Override
+	public int totalOtherSmallProduct(String midCategory) {
+		return sqlSessionTemplate.selectOne("product.totalOtherSmallProduct", midCategory);
+	}
+
+	@Override
+	public int totalPageOfSmallProductOfMidCategory(String searchWord) {
+		return sqlSessionTemplate.selectOne("product.totalPageOfSmallProductOfMidCategory", searchWord);
+	}
+
+	@Override
+	public int totalPageOfSmallProductRelatedSearchWord(String searchWord) {
+		return sqlSessionTemplate.selectOne("product.totalPageOfSmallProductRelatedSearchWord", searchWord);
+	}
+
 }

@@ -62,8 +62,8 @@
 </script>
 
 
-<!-- <script>
-$( document ).ready( function() {
+<script>
+/* $( document ).ready( function() {
 	var jbOffset = $( '.jbMenu' ).offset();
 	$( window ).scroll( function() {
 	  if ( $( document ).scrollTop() > jbOffset.top ) {
@@ -73,8 +73,8 @@ $( document ).ready( function() {
 		$( '.jbMenu' ).removeClass( 'jbFixed' );
 	  }
 	});
-  } );
-</script> -->
+  } ); */
+</script>
 </head>
 
 
@@ -82,10 +82,10 @@ $( document ).ready( function() {
    
       <!-- Header -->
       <tiles:insertAttribute name="header"/>
- 	 <div class="jbContent">
+ 	 <!-- <div class="jbContent"> -->
  	<!-- main -->
  	<tiles:insertAttribute name="main"/>
-  	</div>
+  	<!-- </div> -->
     <div class="container footer">
     <tiles:insertAttribute name="footer"/>
     <!-- footer -->

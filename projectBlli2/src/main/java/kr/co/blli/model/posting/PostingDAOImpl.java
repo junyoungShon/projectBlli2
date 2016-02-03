@@ -23,8 +23,8 @@ public class PostingDAOImpl implements PostingDAO{
 		sqlSessionTemplate.insert("posting.insertPosting", postingVO);
 	}
 	@Override
-	public List<BlliPostingVO> searchSmallProduct(HashMap<String, String> map) {
-		return sqlSessionTemplate.selectList("posting.searchSmallProduct", map);
+	public List<BlliPostingVO> searchPosting(HashMap<String, String> map) {
+		return sqlSessionTemplate.selectList("posting.searchPosting", map);
 	}
 	@Override
 	public List<String> searchProducts(String postingUrl) {
@@ -56,5 +56,9 @@ public class PostingDAOImpl implements PostingDAO{
 	@Override
 	public int totalPageOfPosting(String searchWord) {
 		return sqlSessionTemplate.selectOne("posting.totalPageOfPosting", searchWord);
+	}
+	@Override
+	public List<BlliPostingVO> searchPostingListInProductDetail(String searchWord) {
+		return sqlSessionTemplate.selectList("posting.searchPostingListInProductDetail", searchWord);
 	}
 }

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import javax.annotation.Resource;
 
 import kr.co.blli.model.vo.BlliPostingVO;
+import kr.co.blli.model.vo.BlliSmallProductVO;
 
 import org.springframework.stereotype.Service;
 
@@ -25,15 +26,15 @@ public class PostingServiceImpl implements PostingService {
 	 * @return
 	 */
 	@Override
-	public ArrayList<BlliPostingVO> searchSmallProduct(String pageNo, String searchWord) {
+	public ArrayList<BlliPostingVO> searchPosting(String pageNo, String searchWord) {
 		HashMap<String, String> map = new HashMap<String, String>();
 		if(pageNo == null || pageNo == ""){
 			pageNo = "1";
 		}
 		map.put("pageNo", pageNo);
 		map.put("searchWord", searchWord);
-		ArrayList<BlliPostingVO> list = (ArrayList<BlliPostingVO>)postingDAO.searchSmallProduct(map);
-		return list;
+		ArrayList<BlliPostingVO> postingList = (ArrayList<BlliPostingVO>)postingDAO.searchPosting(map);
+		return postingList;
 	}
 	
 	/**
@@ -61,4 +62,10 @@ public class PostingServiceImpl implements PostingService {
 	public int totalPageOfPosting(String searchWord) {
 		return postingDAO.totalPageOfPosting(searchWord);
 	}
+
+	@Override
+	public ArrayList<BlliPostingVO> searchPostingListInProductDetail(String searchWord) {
+		return (ArrayList<BlliPostingVO>)postingDAO.searchPostingListInProductDetail(searchWord);
+	}
+
 }

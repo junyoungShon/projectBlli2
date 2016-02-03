@@ -95,4 +95,20 @@ public interface ProductDAO {
 
 	void updateSearchTime(String smallProductId);
 
+	List<BlliSmallProductVO> searchMidCategory(HashMap<String, String> map);
+
+	BlliSmallProductVO searchSmallProduct(String searchWord);
+
+	List<BlliSmallProductBuyLinkVO> getSmallProductBuyLink(String smallProductId);
+
+	List<BlliSmallProductVO> getOtherSmallProductList(HashMap<String, Object> map);
+
+	List<BlliSmallProductVO> searchSmallProductList(HashMap<String, String> map);
+
+	int totalOtherSmallProduct(String midCategory);
+
+	int totalPageOfSmallProductOfMidCategory(String searchWord);
+
+	int totalPageOfSmallProductRelatedSearchWord(String searchWord);
+
 }
