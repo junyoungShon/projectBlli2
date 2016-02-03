@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -17,9 +16,7 @@ import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -48,8 +45,8 @@ public class SearchController {
 	/**
 	 * 
 	 * @Method Name : searchSmallProduct
-	 * @Method 설명 : 검색어(소제품)에 해당하는 포스팅 리스트 중 첫 페이지만 반환해주는 메서드
-	 * @작성일 : 2016. 1. 27.
+	 * @Method 설명 : 검색어에 해당하는 페이지를 출력해주는 메서드
+	 * @작성일 : 2016. 2. 3.
 	 * @작성자 : hyunseok
 	 * @param pageNo
 	 * @param searchWord
@@ -154,7 +151,15 @@ public class SearchController {
 		blliMidCategoryVO.getMidCategoryId();
 		return mav;
 	}
-
+	/**
+	 * 
+	 * @Method Name : goSmallProductDetailView
+	 * @Method 설명 : 소제품을 클릭할 때 소제품 상세 페이지를 출력해주는 메서드
+	 * @작성일 : 2016. 2. 3.
+	 * @작성자 : hyunseok
+	 * @param smallProduct
+	 * @return
+	 */
 	@RequestMapping("goSmallProductDetailView.do")
 	public ModelAndView goSmallProductDetailView(String smallProduct){
 		ModelAndView mav = new ModelAndView();
@@ -165,7 +170,16 @@ public class SearchController {
 		mav.setViewName("smallProductDetailPage");
 		return mav;
 	}
-	
+	/**
+	 * 
+	 * @Method Name : getSmallProductList
+	 * @Method 설명 : 중분류 상세 페이지 무한 스크롤을 위한 페이징 메서드
+	 * @작성일 : 2016. 2. 3.
+	 * @작성자 : hyunseok
+	 * @param pageNo
+	 * @param searchWord
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping("getSmallProductList.do")
 	public ArrayList<BlliSmallProductVO> getSmallProductList(String pageNo, String searchWord){

@@ -218,6 +218,16 @@ public class ProductServiceImpl implements ProductService{
 		}
 		return result;
 	}
+	/**
+	 * 
+	 * @Method Name : searchMidCategory
+	 * @Method 설명 : 검색어가 중분류명과 일치할 시 해당 중분류에 포함되는 소제품 리스트를 반환해주는 메서드
+	 * @작성일 : 2016. 2. 3.
+	 * @작성자 : hyunseok
+	 * @param pageNo
+	 * @param searchWord
+	 * @return
+	 */
 	@Override
 	public ArrayList<BlliSmallProductVO> searchMidCategory(String pageNo, String searchWord) {
 		if(pageNo == null || pageNo == ""){
@@ -227,12 +237,22 @@ public class ProductServiceImpl implements ProductService{
 		map.put("pageNo", pageNo);
 		map.put("searchWord", searchWord);
 		ArrayList<BlliSmallProductVO> smallProductList = (ArrayList<BlliSmallProductVO>)productDAO.searchMidCategory(map);
+		//가격에 , 붙여서 다시 저장 후 반환
 		for(int i=0;i<smallProductList.size();i++){
 			DecimalFormat df = new DecimalFormat("#,##0");
 			smallProductList.get(i).setMinPrice(df.format(Integer.parseInt(smallProductList.get(i).getMinPrice())));
 		}
 		return smallProductList;
 	}
+	/**
+	 * 
+	 * @Method Name : searchSmallProduct
+	 * @Method 설명 : 검색어가 소제품명과 일치할 시 소제품 페이지 출력을 위한 정보들을 반환해주는 메서드
+	 * @작성일 : 2016. 2. 3.
+	 * @작성자 : hyunseok
+	 * @param searchWord
+	 * @return
+	 */
 	@Override
 	public HashMap<String, Object> searchSmallProduct(String searchWord) {
 		HashMap<String, Object> smallProductInfo = new HashMap<String, Object>();
@@ -242,6 +262,7 @@ public class ProductServiceImpl implements ProductService{
 		String midCategory = "";
 		if(smallProduct != null){
 			midCategory = smallProduct.getMidCategory();
+			//가격에 , 붙여서 다시 저장 후 반환
 			DecimalFormat df = new DecimalFormat("#,##0");
 			smallProduct.setMinPrice(df.format(Integer.parseInt(smallProduct.getMinPrice())));
 			buyLink = (ArrayList<BlliSmallProductBuyLinkVO>)productDAO.getSmallProductBuyLink(smallProduct.getSmallProductId());
@@ -260,6 +281,16 @@ public class ProductServiceImpl implements ProductService{
 		smallProductInfo.put("otherSmallProductList", otherSmallProductList);
 		return smallProductInfo;
 	}
+	/**
+	 * 
+	 * @Method Name : searchSmallProductList
+	 * @Method 설명 : 검색어와 일치하는 중분류명과 소제품명이 없을 시 검색어를 포함하는 소제품 리스트를 반환해주는 메서드
+	 * @작성일 : 2016. 2. 3.
+	 * @작성자 : hyunseok
+	 * @param pageNo
+	 * @param searchWord
+	 * @return
+	 */
 	@Override
 	public ArrayList<BlliSmallProductVO> searchSmallProductList(String pageNo, String searchWord) {
 		if(pageNo == null || pageNo == ""){
@@ -269,12 +300,23 @@ public class ProductServiceImpl implements ProductService{
 		map.put("pageNo", pageNo);
 		map.put("searchWord", searchWord);
 		ArrayList<BlliSmallProductVO> smallProductList = (ArrayList<BlliSmallProductVO>)productDAO.searchSmallProductList(map);
+		//가격에 , 붙여서 다시 저장 후 반환
 		for(int i=0;i<smallProductList.size();i++){
 			DecimalFormat df = new DecimalFormat("#,##0");
 			smallProductList.get(i).setMinPrice(df.format(Integer.parseInt(smallProductList.get(i).getMinPrice())));
 		}
 		return smallProductList;
 	}
+	/**
+	 * 
+	 * @Method Name : getOtherProductList
+	 * @Method 설명 : 소제품 상세 페이지에 같이 출력될 해당 소제품과 같은 중분류를 가지고 있는 소제품 리스트를 반환해주는 메서드
+	 * @작성일 : 2016. 2. 3.
+	 * @작성자 : hyunseok
+	 * @param pageNo
+	 * @param smallProduct
+	 * @return
+	 */
 	@Override
 	public ListVO getOtherProductList(String pageNo, String smallProduct) {
 		BlliSmallProductVO smallProductVO = productDAO.searchSmallProduct(smallProduct);
@@ -290,10 +332,28 @@ public class ProductServiceImpl implements ProductService{
 		ListVO lvo = new ListVO(smallProductList, paging);
 		return lvo;
 	}
+	/**
+	 * 
+	 * @Method Name : totalPageOfSmallProductOfMidCategory
+	 * @Method 설명 : 중분류 상세페이지의 총 페이지 수를 반환해주는 메서드
+	 * @작성일 : 2016. 2. 3.
+	 * @작성자 : hyunseok
+	 * @param searchWord
+	 * @return
+	 */
 	@Override
 	public int totalPageOfSmallProductOfMidCategory(String searchWord) {
 		return productDAO.totalPageOfSmallProductOfMidCategory(searchWord);
 	}
+	/**
+	 * 
+	 * @Method Name : totalPageOfSmallProductRelatedSearchWord
+	 * @Method 설명 : 소제품 리스트 페이지(검색어가 중분류명, 소제품명과 일치하지 않는 경우)의 총 페이지 수를 반환해주는 메서드
+	 * @작성일 : 2016. 2. 3.
+	 * @작성자 : hyunseok
+	 * @param searchWord
+	 * @return
+	 */
 	@Override
 	public int totalPageOfSmallProductRelatedSearchWord(String searchWord) {
 		return productDAO.totalPageOfSmallProductRelatedSearchWord(searchWord);
