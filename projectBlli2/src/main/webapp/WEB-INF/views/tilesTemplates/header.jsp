@@ -23,12 +23,14 @@
 		<div class="in_fr">
 			<div class="top_nav">
 				<a href="#">회원정보수정</a>   ㅣ   <a href="#">아이정보수정</a>   ㅣ   <a href="#">스크랩</a>   ㅣ   <a href="#">알림</a>   ㅣ   <a href="#">아이일정</a>
+				
 			</div>
 			<div class="main_logo">
 				<a href="#"><img src="${initParam.root}img/main_logo.png" alt="로고"></a>
 				<input type="text" class="search_text2" placeholder="검색어를 입력하세요" name="searchWord">
 			<a href="#" onclick="$(this).closest('form').submit()"><img src="${initParam.root}img/search.png" alt="검색"></a>
 			</div>
+			
 		</div>
 </div>
 </form>

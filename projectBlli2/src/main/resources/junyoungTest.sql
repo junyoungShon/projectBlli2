@@ -200,3 +200,24 @@ select posting_url,small_product,small_product_id,posting_title,posting_summary,
 		
 		
 		create table persistent_logins (username varchar(64) not null, series varchar(64) primary key, token varchar(64) not null, last_used timestamp not null)
+		
+		
+		
+		select * from(
+		select rownum rn ,posting_url,small_product,small_product_id,posting_title,posting_summary,posting_content,posting_score,posting_like_count,
+		posting_dislike_count,posting_media_count,posting_photo_link,posting_total_residence_time,posting_view_count,posting_scrape_count,posting_author,posting_date
+		from(
+		select posting_url,small_product,small_product_id,posting_title,posting_summary,posting_content,posting_score,posting_like_count,
+		posting_dislike_count,posting_media_count,posting_photo_link,posting_total_residence_time,posting_view_count,posting_scrape_count,posting_author,posting_date
+		from blli_posting
+		where posting_status = 'confirmed' and small_product_id = 5666321696
+		order by posting_score desc)
+		) where rn = 3
+		
+		
+		
+		
+		
+		
+		
+		

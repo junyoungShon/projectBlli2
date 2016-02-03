@@ -225,6 +225,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectMemberDibsSmallProduct" resultType="Integer">
 		select count(*) from blli_member_dibs where member_Id=#{memberId} and small_product_id = #{smallProductId}
 	</select>
+	<!-- 소제품 점수 상위 5개 가져옴 -->
+	<select id="selectSmallProductRank" resultMap="bspvRM">
+		<![CDATA[
+		select * from (select rownum as rn,SMALL_PRODUCT, MID_CATEGORY,mid_CATEGORY_ID, SMALL_PRODUCT_MAKER, SMALL_PRODUCT_WHENTOUSE_MIN, SMALL_PRODUCT_WHENTOUSE_MAX, SMALL_PRODUCT_DIBS_COUNT, 
+		SMALL_PRODUCT_MAIN_PHOTO_LINK, SMALL_PRODUCT_SCORE, SMALL_PRODUCT_POSTING_COUNT,  NAVER_SHOPPING_RANK, PRODUCT_REGISTER_DAY,small_product_id
+		from BLLI_SMALL_PRODUCT
+		where MID_CATEGORY_id = #{value} order by SMALL_PRODUCT_SCORE asc) where rn <= 5
+		]]> 
+	</select>
 	<!-- 끝 -->
 	
  </mapper> 		

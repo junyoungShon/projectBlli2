@@ -24,7 +24,7 @@ public interface ProductService {
 	public List<BlliSmallProductVO> selectSameAgeMomBestPickedSmallProductList(
 			List<BlliMidCategoryVO> blliMidCategoryVOList, BlliBabyVO blliBabyVO);
 
-	public List<BlliPostingVO> selectPostingBySmallProductList(List<BlliSmallProductVO> blliSmallProductVOList,String meberId);
+	public List<BlliPostingVO> selectPostingBySmallProductList(List<BlliSmallProductVO> blliSmallProductVOList,String meberId,String pageNum);
 
 	public int smallProductDib(BlliMemberDibsVO blliMemberDibsVO);
 
@@ -45,5 +45,7 @@ public interface ProductService {
 	public int totalPageOfSmallProductOfMidCategory(String searchWord);
 
 	public int totalPageOfSmallProductRelatedSearchWord(String searchWord);
+	
+	public List<BlliSmallProductVO> selectSmallProductRank(String midCategoryId);
 
 }

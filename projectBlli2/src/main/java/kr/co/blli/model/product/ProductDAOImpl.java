@@ -111,9 +111,8 @@ public class ProductDAOImpl implements ProductDAO{
 		return sqlSessionTemplate.update("product.updateSmallProductBuyLink", blliSmallProductBuyLinkVO);
 	}
 	@Override
-	public List<BlliPostingVO> selectPostingBySmallProductList(String smallProductId) {
-		System.out.println("DAO"+smallProductId);
-		return sqlSessionTemplate.selectList("posting.selectPostingBySmallProductList", smallProductId);
+	public List<BlliPostingVO> selectPostingBySmallProductList(HashMap<String, String> paraMap) {
+		return sqlSessionTemplate.selectList("posting.selectPostingBySmallProductList", paraMap);
 	}
 	@Override
 	public int deleteDipsInfo(BlliMemberDibsVO blliMemberDibsVO) {
@@ -320,6 +319,11 @@ public class ProductDAOImpl implements ProductDAO{
 	@Override
 	public void updateSearchTime(String smallProductId) {
 		sqlSessionTemplate.update("product.updateSearchTime", smallProductId);
+	}
+	
+	@Override
+	public List<BlliSmallProductVO> selectSmallProductRank(String midCategoryId) {
+		return sqlSessionTemplate.selectList("product.selectSmallProductRank", midCategoryId);
 	}
 
 	@Override
