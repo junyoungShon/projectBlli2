@@ -88,6 +88,25 @@ select small_product_id, min_price, small_product, small_product_main_photo_link
 	)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc
 ) where page = '1'
 
+select small_product_id, min_price, small_product, small_product_main_photo_link, small_product_whentouse_min, 
+	small_product_whentouse_max, small_product_posting_count, small_product_score from(
+	select ceil(rownum/10) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_whentouse_min, 
+	sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score from(
+		select b.small_product_id, min(b.buy_link_price) as min_price from (
+			select small_product_id from blli_small_product where small_product like '%' || '' || '%' and small_product_status = 'confirmed'
+		)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
+	)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc
+) where page = '1'
+
+select * from(
+	select ceil(rownum/10) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, 
+	sp.small_product_whentouse_min, sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score from(
+		select b.small_product_id, min(b.buy_link_price) as min_price from (
+			select small_product_id from blli_small_product where mid_category = '낮잠이불' and small_product_status = 'confirmed'
+		)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
+	)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc
+) where page = '1'
+
 select mid_category from blli_small_product where small_product = '포그니 토끼친구들 유아용 침구'
 
 select * from blli_small_product where mid_category = '낮잠이불' and small_product_status = 'confirmed'

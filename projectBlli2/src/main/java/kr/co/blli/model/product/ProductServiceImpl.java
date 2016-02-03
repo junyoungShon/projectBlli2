@@ -253,13 +253,11 @@ public class ProductServiceImpl implements ProductService{
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("midCategory", midCategory);
 			map.put("smallProduct", searchWord);
-			//map.put("pageNo", 1);
 			otherSmallProductList = (ArrayList<BlliSmallProductVO>)productDAO.getOtherSmallProductList(map);
 		}
 		smallProductInfo.put("smallProduct", smallProduct);
 		smallProductInfo.put("buyLink", buyLink);
 		smallProductInfo.put("otherSmallProductList", otherSmallProductList);
-		//smallProductInfo.put("totalOtherSmallProduct", productDAO.totalOtherSmallProduct(midCategory));
 		return smallProductInfo;
 	}
 	@Override

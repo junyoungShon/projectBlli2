@@ -166,12 +166,6 @@ public class SearchController {
 		return mav;
 	}
 	
-	/*@ResponseBody
-	@RequestMapping("getOtherProductList.do")
-	public ListVO getOtherProductList(String pageNo, String smallProduct){
-		return productService.getOtherProductList(pageNo, smallProduct);
-	}*/
-	
 	@ResponseBody
 	@RequestMapping("getSmallProductList.do")
 	public ArrayList<BlliSmallProductVO> getSmallProductList(String pageNo, String searchWord){

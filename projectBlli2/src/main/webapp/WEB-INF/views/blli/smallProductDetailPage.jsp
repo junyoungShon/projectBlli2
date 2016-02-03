@@ -1,48 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<script>
-/* var pageNo = 2;
-var rank = 6;
-$(document).ready(function(){
-	$("#productNextBtn").click(function(){
-		$.ajax({
-			type: "POST",
-			url: "${initParam.root}getOtherProductList.do",
-			data: "pageNo="+pageNo+"&smallProduct=${requestScope.smallProductInfo.smallProduct.smallProduct}&midCategory=",
-			success: function(resultData){
-				var table = "<table id='otherProductInfo'>";
-				table += "<colgroup><col width='10%'><col width='50%'><col width='20%'><col width='20%'></colgroup>";
-				table += "<tr><th>순위</th><th>제품명</th><th>점수</th><th>보러가기	</th></tr>";
-				for(var i=0;i<resultData.list.length;i++){
-					table += "<tr><td>"+(rank++)+"</td><td>"+resultData.list[i].smallProduct+"</td><td>"+resultData.list[i].smallProductScore+"</td>";
-					table += "<td><a href='${initParam.root}goSmallProductDetailView.do?smallProduct="+resultData.list[i].smallProduct+"'>"+
-							"<img src='${initParam.root}img/bt_see.png' alt='보러가기'></a></td></tr>";
-				}
-				table += "</table>";
-				$("#otherProductInfo").html(table);
-				var div = "<div style='width: 30%; margin: 0 auto;' id='pageOfProduct'>";
-				div += "<div style='float: left; margin: 5px;'>";
-				if(resultData.pagingBean.previousPageGroup){
-					div += "<img src='${initParam.root}img/btn_left.PNG' alt='prev' width='15px;' id='productPrevBtn' style='cursor: pointer;'>";
-				}else{
-					div += "<img src='${initParam.root}img/btn_left.PNG' alt='prev' width='15px;' id='productPrevBtn' style='cursor: pointer; visibility: hidden;'>";
-				}
-				div += "</div>";
-				div += "<div style='float: right; margin: 5px;'>";
-				if(resultData.pagingBean.nextPageGroup){
-					div += "<img src='${initParam.root}img/btn_right.PNG' alt='next' width='15px;' id='productNextBtn' style='cursor: pointer;'>";
-				}else{
-					div += "<img src='${initParam.root}img/btn_right.PNG' alt='next' width='15px;' id='productNextBtn' style='cursor: pointer; visibility: hidden;'>";
-				}
-				div += "</div></div>";
-				$("#pageOfProduct").html(div);
-				pageNo++;
-			}
-	    });
-	});
-}); */
-</script>
 <div class="jbContent">
 	<div class="result_bg1">
 			<div class="in_fr" style="height:330px;">
@@ -198,16 +156,6 @@ $(document).ready(function(){
 								</tr>
 							</c:forEach>
 						</table>
-						<%-- <div style="width: 30%; margin: 0 auto;" id="pageOfProduct">
-							<div style="float: left; margin: 5px;">
-								<img src="${initParam.root}img/btn_left.PNG" alt="prev" width="15px;" id="productPrevBtn" style="cursor: pointer; visibility: hidden;">
-							</div>
-							<div style="float: right; margin: 5px;">
-								<c:if test="${requestScope.smallProductInfo.totalOtherSmallProduct > 5}">
-									<img src="${initParam.root}img/btn_right.PNG" alt="next" width="15px;" id="productNextBtn" style="cursor: pointer;">
-								</c:if>
-							</div>
-						</div> --%>
 					</div>
 				</div>
 			</div>
