@@ -26,5 +26,7 @@ public interface MemberService {
 
 	public void changeRecommendingBaby(BlliBabyVO blliBabyVO);
 
+	public void updateMemberInfoByEmail(BlliMemberVO blliMemberVO);
+
 
 }

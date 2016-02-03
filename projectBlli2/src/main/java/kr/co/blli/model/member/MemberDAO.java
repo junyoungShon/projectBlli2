@@ -34,5 +34,7 @@ public interface MemberDAO {
 	
 	public List<BlliBabyVO> getBabyAgeChangedListOfMember(String memberId);
 
+	public void updateMemberInfoByEmail(BlliMemberVO blliMemberVO);
+
 
 }

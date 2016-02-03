@@ -62,13 +62,29 @@
 				}
 			});
 		});
-		//소제품 찜하기 스크립트
+		/* //소제품 찜하기 스크립트
 		$('.jbContent').on("click", ".smallProductDibBtn",function(){
 			$.ajax({
 				type:"get",
 				url:"smallProductDib.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(this).siblings('.smallProductId').val(),
 				success:function(result){
-					alert(result);
+					alert($(this).html());
+					if(result==1){
+						$(this).removeClass("fa-heart-o");
+						$(this).addClass("fa-heart");
+					}else if(result==0){
+						$(this).removeClass("fa-heart-o").addClass("fa-heart");
+					}
+				}
+			});
+		}); */
+		//소제품 찜하기 스크립트
+		$('.smallProductDibBtn').click(function(){
+			$.ajax({
+				type:"get",
+				url:"smallProductDib.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(this).siblings('.smallProductId').val(),
+				success:function(result){
+					alert($(this));
 					if(result==1){
 						$(this).removeClass("fa-heart-o");
 						$(this).addClass("fa-heart");

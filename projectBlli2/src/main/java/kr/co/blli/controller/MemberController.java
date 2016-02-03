@@ -293,19 +293,63 @@ public class MemberController {
 	@RequestMapping("insertBabyInfo.do")
 	public String insertBabyInfo
 	(HttpServletRequest request,BlliMemberVO blliMemberVO) throws Exception{
-		
 		memberService.insertBabyInfo(blliMemberVO,request);
 		return "redirect:member_proceedingToMain.do";
 	}
+	
+	/**
+	  * @Method Name : goModifyMemberInfoPage
+	  * @Method 설명 : 멤버의 정보를 수정하는 메서드
+	  * @작성일 : 2016. 1. 16.
+	  * @작성자 : junyoung
+	  * @param request
+	 */
+	@RequestMapping("goModifyMemberInfoPage.do")
+	public ModelAndView goModifyMemberInfoPage
+	(HttpServletRequest request,BlliMemberVO blliMemberVO){
+		blliMemberVO = (BlliMemberVO) request.getSession().getAttribute("blliMemberVO");
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("blliMemberVO", blliMemberVO);
+		mav.setViewName("modifyMemberInfoPage");
+		return mav;
+	}
+	
+	/**
+	  * @Method Name : goModifyBabyInfoPage
+	  * @Method 설명 : 멤버의 정보를 수정하는 메서드
+	  * @작성일 : 2016. 1. 16.
+	  * @작성자 : junyoung
+	  * @param request
+	 */
+	@RequestMapping("goModifyBabyInfoPage.do")
+	public ModelAndView goModifyBabyInfoPage (HttpServletRequest request,BlliMemberVO blliMemberVO){
+		blliMemberVO = (BlliMemberVO) request.getSession().getAttribute("blliMemberVO");
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("blliMemberVO", blliMemberVO);
+		System.out.println(blliMemberVO.getBlliBabyVOList());
+		mav.setViewName("modifyBabyInfoPage");
+		return mav;
+	}
+	/**
+	  * @Method Name : goModifyMemberInfoPage
+	  * @Method 설명 : 멤버의 정보를 수정하는 메서드
+	  * @작성일 : 2016. 1. 16.
+	  * @작성자 : junyoung
+	  * @param request
+	 */
+	@RequestMapping("updateMemberInfoByEmail.do")
+	public String updateMemberInfoByEmail(BlliMemberVO blliMemberVO){
+		memberService.updateMemberInfoByEmail(blliMemberVO);
+		return "redirect:member_goMain.do";
+	}
+	
 	
 	//용호 메소드 작성 영역
 	
 	@RequestMapping("memberCalendar.do")
 	@ResponseBody
 	public ModelAndView calendar(BlliMemberVO blliMemberVO){
-		
 		ModelAndView mv = new ModelAndView();
-		
 		mv.setViewName("member_calender.do");
 		boolean result = false;
 		if(memberService.findMemberById(blliMemberVO)!=null){

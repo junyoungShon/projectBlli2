@@ -65,6 +65,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="changeRecommendingBaby">
 		update blli_baby set recommending = #{recommending} where member_id = #{memberId} and baby_name=#{babyName}
 	</update>
+	<!-- 회원의 정보를 바꿔줍니다. -->
+	<update id="updateMemberInfoByEmail">
+		update blli_member set member_email = #{memberEmail}, member_name =#{memberName} , member_password=#{memberPassword} where member_id = #{memberId}
+	</update>
+	
 	<!-- 준영 쿼리 끝 -->
 	
 	

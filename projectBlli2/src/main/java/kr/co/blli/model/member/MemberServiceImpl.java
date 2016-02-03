@@ -90,7 +90,7 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.findMemberByIdForLogin(blliMemberVO.getMemberId());
 	}
 	/**
-	  * @Method Name : insertBabyInfoForKakaoUser
+	  * @Method Name : insertBabyInfo
 	  * @Method 설명 : 카카오톡 가입자의 아이정보와 이메일을 입력해주는 서비스 메서드
 	  * @작성일 : 2016. 1. 16.
 	  * @작성자 : junyoung
@@ -256,6 +256,12 @@ public class MemberServiceImpl implements MemberService {
 		//새로운 추천 대상을 등록합니다.
 		blliBabyVO.setRecommending(1);
 		memberDAO.changeRecommendingBaby(blliBabyVO);
-		
+	}
+	
+	@Override
+	public void updateMemberInfoByEmail(BlliMemberVO blliMemberVO) {
+		//비번 암호화
+		blliMemberVO.setMemberPassword(passwordEncoder.encode(blliMemberVO.getMemberPassword()));
+		memberDAO.updateMemberInfoByEmail(blliMemberVO);
 	}
 }
