@@ -14,7 +14,7 @@ public interface PostingDAO {
 
 	void insertPosting(BlliPostingVO postingVO);
 
-	List<BlliPostingVO> searchSmallProduct(HashMap<String, String> map);
+	List<BlliPostingVO> searchPosting(HashMap<String, String> map);
 
 	List<String> searchProducts(String postingUrl);
 
@@ -27,5 +27,7 @@ public interface PostingDAO {
 	void updatePostingViewCountAndResidenceTime(BlliPostingVO blliPostingVO);
 
 	int totalPageOfPosting(String searchWord);
+
+	List<BlliPostingVO> searchPostingListInProductDetail(String searchWord);
 
 }

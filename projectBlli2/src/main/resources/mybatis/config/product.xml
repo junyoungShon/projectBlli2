@@ -34,6 +34,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="productRegisterDay" column="product_register_day"/>
  		<result property="midCategoryId" column="mid_category_id"/>
  		<result property="smallProductId" column="small_product_id"/>
+ 		<result property="minPrice" column="min_price"/>
+ 		<result property="searchTime" column="search_time"/>
+ 	</resultMap>
+ 	<!-- BlliSmallProductBuyLinkVO Result Map 설정 -->
+ 	<resultMap type="blliSmallProductBuyLinkVO" id="bspblvRM">
+ 		<result property="smallProductId" column="small_product_id"/>
+ 		<result property="buyLink" column="buy_link"/>
+ 		<result property="buyLinkPrice" column="buy_link_price"/>
+ 		<result property="buyLinkDeliveryCost" column="buy_link_delivery_cost"/>
+ 		<result property="buyLinkOption" column="buy_link_option"/>
+ 		<result property="seller" column="seller"/>
+ 		<result property="buyLinkClickCount" column="buy_link_click_count"/>
  	</resultMap>
  	<!-- BlliNotRecommMidCategoryVO Result Map 설정 -->
  	<resultMap type="blliNotRecommMidCategoryVO" id="bnrmcvRM">
@@ -81,7 +93,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<update id="updateSmallProduct">
-		update blli_small_product set small_product = #{smallProduct}, mid_category = #{midCategory}, small_product_maker = #{smallProductMaker}, 
+		update blli_small_product set mid_category = #{midCategory}, small_product_maker = #{smallProductMaker}, 
 		small_product_main_photo_link = #{smallProductMainPhotoLink},
 		small_product_posting_count = #{smallProductPostingCount}, naver_shopping_rank = #{naverShoppingRank}, 
 		product_register_day = #{productRegisterDay}
@@ -96,12 +108,65 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateSmallProductBuyLink">
 		update blli_small_prod_buy_link set buy_link = #{buyLink}, buy_link_price = #{buyLinkPrice}, 
 		buy_link_delivery_cost = #{buyLinkDeliveryCost}, buy_link_option = #{buyLinkOption}, seller = #{seller}
-		where small_product_id = #{smallProductId}
+		where small_product_id = #{smallProductId} and seller = #{seller}
 	</update>
 	
 	<update id="updateSearchTime">
 		update blli_small_product set search_time = sysdate where small_product_id = #{smallProductId}
 	</update>
+	
+	<select id="searchMidCategory" resultMap="bspvRM">
+		select * from(
+			select ceil(rownum/10) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, 
+			sp.small_product_whentouse_min, sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score from(
+				select b.small_product_id, min(b.buy_link_price) as min_price from (
+					select small_product_id from blli_small_product where mid_category = #{searchWord} and small_product_status = 'confirmed'
+				)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
+			)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc
+		) where page = #{pageNo}
+	</select>
+	
+	<select id="searchSmallProduct" resultMap="bspvRM">
+		select sp.mid_category, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_whentouse_min, 
+		sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score from(
+			select b.small_product_id, min(b.buy_link_price) as min_price from (
+				select small_product_id from blli_small_product where small_product = #{searchWord} and small_product_status = 'confirmed'
+			)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
+		)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id
+	</select>
+	
+	<select id="getSmallProductBuyLink" resultMap="bspblvRM">
+		select * from blli_small_prod_buy_link where small_product_id =  #{smallProductId} order by buy_link_price asc
+	</select>
+	
+	<select id="getOtherSmallProductList" resultMap="bspvRM">
+		select small_product_id, small_product, small_product_score
+		from blli_small_product where mid_category = #{midCategory} and small_product_status = 'confirmed' and small_product != #{smallProduct} order by small_product_score desc
+	</select>
+	
+	<select id="searchSmallProductList" resultMap="bspvRM">
+		select small_product_id, min_price, small_product, small_product_main_photo_link, small_product_whentouse_min, 
+			small_product_whentouse_max, small_product_posting_count, small_product_score from(
+			select ceil(rownum/10) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_whentouse_min, 
+			sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score from(
+				select b.small_product_id, min(b.buy_link_price) as min_price from (
+					select small_product_id from blli_small_product where small_product like '%' || #{searchWord} || '%' and small_product_status = 'confirmed'
+				)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
+			)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc
+		) where page = #{pageNo}
+	</select>
+	
+	<select id="totalOtherSmallProduct" resultType="int">
+		select count(*) from blli_small_product where mid_category = #{midCategory} and small_product_status = 'confirmed'
+	</select>
+	
+	<select id="totalPageOfSmallProductOfMidCategory" resultType="int">
+		select ceil(count(*)/10) from blli_small_product where mid_category = #{searchWord} and small_product_status = 'confirmed'
+	</select>
+	
+	<select id="totalPageOfSmallProductRelatedSearchWord" resultType="int">
+		select ceil(count(*)/10) from blli_small_product where small_product like '%' || #{searchWord} || '%' and small_product_status = 'confirmed'
+	</select>
 	<!-- 현석 쿼리 끝 -->
 
 	<!-- 준영쿼리 시작 -->

@@ -31,7 +31,7 @@
 			}
 			if(confirm("확실해?")){
 				var array = [];
-				for(var i=0;i<"${fn:length(requestScope.resultList.postingList)}";i++){
+				for(var i=0;i<"${fn:length(requestScope.resultList.list)}";i++){
 					// 선택한 소제품과 postingUrl을 배열에 저장
 				    array.push({"smallProduct": $("input:radio[name='"+i+"']:checked").next().text(), 
 				    	"postingUrl": $("input:radio[name='"+i+"']:checked").val()});
@@ -82,7 +82,7 @@
 		</c:choose>
 	</td>
 </tr>
-<c:forEach items="${requestScope.resultList.postingList}" var="postingList" varStatus="count">
+<c:forEach items="${requestScope.resultList.list}" var="postingList" varStatus="count">
 	<tr>
 		<td style="border-bottom: dotted; border-bottom-color: silver;"><h3><strong>
 		<a href="${postingList.postingUrl}" style="text-decoration:none; color: black;">${postingList.postingTitle}</a>

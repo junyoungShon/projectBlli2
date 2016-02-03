@@ -38,11 +38,11 @@ public class PostingScheduler {
 	 * @return
 	 * @throws IOException
 	 */
-	@Scheduled(cron = "00 00 04 * * *")
+	//@Scheduled(cron = "00 00 04 * * *")
 	public void insertPosting() throws IOException {
 		long start = System.currentTimeMillis(); // 시작시간 
-		
-		String key = "0a044dc7c63b8f3b9394e1a5e49db7ab"; //네이버 검색API 이용하기 위해 발급받은 key값 세번째
+		//0a044dc7c63b8f3b9394e1a5e49db7ab
+		String key = "2a636a785d0e03f7048319f8adb3d912"; //네이버 검색API 이용하기 위해 발급받은 key값 세번째
 		//소제품 리스트를 불러와 변수에 할당
 		ArrayList<BlliSmallProductVO> smallProductList = (ArrayList<BlliSmallProductVO>)productDAO.getSmallProduct(); 
 		String postingUrl = ""; //포스팅 주소
@@ -327,7 +327,7 @@ public class PostingScheduler {
 					productDAO.updateSearchTime(smallProductList.get(i).getSmallProductId());
 					long end = System.currentTimeMillis();  //종료시간
 					//종료-시작=실행시간		
-					if((end-start)/1000.0*60*60 > 3){ //3시간을 초과하면 실행 중지
+					if((end-start)/1000.0 > 3*60*60){ //3시간을 초과하면 실행 중지
 						break label;
 					}
 				} //for

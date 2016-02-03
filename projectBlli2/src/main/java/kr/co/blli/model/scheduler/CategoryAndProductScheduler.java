@@ -244,7 +244,7 @@ public class CategoryAndProductScheduler {
 							for(Element elem : ele){
 								BlliSmallProductBuyLinkVO blliSmallProductBuyLinkVO = new BlliSmallProductBuyLinkVO();
 								String buyLink = elem.select(".buy_area a").attr("href");
-								int buyLinkPrice = Integer.parseInt(elem.select(".price a").text().replace(",", ""));
+								String buyLinkPrice = elem.select(".price a").text().replace(",", "");
 								String buyLinkDeliveryCost = elem.select(".gift").first().text().trim();
 								String buyLinkOption = elem.select(".gift").last().text().trim();
 								String seller = elem.select(".mall a").text();

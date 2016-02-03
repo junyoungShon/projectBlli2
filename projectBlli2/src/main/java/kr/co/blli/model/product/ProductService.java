@@ -1,5 +1,7 @@
 package kr.co.blli.model.product;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import kr.co.blli.model.vo.BlliBabyVO;
@@ -11,6 +13,7 @@ import kr.co.blli.model.vo.BlliPostingDisLikeVO;
 import kr.co.blli.model.vo.BlliPostingLikeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
+import kr.co.blli.model.vo.ListVO;
 
 public interface ProductService {
 
@@ -31,6 +34,18 @@ public interface ProductService {
 
 	public int postingDisLike(BlliPostingDisLikeVO blliPostingDisLikeVO);
 
+	public ArrayList<BlliSmallProductVO> searchMidCategory(String pageNo, String searchWord);
+
+	public HashMap<String, Object> searchSmallProduct(String searchWord);
+
+	public ArrayList<BlliSmallProductVO> searchSmallProductList(String pageNo, String searchWord);
+
+	public ListVO getOtherProductList(String pageNo, String smallProduct);
+
+	public int totalPageOfSmallProductOfMidCategory(String searchWord);
+
+	public int totalPageOfSmallProductRelatedSearchWord(String searchWord);
+	
 	public List<BlliSmallProductVO> selectSmallProductRank(String midCategoryId);
 
 }

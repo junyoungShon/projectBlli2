@@ -142,7 +142,7 @@ CREATE TABLE blli_small_prod_buy_link (
 	seller               VARCHAR2(50) NOT NULL ,
 	buy_link_click_count NUMBER(10) default 0 ,
 	constraint fk_small_buy_link_small foreign key(small_product_id) references blli_small_product(small_product_id), -- 변경,
-	constraint pk_blli_small_prod_buy_link primary key (small_product_id, buy_link) --복합키로 수정
+	constraint pk_blli_small_prod_buy_link primary key (small_product_id, seller) --복합키로 수정 -> seller로 다시 수정
 );
 
 

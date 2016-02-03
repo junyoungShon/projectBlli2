@@ -16,7 +16,7 @@
 	$(document).ready(function(){
 		$("#confirmBtn").click(function(){
 			if(confirm("확실합니까?")){
-				for(var i=0;i<"${fn:length(requestScope.resultList.smallProductList)}";i++){
+				for(var i=0;i<"${fn:length(requestScope.resultList.list)}";i++){
 					if($("input:checkbox[name=delete]")[i].value != "삭제"){
 						if($("input:text[name=min]")[i].value > 36 || $("input:text[name=min]")[i].value < 0){
 							alert("최소 연령은 0개월부터 36개월까지 입력해주세요");
@@ -36,7 +36,7 @@
 					}
 				}
 				var array = [];
-				for(var i=0;i<"${fn:length(requestScope.resultList.smallProductList)}";i++){
+				for(var i=0;i<"${fn:length(requestScope.resultList.list)}";i++){
 					if($("input:text[name=smallProduct]")[i].value == "" && $("input:text[name=min]")[i].value == "" && 
 					$("input:text[name=max]")[i].value == "" && $("input:checkbox[name=delete]")[i].checked == false){
 						
@@ -101,7 +101,7 @@
 		</c:choose>
 	</div>
 	<br>
-<c:forEach items="${requestScope.resultList.smallProductList}" var="smallProductList" varStatus="count">
+<c:forEach items="${requestScope.resultList.list}" var="smallProductList" varStatus="count">
 	<c:choose>
 		<c:when test="${count.index%2 == 0}">
 			<c:choose>

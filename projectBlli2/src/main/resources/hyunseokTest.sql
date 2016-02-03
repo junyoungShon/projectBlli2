@@ -31,6 +31,145 @@ drop table test_log
 insert into test_log values('a')
 select * from test_log
 
+  select rownum, posting_url,small_product,small_product_id,posting_title,posting_summary,posting_content,posting_score,posting_like_count,
+  posting_dislike_count,posting_media_count,posting_photo_link,posting_total_residence_time,posting_view_count,posting_scrape_count,posting_author,posting_date
+  from blli_posting
+  where posting_status = 'unconfirmed' and small_product_id = 6960322059 and rownum = 2
+  order by posting_score desc
+
+select * from blli_small_prod_buy_link where small_product_id =  5707335265 and rownum <= 5 order by buy_link_price asc
+select * from blli_small_product where small_product_id = 6960322059
+
+select * from blli_small_product where mid_category = '캐릭터/패션인형' and rownum <= 5 order by small_product_score desc
+
+select posting_url, posting_photo_link from blli_posting where small_product = '금보 헬로키티 차' order by posting_score desc
+
+select * from(
+	select ceil(rownum/10) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_whentouse_min, 
+	sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score from(
+		select b.small_product_id, min(b.buy_link_price) as min_price from (
+			select small_product_id from blli_small_product where small_product like '%' || '토끼' || '%' and small_product_status = 'confirmed'
+		)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
+	)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id
+) where page = 1
+
+select sp.mid_category, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_whentouse_min, 
+sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score from(
+	select b.small_product_id, min(b.buy_link_price) as min_price from (
+		select small_product_id from blli_small_product where small_product = '' and small_product_status = 'confirmed'
+	)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
+)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id
+
+select * from(
+	select ceil(rownum/10) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_whentouse_min, 
+	sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score from(
+		select b.small_product_id, min(b.buy_link_price) as min_price from (
+			select small_product_id from blli_small_product where small_product like '%' || '' || '%' and small_product_status = 'confirmed'
+		)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
+	)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id
+) where page = '1'
+
+select small_product, mid_category from blli_small_product where small_product_status = 'confirmed'
+
+select sp.mid_category, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_whentouse_min, 
+sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score from(
+	select b.small_product_id, min(b.buy_link_price) as min_price from (
+		select small_product_id from blli_small_product where small_product = '포그니 토끼친구들 유아용 침구' and small_product_status = 'confirmed'
+	)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
+)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id
+
+select small_product_id, min_price, small_product, small_product_main_photo_link, small_product_whentouse_min, 
+	small_product_whentouse_max, small_product_posting_count, small_product_score from(
+	select ceil(rownum/10) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_whentouse_min, 
+	sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score from(
+		select b.small_product_id, min(b.buy_link_price) as min_price from (
+			select small_product_id from blli_small_product where small_product like '%' || '' || '%' and small_product_status = 'confirmed' 
+		)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id 
+	)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc
+) where page = '1'
+
+select small_product_id, min_price, small_product, small_product_main_photo_link, small_product_whentouse_min, 
+	small_product_whentouse_max, small_product_posting_count, small_product_score from(
+	select ceil(rownum/10) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_whentouse_min, 
+	sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score from(
+		select b.small_product_id, min(b.buy_link_price) as min_price from (
+			select small_product_id from blli_small_product where small_product like '%' || '' || '%' and small_product_status = 'confirmed'
+		)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
+	)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc
+) where page = '1'
+
+select * from(
+	select ceil(rownum/10) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, 
+	sp.small_product_whentouse_min, sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score from(
+		select b.small_product_id, min(b.buy_link_price) as min_price from (
+			select small_product_id from blli_small_product where mid_category = '낮잠이불' and small_product_status = 'confirmed'
+		)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
+	)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc
+) where page = '1'
+
+select mid_category from blli_small_product where small_product = '포그니 토끼친구들 유아용 침구'
+
+select * from blli_small_product where mid_category = '낮잠이불' and small_product_status = 'confirmed'
+
+update blli_small_product set small_product_status = 'confirmed' where mid_category = '낮잠이불'
+
+update blli_small_product set small_product_score = 87 where small_product = '큐비앤맘 포비 이불 요세트'
+
+select ceil(count(*)/10) from blli_small_product where small_product like '%' || '' || '%' and small_product_status = 'confirmed'
+
+select * from blli_small_prod_buy_link where small_product_id = 5707335265 and 5 >= rownum order by buy_link_price asc
+
+select posting_url, posting_photo_link from blli_posting where small_product = '포그니 토끼친구들 유아용 침구' order by posting_score desc
+
+update blli_posting set posting_status = 'confirmed' where small_product = '포그니 토끼친구들 유아용 침구'
+
+select ceil(count(*)/10) from blli_small_product where mid_category = '낮잠이불'
+
+update blli_small_product set small_product_status = 'confirmed' where small_product = '포그니 토끼친구들 유아용 침구'
+
+select * from blli_small_product where mid_category = '낮잠이불' and 5 >= rownum and small_product_status = 'confirmed' and small_product != '포그니 토끼친구들 유아용 침구' order by small_product_score desc
+
+select * from blli_posting where small_product like '%' || '토끼' || '%'
+
+select small_product, posting_url, posting_photo_link from blli_posting where small_product like '%' || '큐비앤맘' || '%' and posting_status = 'unconfirmed' order by posting_score desc
+
+select small_product_id, small_product, small_product_score from(
+	select ceil(rownum/5) as page, small_product_id, small_product, small_product_score from(
+		select small_product_id, small_product, small_product_score
+		from blli_small_product where mid_category = '낮잠이불' and small_product_status = 'confirmed' and small_product != '포그니 비엔나 유아용 침구 이불 요세트' order by small_product_score desc
+	)
+) where page = '3'
+
+update blli_small_product set small_product_score = 90 where small_product_id = '5707335265'
+  
+select * from(
+	select ceil(rownum/5) as page, bl.small_product_id, bl.buy_link_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_whentouse_min, sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score from(
+		select b.small_product_id, min(b.buy_link_price) as buy_link_price from (
+			select small_product_id from blli_small_product where mid_category = '캐릭터/패션인형'
+		)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
+	)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id
+) where page = '1'
+
+select bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_whentouse_min, sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score from(
+	select b.small_product_id, min(b.buy_link_price) as min_price from (
+		select small_product_id from blli_small_product where small_product = '하은맘 프라임 샴푸의자'
+	)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
+)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id
+
+select bl.buy_link, bl.buy_link_price, bl.buy_link_delivery_cost, bl.buy_link_option, bl.seller, sp.small_product_id, sp.small_product_main_photo_link, 
+sp.small_product_whentouse_min, sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score from(
+	select small_product_id, small_product_main_photo_link, small_product_whentouse_min, small_product_whentouse_max, small_product_posting_count, small_product_score 
+	from blli_small_product where small_product = '하은맘 프라임 샴푸의자'
+)sp, blli_small_prod_buy_link bl where sp.small_product_id = bl.small_product_id
+
+select * from blli_small_prod_buy_link where small_product_id = '5666293165'
+
+select * from blli_small_product where small_product_id = '5666293165';
+
+select * from blli_small_prod_buy_link
+
+select mid_category from blli_small_product;
+
 select max(ceil(rownum/5)) from blli_posting where small_product like '%' || '' || '%' and posting_status = 'confirmed'
 
 update blli_small_product set small_product_status = 'unconfirmed';
