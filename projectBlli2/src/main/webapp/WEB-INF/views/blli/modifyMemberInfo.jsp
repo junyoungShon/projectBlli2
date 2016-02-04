@@ -14,11 +14,10 @@
 	var regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i; 
 	$(document).ready(function(){
 		if($(':input[name="memberId"]').val()!=null){
-			memberNameValidity = true;
+			emailValidity = true;
 		}
 		if(!regExp.test($(':input[name="memberEmail"]').val())){
 			emailValidity = false;
-			alert('asdf');
 			$(':input[name="memberEmail"]').attr("type","text");
 		}else{
 			emailValidity = true;
@@ -149,7 +148,7 @@
 				<input type="hidden" name="memberId" value="${requestScope.blliMemberVO.memberId}"  readonly="readonly">
 				<div class="h30"><h2 id="memberIdInsertMSG" style="color: white; padding-top: 10px; padding-left:11px; font-weight: bold; text-align: left;" ></h2>
 				</div>
-				<input type="hidden" name="memberEmail" placeholder="이메일 주소를 입력해주세요">
+				<input type="hidden" name="memberEmail" placeholder="이메일 주소를 입력해주세요" value="${requestScope.blliMemberVO.memberEmail}">
 				<div class="h30"><h2 id="memberEmailInsertMSG" style="color: white; padding-top: 10px; padding-left:11px; font-weight: bold; text-align: left;" ></h2>
 				</div>
 				<input type="text" name="memberName" value="${requestScope.blliMemberVO.memberName}">

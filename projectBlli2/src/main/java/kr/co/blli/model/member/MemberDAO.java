@@ -36,5 +36,7 @@ public interface MemberDAO {
 
 	public void updateMemberInfoByEmail(BlliMemberVO blliMemberVO);
 
+	public void deleteBabyInfo(BlliMemberVO blliMemberVO);
+
 
 }

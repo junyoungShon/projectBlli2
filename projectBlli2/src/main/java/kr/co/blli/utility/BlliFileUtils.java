@@ -8,10 +8,13 @@ import java.util.List;
 import java.util.Map;
  
 
+
 import javax.servlet.http.HttpServletRequest;
  
 
+
 import kr.co.blli.model.vo.BlliBabyVO;
+import kr.co.blli.model.vo.BlliMemberVO;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,13 +24,10 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 public class BlliFileUtils {
     private static final String filePath 
     = "C:\\Users\\junyoung\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\babyphoto\\";
-    public String parseInsertFileInfo
-    (HttpServletRequest request,BlliBabyVO blliBabyVO) throws Exception{
-        MultipartHttpServletRequest multipartHttpServletRequest 
-        = (MultipartHttpServletRequest)request;
+    public ArrayList<BlliBabyVO> parseInsertFileInfo
+    (HttpServletRequest request,ArrayList<BlliBabyVO> list) throws Exception{
+        MultipartHttpServletRequest multipartHttpServletRequest  = (MultipartHttpServletRequest)request;
         
-        Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
-        System.out.println("파일 업로드 위치");
         MultipartFile multipartFile = null;
         String originalFileName = null;
         String originalFileExtension = null;
@@ -37,22 +37,24 @@ public class BlliFileUtils {
         if(file.exists() == false){
             file.mkdirs();
         }
-        
-        while(iterator.hasNext()){
-            multipartFile = multipartHttpServletRequest.getFile(iterator.next());
-            if(multipartFile.isEmpty() == false){
-                originalFileName = multipartFile.getOriginalFilename();
+        for(int i=0;i<list.size();i++){
+        	multipartFile = multipartHttpServletRequest.getFile("BlliBabyVO["+i+"].babyPhoto");
+            if(!multipartFile.getOriginalFilename().equals("")){
+            	originalFileName = multipartFile.getOriginalFilename();
+                System.out.println(originalFileName);
                 originalFileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
                 System.out.println("파일 업로드 위치"+originalFileName);
                 //프로필 사진은 멤버아이디_아이이름.확장자로 저장된다.
-                storedFileName 
-                = blliBabyVO.getMemberId()+"_"+blliBabyVO.getBabyName()+ originalFileExtension;
+                storedFileName = list.get(i).getMemberId()+"_"+list.get(i).getBabyName()+ originalFileExtension;
+                list.get(i).setBabyPhoto(storedFileName);
                 file = new File(filePath + storedFileName);
                 multipartFile.transferTo(file);
+            }else{
+            	list.get(i).setBabyPhoto("default");
             }
         }
         
-        return storedFileName;
+        return list;
     }
 }
 

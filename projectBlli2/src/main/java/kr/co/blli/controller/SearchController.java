@@ -6,11 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import kr.co.blli.model.posting.PostingService;
 import kr.co.blli.model.product.ProductService;
 import kr.co.blli.model.scheduler.CategoryAndProductScheduler;
 import kr.co.blli.model.scheduler.PostingScheduler;
+import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
@@ -53,7 +56,7 @@ public class SearchController {
 	 * @return
 	 */
 	@RequestMapping("searchSmallProduct.do")
-	public ModelAndView searchSmallProduct(String pageNo, String searchWord){
+	public ModelAndView searchSmallProduct(String pageNo, String searchWord,HttpServletRequest request){
 		ModelAndView mav = new ModelAndView();
 		ArrayList<BlliSmallProductVO> smallProductList = productService.searchMidCategory(pageNo, searchWord);
 		String viewName = "";
@@ -77,6 +80,18 @@ public class SearchController {
 			mav.addObject("resultList", smallProductList);
 			mav.addObject("totalPage", productService.totalPageOfSmallProductOfMidCategory(searchWord));
 			mav.addObject("searchWord", searchWord);
+			
+			//소제품 찜 여부 체크
+			HttpSession session =  request.getSession();
+			if(session!=null){
+				BlliMemberVO blliMemberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
+				for(int i=0;i<smallProductList.size();i++){
+					BlliSmallProductVO blliSmallProductVO = productService.productDibChecker(blliMemberVO.getMemberId(),smallProductList.get(i));
+					smallProductList.get(i).setIsDib(blliSmallProductVO.getIsDib());
+				}
+			}
+			
+			
 		}
 		
 		mav.setViewName(viewName);
@@ -161,12 +176,22 @@ public class SearchController {
 	 * @return
 	 */
 	@RequestMapping("goSmallProductDetailView.do")
-	public ModelAndView goSmallProductDetailView(String smallProduct){
+	public ModelAndView goSmallProductDetailView(String smallProduct,HttpServletRequest request){
+		HttpSession session = request.getSession();
+		BlliMemberVO blliMemberVO = null;
 		ModelAndView mav = new ModelAndView();
-		HashMap<String, Object> smallProductInfo = productService.searchSmallProduct(smallProduct);
 		ArrayList<BlliPostingVO> postingList = postingService.searchPostingListInProductDetail(smallProduct);
+		HashMap<String, Object> smallProductInfo = productService.searchSmallProduct(smallProduct);
+		
+		if(session!=null){
+			blliMemberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
+			BlliSmallProductVO blliSmallProductVO = productService.productDibChecker(blliMemberVO.getMemberId(),(BlliSmallProductVO) smallProductInfo.get("smallProduct"));
+			((BlliSmallProductVO) smallProductInfo.get("smallProduct")).setIsDib(blliSmallProductVO.getIsDib());
+		}
+		
 		mav.addObject("smallProductInfo", smallProductInfo);
 		mav.addObject("postingList", postingList);
+		mav.addObject("blliMemberVO",blliMemberVO);
 		mav.setViewName("smallProductDetailPage");
 		return mav;
 	}

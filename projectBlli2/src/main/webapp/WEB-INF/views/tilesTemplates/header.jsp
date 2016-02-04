@@ -6,7 +6,7 @@
 <form action="${initParam.root}searchSmallProduct.do" method="get">
 <div class="jbMenu">
       <div class="in_fr">
-		<a href="/main.html"><img src="${initParam.root}img/top_logo.png" alt="탑로고" class="logo"></a>
+		<a href="${initParam.root}member_goMain.do"><img src="${initParam.root}img/top_logo.png" alt="탑로고" class="logo"></a>
 		<div class="top_search">
 			<input type="text" class="search_text" placeholder="검색어를 입력하세요" name="searchWord">
 			<a href="#" onclick="$(this).closest('form').submit()"><img src="${initParam.root}img/search.png" alt="검색"></a>
@@ -44,7 +44,7 @@
 <form action="${initParam.root}searchSmallProduct.do" method="get">
    <div class="jbMenu">
 	<div class="in_fr">
-		<a href="/main.html"><img src="${initParam.root}img/top_logo.png" alt="탑로고"
+		<a href="${initParam.root}member_goMain.do"><img src="${initParam.root}img/top_logo.png" alt="탑로고"
 			class="logo"></a>
 		<div class="top_search">
 			<input type="text" class="search_text" placeholder="검색어를 입력하세요" name="searchWord">

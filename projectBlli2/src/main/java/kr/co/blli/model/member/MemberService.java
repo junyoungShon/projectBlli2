@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 
+
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 
@@ -27,6 +28,9 @@ public interface MemberService {
 	public void changeRecommendingBaby(BlliBabyVO blliBabyVO);
 
 	public void updateMemberInfoByEmail(BlliMemberVO blliMemberVO);
+
+	public void deleteBabyInfo(BlliMemberVO blliMemberVO);
+
 
 
 }

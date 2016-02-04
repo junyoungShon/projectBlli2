@@ -46,7 +46,8 @@
 					url:"deleteRecommendMidCategory.do?midCategory="+$(this).children('.midCategoryValue').val()
 							+"&memberId=${sessionScope.blliMemberVO.memberId}&midCategoryId="+$(this).children('.midCategoryIdValue').val(),
 					success:function(){
-						$(this).parent().parent().parent().css("display","none");
+						$(this).parent('.gallery-cell').css("display","none");
+						alert($($(this).parent()).html());
 					}
 				}); 
 			}
@@ -86,10 +87,10 @@
 				success:function(result){
 					alert($(this));
 					if(result==1){
-						$(this).removeClass("fa-heart-o");
-						$(this).addClass("fa-heart");
+						$(this).removeClass("fa-heart");
+						$(this).addClass("fa-heart-o");
 					}else if(result==0){
-						$(this).removeClass("fa-heart-o").addClass("fa-heart");
+						$(this).removeClass("fa-heart").addClass("fa-heart");
 					}
 				}
 			});
@@ -156,87 +157,98 @@
 				success:function(data){
 					var accordionDetailHTML = '<table><colgroup><col width="20%"></colgroup>';
 					for(var i=0;i<data.length;i++){
-						alert(data[i].smallProduct);
-						accordionDetailHTML += '<tr><th>'+(i+1)+'위</th><td>'+data[i].smallProduct+' </td></tr>'
+						accordionDetailHTML += 
+							'<tr><th>'+(i+1)+'위</th><td><a href="goSmallProductDetailView.do?smallProduct='+data[i].smallProduct+'">'+data[i].smallProduct+'</a></td></tr>'
 					}
 					accordionDetailHTML += '</table>';
 					$('#accordion-'+accodionindex).html(accordionDetailHTML);
 				}
 			}); 
 		});
+		
+		//무한 스크롤
 		$(window).scroll(function(){ 
 		    if($(window).scrollTop() >= $(document).height() - $(window).height()){  
-		    	pageNum++;
-	    		var smallProductId;
-		    	$('.main_product_ti').each(function(index){
-		    		if($('#smallProductId-'+index).val()!=undefined){
-			    		if(index==0){
-			    			smallProductId = $('#smallProductId-'+index).val();
-			    		}else{
-			    			smallProductId += "/"+$('#smallProductId-'+index).val();
-			    		}
-		    		} 
-		    	});
-		    	$.ajax({
-		    		type : "get",
-		    		url : "selectPostingBySmallProduct.do?pageNum="+pageNum+"&smallProductIdList="+smallProductId+"&memberId=${sessionScope.blliMemberVO.memberId}",
-		    		success : function(data){
-		    			var leftProductAjaxHTML = "";
-		    			var rightPostingAjaxHTML = "";
-		    			var postingScrapeAjaxHTML = '<i class="fa fa-bookmark-o postingScrapeBtn" style="color: gray"></i> ';
-		    			var postingLikeAjaxHTML = '<i class="fa fa-thumbs-up postingLikeBtn" style="color: gray"></i> ';
-		    			var postingDisLikeAjaxHTML = '<i class="fa fa-thumbs-down postingDisLikeBtn" style="color: gray"></i> ';
-		    			for(var i=0;i<data.length;i++){
-		    				if(data[i].isScrapped==1){
-		    					postingScrapeAjaxHTML = '<i class="fa fa-bookmark postingScrapeBtn" style="color: orange"></i>';
-		    				}
-		    				if(data[i].isLike==1){
-		    					postingLikeAjaxHTML = '<i class="fa fa-thumbs-up postingLikeBtn" style="color: orange"></i>';
-		    				}
-		    				if(data[i].isDisLike==1){
-		    					postingDisLikeAjaxHTML = '<i class="fa fa-thumbs-down postingDisLikeBtn" style="color: orange"></i>';
-		    				}
-		    				$('.postingForSmallProduct').each(function(index){
-		    						if(data[i].smallProductId==$($('.postingForSmallProduct').get(index)).children('.product_price').children('.fr').children().children('.smallProductId').val()){
-			    						leftProductAjaxHTML += '<div style="height:356px;" class="postingForSmallProduct">';
-			    						leftProductAjaxHTML += $($('.postingForSmallProduct').get(index)).html();
-			    						leftProductAjaxHTML += '</div>';
-			    						return false;
-				    				}
-		    				})
-							rightPostingAjaxHTML +=
-							'<input type="hidden" class="smallProductIdInfo" value="${postingList.smallProductId}">'+
-							'<input type="hidden" class="postingUrlInfo" value="${postingList.postingUrl}"><div style="height:356px;"><div class="result_ti">'+
-							'<div style="width:450px; overflow:hidden;white-space:nowrap; text-overflow:ellipsis;">'+
-							data[i].postingTitle+
-							'</div></div><div style="height:245px;"><div class="result_foto fl"><a href="goPosting.do?postingUrl='+
-							data[i].postingUrl+
-							'&smallProductId='+
-							data[i].smallProductId+'"><img src="http://t1.daumcdn.net/thumb/R1024x0/?fname='+
-							data[i].postingPhotoLink+
-							'" style="width: 342px; max-height: 247px;"></a></div><div class="fl"><div class="product_text2">'+
-							data[i].postingSummary+
-							'</div><div class="product_id"><div style="width:180px; overflow:hidden;white-space:nowrap; text-overflow:ellipsis;">'+
-							data[i].postingAuthor+
-							'</div></div></div></div><div class="product_sns"><div class="fl score">'+
-							data[i].postingScore+
-							'점</div><div class="fr sns">'+
-							postingScrapeAjaxHTML+
-							data[i].postingScrapeCount+' '+
-							postingLikeAjaxHTML+
-							data[i].postingLikeCount+' '+
-							postingDisLikeAjaxHTML+
-							data[i].postingLikeCount+' '+
-							'</div></div></div>'
-		    			}
-		    			
-		    			$('.main_left_product').append(leftProductAjaxHTML);
-		    			$('.main_left_con').append(rightPostingAjaxHTML);
-		    			leftProductAjaxHTML = "";
-		    		}
-		   		});
+		    	setTimeout(function(){$("#loading").show();}, 100)
+		    	setTimeout(function(){loadingPostingList();}, 800)
+		    	setTimeout(function(){$("#loading").hide();}, 600)
 		    }
 		});
+		
+		function loadingPostingList(){
+			pageNum++;
+    		var smallProductId;
+	    	$('.main_product_ti').each(function(index){
+	    		if($('#smallProductId-'+index).val()!=undefined){
+		    		if(index==0){
+		    			smallProductId = $('#smallProductId-'+index).val();
+		    		}else{
+		    			smallProductId += "/"+$('#smallProductId-'+index).val();
+		    		}
+	    		} 
+	    	});
+	    	$.ajax({
+	    		type : "get",
+	    		url : "selectPostingBySmallProduct.do?pageNum="+pageNum+"&smallProductIdList="+smallProductId+"&memberId=${sessionScope.blliMemberVO.memberId}",
+	    		success : function(data){
+	    			var leftProductAjaxHTML = "";
+	    			var rightPostingAjaxHTML = "";
+	    			var postingScrapeAjaxHTML = '<i class="fa fa-bookmark-o postingScrapeBtn" style="color: gray"></i> ';
+	    			var postingLikeAjaxHTML = '<i class="fa fa-thumbs-up postingLikeBtn" style="color: gray"></i> ';
+	    			var postingDisLikeAjaxHTML = '<i class="fa fa-thumbs-down postingDisLikeBtn" style="color: gray"></i> ';
+	    			if(data.length==0){
+	    				alert('현재 추천되는 소제품 관련 포스팅은 여기까지 입니다 ^^');
+	    			}
+	    			for(var i=0;i<data.length;i++){
+	    				if(data[i].isScrapped==1){
+	    					postingScrapeAjaxHTML = '<i class="fa fa-bookmark postingScrapeBtn" style="color: orange"></i>';
+	    				}
+	    				if(data[i].isLike==1){
+	    					postingLikeAjaxHTML = '<i class="fa fa-thumbs-up postingLikeBtn" style="color: orange"></i>';
+	    				}
+	    				if(data[i].isDisLike==1){
+	    					postingDisLikeAjaxHTML = '<i class="fa fa-thumbs-down postingDisLikeBtn" style="color: orange"></i>';
+	    				}
+	    				$('.postingForSmallProduct').each(function(index){
+	    						if(data[i].smallProductId==$($('.postingForSmallProduct').get(index)).children('.product_price').children('.fr').children().children('.smallProductId').val()){
+		    						leftProductAjaxHTML += '<div style="height:356px;" class="postingForSmallProduct">';
+		    						leftProductAjaxHTML += $($('.postingForSmallProduct').get(index)).html();
+		    						leftProductAjaxHTML += '</div>';
+		    						return false;
+			    				}
+	    				})
+						rightPostingAjaxHTML +=
+						'<input type="hidden" class="smallProductIdInfo" value="${postingList.smallProductId}">'+
+						'<input type="hidden" class="postingUrlInfo" value="${postingList.postingUrl}"><div style="height:356px;"><div class="result_ti">'+
+						'<div style="width:450px; overflow:hidden;white-space:nowrap; text-overflow:ellipsis;">'+
+						data[i].postingTitle+
+						'</div></div><div style="height:245px;"><div class="result_foto fl"><a href="goPosting.do?postingUrl='+
+						data[i].postingUrl+
+						'&smallProductId='+
+						data[i].smallProductId+'&postingTitle='+data[i].postingTitle+'"><img src="http://t1.daumcdn.net/thumb/R1024x0/?fname='+
+						data[i].postingPhotoLink+
+						'" style="width: 342px; max-height: 247px;"></a></div><div class="fl"><div class="product_text2">'+
+						data[i].postingSummary+
+						'</div><div class="product_id"><div style="width:180px; overflow:hidden;white-space:nowrap; text-overflow:ellipsis;">'+
+						data[i].postingAuthor+
+						'</div></div></div></div><div class="product_sns"><div class="fl score">'+
+						data[i].postingScore+
+						'점</div><div class="fr sns">'+
+						postingScrapeAjaxHTML+
+						data[i].postingScrapeCount+' '+
+						postingLikeAjaxHTML+
+						data[i].postingLikeCount+' '+
+						postingDisLikeAjaxHTML+
+						data[i].postingLikeCount+' '+
+						'</div></div></div>'
+	    			}
+	    			
+	    			$('.main_left_product').append(leftProductAjaxHTML);
+	    			$('.main_left_con').append(rightPostingAjaxHTML);
+	    			leftProductAjaxHTML = "";
+	    		}
+	   		});
+		}
 		
 	});
 </script>
@@ -283,19 +295,23 @@
 						<c:forEach items="${requestScope.blliMidCategoryVOList}" var="recommProductList">
 							<li>
 								<div class="boxy-menu-item-top gallery-cell">
+								<label>
 									<div class="yellow_foto">
-									<img src='${recommProductList.midCategoryMainPhotoLink}' style="width: 115px;height: 115px;border-radius:20px">
+									<a href="searchSmallProduct.do?searchWord=${recommProductList.midCategory}"> 
+									<img src='${recommProductList.midCategoryMainPhotoLink}' style="width: 115px;height: 115px;border-radius:20px"></a>
 									</div>
 									<div class="yellow_ti">
 										${recommProductList.midCategory }
 									</div>
 								</div>
+								
 								<div class="boxy-menu-item-bottom">
 									<ul class="items">
 										<li class="main_yellow_ti">샴푸의자</li>
 										<li style="height:100px; font-weight:normal;">
 											${recommProductList.midCategoryInfo }
 										</li>
+								</label>
 										<li class="recommendMidDelete">
 											[추천제외]
 											<input type="text" value="${recommProductList.midCategory}" class="midCategoryValue" style="display: none"> 
@@ -322,10 +338,13 @@
 		<div class="main_product">
 			<ul class="midRecommProduct">
 			<c:forEach items="${requestScope.blliSmallProductVOList}" var="blliSmallProductVOList" varStatus="smallProductIndex">
+			
 				<li class="gallery-cell">
 				<%-- ${blliSmallProductVOList.midCategoryId} --%>
 					<div class="foto205">
-						<img src="${blliSmallProductVOList.smallProductMainPhotoLink}" style="height: 207px; width: 207px;">
+						<a href = "goSmallProductDetailView.do?smallProduct=${blliSmallProductVOList.smallProduct}">
+							<img src="${blliSmallProductVOList.smallProductMainPhotoLink}" style="height: 207px; width: 207px;">
+						</a>
 						<div class="product_month">
 						${blliSmallProductVOList.smallProductWhenToUseMin}~${blliSmallProductVOList.smallProductWhenToUseMax}<br/>
 							개월
@@ -373,9 +392,12 @@
 			<c:forEach items="${requestScope.blliPostingVOList}" var="postingList">
 				<c:forEach items="${requestScope.blliSmallProductVOList}" var="blliSmallProductVOList">
 				<c:if test="${postingList.smallProductId==blliSmallProductVOList.smallProductId}">
+				
 			<div style="height:356px;" class="postingForSmallProduct">
 				<div class="foto170">
+					<a href = "goSmallProductDetailView.do?smallProduct=${blliSmallProductVOList.smallProduct}">
 					<img src="${blliSmallProductVOList.smallProductMainPhotoLink}" style="height: 170px; width: 170px;">
+					</a>
 					<div class="product_month">
 							${blliSmallProductVOList.smallProductWhenToUseMin}~${blliSmallProductVOList.smallProductWhenToUseMax}<br/>
 						개월
@@ -386,11 +408,13 @@
 							${blliSmallProductVOList.smallProduct} / ${blliSmallProductVOList.smallProductMaker}
 						</div>
 				</div>
+				
 				<div class="product_price" style="margin:0px;">
 					<div class="fl">
 						<p class="result_gray">최저가</p>
 						<p class="result_price">25,000원</p>
 					</div>
+				
 					<div class="fr">
 						
 						<c:if test="${blliSmallProductVOList.isDib==0}">
@@ -410,6 +434,7 @@
 					</div>
 				</div>
 			</div>
+			
 			</c:if>
 				</c:forEach>
 			</c:forEach>
@@ -431,7 +456,7 @@
 				</div>
 				<div style="height:245px;">
 					<div class="result_foto fl">
-						<a href="goPosting.do?postingUrl=${postingList.postingUrl}&smallProductId=${postingList.smallProductId}">
+						<a href="goPosting.do?postingUrl=${postingList.postingUrl}&smallProductId=${postingList.smallProductId}+'&postingTitle='${postingList.postingTitle}">
 							<img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${postingList.postingPhotoLink}" style="width: 342px; max-height: 247px;">
 						</a>
 					</div>
@@ -478,6 +503,7 @@
 					</div>
 				</div>
 			</div>
+			<p align="center"><img id="loading" src="${initParam.root}image/loading.gif" style="width: 50px"></p>
 			</c:forEach>
 		</div>
 		<div class="main_right_list">
@@ -504,6 +530,7 @@
 				</div>
 				</c:forEach>
 			</div>
+
 		</div>
 </div>
 
@@ -513,5 +540,3 @@
 
 
 
-
-</html>

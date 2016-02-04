@@ -192,7 +192,20 @@ $(document).ready(function(){
 							<p class="result_price">${smallProductList.minPrice}원</p>
 						</div>
 						<div class="fr">
-							<a href="#"><img src="${initParam.root}img/jjim.png" alt="찜" style="margin-top:10px;"></a>
+							<c:if test="${smallProductList.isDib==0}">
+											<div style="margin-top: 15px">
+												<i class="fa fa-heart-o fa-2x smallProductDibBtn" style="color: red"></i>
+												<span style="font-size: 15px ;color: gray;">${smallProductList.smallProductDibsCount}</span>
+												<input type="hidden" value="${smallProductList.smallProductId}" class="smallProductId">
+											</div>
+									</c:if>
+									<c:if test="${smallProductList.isDib==1}">
+											<div style="margin-top: 15px">
+												<i class="fa fa-heart fa-2x smallProductDibBtn" style="color: red"></i>
+													<span style="font-size: 15px ;color: gray;">${smallProductList.smallProductDibsCount}</span>
+												<input type="hidden" value="${smallProductList.smallProductId}" class="smallProductId">
+									</div>
+									</c:if>
 						</div>
 					</div>
 				</div>
@@ -246,7 +259,20 @@ $(document).ready(function(){
 							<p class="result_price">${smallProductList.minPrice}원</p>
 						</div>
 						<div class="fr">
-							<a href="#"><img src="${initParam.root}img/jjim.png" alt="찜" style="margin-top:10px;"></a>
+							<c:if test="${smallProductList.isDib==0}">
+											<div style="margin-top: 15px">
+												<i class="fa fa-heart-o fa-2x smallProductDibBtn" style="color: red"></i>
+												<span style="font-size: 15px ;color: gray;">${smallProductList.smallProductDibsCount}</span>
+												<input type="hidden" value="${smallProductList.smallProductId}" class="smallProductId">
+											</div>
+									</c:if>
+									<c:if test="${smallProductList.isDib==1}">
+											<div style="margin-top: 15px">
+												<i class="fa fa-heart fa-2x smallProductDibBtn" style="color: red"></i>
+													<span style="font-size: 15px ;color: gray;">${smallProductList.smallProductDibsCount}</span>
+												<input type="hidden" value="${smallProductList.smallProductId}" class="smallProductId">
+									</div>
+									</c:if>
 						</div>
 					</div>
 				</div>

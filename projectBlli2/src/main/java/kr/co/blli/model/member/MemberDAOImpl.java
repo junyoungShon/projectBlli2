@@ -34,6 +34,7 @@ public class MemberDAOImpl implements MemberDAO{
 	
 	@Override
 	public void insertBabyInfo(BlliBabyVO blliBabyVO) {
+		System.out.println(blliBabyVO);
 		sqlSessionTemplate.insert("member.insertBabyInfo",blliBabyVO);
 	}
 	
@@ -78,6 +79,11 @@ public class MemberDAOImpl implements MemberDAO{
 	@Override
 	public List<BlliBabyVO> getBabyAgeChangedListOfMember(String memberId) {
 		return sqlSessionTemplate.selectList("member.getBabyAgeChangedListOfMember", memberId);	
+	}
+
+	@Override
+	public void deleteBabyInfo(BlliMemberVO blliMemberVO) {
+		sqlSessionTemplate.delete("member.deleteBabyInfo", blliMemberVO);
 	}
 
 

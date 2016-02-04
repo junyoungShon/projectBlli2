@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
+import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
 import kr.co.blli.model.vo.BlliPagingBean;
@@ -77,7 +78,6 @@ public class ProductServiceImpl implements ProductService{
 			List<BlliMidCategoryVO> blliMidCategoryVOList, BlliBabyVO blliBabyVO) {
 		List<BlliSmallProductVO> blliSmallProductVOList = new ArrayList<BlliSmallProductVO>();
 		int recommMidNumber = blliMidCategoryVOList.size();
-		System.out.println("여기오냐");
 		if(recommMidNumber>9){
 			for(int i=0;i<blliMidCategoryVOList.size();i++){
 				HashMap<String,String> paraMap = new HashMap<String, String>();
@@ -98,17 +98,8 @@ public class ProductServiceImpl implements ProductService{
 				}
 			}
 		}
-		//출력해줄 소분류 제품이 추출 된 후 그 리스트 중에 이미 엄마가 찜한 상품이 있는지 파악
-		String memberId = blliBabyVO.getMemberId();
-		BlliMemberDibsVO blliMemberDibsVO= new BlliMemberDibsVO();
-		blliMemberDibsVO.setMemberId(memberId);
 		for(int i=0;i<blliSmallProductVOList.size();i++){
-			blliMemberDibsVO.setSmallProductId(blliSmallProductVOList.get(i).getSmallProductId());
-			if(productDAO.selectMemberDibsSmallProduct(blliMemberDibsVO)!=0){
-				blliSmallProductVOList.get(i).setIsDib(1);
-			}else{
-				blliSmallProductVOList.get(i).setIsDib(0);
-			}
+			blliSmallProductVOList.set(i, productDibChecker(blliBabyVO.getMemberId(), blliSmallProductVOList.get(i)));
 		}
 		return blliSmallProductVOList;
 	}
@@ -361,6 +352,19 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public List<BlliSmallProductVO> selectSmallProductRank(String midCategoryId) {
 		return productDAO.selectSmallProductRank(midCategoryId);
+	}
+	@Override
+	public BlliSmallProductVO productDibChecker(String memberId, BlliSmallProductVO blliSmallProductVO) {
+		//출력해줄 소분류 제품이 추출 된 후 그 리스트 중에 이미 엄마가 찜한 상품이 있는지 파악
+		BlliMemberDibsVO blliMemberDibsVO= new BlliMemberDibsVO();
+		blliMemberDibsVO.setMemberId(memberId);
+		blliMemberDibsVO.setSmallProductId(blliSmallProductVO.getSmallProductId());
+		if(productDAO.selectMemberDibsSmallProduct(blliMemberDibsVO)!=0){
+			blliSmallProductVO.setIsDib(1);
+		}else{
+			blliSmallProductVO.setIsDib(0);
+		}
+		return blliSmallProductVO;
 	}
 
 }

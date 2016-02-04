@@ -296,6 +296,21 @@ public class MemberController {
 		memberService.insertBabyInfo(blliMemberVO,request);
 		return "redirect:member_proceedingToMain.do";
 	}
+	/**
+	 * @Method Name : insertBabyInfo
+	 * @Method 설명 : 아이 및 이메일을 등록하는 메서드
+	 * @작성일 : 2016. 1. 16.
+	 * @작성자 : junyoung
+	 * @param request
+	 * @throws Exception 
+	 */
+	@RequestMapping("updateBabyInfo.do")
+	public String updateBabyInfo
+	(HttpServletRequest request,BlliMemberVO blliMemberVO) throws Exception{
+		memberService.deleteBabyInfo(blliMemberVO);
+		memberService.insertBabyInfo(blliMemberVO,request);
+		return "redirect:member_proceedingToMain.do";
+	}
 	
 	/**
 	  * @Method Name : goModifyMemberInfoPage

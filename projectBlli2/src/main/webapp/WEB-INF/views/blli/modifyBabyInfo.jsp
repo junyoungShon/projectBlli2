@@ -4,11 +4,22 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
     <script>
   //이메일 유효성 변수
-	var emailValidity = false;
+	var emailValidity;
 	//쌍둥이 선택 시 몇번째 칸 아이인지 저장하는 변수
 	var selectBabyNum ;
 	//최근 업로드된 사진번호 저장 변수
 	var updateBabyPhotoNum;
+	
+	var regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i; 
+	$(document).ready(function(){
+		if(!regExp.test($(':input[name="memberEmail"]').val())){
+			emailValidity = false;
+			$('.email_bg').css("display","block");
+		}else{
+			emailValidity = true;
+		}
+	});
+	
 	
 	function setUpdateBabyPhotoNum(updateBabyPhotoNum){
 		this.updateBabyPhotoNum = updateBabyPhotoNum;
@@ -253,55 +264,61 @@
 			document.getElementById("babyInfoForm").submit();
 		}
 	}
+	function backButton(){
+		history.back();
+	}
 		
 </script>
 	<div class="loginPage_bg" style="height: 1000px;">
-<form action="insertBabyInfo.do" id="babyInfoForm" method="post" name="babyInfoInsertForm" enctype="multipart/form-data">
+<form action="updateBabyInfo.do" id="babyInfoForm" method="post" name="babyInfoInsertForm" enctype="multipart/form-data">
 	<div class="info_fr">
 			<input type="hidden" name="memberId" value="${sessionScope.blliMemberVO.memberId}">
 			<div class="email_bg" style="top: 15%; display : none;">
-				이메일 주소 <input type="text" name="memberId" placeholder="Email 주소">
+				이메일 주소 <input type="text" name="memberEmail" placeholder="Email 주소" value="${sessionScope.blliMemberVO.memberEmail}">
 			</div>
 
 			<!-- 몇명의 아이를 입력했는지 정보를 넘겨주는 히든 폼 -->
 			<input type="hidden" value="1" name="targetAmount"> 
 		<c:if test="${requestScope.blliMemberVO.blliBabyVOList.size()==1 }">
 			<div class="info_bg" style="top: 28%;">
-			<div class="title">
-				아이 정보 입력
-			</div>
-			<div>
-				<div class="fl">
-					<label>
-					<div class="baby_foto">
-						<input type="file" class="babyPhoto" name="BlliBabyVO[0].babyPhoto" id="babyPhotoInput0" style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(0)">
- 						<c:if test="${requestScope.blliMemberVO.blliBabyVOList.get(0).babyPhoto!='default'}">
- 							<img src="${initParam.root}babyphoto/${requestScope.blliMemberVO.blliBabyVOList.get(0).babyPhoto}" 
-			 						alt="사진추가하기" class="foto_plus" id="babyPhoto0" style="height: 116px; width: 116px;">
- 						</c:if>
- 						<c:if test="${requestScope.blliMemberVO.blliBabyVOList.get(0).babyPhoto=='default'}">
- 							<img src="./img/foto_plus.png" alt="사진추가하기" class="foto_plus" id="babyPhoto0">
- 						</c:if>
-					</div>
-					</label>
+				<div class="title">
+					아이 정보 입력
 				</div>
-				<div class="fr" style="width:190px;">
-						<span class="fl" style="margin-bottom: 7px;">
-							성별 : 
-							<select name="BlliBabyVO[0].babySex" class="genderSelector">
-								<option value="${requestScope.blliMemberVO.blliBabyVOList.get(0).babySex}" selected="selected">
-									${requestScope.blliMemberVO.blliBabyVOList.get(0).babySex}</option>
-								<option value="남자">남자</option>
-								<option value="여자">여자</option>
-								<option value="쌍둥이">쌍둥이</option>
-								<option value="모름">모름</option>
-							</select>					
-						</span>
-					<label><input type="text" placeholder="아이이름" name="BlliBabyVO[0].babyName" class="babyName"
-					value="${requestScope.blliMemberVO.blliBabyVOList.get(0).babyName}"></label>
-					<label><input type="text" id="datepicker" value="${requestScope.blliMemberVO.blliBabyVOList.get(0).babyBirthday}" 
-					name="BlliBabyVO[0].babyBirthday" placeholder="아이생일" readonly="readonly" style="margin-top:5px;" ></label>
-					<input type="button" class="fr" onclick="addInfoBg2()" style="margin-top: 10px ;height: 20px;" value="아이 추가 하기">
+				<div>
+					<div class="fl">
+						<label>
+						<div class="baby_foto">
+							<input type="file" class="babyPhoto" name="BlliBabyVO[0].babyPhoto" id="babyPhotoInput0" 
+							value="${requestScope.blliMemberVO.blliBabyVOList.get(0).babyPhoto}"
+							style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(0)">
+	 						<c:if test="${requestScope.blliMemberVO.blliBabyVOList.get(0).babyPhoto!='default'}">
+	 							<img src="${initParam.root}babyphoto/${requestScope.blliMemberVO.blliBabyVOList.get(0).babyPhoto}" 
+				 						alt="사진추가하기" class="foto_plus" id="babyPhoto0" style="height: 116px; width: 116px;">
+	 						</c:if>
+	 						<c:if test="${requestScope.blliMemberVO.blliBabyVOList.get(0).babyPhoto=='default'}">
+	 							<img src="./img/foto_plus.png" alt="사진추가하기" class="foto_plus" id="babyPhoto0">
+	 						</c:if>
+						</div>
+						</label>
+					</div>
+					<div class="fr" style="width:190px;">
+							<span class="fl" style="margin-bottom: 7px;">
+								성별 : 
+								<select name="BlliBabyVO[0].babySex" class="genderSelector">
+									<option value="${requestScope.blliMemberVO.blliBabyVOList.get(0).babySex}" selected="selected">
+										${requestScope.blliMemberVO.blliBabyVOList.get(0).babySex}</option>
+									<option value="남자">남자</option>
+									<option value="여자">여자</option>
+									<option value="쌍둥이">쌍둥이</option>
+									<option value="모름">모름</option>
+								</select>					
+							</span>
+						<label><input type="text" placeholder="아이이름" name="BlliBabyVO[0].babyName" class="babyName"
+						value="${requestScope.blliMemberVO.blliBabyVOList.get(0).babyName}"></label>
+						<label><input type="text" id="datepicker" value="${requestScope.blliMemberVO.blliBabyVOList.get(0).babyBirthday}" 
+						name="BlliBabyVO[0].babyBirthday" placeholder="아이생일" readonly="readonly" style="margin-top:5px;" ></label>
+						<input type="button" class="fr" onclick="addInfoBg2()" style="margin-top: 10px ;height: 20px;" value="아이 추가 하기">
+					</div>
 				</div>
 			</div>
 			<div class="info_bg2" style="display: none;">
@@ -331,7 +348,6 @@
 						</div>
 					</div>
 				</div>
-		</div>
 		<div class="info_bg3" style="display: none;">
 			<div>
 				<div class="fl">
@@ -362,14 +378,15 @@
 		</c:if>
 		<c:if test="${requestScope.blliMemberVO.blliBabyVOList.size()==2 }">
 			<div class="info_bg" style="top: 28%;">
-			<div class="title">
-				아이 정보 입력
-			</div>
-			<div>
+				<div class="title">
+					아이 정보 입력
+				</div>
 				<div class="fl">
 					<label>
 					<div class="baby_foto">
-						<input type="file" class="babyPhoto" name="BlliBabyVO[0].babyPhoto" id="babyPhotoInput0" style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(0)">
+						<input type="file" class="babyPhoto" name="BlliBabyVO[0].babyPhoto" id="babyPhotoInput0" style="display: none;" 
+						value="${requestScope.blliMemberVO.blliBabyVOList.get(0).babyPhoto}"
+						accept="image/*" onchange="setUpdateBabyPhotoNum(0)">
  						<c:if test="${requestScope.blliMemberVO.blliBabyVOList.get(0).babyPhoto!='default'}">
  							<img src="${initParam.root}babyphoto/${requestScope.blliMemberVO.blliBabyVOList.get(0).babyPhoto}" 
 			 						alt="사진추가하기" class="foto_plus" id="babyPhoto0" style="height: 116px; width: 116px;">
@@ -404,7 +421,9 @@
 						<div class="fl">
 							<label>
 								<div class="baby_foto" >
-									<input type="file" class="babyPhoto" name="BlliBabyVO[1].babyPhoto" style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(1)">
+									<input type="file" class="babyPhoto" name="BlliBabyVO[1].babyPhoto" style="display: none;" accept="image/*" 
+									value="${requestScope.blliMemberVO.blliBabyVOList.get(1).babyPhoto}"
+									onchange="setUpdateBabyPhotoNum(1)">
 			 						<c:if test="${requestScope.blliMemberVO.blliBabyVOList.get(0).babyPhoto!='default'}">
 				 						<img src="${initParam.root}babyphoto/${requestScope.blliMemberVO.blliBabyVOList.get(1).babyPhoto}" 
 				 						alt="사진추가하기" class="foto_plus" id="babyPhoto1" style="height: 116px;width: 116px;">
@@ -475,7 +494,9 @@
 				<div class="fl">
 					<label>
 					<div class="baby_foto">
-						<input type="file" class="babyPhoto" name="BlliBabyVO[0].babyPhoto" id="babyPhotoInput0" style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(0)">
+						<input type="file" class="babyPhoto" name="BlliBabyVO[0].babyPhoto" id="babyPhotoInput0" style="display: none;"
+						 value="${requestScope.blliMemberVO.blliBabyVOList.get(0).babyPhoto}"
+						style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(0)">
  						<c:if test="${requestScope.blliMemberVO.blliBabyVOList.get(0).babyPhoto!='default'}">
  							<img src="${initParam.root}babyphoto/${requestScope.blliMemberVO.blliBabyVOList.get(0).babyPhoto}" 
 			 						alt="사진추가하기" class="foto_plus" id="babyPhoto0" style="height: 116px; width: 116px;">
@@ -511,7 +532,9 @@
 						<div class="fl">
 							<label>
 								<div class="baby_foto" >
-									<input type="file" class="babyPhoto" name="BlliBabyVO[1].babyPhoto" style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(1)">
+									<input type="file" class="babyPhoto" name="BlliBabyVO[1].babyPhoto" style="display: none;" 
+									value="${requestScope.blliMemberVO.blliBabyVOList.get(1).babyPhoto}"
+									accept="image/*" onchange="setUpdateBabyPhotoNum(1)">
 			 						<c:if test="${requestScope.blliMemberVO.blliBabyVOList.get(1).babyPhoto!='default'}">
 				 						<img src="${initParam.root}babyphoto/${requestScope.blliMemberVO.blliBabyVOList.get(1).babyPhoto}" 
 				 						alt="사진추가하기" class="foto_plus" id="babyPhoto1" style="height: 116px;width: 116px;">
@@ -547,7 +570,9 @@
 						<div class="fl">
 							<label>
 								<div class="baby_foto" >
-									<input type="file" class="babyPhoto" name="BlliBabyVO[2].babyPhoto" style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(2)">
+									<input type="file" class="babyPhoto" name="BlliBabyVO[2].babyPhoto" style="display: none;" 
+									value="${requestScope.blliMemberVO.blliBabyVOList.get(2).babyPhoto}"
+									accept="image/*" onchange="setUpdateBabyPhotoNum(2)">
 			 						<c:if test="${requestScope.blliMemberVO.blliBabyVOList.get(2).babyPhoto!='default'}">
 				 						<img src="${initParam.root}babyphoto/${requestScope.blliMemberVO.blliBabyVOList.get(2).babyPhoto}" 
 				 						alt="사진추가하기" class="foto_plus" id="babyPhoto2" style="height: 116px;width: 116px;">
@@ -581,8 +606,8 @@
 		
 		<div class="info_bt" style="top: 55%;">
 			<div style="width:317px; margin:auto; ">
-			<input type="button" class="loginButton" value="아이정보수정완료" style="margin-top:20px;" > 
-			<input type="button" class="loginButton" value="아이정보수정취소" style="margin-top:20px;" > 
+			<input type="button" class="loginButton" value="아이정보수정완료" style="margin-top:20px;" onclick="insertBabyInfo()"> 
+			<input type="button" class="loginButton" value="아이정보수정취소" style="margin-top:20px;" onclick="backButton()"> 
 			</div>
 		</div>
 	</div>
