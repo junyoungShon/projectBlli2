@@ -3,6 +3,7 @@ package kr.co.blli.model.scheduler;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,24 +36,30 @@ public class MailScheduler {
 	
 	/**
 	  * @Method Name : sendRecommendingMail
-	  * @Method 설명 : 스케줄러에 의해  주기적으로 실행되는 제품추천메일 발송 메소드. 실행 시기 : 매일 00시 월령이 바뀐 자녀를 가진 회원에게 월령병 추천 제품 메일 발송
+	  * @Method 설명 : 스케줄러에 의해  주기적으로 실행되는 제품추천메일 발송 메소드. 
 	  * @작성일 : 2016. 1. 22.
 	  * @작성자 : yongho
 	  * @param memberId
 	  * @param mailForm
 	  */
-	//@Scheduled(cron = "00 00 00 * * *")
-	@Scheduled(cron = "00/03 * * * * *") //테스트용
+	//@Scheduled(cron = "00 00 00 * * *") // 매일 00시 월령이 바뀐 자녀를 가진 회원에게 월령병 추천 제품 메일 발송
+	@Scheduled(cron = "00/05 * * * * *") //테스트용
 	public void sendRecommendingMail()
 			throws FileNotFoundException, URISyntaxException, UnsupportedEncodingException, MessagingException {
 		
 		//월령이 바뀐 아이를 가진 회원 목록을 불러온다.
 		List<BlliMemberVO> memberList = memberDAO.getMemberHavingBabyAgeChangedList();
-		
+				
 		if(memberList.size()==0) {
 			System.out.println("월령이 바뀐 아기가 한명도 없습니다.");
 		} else {
-		
+			
+			ArrayList<Integer> testList = new ArrayList<Integer>();
+			for(int i=0;i<10;i++) {
+				testList.add(i);
+			}
+			
+			
 			//해당 회원의 아이 중 월령이 바뀐 아이의 정보를 회원VO가 가진 회원아기VOList 변수에 set 해준다.
 			for(int i=0; i<memberList.size(); i++) {
 				memberList.get(i).setBlliBabyVOList(memberDAO.getBabyAgeChangedListOfMember(memberList.get(i).getMemberId()));
@@ -75,6 +82,9 @@ public class MailScheduler {
 				String recipient = memberList.get(i).getMemberEmail();
 				textParams.put("memberName", memberList.get(i).getMemberName());
 				textParams.put("memberBabyName", memberList.get(i).getBlliBabyVOList().get(0).getBabyName());
+				textParams.put("testList", testList);
+				
+				
 				message.addRecipient(RecipientType.TO, new InternetAddress(recipient)); //import javax.mail.Message.RecipientType;
 				mailText = VelocityEngineUtils.mergeTemplateIntoString(velocityConfig.getVelocityEngine(), contentFile, "utf-8", textParams);
 				message.setText(mailText, "utf-8", "html");

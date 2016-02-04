@@ -63,7 +63,7 @@ insert into blli_member(member_id, member_email, member_password, member_name, m
 	
 select * from blli_member;
 
-insert into blli_mailing(mail_form, mail_subject, mail_content_file) values('findPassword', 'mail_subject', 'mailForm_findPassword.vm');
+insert into blli_mailing(mail_form, mail_subject, mail_content_file) values('findPassword', '비밀번호를 잊으셨군요!', 'mailForm_findPassword.vm');
 insert into blli_mailing(mail_form, mail_subject, mail_content_file) values('recommendingMail', '블리가 제안하는 지금 아이에게 맞는 제품!', 'mailForm_recommendingMail.vm');
 
 select * from blli_mailing;
