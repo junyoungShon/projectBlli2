@@ -1,5 +1,6 @@
 package kr.co.blli.model.product;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,12 +10,16 @@ import javax.annotation.Resource;
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
+import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
+import kr.co.blli.model.vo.BlliPagingBean;
 import kr.co.blli.model.vo.BlliPostingDisLikeVO;
 import kr.co.blli.model.vo.BlliPostingLikeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
+import kr.co.blli.model.vo.BlliSmallProductBuyLinkVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
+import kr.co.blli.model.vo.ListVO;
 
 import org.springframework.stereotype.Service;
 
@@ -73,7 +78,6 @@ public class ProductServiceImpl implements ProductService{
 			List<BlliMidCategoryVO> blliMidCategoryVOList, BlliBabyVO blliBabyVO) {
 		List<BlliSmallProductVO> blliSmallProductVOList = new ArrayList<BlliSmallProductVO>();
 		int recommMidNumber = blliMidCategoryVOList.size();
-		System.out.println("여기오냐");
 		if(recommMidNumber>9){
 			for(int i=0;i<blliMidCategoryVOList.size();i++){
 				HashMap<String,String> paraMap = new HashMap<String, String>();
@@ -94,17 +98,8 @@ public class ProductServiceImpl implements ProductService{
 				}
 			}
 		}
-		//출력해줄 소분류 제품이 추출 된 후 그 리스트 중에 이미 엄마가 찜한 상품이 있는지 파악
-		String memberId = blliBabyVO.getMemberId();
-		BlliMemberDibsVO blliMemberDibsVO= new BlliMemberDibsVO();
-		blliMemberDibsVO.setMemberId(memberId);
 		for(int i=0;i<blliSmallProductVOList.size();i++){
-			blliMemberDibsVO.setSmallProductId(blliSmallProductVOList.get(i).getSmallProductId());
-			if(productDAO.selectMemberDibsSmallProduct(blliMemberDibsVO)!=0){
-				blliSmallProductVOList.get(i).setIsDib(1);
-			}else{
-				blliSmallProductVOList.get(i).setIsDib(0);
-			}
+			blliSmallProductVOList.set(i, productDibChecker(blliBabyVO.getMemberId(), blliSmallProductVOList.get(i)));
 		}
 		return blliSmallProductVOList;
 	}
@@ -214,9 +209,162 @@ public class ProductServiceImpl implements ProductService{
 		}
 		return result;
 	}
+	/**
+	 * 
+	 * @Method Name : searchMidCategory
+	 * @Method 설명 : 검색어가 중분류명과 일치할 시 해당 중분류에 포함되는 소제품 리스트를 반환해주는 메서드
+	 * @작성일 : 2016. 2. 3.
+	 * @작성자 : hyunseok
+	 * @param pageNo
+	 * @param searchWord
+	 * @return
+	 */
+	@Override
+	public ArrayList<BlliSmallProductVO> searchMidCategory(String pageNo, String searchWord) {
+		if(pageNo == null || pageNo == ""){
+			pageNo = "1";
+		}
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("pageNo", pageNo);
+		map.put("searchWord", searchWord);
+		ArrayList<BlliSmallProductVO> smallProductList = (ArrayList<BlliSmallProductVO>)productDAO.searchMidCategory(map);
+		//가격에 , 붙여서 다시 저장 후 반환
+		for(int i=0;i<smallProductList.size();i++){
+			DecimalFormat df = new DecimalFormat("#,##0");
+			smallProductList.get(i).setMinPrice(df.format(Integer.parseInt(smallProductList.get(i).getMinPrice())));
+		}
+		return smallProductList;
+	}
+	/**
+	 * 
+	 * @Method Name : searchSmallProduct
+	 * @Method 설명 : 검색어가 소제품명과 일치할 시 소제품 페이지 출력을 위한 정보들을 반환해주는 메서드
+	 * @작성일 : 2016. 2. 3.
+	 * @작성자 : hyunseok
+	 * @param searchWord
+	 * @return
+	 */
+	@Override
+	public HashMap<String, Object> searchSmallProduct(String searchWord) {
+		HashMap<String, Object> smallProductInfo = new HashMap<String, Object>();
+		BlliSmallProductVO smallProduct = productDAO.searchSmallProduct(searchWord);
+		ArrayList<BlliSmallProductBuyLinkVO> buyLink = null;
+		ArrayList<BlliSmallProductVO> otherSmallProductList = null;
+		String midCategory = "";
+		if(smallProduct != null){
+			midCategory = smallProduct.getMidCategory();
+			//가격에 , 붙여서 다시 저장 후 반환
+			DecimalFormat df = new DecimalFormat("#,##0");
+			smallProduct.setMinPrice(df.format(Integer.parseInt(smallProduct.getMinPrice())));
+			buyLink = (ArrayList<BlliSmallProductBuyLinkVO>)productDAO.getSmallProductBuyLink(smallProduct.getSmallProductId());
+			if(!buyLink.isEmpty()){
+				for(int i=0;i<buyLink.size();i++){
+					buyLink.get(i).setBuyLinkPrice(df.format(Integer.parseInt(buyLink.get(i).getBuyLinkPrice())));
+				}
+			}
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("midCategory", midCategory);
+			map.put("smallProduct", searchWord);
+			otherSmallProductList = (ArrayList<BlliSmallProductVO>)productDAO.getOtherSmallProductList(map);
+		}
+		smallProductInfo.put("smallProduct", smallProduct);
+		smallProductInfo.put("buyLink", buyLink);
+		smallProductInfo.put("otherSmallProductList", otherSmallProductList);
+		return smallProductInfo;
+	}
+	/**
+	 * 
+	 * @Method Name : searchSmallProductList
+	 * @Method 설명 : 검색어와 일치하는 중분류명과 소제품명이 없을 시 검색어를 포함하는 소제품 리스트를 반환해주는 메서드
+	 * @작성일 : 2016. 2. 3.
+	 * @작성자 : hyunseok
+	 * @param pageNo
+	 * @param searchWord
+	 * @return
+	 */
+	@Override
+	public ArrayList<BlliSmallProductVO> searchSmallProductList(String pageNo, String searchWord) {
+		if(pageNo == null || pageNo == ""){
+			pageNo = "1";
+		}
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("pageNo", pageNo);
+		map.put("searchWord", searchWord);
+		ArrayList<BlliSmallProductVO> smallProductList = (ArrayList<BlliSmallProductVO>)productDAO.searchSmallProductList(map);
+		//가격에 , 붙여서 다시 저장 후 반환
+		for(int i=0;i<smallProductList.size();i++){
+			DecimalFormat df = new DecimalFormat("#,##0");
+			smallProductList.get(i).setMinPrice(df.format(Integer.parseInt(smallProductList.get(i).getMinPrice())));
+		}
+		return smallProductList;
+	}
+	/**
+	 * 
+	 * @Method Name : getOtherProductList
+	 * @Method 설명 : 소제품 상세 페이지에 같이 출력될 해당 소제품과 같은 중분류를 가지고 있는 소제품 리스트를 반환해주는 메서드
+	 * @작성일 : 2016. 2. 3.
+	 * @작성자 : hyunseok
+	 * @param pageNo
+	 * @param smallProduct
+	 * @return
+	 */
+	@Override
+	public ListVO getOtherProductList(String pageNo, String smallProduct) {
+		BlliSmallProductVO smallProductVO = productDAO.searchSmallProduct(smallProduct);
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		String midCategory = smallProductVO.getMidCategory();
+		map.put("midCategory", midCategory);
+		map.put("smallProduct", smallProduct);
+		map.put("pageNo", pageNo);
+		ArrayList<BlliSmallProductVO> smallProductList = (ArrayList<BlliSmallProductVO>)productDAO.getOtherSmallProductList(map);
+		int total = productDAO.totalOtherSmallProduct(midCategory);
+		BlliPagingBean paging = new BlliPagingBean(total, Integer.parseInt(pageNo));
+		paging.setNumberOfPageGroup(1);
+		ListVO lvo = new ListVO(smallProductList, paging);
+		return lvo;
+	}
+	/**
+	 * 
+	 * @Method Name : totalPageOfSmallProductOfMidCategory
+	 * @Method 설명 : 중분류 상세페이지의 총 페이지 수를 반환해주는 메서드
+	 * @작성일 : 2016. 2. 3.
+	 * @작성자 : hyunseok
+	 * @param searchWord
+	 * @return
+	 */
+	@Override
+	public int totalPageOfSmallProductOfMidCategory(String searchWord) {
+		return productDAO.totalPageOfSmallProductOfMidCategory(searchWord);
+	}
+	/**
+	 * 
+	 * @Method Name : totalPageOfSmallProductRelatedSearchWord
+	 * @Method 설명 : 소제품 리스트 페이지(검색어가 중분류명, 소제품명과 일치하지 않는 경우)의 총 페이지 수를 반환해주는 메서드
+	 * @작성일 : 2016. 2. 3.
+	 * @작성자 : hyunseok
+	 * @param searchWord
+	 * @return
+	 */
+	@Override
+	public int totalPageOfSmallProductRelatedSearchWord(String searchWord) {
+		return productDAO.totalPageOfSmallProductRelatedSearchWord(searchWord);
+	}
 	@Override
 	public List<BlliSmallProductVO> selectSmallProductRank(String midCategoryId) {
 		return productDAO.selectSmallProductRank(midCategoryId);
+	}
+	@Override
+	public BlliSmallProductVO productDibChecker(String memberId, BlliSmallProductVO blliSmallProductVO) {
+		//출력해줄 소분류 제품이 추출 된 후 그 리스트 중에 이미 엄마가 찜한 상품이 있는지 파악
+		BlliMemberDibsVO blliMemberDibsVO= new BlliMemberDibsVO();
+		blliMemberDibsVO.setMemberId(memberId);
+		blliMemberDibsVO.setSmallProductId(blliSmallProductVO.getSmallProductId());
+		if(productDAO.selectMemberDibsSmallProduct(blliMemberDibsVO)!=0){
+			blliSmallProductVO.setIsDib(1);
+		}else{
+			blliSmallProductVO.setIsDib(0);
+		}
+		return blliSmallProductVO;
 	}
 
 }

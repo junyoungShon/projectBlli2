@@ -126,10 +126,12 @@ CREATE TABLE blli_posting (
 	posting_reply_count      NUMBER(4) NOT NULL, -- 추가
 	posting_status            VARCHAR2(30) NOT NULL, -- 추가
 	constraint fk_posting_small_prod_id foreign key(small_product_id) references blli_small_product(small_product_id),
-	constraint pk_posting primary key(posting_url, small_product) -- 복합키로 변경
+	constraint pk_posting primary key(posting_url, small_product_id) -- 복합키로 변경
 );
-
-
+--기존 프라이머리키 제거
+alter table blli_posting drop primary key;
+-- 프라이머리키 변경
+alter table blli_posting add constraint pk_posting primary key(posting_url, small_product_id)
 drop table blli_small_prod_buy_link cascade constraint;
 CREATE TABLE blli_small_prod_buy_link (
 	small_product_id    VARCHAR2(30) NOT NULL , -- 추가
@@ -140,7 +142,7 @@ CREATE TABLE blli_small_prod_buy_link (
 	seller               VARCHAR2(50) NOT NULL ,
 	buy_link_click_count NUMBER(10) default 0 ,
 	constraint fk_small_buy_link_small foreign key(small_product_id) references blli_small_product(small_product_id), -- 변경,
-	constraint pk_blli_small_prod_buy_link primary key (small_product_id, buy_link) --복합키로 수정
+	constraint pk_blli_small_prod_buy_link primary key (small_product_id, seller) --복합키로 수정 -> seller로 다시 수정
 );
 
 
@@ -205,9 +207,9 @@ CREATE TABLE blli_member_scrape (
 	posting_url          VARCHAR2(300) NOT NULL ,
 	small_product_id   VARCHAR2(30) NOT NULL , -- 추가
 	scrape_time			DATE,
-	small_product   VARCHAR2(200) NOT NULL , -- VARCHAR2(100)을 VARCHAR2(200)으로 변경
+	--small_product   VARCHAR2(200) NOT NULL , -- VARCHAR2(100)을 VARCHAR2(200)으로 변경 ///제거
 	constraint fk_member_scrape_mem_id foreign key(member_id) references blli_member(member_id),
-	constraint fk_member_scrape_post_url foreign key(posting_url, small_product) references blli_posting(posting_url, small_product),
+	constraint fk_member_scrape_post_url foreign key(posting_url, small_product_id) references blli_posting(posting_url, small_product_id), --변경
 	constraint fk_member_scrape_small_p_id foreign key(small_product_id) references blli_small_product(small_product_id),
 	constraint pk_member_scrape primary key (member_id, posting_url,small_product_id)
 );
@@ -218,9 +220,9 @@ CREATE TABLE blli_posting_like (
 	posting_url          VARCHAR2(300) NOT NULL ,
 	small_product_id   VARCHAR2(30) NOT NULL , -- 추가
 	LIKE_time			DATE,
-	small_product   VARCHAR2(200) NOT NULL , -- VARCHAR2(100)을 VARCHAR2(200)으로 변경
+	--small_product   VARCHAR2(200) NOT NULL , -- VARCHAR2(100)을 VARCHAR2(200)으로 변경
 	constraint fk_member_LIKE_mem_id foreign key(member_id) references blli_member(member_id),
-	constraint fk_member_LIKE_post_url foreign key(posting_url, small_product) references blli_posting(posting_url, small_product),
+	constraint fk_member_LIKE_post_url foreign key(posting_url, small_product_id) references blli_posting(posting_url, small_product_id),
 	constraint fk_member_LIKE_small_p_id foreign key(small_product_id) references blli_small_product(small_product_id),
 	constraint pk_member_LIKE primary key (member_id, posting_url,small_product_id)
 );
@@ -230,9 +232,9 @@ CREATE TABLE blli_posting_dislike (
 	posting_url          VARCHAR2(300) NOT NULL ,
 	small_product_id   VARCHAR2(30) NOT NULL , -- 추가
 	DISLIKE_time			DATE,
-	small_product   VARCHAR2(200) NOT NULL , -- VARCHAR2(100)을 VARCHAR2(200)으로 변경
+	--small_product   VARCHAR2(200) NOT NULL , -- VARCHAR2(100)을 VARCHAR2(200)으로 변경
 	constraint fk_member_DISLIKE_mem_id foreign key(member_id) references blli_member(member_id),
-	constraint fk_member_DISLIKE_post_url foreign key(posting_url,small_product) references blli_posting(posting_url,small_product),
+	constraint fk_member_DISLIKE_post_url foreign key(posting_url,small_product_id) references blli_posting(posting_url,small_product_id),
 	constraint fk_member_DISLIKE_small_p_id foreign key(small_product_id) references blli_small_product(small_product_id),
 	constraint pk_member_DISLIKE primary key (member_id, posting_url,small_product_id)
 );

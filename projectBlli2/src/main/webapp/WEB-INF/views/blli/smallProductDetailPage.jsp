@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<div class="jbContent">
 	<div class="result_bg1">
 			<div class="in_fr" style="height:330px;">
 				<div class="result_num">
@@ -7,12 +9,13 @@
 				</div>
 				<div class="result_con">
 					<div class="result_ti">
-						하은맘 프라임샴푸의자 
+						${requestScope.smallProductInfo.smallProduct.smallProduct} 
 					</div>
 					<div>
 						<div class="result_foto fl">
+							<img src="${requestScope.smallProductInfo.smallProduct.smallProductMainPhotoLink}" alt="${requestScope.smallProductInfo.smallProduct.smallProduct}" style="width: 100%; height: 100%; vertical-align: middle;">
 							<div class="product_month">
-								12~34<br/>
+								${requestScope.smallProductInfo.smallProduct.smallProductWhenToUseMin}~${requestScope.smallProductInfo.smallProduct.smallProductWhenToUseMax}<br/>
 								개월
 							</div>
 						</div>
@@ -24,10 +27,23 @@
 							<div class="product_price">
 								<div class="fl">
 									<p class="result_gray">최저가</p>
-									<p class="result_price">25,000원</p>
+									<p class="result_price">${requestScope.smallProductInfo.smallProduct.minPrice}원</p>
 								</div>
 								<div class="fr">
-									<a href="#"><img src="./img/jjim.png" alt="찜" style="margin-top:10px;"></a>
+									<c:if test="${requestScope.smallProductInfo.smallProduct.isDib==0}">
+											<div style="margin-top: 15px">
+												<i class="fa fa-heart-o fa-2x smallProductDibBtn" style="color: red"></i>
+												<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
+												<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
+											</div>
+									</c:if>
+									<c:if test="${requestScope.smallProductInfo.smallProduct.isDib==1}">
+											<div style="margin-top: 15px">
+												<i class="fa fa-heart fa-2x smallProductDibBtn" style="color: red"></i>
+													<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
+												<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
+									</div>
+									</c:if>
 								</div>
 							</div>
 						</div>
@@ -36,21 +52,17 @@
 				<div class="result_last fr">
 					<ul>
 						<li>
-							<p class="result_sns">212</p>
+							<p class="result_sns">${requestScope.smallProductInfo.smallProduct.smallProductPostingCount}</p>
 							<p class="result_sns_text">blog</p>
 						</li>
 						<li>
-							<p class="result_sns">212</p>
-							<p class="result_sns_text">Like</p>
-						</li>
-						<li>
-							<p class="result_sns">212</p>
+							<p class="result_sns">${requestScope.smallProductInfo.smallProduct.smallProductScore}</p>
 							<p class="result_sns_text">Point</p>
 						</li>
 					</ul>
 					<div style="text-align:center;">
-						<a href="#"><img src="./img/facebook.png" alt="페이스북"></a>
-						<a href="#"><img src="./img/twitter.png" alt="트위터"></a>
+						<a href="#"><img src="${initParam.root}img/facebook.png" alt="페이스북"></a>
+						<a href="#"><img src="${initParam.root}img/twitter.png" alt="트위터"></a>
 					</div>
 				</div>
 			</div>
@@ -61,13 +73,13 @@
 					<div class="result_ti">
 						쇼핑몰 리스트 
 					</div>
-					<div>
+					<div style="overflow-y:auto; height: 247px;">
 						<table>
 							<colgroup>
 								<col width="15%">
 								<col width="15%">
-								<col width="10%">
-								<col width="40%">
+								<col width="20%">
+								<col width="30%">
 								<col width="20%">
 							</colgroup>
 							<tr>
@@ -87,91 +99,30 @@
 									사러가기
 								</th>
 							</tr>
-							<tr>
-								<td>
-									인터파크
-								</td>
-								<td>
-									16,000원
-								</td>
-								<td>
-									2500원
-								</td>
-								<td>
-									옵션 포함입니다
-								</td>
-								<td>
-									<a href="#"><img src="./img/bt_buy.png" alt="사러가기"></a>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									인터파크
-								</td>
-								<td>
-									16,000원
-								</td>
-								<td>
-									2500원
-								</td>
-								<td>
-									옵션 포함입니다
-								</td>
-								<td>
-									<a href="#"><img src="./img/bt_buy.png" alt="사러가기"></a>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									인터파크
-								</td>
-								<td>
-									16,000원
-								</td>
-								<td>
-									2500원
-								</td>
-								<td>
-									옵션 포함입니다
-								</td>
-								<td>
-									<a href="#"><img src="./img/bt_buy.png" alt="사러가기"></a>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									인터파크
-								</td>
-								<td>
-									16,000원
-								</td>
-								<td>
-									2500원
-								</td>
-								<td>
-									옵션 포함입니다
-								</td>
-								<td>
-									<a href="#"><img src="./img/bt_buy.png" alt="사러가기"></a>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									인터파크
-								</td>
-								<td>
-									16,000원
-								</td>
-								<td>
-									2500원
-								</td>
-								<td>
-									옵션 포함입니다
-								</td>
-								<td>
-									<a href="#"><img src="./img/bt_buy.png" alt="사러가기"></a>
-								</td>
-							</tr>
+							<c:forEach items="${requestScope.smallProductInfo.buyLink}" var="sellerInfo">
+								<tr>
+									<td>
+										${sellerInfo.seller}
+									</td>
+									<td>
+										${sellerInfo.buyLinkPrice}원
+									</td>
+									<td>
+										${sellerInfo.buyLinkDeliveryCost}
+									</td>
+									<td>
+										<c:if test="${sellerInfo.buyLinkOption == null}">
+											없음
+										</c:if>
+										<c:if test="${sellerInfo.buyLinkOption != null}">
+											${sellerInfo.buyLinkOption}
+										</c:if>
+									</td>
+									<td>
+										<a href="${sellerInfo.buyLink}"><img src="${initParam.root}img/bt_buy.png" alt="사러가기"></a>
+									</td>
+								</tr>
+							</c:forEach>
 						</table>
 					</div>
 				</div>
@@ -179,8 +130,8 @@
 					<div class="result_ti">
 						동일 제품점수별로 보기
 					</div>
-					<div>
-						<table>
+					<div style="overflow-y:auto; height: 247px;">
+						<table id="otherProductInfo">
 							<colgroup>
 								<col width="10%">
 								<col width="50%">
@@ -201,132 +152,32 @@
 									보러가기
 								</th>
 							</tr>
-							<tr>
-								<td>
-									1
-								</td>
-								<td>
-									하윤맘프라임 샴푸의자
-								</td>
-								<td>
-									95
-								</td>
-								<td>
-									<a href="#"><img src="./img/bt_see.png" alt="보러가기"></a>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									1
-								</td>
-								<td>
-									하윤맘프라임 샴푸의자
-								</td>
-								<td>
-									95
-								</td>
-								<td>
-									<a href="#"><img src="./img/bt_see.png" alt="보러가기"></a>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									1
-								</td>
-								<td>
-									하윤맘프라임 샴푸의자
-								</td>
-								<td>
-									95
-								</td>
-								<td>
-									<a href="#"><img src="./img/bt_see.png" alt="보러가기"></a>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									1
-								</td>
-								<td>
-									하윤맘프라임 샴푸의자
-								</td>
-								<td>
-									95
-								</td>
-								<td>
-									<a href="#"><img src="./img/bt_see.png" alt="보러가기"></a>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									1
-								</td>
-								<td>
-									하윤맘프라임 샴푸의자
-								</td>
-								<td>
-									95
-								</td>
-								<td>
-									<a href="#"><img src="./img/bt_see.png" alt="보러가기"></a>
-								</td>
-							</tr>
+							<c:forEach items="${requestScope.smallProductInfo.otherSmallProductList}" var="productList" varStatus="rank">
+								<tr>
+									<td>
+										${rank.count}
+									</td>
+									<td>
+										${productList.smallProduct}
+									</td>
+									<td>
+										${productList.smallProductScore}
+									</td>
+									<td>
+										<a href="${initParam.root}goSmallProductDetailView.do?smallProduct=${productList.smallProduct}"><img src="${initParam.root}img/bt_see.png" alt="보러가기"></a>
+									</td>
+								</tr>
+							</c:forEach>
 						</table>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 	<div class="jbMenu2">
-		<div style="width:1100px; margin:auto;">
-			<div class="fl">
-				<a href="#"><img src="./img/allow_l.png" alt="왼쪽화살표" style="margin-top:70px;"></a>
-			</div>
-			<ul>
-				<li>
-					<div class="yellow_foto">
-					</div>
-					<div class="yellow_ti">
-						샴푸의자
-					</div>
-				</li>
-				<li>
-					<div class="yellow_foto">
-					</div>
-					<div class="yellow_ti">
-						샴푸의자
-					</div>
-				</li>
-				<li>
-					<div class="yellow_foto">
-					</div>
-					<div class="yellow_ti">
-						샴푸의자
-					</div>
-				</li>
-				<li>
-					<div class="yellow_foto">
-					</div>
-					<div class="yellow_ti">
-						샴푸의자
-					</div>
-				</li>
-				<li>
-					<div class="yellow_foto">
-					</div>
-					<div class="yellow_ti">
-						샴푸의자
-					</div>
-				</li>
-				<li>
-					<div class="yellow_foto">
-					</div>
-					<div class="yellow_ti">
-						샴푸의자
-					</div>
-				</li>
-			</ul>
-			<div class="fr">
-				<a href="#"><img src="./img/allow_r.png" alt="오른쪽화살표" style="margin-top:70px;"></a>
-			</div>
+		<div class="gallery js-flickity" data-flickity-options='{ "imagesLoaded": true }'>
+			<c:forEach items="${requestScope.postingList}" var="postingList">
+				<a href="${postingList.postingUrl}"><img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${postingList.postingPhotoLink}" alt="${requestScope.smallProductInfo.smallProduct.smallProduct}"></a>
+			</c:forEach>
 		</div>
-		</div>
+	</div>

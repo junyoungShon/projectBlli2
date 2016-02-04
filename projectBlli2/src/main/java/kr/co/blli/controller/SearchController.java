@@ -2,23 +2,24 @@ package kr.co.blli.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import kr.co.blli.model.posting.PostingService;
 import kr.co.blli.model.product.ProductService;
 import kr.co.blli.model.scheduler.CategoryAndProductScheduler;
 import kr.co.blli.model.scheduler.PostingScheduler;
+import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -47,21 +48,55 @@ public class SearchController {
 	/**
 	 * 
 	 * @Method Name : searchSmallProduct
-	 * @Method 설명 : 검색어(소제품)에 해당하는 포스팅 리스트 중 첫 페이지만 반환해주는 메서드
-	 * @작성일 : 2016. 1. 27.
+	 * @Method 설명 : 검색어에 해당하는 페이지를 출력해주는 메서드
+	 * @작성일 : 2016. 2. 3.
 	 * @작성자 : hyunseok
 	 * @param pageNo
 	 * @param searchWord
 	 * @return
 	 */
 	@RequestMapping("searchSmallProduct.do")
-	public ModelAndView searchSmallProduct(String pageNo, String searchWord){
-		ArrayList<BlliPostingVO> list = postingService.searchSmallProduct(pageNo, searchWord);
+	public ModelAndView searchSmallProduct(String pageNo, String searchWord,HttpServletRequest request){
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("searchResult");
-		mav.addObject("resultList", list);
-		mav.addObject("searchWord", searchWord);
-		mav.addObject("totalPage", postingService.totalPageOfPosting(searchWord));
+		ArrayList<BlliSmallProductVO> smallProductList = productService.searchMidCategory(pageNo, searchWord);
+		String viewName = "";
+		if(smallProductList.isEmpty()){
+			HashMap<String, Object> smallProductInfo = productService.searchSmallProduct(searchWord);
+			if(smallProductInfo.get("smallProduct") != null){
+				ArrayList<BlliPostingVO> postingList = postingService.searchPostingListInProductDetail(searchWord);
+				viewName = "smallProductDetailPage";
+				mav.addObject("smallProductInfo", smallProductInfo);
+				mav.addObject("postingList", postingList);
+			}else{
+				smallProductList = productService.searchSmallProductList(pageNo, searchWord);
+				viewName = "midCategoryDetailPage";
+				mav.addObject("resultList", smallProductList);
+				mav.addObject("totalPage", productService.totalPageOfSmallProductRelatedSearchWord(searchWord));
+				mav.addObject("searchWord", searchWord);
+			}
+			//ArrayList<BlliPostingVO> postingList = postingService.searchPosting(pageNo, searchWord);
+		}else{
+			viewName = "midCategoryDetailPage";
+			mav.addObject("resultList", smallProductList);
+			mav.addObject("totalPage", productService.totalPageOfSmallProductOfMidCategory(searchWord));
+			mav.addObject("searchWord", searchWord);
+			
+			//소제품 찜 여부 체크
+			HttpSession session =  request.getSession();
+			if(session!=null){
+				BlliMemberVO blliMemberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
+				for(int i=0;i<smallProductList.size();i++){
+					BlliSmallProductVO blliSmallProductVO = productService.productDibChecker(blliMemberVO.getMemberId(),smallProductList.get(i));
+					smallProductList.get(i).setIsDib(blliSmallProductVO.getIsDib());
+				}
+			}
+			
+			
+		}
+		
+		mav.setViewName(viewName);
+		//mav.addObject("searchWord", searchWord);
+		//mav.addObject("totalPage", postingService.totalPageOfPosting(searchWord));
 		return mav;
 	}
 	/**
@@ -77,7 +112,7 @@ public class SearchController {
 	@ResponseBody
 	@RequestMapping("getPostingList.do")
 	public ArrayList<BlliPostingVO> getPostingList(String pageNo, String searchWord){
-		return postingService.searchSmallProduct(pageNo, searchWord);
+		return postingService.searchPosting(pageNo, searchWord);
 	}
 	//스케줄러 완성 전까지 임시 사용
 	@RequestMapping("insertBigCategory.do")
@@ -131,13 +166,53 @@ public class SearchController {
 		blliMidCategoryVO.getMidCategoryId();
 		return mav;
 	}
-
+	/**
+	 * 
+	 * @Method Name : goSmallProductDetailView
+	 * @Method 설명 : 소제품을 클릭할 때 소제품 상세 페이지를 출력해주는 메서드
+	 * @작성일 : 2016. 2. 3.
+	 * @작성자 : hyunseok
+	 * @param smallProduct
+	 * @return
+	 */
 	@RequestMapping("goSmallProductDetailView.do")
-	public ModelAndView goSmallProductDetailView(BlliMidCategoryVO blliMidCategoryVO){
+	public ModelAndView goSmallProductDetailView(String smallProduct,HttpServletRequest request){
+		HttpSession session = request.getSession();
+		BlliMemberVO blliMemberVO = null;
 		ModelAndView mav = new ModelAndView();
+		ArrayList<BlliPostingVO> postingList = postingService.searchPostingListInProductDetail(smallProduct);
+		HashMap<String, Object> smallProductInfo = productService.searchSmallProduct(smallProduct);
+		
+		if(session!=null){
+			blliMemberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
+			BlliSmallProductVO blliSmallProductVO = productService.productDibChecker(blliMemberVO.getMemberId(),(BlliSmallProductVO) smallProductInfo.get("smallProduct"));
+			((BlliSmallProductVO) smallProductInfo.get("smallProduct")).setIsDib(blliSmallProductVO.getIsDib());
+		}
+		
+		mav.addObject("smallProductInfo", smallProductInfo);
+		mav.addObject("postingList", postingList);
+		mav.addObject("blliMemberVO",blliMemberVO);
 		mav.setViewName("smallProductDetailPage");
-		blliMidCategoryVO.getMidCategoryId();
 		return mav;
+	}
+	/**
+	 * 
+	 * @Method Name : getSmallProductList
+	 * @Method 설명 : 중분류 상세 페이지 무한 스크롤을 위한 페이징 메서드
+	 * @작성일 : 2016. 2. 3.
+	 * @작성자 : hyunseok
+	 * @param pageNo
+	 * @param searchWord
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("getSmallProductList.do")
+	public ArrayList<BlliSmallProductVO> getSmallProductList(String pageNo, String searchWord){
+		ArrayList<BlliSmallProductVO> smallProductList = productService.searchMidCategory(pageNo, searchWord);
+		if(smallProductList.isEmpty()){
+			smallProductList = productService.searchSmallProductList(pageNo, searchWord);
+		}
+		return smallProductList;
 	}
 	@RequestMapping("selectSmallProductRank.do")
 	@ResponseBody

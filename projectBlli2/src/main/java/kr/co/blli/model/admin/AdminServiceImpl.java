@@ -248,7 +248,7 @@ public class AdminServiceImpl implements AdminService{
 		BlliPagingBean paging = new BlliPagingBean(total, Integer.parseInt(pageNo));
 		paging.setNumberOfPostingPerPage(10);
 		ListVO lvo = new ListVO();
-		lvo.setSmallProductList(smallProductList);
+		lvo.setList(smallProductList);
 		lvo.setPagingBean(paging);
 		return lvo;
 	}

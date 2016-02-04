@@ -347,7 +347,7 @@ img {
 }
  */
 .jbMenu {
-	display : none;
+	/* display : none; */
 	background-color: #2d2d2d;
 	width: 100%;
 	height:82px;
@@ -547,6 +547,7 @@ img {
 	font-family:'Nanum Barun Gothic';
 	font-size:24px;
 	font-weight:bold;
+	text-align: center; /* 02.01 추가 */
 }
 
 .result_sns_text{
@@ -555,7 +556,7 @@ img {
 }
 
 .result_last{
-	width:162px;
+	width:100px;
 }
 
 .result_last ul{
@@ -842,3 +843,34 @@ img {
     text-align: center;
 }
 /*demo.css 01.30일 추가 메인관련 끝*/
+
+
+/* blog_view */
+
+.top_blog{
+	margin-left:40px;
+	margin-top:34px;
+	float:left;
+	font-weight:bold;
+	font-family:'Nanum Barun Gothic';
+	font-size:18px;
+	color:#fff;
+}
+
+.top_blog2{
+	color:#fff;
+	font-size:16px;
+	float:right;
+	font-family:'Nanum Barun Gothic';
+	line-height:80px;
+}
+
+.top_blog2 img{
+	margin-top:20px;
+}
+
+.top_blog2 span{
+	width:100px;
+	margin-right:10px;
+}
+

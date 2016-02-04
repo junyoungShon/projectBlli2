@@ -3,7 +3,7 @@ package kr.co.blli.model.vo;
 public class BlliSmallProductBuyLinkVO {
 	private String smallProductId;
 	private String buyLink;
-	private int buyLinkPrice;
+	private String buyLinkPrice; // String으로 수정
 	private String buyLinkDeliveryCost;
 	private String buyLinkOption;
 	private String seller;
@@ -13,8 +13,8 @@ public class BlliSmallProductBuyLinkVO {
 		// TODO Auto-generated constructor stub
 	}
 	public BlliSmallProductBuyLinkVO(String smallProductId, String buyLink,
-			int buyLinkPrice, String buyLinkDeliveryCost, String buyLinkOption,
-			String seller, int buyLinkClickCount) {
+			String buyLinkPrice, String buyLinkDeliveryCost,
+			String buyLinkOption, String seller, int buyLinkClickCount) {
 		super();
 		this.smallProductId = smallProductId;
 		this.buyLink = buyLink;
@@ -36,10 +36,10 @@ public class BlliSmallProductBuyLinkVO {
 	public void setBuyLink(String buyLink) {
 		this.buyLink = buyLink;
 	}
-	public int getBuyLinkPrice() {
+	public String getBuyLinkPrice() {
 		return buyLinkPrice;
 	}
-	public void setBuyLinkPrice(int buyLinkPrice) {
+	public void setBuyLinkPrice(String buyLinkPrice) {
 		this.buyLinkPrice = buyLinkPrice;
 	}
 	public String getBuyLinkDeliveryCost() {

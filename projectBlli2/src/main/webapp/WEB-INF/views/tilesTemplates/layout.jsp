@@ -45,6 +45,8 @@
 
 <link href="${initParam.root}css/boxymenu.css" rel="stylesheet" type="text/css" />
 <script src="${initParam.root}js/boxymenu.js" type="text/javascript"></script>
+<!-- jquery UI -->
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
 <link rel="stylesheet" type="text/css" href="${initParam.root}css/rjaccordion.css">
 
@@ -64,8 +66,8 @@
 </script>
 
 
-<!-- <script>
-$( document ).ready( function() {
+<script>
+/* $( document ).ready( function() {
 	var jbOffset = $( '.jbMenu' ).offset();
 	$( window ).scroll( function() {
 	  if ( $( document ).scrollTop() > jbOffset.top ) {
@@ -75,8 +77,8 @@ $( document ).ready( function() {
 		$( '.jbMenu' ).removeClass( 'jbFixed' );
 	  }
 	});
-  } );
-</script> -->
+  } ); */
+</script>
 </head>
 
 
@@ -84,10 +86,10 @@ $( document ).ready( function() {
    
       <!-- Header -->
       <tiles:insertAttribute name="header"/>
- 	 <div class="jbContent">
+ 	 <!-- <div class="jbContent"> -->
  	<!-- main -->
  	<tiles:insertAttribute name="main"/>
-  	</div>
+  	<!-- </div> -->
     <div class="container footer">
     <tiles:insertAttribute name="footer"/>
     <!-- footer -->

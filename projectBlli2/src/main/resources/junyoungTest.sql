@@ -216,8 +216,6 @@ select posting_url,small_product,small_product_id,posting_title,posting_summary,
 		
 		
 		
-		
-		
-		
-		
+		select count(*) from blli_posting
+		update blli_small_product set small_product_status = 'confirmed'
 		
