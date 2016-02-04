@@ -15,7 +15,13 @@
 	</bean>
 	<mvc:annotation-driven />
 	<context:component-scan base-package="kr.co.blli.controller" />
-	<!--Interceptor 설정 공간-->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/*"/>
+			<bean class="kr.co.blli.controller.BlliInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+		
 	
 	<!-- 타일즈 설정 -->
 	<bean id="tilesConfig" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
@@ -32,5 +38,12 @@
 			value="org.springframework.web.servlet.view.tiles2.TilesView" />
 		<property name="order" value="0" />
 	</bean>
-
+	
+	<!-- 파일 업로드 설정 -->
+	 <!-- MultipartResolver 설정 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    	<!-- 최대 업로드허용 2mb -->
+        <property name="maxUploadSize" value="20000000" />
+        <property name="maxInMemorySize" value="20000000" />
+    </bean>
 </beans>

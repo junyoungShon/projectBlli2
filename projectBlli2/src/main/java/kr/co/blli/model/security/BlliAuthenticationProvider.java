@@ -1,6 +1,5 @@
 package kr.co.blli.model.security;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -15,7 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -42,22 +40,28 @@ public class BlliAuthenticationProvider implements AuthenticationProvider{
 	@Override
 	public Authentication authenticate(Authentication authentication)
 			throws AuthenticationException {
-		UsernamePasswordAuthenticationToken authToken = (UsernamePasswordAuthenticationToken) authentication;
+		UsernamePasswordAuthenticationToken authToken = 
+				(UsernamePasswordAuthenticationToken) authentication;
+		System.out.println("여기 왜 안오냐");
+		System.out.println(authToken.getName()); 
 		BlliMemberVO blliMemberVO = memberDAO.findMemberByIdForLogin(authToken.getName());
 		if(blliMemberVO==null)
 			throw new UsernameNotFoundException(authToken.getName());	
 		
 		BlliUserDetails blliUserDetails = 
-				new BlliUserDetails(blliMemberVO.getMemberId(),blliMemberVO.getMemberPassword(),blliMemberVO.getAuthority());
+				new BlliUserDetails(blliMemberVO.getMemberId(),blliMemberVO.getMemberPassword(),
+						blliMemberVO.getAuthority());
 		
 		
 		if(!matchPassword(blliUserDetails.getPassword(),authToken.getCredentials())){
 			throw new BadCredentialsException("회원의 아이디 또는 비밀번호가 옳지 않습니다.");
 		}
 		
-		List<GrantedAuthority> authorities = (List<GrantedAuthority>) blliUserDetails.getAuthorities();
+		List<GrantedAuthority> authorities = 
+				(List<GrantedAuthority>) blliUserDetails.getAuthorities();
         UsernamePasswordAuthenticationToken result = 
-        		new UsernamePasswordAuthenticationToken(blliUserDetails.getUsername(),blliUserDetails.getPassword(),authorities);
+        		new UsernamePasswordAuthenticationToken(blliUserDetails.getUsername(),
+        				blliUserDetails.getPassword(),authorities);
 		return result;
 	}
 

@@ -1,0 +1,876 @@
+html {
+	margin: 0px;
+    padding: 0px;
+	overflow-y:auto;
+	overflow-x:hidden;
+}
+body {
+	font-size:12px;
+	font-family:"돋움",Dotum,tahoma,Helvetica,AppleGothic,Sans-serif,'Nanum Barun Gothic';
+}
+
+div table p span{
+	font-family:'Nanum Barun Gothic';
+}
+
+/*
+a:link{color:#ff0000;}
+
+a:visited, a:active{
+	color:#f2f2f2;
+}
+*/
+
+.aa_link{
+	color: #3C4756;
+	text-decoration:none;
+	font-size:9px; 
+}
+.aa_link:hover{
+	font-weight:bold;
+	text-decoration:underline;
+	font-size:9px;
+}
+
+img { 
+	-ms-interpolation-mode: bicubic;
+	vertical-align:top;
+}
+
+
+/* default */
+
+.login_bg{
+	width:100%;
+	min-width:100%;
+	height:968px;
+	background:url(../img/login_bg.jpg) no-repeat;
+	background-size:cover;
+	overflow-y:hidden;
+	position:relative;
+}
+.loginPage_bg{
+	width:100%;
+	min-width:100%;
+	height:968px;
+	background:url(../img/loginBg.jpg) no-repeat;
+	background-size:cover;
+	overflow-y:hidden;
+	position:relative;
+}
+.login_bg2{
+	width:720px;
+	height:525px;
+	border-radius:10px;
+	background:url(../img/login_bg2.jpg);
+	top:10%;
+	left:50%;
+	position:absolute;
+	margin-left:-380px;
+	text-align:center;
+	padding:20px;
+}
+
+.login_logo{
+	padding-top:5px;
+}
+
+.login_bg2 p{
+	color:#fff;
+	font-family:'Nanum Barun Gothic';
+	font-size:16px;
+	line-height:20px;
+	text-align:left;
+	width:400px;
+	margin:auto;
+}
+
+.login_bt{
+	text-align:center !important;
+	width:220px;
+	margin:auto;
+}
+
+.login_bt p{
+	margin-top:10px;
+	width:218px;
+}
+
+.fl{
+	float:left;
+}
+
+.fr{
+	float:right;
+}
+
+.login_bottom{
+	height:50px;
+	position:fixed;
+	bottom:0;
+	width:100%;
+	font-family:'Nanum Barun Gothic';
+	line-height:50px;
+}
+
+.login_bottom_ft{
+	font-size:16px;
+	color:#fff;
+}
+
+.join_bg{
+	width:350px;
+	background:#000;
+	opacity:0.8;
+	padding:10px;
+	position:absolute;
+	left:50%;
+	margin-left:-175px;
+	border-radius:10px;
+	top:10%;
+	text-align:center;
+}
+
+.title{
+	font-size:24px;
+	color:#fff;
+	font-weight:bold;
+	text-align:center;
+	height:70px;
+	font-family:'Nanum Barun Gothic';
+	line-height:70px;
+}
+
+.join_bg input{
+	width:320px;
+	height:35px;
+}
+
+.h30{
+	height:30px;
+}
+
+.join_bg p{
+	color:#fff;
+	text-align:center;
+	font-family:'Nanum Barun Gothic';
+	font-size:13px;
+	line-height:30px;
+}
+/*로그인 페이지 css 시작*/
+.loginComp_bg{
+	width:320px;
+	background-color: rgba( 0, 0, 0, 0.5 );
+	opacity:0.8;
+	padding:25px;
+	padding-top:5px;
+	position:absolute;
+	left:38%;
+/* 	margin-left:-175px; */
+	border-radius:10px;
+	top:90px;
+	text-align:center;
+	color:#fff;
+}
+
+.loginComp_bg input{
+	width:190px;
+	height:35px;
+}
+
+.loginButton {
+    background-color: #ffc91d; /* Green */
+    border: none;
+    color: black;
+    padding: 8px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    font-family:'Nanum Barun Gothic';
+    border-radius: 5px;
+    width: 250px;
+}
+/*로그인 페이지 css 끝*/
+.info_bg{
+	width:320px;
+	background:#000;
+	opacity:0.8;
+	padding:25px;
+	padding-top:5px;
+	position:absolute;
+	left:38%;
+/* 	margin-left:-175px; */
+	border-radius:10px;
+	top:90px;
+	text-align:center;
+	color:#fff;
+}
+
+.info_bg input{
+	width:190px;
+	height:35px;
+}
+
+.info_bg p{
+	color:#fff;
+	text-align:center;
+	font-family:'Nanum Barun Gothic';
+	font-size:13px;
+	line-height:30px;
+}
+.email_bg{
+	width:320px;
+	background:#000;
+	opacity:0.8;
+	padding-bottom:5px;
+	padding:25px;
+	position:absolute;
+	left:38%;
+/* 	margin-left:-175px; */
+	border-radius:10px;
+	text-align:center;
+	color:#fff;
+}
+
+.email_bg input{
+	width:190px;
+	height:20px;
+}
+
+.email_bg p{
+	color:#fff;
+	text-align:center;
+	font-family:'Nanum Barun Gothic';
+	font-size:13px;
+	line-height:30px;
+}
+
+.info_bg2{
+	width:320px;
+	background:#000;
+	opacity:0.8;
+	padding:25px;
+	position:absolute;
+	left:38%;
+/* 	margin-left:-175px; */
+	border-radius:10px;
+	top:375px;
+	text-align:center;
+	color:#fff;
+}
+
+.info_bg2 input{
+	width:190px;
+	height:35px;
+}
+
+.info_bg2 p{
+	color:#fff;
+	text-align:center;
+	font-family:'Nanum Barun Gothic';
+	font-size:13px;
+	line-height:30px;
+}
+.info_bg3{
+	width:320px;
+	background:#000;
+	opacity:0.8;
+	padding:25px;
+	position:absolute;
+	left:38%;
+/* 	margin-left:-175px; */
+	border-radius:10px;
+	top:584px;
+	text-align:center;
+	color:#fff;
+}
+
+.info_bg3 input{
+	width:190px;
+	height:35px;
+}
+
+.info_bg3 p{
+	color:#fff;
+	text-align:center;
+	font-family:'Nanum Barun Gothic';
+	font-size:13px;
+	line-height:30px;
+}
+
+.yellow{
+	color:#febf00;
+	text-decoration:underline;
+}
+
+.baby_foto{
+	width:116px;
+	height:116px;
+	background:url(../img/baby_foto.jpg);
+	position:relative;
+	background-size:cover;
+}
+
+.info_fr{
+	width:370px;
+	margin: 0 auto;
+}
+
+.foto_plus{
+	position:absolute;
+	right:0px;
+	bottom:0px;
+}
+
+.info_bt{
+	margin : 0 auto;
+	position:absolute;
+	top:75%;
+	left:40%;
+}
+
+.info_bt p{
+	color:#fff;
+	text-align:center;
+	font-family:'Nanum Barun Gothic';
+	font-size:13px;
+	line-height:30px;
+}
+/* 
+//2016,01,29추가
+
+
+.yellow{
+	color:#febf00;
+	text-decoration:underline;
+}
+ */
+.jbMenu {
+	/* display : none; */
+	background-color: #2d2d2d;
+	width: 100%;
+	height:82px;
+	border-bottom:2px solid #fee04a;
+	position:relative;
+	z-index:1;
+}
+
+.jbMenu2 {
+	background-color: #fee04a;
+	width: 100%;
+	height:155px;
+	position:fixed;
+	z-index:1;
+	bottom:0;
+	padding:20px;
+}
+
+.jbMenu2 li{
+	width:155px;
+	padding:10px;
+	float:left;
+	text-align:center;
+}
+
+.yellow_foto{
+	width:115px;
+	height:115px;
+	background:#fff;
+	border-radius:5px;
+	margin:auto;
+}
+
+.yellow_foto:hover{
+	border:2px solid #000;
+}
+
+.yellow_ti{
+	font-family:'Nanum Barun Gothic';
+	text-align:center;
+	font-size:14px;
+	padding-top:10px;
+}
+
+.jbContent {
+	height:1000px;
+
+}
+.jbFixed {
+	position: fixed;
+	top: 0px;
+}
+
+.jbFixedSmallProduct {
+	position: fixed;
+	top: 0px;
+}
+.jbFixedSmallProduct *{
+	position: fixed;
+}
+
+.in_fr{
+	width:1040px;
+	margin:auto;
+}
+
+.logo{
+	float:left;
+}
+
+.search_text{
+	width:320px;
+	height:33px;
+	border-radius:5px;
+	border:none;
+}
+
+.top_search{
+	margin-left:40px;
+	margin-top:24px;
+	float:left;
+}
+
+.top_nav{
+	color:#fff;
+	font-size:16px;
+	float:right;
+	font-family:'Nanum Barun Gothic';
+	line-height:80px;
+}
+
+.top_nav a{
+	text-decoration:none;
+	color:#fff;
+}
+
+.top_nav a:hover{
+	color:#fee04a;
+}
+
+.result_bg1{
+	height:330px;
+}
+
+.result_bg2{
+	height:330px;
+	background:#f5f5f5;
+}
+
+.result_num{
+	width:175px;
+	float:left;
+	font-size:135px;
+	font-family:'Nanum Barun Gothic';
+	font-weight:bold;
+	text-align:center;
+	line-height:300px;
+}
+
+.result_con{
+	width:660px;
+	height:290px;
+	float:left;
+	padding:20px;
+}
+
+.result_ti{
+	height:45px;
+	background:url(../img/title_dot.png) no-repeat 5px ;
+	font-family:'Nanum Barun Gothic';
+	padding-left:25px;
+	font-weight:bold;
+	font-size:24px;
+	line-height:40px;
+}
+
+.result_foto{
+	width:340px;
+	height:235px;
+	border:1px solid #ccc;
+	position:relative;
+}
+
+.product_month{
+	width:46px;
+	height:36px;
+	background:#000;
+	color:#fff;
+	text-align:center;
+	font-family:'Nanum Barun Gothic';
+	padding-top:10px;
+	bottom:0px;
+	position:absolute;
+}
+
+.product_text{
+	width:280px;
+	height:160px;
+	background:#f7f7f7;
+	padding:10px;
+	font-family:'Nanum Barun Gothic';
+	margin-left:10px;
+	line-height:20px;
+	overflow-y:scroll;
+}
+.product_text2{
+	width:215px;
+	height:160px;
+	background:#f7f7f7;
+	padding:10px;
+	font-family:'Nanum Barun Gothic';
+	margin-left:10px;
+	line-height:20px;
+	overflow-y:scroll;
+}
+
+.result_gray{
+	font-size:14px;
+	color:#b9b9b9;
+	font-family:'Nanum Barun Gothic';
+}
+
+.result_price{
+	font-size:16px;
+	font-weight:bold;
+	color:#ff1418;
+}
+
+.product_price{
+	height:55px;
+	margin-left:10px;
+	margin-top:10px;
+	line-height:20px;
+}
+
+.result_sns{
+	font-family:'Nanum Barun Gothic';
+	font-size:24px;
+	font-weight:bold;
+	text-align: center; /* 02.01 추가 */
+}
+
+.result_sns_text{
+	font-family:'Nanum Barun Gothic';
+	text-align:center;
+}
+
+.result_last{
+	width:100px;
+}
+
+.result_last ul{
+	width:100%;
+	margin-top:130px;
+	margin-bottom:10px;
+}
+
+.result_last li{
+	float:left;
+	padding:5px;
+}
+
+.detail_list{
+	width:45%;
+	padding:20px;
+}
+	
+.detail_list table{
+	width:100%;
+}
+
+.detail_list th{
+	height:30px;
+	background:#000;
+	color:#fff;
+	border-top:2px solid #fee04a;
+	font-family:'Nanum Barun Gothic';
+	text-align:center;
+	vertical-align:middle;
+	padding:5px;
+}
+
+.detail_list td{
+	height:30px;
+	padding:5px;
+	font-family:'Nanum Barun Gothic';
+	text-align:center;
+	vertical-align:middle;
+	border-bottom:1px solid #000;
+
+}
+
+.detail_slide{
+	height:225px;
+	background:#fee04a;
+	position:fixed;
+	bottom:0px;
+}
+/*main.css*/
+
+.main_top{
+	height:520px;
+	background:url(../img/main_img.jpg) center no-repeat;
+}
+
+.search_text2{
+	width:480px;
+	height:33px;
+	border-radius:5px;
+	border:none;
+}
+.main_logo{
+	width:575px;
+	margin:auto;
+	text-align:center;
+	padding-top:190px;
+}
+
+.main_yellow{
+	height:250px;
+	background:#fee04a;
+}
+
+.main_yellow_in{
+	width:150px;
+	height:230px;
+	background:#2d2d2d;
+	padding:10px;
+	text-align:center;
+	float:left;
+}
+
+.main_yellow_in select{
+	margin-top:10px;
+}
+
+.main_baby_foto{
+	width:116px;
+	height:116px;
+	border-radius:70px;
+	background:#fff;
+	margin:auto;
+	margin-top:20px;
+}
+
+.main_baby_name{
+	color:#fff;
+	font-size:16px;
+	text-align:center;
+	font-family:'Nanum Barun Gothic';
+	margin-top:20px;
+}
+
+.main_yellow_in2{
+	float:left;
+}
+
+.main_yellow_in2 ul{
+	margin-top:20px;
+}
+
+.main_yellow_in2 li{
+	float:left;
+}
+
+.main_ti{
+	height:45px;
+	background:url(../img/main_tibg.png) no-repeat 25px;
+	font-family:'Nanum Barun Gothic';
+	padding-left:25px;
+	font-weight:bold;
+	font-size:24px;
+	line-height:40px;
+	margin-top:20px;
+}
+
+.main_product li{
+	float:left;
+	width:205px;
+	height:270px;
+	border:1px solid #ccc;
+	padding:10px;
+	margin:10px;
+}
+
+.foto205{
+	width:205px;
+	height:205px;
+	border:1px solid #ccc;
+	margin:auto;
+	position:relative;
+}
+
+.main_product_ti{
+	height:28px;
+	text-align:center;
+	font-weight:bold;
+	font-size:14px;
+	font-family:'Nanum Barun Gothic';
+	line-height:30px;
+}
+
+.main_left_product{
+	width:175px;
+	float:left;
+	border-right:1px solid #ccc;
+	padding:10px;
+}
+
+.main_left_con{
+	width:590px;
+	float:left;
+	padding:10px;
+	border-right:1px solid #ccc;
+}
+
+.foto170{
+	width:170px;
+	height:170px;
+	border:1px solid #ccc;
+	margin:auto;
+	position:relative;
+}
+
+.product_id{
+	font-size:20px;
+	color:#ffcb08;
+	font-weight:bold;
+	text-align:right;
+	font-family:'Nanum Barun Gothic';
+	line-height:60px;
+}
+
+.product_sns{
+	height:25px;
+	border-top:1px solid #ccc;
+	border-bottom:1px solid #ccc;
+	padding:10px;
+}
+
+.score{
+	font-size:20px;
+	font-family:'Nanum Barun Gothic';
+	font-weight:bold;
+	color:#ff1418;
+	clear:both;
+}
+
+.sns{
+	font-size:20px;
+	font-family:'Nanum Barun Gothic';
+}
+
+.main_yellow_ti{
+	font-size:12px;
+	text-align:center;
+}
+
+.main_right_list{
+	width:230px;
+	float:right;
+}
+
+.main_right_ti{
+	height:55px;
+	font-size:16px;
+	font-weight:bold;
+	text-align:center;
+	font-family:'Nanum Barun Gothic';
+	line-height:60px;
+}
+
+.foto50{
+	width:50px;
+	height:50px;
+	background:#fff;
+	float:left;
+}
+
+.main_right_name{
+	line-height:50px;
+	margin-left:10px;
+	float:left;
+}
+#wrapper {
+  width: 841px; /* MUST HAVE WIDTH SET, should be the sidebar width + main width */
+  margin-left: auto;
+  margin-right: auto;
+}
+/*demo.css 01.30일 추가 메인관련*/
+
+.items
+{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    margin-top: 16px;
+    margin-left: 10px;
+	font-family:'Nanum Barun Gothic';
+
+}
+.items li
+{
+    text-align: center;
+    font-size: 11px !important;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-weight: bold;
+	width:110px;
+}
+.items li a, .items li a:visited, .items li a:active
+{
+    color: #443901;
+    text-decoration: none;
+}
+.items li a:hover
+{
+    /*text-decoration: underline;*/
+    color: #7C6300;
+    -webkit-text-shadow: 1px 1px 2px #ffffff; /* Saf3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+    -moz-text-shadow: 1px 1px 2px #ffffff; /* FF3.5 - 3.6 */
+    text-shadow: 1px 1px 2px #ffffff; /* Opera 10.5, IE9, FF4+, Chrome 6+, iOS 5 */
+}
+
+#inline-content
+{
+    height: 100px;
+    margin-top: 100px;
+    margin: 0 auto;
+    color: #000;
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+}
+/*demo.css 01.30일 추가 메인관련 끝*/
+
+
+/* blog_view */
+
+.top_blog{
+	margin-left:40px;
+	margin-top:34px;
+	float:left;
+	font-weight:bold;
+	font-family:'Nanum Barun Gothic';
+	font-size:18px;
+	color:#fff;
+}
+
+.top_blog2{
+	color:#fff;
+	font-size:16px;
+	float:right;
+	font-family:'Nanum Barun Gothic';
+	line-height:80px;
+}
+
+.top_blog2 img{
+	margin-top:20px;
+}
+
+.top_blog2 span{
+	width:100px;
+	margin-right:10px;
+}
+

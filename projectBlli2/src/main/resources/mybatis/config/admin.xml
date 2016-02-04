@@ -19,6 +19,45 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="mailSubject" column="mail_subject"/>
  		<result property="mailContentFile" column="mail_content_file"/>
  	</resultMap>
+ 	<!-- BlliPostingVO Result Map 설정 -->
+ 	<resultMap type="blliPostingVO" id="bpvRM">
+ 		<result property="postingUrl" column="posting_url"/>
+ 		<result property="postingTitle" column="posting_title"/>
+ 		<result property="postingSummary" column="posting_summary"/>
+ 		<result property="postingContent" column="posting_content"/>
+ 		<result property="postingScore" column="posting_score"/>
+ 		<result property="postingLikeCount" column="posting_like_count"/>
+ 		<result property="postingDislikeCount" column="posting_dislike_count"/>
+ 		<result property="postingMediaCount" column="posting_media_count"/>
+ 		<result property="postingPhotoLink" column="posting_photo_link"/>
+ 		<result property="postingStatus" column="posting_status"/>
+ 		<result property="postingTotalResidenceTime" column="posting_total_residence_time"/>
+ 		<result property="postingViewCount" column="posting_view_count"/>
+ 		<result property="postingScrapeCount" column="posting_scrape_count"/>
+ 		<result property="postingAuthor" column="posting_author"/>
+ 		<result property="postingDate" column="posting_date"/>
+ 		<result property="postingRank" column="posting_rank"/>
+ 		<result property="postingReplyCount" column="posting_reply_count"/>
+ 		<result property="smallProduct" column="small_product"/>
+ 		<result property="smallProductId" column="small_product_id"/>
+ 	</resultMap>
+ 	<!-- BlliSmallProductVO Result Map 설정 -->
+ 	<resultMap type="blliSmallProductVO" id="bspvRM">
+ 		<result property="smallProductId" column="small_product_id"/>
+ 		<result property="smallProduct" column="small_product"/>
+ 		<result property="midCategory" column="mid_category"/>
+ 		<result property="smallProductMaker" column="small_product_maker"/>
+ 		<result property="smallProductWhenToUseMin" column="small_product_whentouse_min"/>
+ 		<result property="smallProductWhenToUseMax" column="small_product_whentouse_max"/>
+ 		<result property="smallProductDibsCount" column="small_product_dibs_count"/>
+ 		<result property="smallProductMainPhotoLink" column="small_product_main_photo_link"/>
+ 		<result property="smallProductScore" column="small_product_score"/>
+ 		<result property="smallProductPostingCount" column="small_product_posting_count"/>
+ 		<result property="naverShoppingRank" column="naver_shopping_rank"/>
+ 		<result property="productRegisterDay" column="product_register_day"/>
+ 		<result property="midCategoryId" column="mid_category_id"/>
+ 		<result property="smallProductId" column="small_product_id"/>
+ 	</resultMap>
  	
  	<!-- 용호 작성 쿼리 -->
  	<!-- memberId로 회원의 메일주소를 찾습니다. -->
@@ -30,6 +69,93 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select mail_subject, mail_content_file from blli_mailing where mail_form = #{value}
 	</select>
 	<!-- 용호 쿼리 끝 -->
+	
+	<!-- 현석 쿼리 시작 -->
+	<select id="unconfirmedPosting" resultMap="bpvRM">
+		select posting_url, posting_title, posting_content, small_product from(
+			select ceil(rownum/5) as page, posting_url, posting_title, posting_content, small_product from(
+				select count(*) over (partition by posting_url) as count_posting_url, posting_url, posting_title, 
+				posting_content, small_product from blli_posting where posting_status = 'unconfirmed'
+			) where count_posting_url = 1
+		) where page = #{pageNo}
+	</select>
+	
+	<select id="totalUnconfirmedPosting" resultType="int">
+		select count(*) from(
+			select count(*) over (partition by posting_url) as count_posting_url from blli_posting where posting_status = 'unconfirmed'
+		) where count_posting_url = 1
+	</select>
+	
+	<select id="postingListWithSmallProducts" resultMap="bpvRM">
+		select * from(
+			select ceil(row_num/5) as page, posting_url, posting_title, small_product, posting_content from(
+				select (dense_rank() over (order by posting_url)) row_num, posting_url, posting_title, small_product, posting_content from(
+					select count(*) over (partition by posting_url) as small_product_count, posting_url, posting_title, small_product, 
+					posting_content from blli_posting where posting_status = 'unconfirmed'
+				) where small_product_count > 1 order by posting_url
+			)
+		) where page = #{pageNo}
+	</select>
+	
+	<select id="totalPostingWithProducts" resultType="int">
+		select count(*) from(
+			select count(*) over (partition by posting_url) as small_product_count from blli_posting where posting_status = 'unconfirmed'
+		) where small_product_count > 1
+	</select>
+	
+	<select id="unconfirmedSmallProduct" resultMap="bspvRM">
+		select small_product, mid_category, small_product_whentouse_min, small_product_whentouse_max, 
+		small_product_main_photo_link, small_product_id from(
+			select ceil(rownum/10) as page, small_product, mid_category, small_product_whentouse_min, 
+			small_product_whentouse_max, small_product_main_photo_link, small_product_id
+			from blli_small_product where small_product_status = 'unconfirmed'
+		) where page = #{pageNo}
+	</select>
+	
+	<select id="totalUnconfirmedSmallProduct" resultType="int">
+		select count(*) from blli_small_product where small_product_status = 'unconfirmed'
+	</select>
+	
+	<update id="deletePosting">
+		update blli_posting set posting_status = 'dead' where posting_url = #{postingUrl}
+	</update>
+	
+	<update id="addProduct">
+		update blli_posting set small_product = #{smallProduct} where posting_url = #{postingUrl} and small_product = #{preSmallProduct}
+	</update>
+	
+	<update id="selectProduct">
+		update blli_posting set posting_status = 'confirmed' where posting_url = #{postingUrl} and small_product = #{smallProduct}
+	</update>
+	
+	<update id="deleteProduct">
+		update blli_posting set posting_status = 'dead' where posting_url = #{postingUrl} and posting_status = 'unconfirmed'
+	</update>
+	
+	<update id="registerPosting">
+		update blli_posting set posting_status = 'confirmed' where posting_url = #{postingUrl} and small_product = #{smallProduct}
+	</update>
+	
+	<update id="deleteSmallProduct">
+		update blli_small_product set small_product_status = 'dead' where small_product_id = #{smallProductId}
+	</update>
+	
+	<update id="registerSmallProduct">
+		update blli_small_product set small_product_status = 'confirmed', small_product_whentouse_min = #{smallProductWhenToUseMin}, 
+		small_product_whentouse_max = #{smallProductWhenToUseMax}
+		where small_product_id = #{smallProductId}
+	</update>
+	
+	<update id="registerAndUpdateSmallProduct">
+		update blli_small_product set small_product_status = 'confirmed', small_product_whentouse_min = #{smallProductWhenToUseMin}, 
+		small_product_whentouse_max = #{smallProductWhenToUseMax}, small_product = #{smallProduct}
+		where small_product_id = #{smallProductId}
+	</update>
+	
+	<update id="updateSmallProductName">
+		update blli_small_product set small_product = #{smallProduct} where small_product_id = #{smallProductId}
+	</update>
+	<!-- 현석 쿼리 끝 -->
 	
  </mapper>
  

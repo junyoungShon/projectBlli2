@@ -14,14 +14,20 @@ public interface PostingDAO {
 
 	void insertPosting(BlliPostingVO postingVO);
 
-	List<BlliPostingVO> searchJsoupTest(String searchWord);
-
-	List<BlliPostingVO> postingListWithSmallProducts();
+	List<BlliPostingVO> searchPosting(HashMap<String, String> map);
 
 	List<String> searchProducts(String postingUrl);
 
-	void deleteProduct(HashMap<String, String> map);
+	int countOfPostingUrl(String postingUrl);
 
-	int isPostingUrl(String postingUrl);
+	String getPostingStatus(String postingUrl);
+
+	List<String> getAllPostingStatus(String postingUrl);
+
+	void updatePostingViewCountAndResidenceTime(BlliPostingVO blliPostingVO);
+
+	int totalPageOfPosting(String searchWord);
+
+	List<BlliPostingVO> searchPostingListInProductDetail(String searchWord);
 
 }

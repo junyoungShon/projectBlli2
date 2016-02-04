@@ -34,5 +34,4 @@ public class BlliAuthenticationSuccessHandler implements AuthenticationSuccessHa
 		session.setAttribute("blliMemberVO", blliMemberVO);
 		response.sendRedirect("authorityCheck.do");
 	}
-
 }

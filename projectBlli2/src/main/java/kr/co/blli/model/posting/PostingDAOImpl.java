@@ -23,23 +23,42 @@ public class PostingDAOImpl implements PostingDAO{
 		sqlSessionTemplate.insert("posting.insertPosting", postingVO);
 	}
 	@Override
-	public List<BlliPostingVO> searchJsoupTest(String searchWord) {
-		return sqlSessionTemplate.selectList("posting.searchJsoupTest", searchWord);
-	}
-	@Override
-	public List<BlliPostingVO> postingListWithSmallProducts() {
-		return sqlSessionTemplate.selectList("posting.postingListWithSmallProducts");
+	public List<BlliPostingVO> searchPosting(HashMap<String, String> map) {
+		return sqlSessionTemplate.selectList("posting.searchPosting", map);
 	}
 	@Override
 	public List<String> searchProducts(String postingUrl) {
 		return sqlSessionTemplate.selectList("posting.searchProducts", postingUrl);
 	}
 	@Override
-	public void deleteProduct(HashMap<String, String> map) {
-		sqlSessionTemplate.delete("posting.deleteProduct", map);
+	public int countOfPostingUrl(String postingUrl) {
+		return sqlSessionTemplate.selectOne("posting.countOfPostingUrl", postingUrl);
 	}
 	@Override
-	public int isPostingUrl(String postingUrl) {
-		return sqlSessionTemplate.selectOne("posting.isPostingUrl",postingUrl);
+	public String getPostingStatus(String postingUrl) {
+		return sqlSessionTemplate.selectOne("posting.getPostingStatus",postingUrl);
+	}
+	@Override
+	public List<String> getAllPostingStatus(String postingUrl) {
+		return sqlSessionTemplate.selectList("posting.getAllPostingStatus",postingUrl);
+	}
+	/**
+	  * @Method Name : updatePostingViewCountAndResidenceTime
+	  * @Method 설명 : 체류시간과 포스팅 조회수를 업데이트 해줍니다.
+	  * @작성일 : 2016. 1. 22.
+	  * @작성자 : junyoung
+	  * @param blliPostingVO
+	 */
+	@Override
+	public void updatePostingViewCountAndResidenceTime(BlliPostingVO blliPostingVO) {
+		sqlSessionTemplate.update("posting.updatePostingViewCountAndResidenceTime",blliPostingVO);
+	}
+	@Override
+	public int totalPageOfPosting(String searchWord) {
+		return sqlSessionTemplate.selectOne("posting.totalPageOfPosting", searchWord);
+	}
+	@Override
+	public List<BlliPostingVO> searchPostingListInProductDetail(String searchWord) {
+		return sqlSessionTemplate.selectList("posting.searchPostingListInProductDetail", searchWord);
 	}
 }

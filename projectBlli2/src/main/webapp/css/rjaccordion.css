@@ -1,0 +1,58 @@
+﻿
+/*----- rjAccordion -----*/
+    
+
+
+.accordion, .accordion * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.accordion {
+  overflow-y: scroll;
+  /* box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.25);
+  border-radius: 3px; */
+  background: #f3f3f3;
+  color: #000;
+  width: 99%;
+  height:325px;
+}
+
+.accordion-section-header {
+  width: 100%;
+  padding: 5px;
+  display: inline-block;
+  background: #f3f3f3;
+  transition: all linear 0.15s;
+  font-size: 1.200em;
+  color: #000;
+  border-top:1px solid #ccc;
+  font-family:'Nanum Barun Gothic';
+}
+
+.accordion-section-header.active, .accordion-section-header:hover {
+  background: #fee04a;
+  text-decoration: none;
+}
+
+.accordion-section:last-child .accordion-section-header { border-bottom: none; }
+
+.accordion-section-content {
+  display: none;
+}
+
+.accordion-section-content th{
+	height:25px;
+	background:#2d2d2d;
+	color:#fff;
+	text-align:center;
+	vertical-align:middle;
+	font-family:'Nanum Barun Gothic';
+}
+
+.accordion-section-content td{
+	padding:5px;
+	font-family:'Nanum Barun Gothic';
+	text-align:left;
+}
