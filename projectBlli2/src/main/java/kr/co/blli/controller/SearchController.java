@@ -251,4 +251,9 @@ public class SearchController {
 	public void productMarker() throws ParseException{
 		postingMarker.productMarkering();
 	}
+	//임시 메서드
+	@RequestMapping("smallProductRankingMaker.do")
+	public void smallProductRankingMaker() throws ParseException{
+		postingMarker.smallProductRankingMaker();
+	}
 }

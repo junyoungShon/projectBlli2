@@ -281,8 +281,10 @@
 	
 	<!-- 회원가입페이지에 ROLE_USER접근 시 alert과 메인페이지 이동 -->
 	<sec:authorize access="hasRole('ROLE_USER')">
+		<script type="text/javascript">
 			alert('이미 로그인은 완료하셨습니다^^ 메인으로 이동할게요~');
-			location.replace('${initParam.root}member_proceedingToMain.do')	;
+			location.replace('${initParam.root}member_proceedingToMain.do');
+		</script>
 	</sec:authorize>
 	
 	<!-- 미인증 유저에게는 로그인 폼이 제공된다. -->

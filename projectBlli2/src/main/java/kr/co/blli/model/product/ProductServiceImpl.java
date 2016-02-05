@@ -266,6 +266,8 @@ public class ProductServiceImpl implements ProductService{
 			map.put("midCategory", midCategory);
 			map.put("smallProduct", searchWord);
 			otherSmallProductList = (ArrayList<BlliSmallProductVO>)productDAO.getOtherSmallProductList(map);
+			//smallProductDetailCount를 올려줍니다.
+			productDAO.updateSmallProductDetailViewCount(smallProduct.getSmallProductId());
 		}
 		smallProductInfo.put("smallProduct", smallProduct);
 		smallProductInfo.put("buyLink", buyLink);

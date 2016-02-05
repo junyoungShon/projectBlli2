@@ -20,8 +20,14 @@
 			<mvc:mapping path="/*"/>
 			<bean class="kr.co.blli.controller.BlliInterceptor"></bean>
 		</mvc:interceptor>
+		<!-- 캐쉬저장을 안한다. 이를 통해서 폼 전송 후 뒤로 가기를 봉쇄한다. -->
+		<bean id="webContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+        	<property name="cacheSeconds" value="0" />
+        	<property name="useExpiresHeader" value="true" />
+        	<property name="useCacheControlHeader" value="true" />
+        	<property name="useCacheControlNoStore" value="true" />
+    	</bean>
 	</mvc:interceptors>
-		
 	
 	<!-- 타일즈 설정 -->
 	<bean id="tilesConfig" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">

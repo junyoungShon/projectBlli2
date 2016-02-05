@@ -39,6 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="searchTime" column="search_time"/>
  		<result property="productDbInsertDate" column="product_db_insert_date"/>
  		<result property="detailViewCount" column="detail_View_Count"/>
+ 		<result property="smallProductRanking" column="small_Product_Ranking"/>
  	</resultMap>
  	<!-- BlliSmallProductBuyLinkVO Result Map 설정 -->
  	<resultMap type="blliSmallProductBuyLinkVO" id="bspblvRM">
@@ -243,8 +244,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectBuyLinkClickCountBySmallProductId" resultType="Integer">
 		select sum(buy_link_click_count) from blli_small_prod_buy_link where small_product_id = #{value} 
 	</select>
-	
-
 	<!-- 네이버 지식 쇼핑에 등록 된 중분류 아래 소제품 갯수 -->
 	<select id="selectSmallProductNumByMidCategoryId" resultType="Integer">
 		select small_product_count from blli_mid_category where mid_category_id = #{value}
@@ -253,8 +252,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateProductScore">
 		update blli_small_product set small_product_score = #{smallProductScore} where small_product_id=#{smallProductId}
 	</update>
+	<!-- 중분류 카테고리 리스트를 반환한다. -->
+	<select id="selectMidCategoryVOList" resultType="String">
+		select mid_category_id from blli_mid_category
+	</select>
+	<!-- 중분류 카테고리 리스트를 반환한다. -->
+	<select id="selectAllSmallProductByMidCategoryId" resultMap="bspvRM">
+		select small_product_id,small_product_score from blli_small_product where mid_category_id = #{value} and 
+		small_product_status ='confirmed' order by small_product_score desc
+	</select>
+	<!-- 중분류 내의 소분류 랭킹들을 설정합니다.. -->
+	<update id="updateSmallProductRanking">
+		update blli_small_product set small_product_ranking = #{smallProductRanking} where small_product_id = #{smallProductId}
+	</update>
+	<!-- 소분류 상세 보기 조회수를 올려줍니다. -->
+	<update id="updateSmallProductDetailPageView">
+		update blli_small_product set detail_view_count = detail_view_count+1 where small_product_id = #{value}
+	</update>
 	<!-- 끝 -->
-	
+		
  </mapper> 		
  
  
