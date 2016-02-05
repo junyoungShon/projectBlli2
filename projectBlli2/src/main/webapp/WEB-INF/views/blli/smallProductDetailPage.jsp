@@ -177,7 +177,7 @@
 	<div class="jbMenu2">
 		<div class="gallery js-flickity" data-flickity-options='{ "imagesLoaded": true }'>
 			<c:forEach items="${requestScope.postingList}" var="postingList">
-				<a href="${postingList.postingUrl}"><img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${postingList.postingPhotoLink}" alt="${requestScope.smallProductInfo.smallProduct.smallProduct}"></a>
+				<a href="goPosting.do?postingUrl=${postingList.postingUrl}&smallProductId=${blliSmallProductVOList.smallProductId}&postingTitle=${postingList.postingTitle}"><img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${postingList.postingPhotoLink}" alt="${requestScope.smallProductInfo.smallProduct.smallProduct}"></a>
 			</c:forEach>
 		</div>
 	</div>

@@ -74,7 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="searchPostingListInProductDetail" resultMap="bpvRM">
-		select posting_url, posting_photo_link from blli_posting where small_product = #{searchWord} and posting_status = 'confirmed' order by posting_score desc
+		select posting_url, posting_photo_link, posting_title from blli_posting where small_product = #{searchWord} and posting_status = 'confirmed' order by posting_score desc
 	</select>
 	<!-- 현석 쿼리 끝 -->
 	
