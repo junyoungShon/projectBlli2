@@ -21,7 +21,7 @@ public interface AdminService {
 	
 	public ListVO unconfirmedSmallProduct(String pageNo);
 	
-	abstract void selectProduct(List<Map<String, Object>> urlAndProduct);
+	abstract void selectProduct(List<Map<String, Object>> urlAndImage);
 	
 	abstract void registerPosting(List<Map<String, Object>> urlAndProduct);
 	

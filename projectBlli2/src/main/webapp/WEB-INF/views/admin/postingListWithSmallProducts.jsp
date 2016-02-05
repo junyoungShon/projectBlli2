@@ -92,13 +92,9 @@ $(document).ready(function(){
 </tr>
 <c:forEach items="${requestScope.resultList.list}" var="postingList" varStatus="count">
 	<tr>
-		<td style="border-bottom: dotted; border-bottom-color: silver;"><h3><strong>
+		<td colspan="2" style="border-bottom: dotted; border-bottom-color: silver;"><h3><strong>
 		<a href="${postingList.postingUrl}" style="text-decoration:none; color: black;">${postingList.postingTitle}</a>
 		</strong></h3></td>
-		<td>
-			<p align="right"><input type="checkbox" name="${count.index}" value="${postingList.postingUrl}">
-			<span><strong>삭제</strong></span></p>
-		</td>
 	</tr>
 	<tr>
 		<td>
@@ -109,6 +105,7 @@ $(document).ready(function(){
 		</td>
 		<td style="background-color: #f7f7f7;">
 		<c:forEach items="${postingList.smallProductList}" var="productList">
+			<label>
 			<input type="checkbox" name="${count.index}" value="${postingList.postingUrl}"><span>${productList}</span><br><br>
 			<c:forEach var="map" items="${postingList.smallProductImage}">
 				<!-- 해당 소제품의 대표 이미지 찾아서 보여줌 -->
@@ -116,7 +113,13 @@ $(document).ready(function(){
 					<img src="${map.value}"><br><br>
 				</c:if>
 			</c:forEach>
+			</label>
 		</c:forEach>
+		<hr>
+		<label>
+		<input type="checkbox" name="${count.index}" value="${postingList.postingUrl}">
+		<span><strong>삭제</strong></span>
+		</label>
 		</td>
 	</tr>
 </c:forEach>

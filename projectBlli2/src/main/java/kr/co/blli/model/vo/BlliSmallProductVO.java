@@ -21,11 +21,14 @@ public class BlliSmallProductVO {
 	private String minPrice;
 	//16.02.01 추가
 	private String searchTime;
-	
+	//16.02.05  추가
+	private int detailViewCount;
+	//16.02.05 추가
+	private String productDbInsertDate;
 	public BlliSmallProductVO() {
 		super();
 	}
-
+	
 	public BlliSmallProductVO(String smallProduct, String midCategory,
 			String midCategoryId, String smallProductMaker,
 			int smallProductWhenToUseMin, int smallProductWhenToUseMax,
@@ -33,7 +36,8 @@ public class BlliSmallProductVO {
 			int smallProductScore, String naverShoppingLink,
 			int naverShoppingRank, int smallProductPostingCount,
 			String productRegisterDay, String smallProductId, int isDib,
-			String minPrice, String searchTime) {
+			String minPrice, String searchTime, int detailViewCount,
+			String productDbInsertDate) {
 		super();
 		this.smallProduct = smallProduct;
 		this.midCategory = midCategory;
@@ -52,7 +56,10 @@ public class BlliSmallProductVO {
 		this.isDib = isDib;
 		this.minPrice = minPrice;
 		this.searchTime = searchTime;
+		this.detailViewCount = detailViewCount;
+		this.productDbInsertDate = productDbInsertDate;
 	}
+
 
 	public String getSmallProduct() {
 		return smallProduct;
@@ -190,6 +197,22 @@ public class BlliSmallProductVO {
 		this.searchTime = searchTime;
 	}
 
+	public int getDetailViewCount() {
+		return detailViewCount;
+	}
+
+	public void setDetailViewCount(int detailViewCount) {
+		this.detailViewCount = detailViewCount;
+	}
+
+	public String getProductDbInsertDate() {
+		return productDbInsertDate;
+	}
+
+	public void setProductDbInsertDate(String productDbInsertDate) {
+		this.productDbInsertDate = productDbInsertDate;
+	}
+
 	@Override
 	public String toString() {
 		return "BlliSmallProductVO [smallProduct=" + smallProduct
@@ -205,7 +228,9 @@ public class BlliSmallProductVO {
 				+ ", smallProductPostingCount=" + smallProductPostingCount
 				+ ", productRegisterDay=" + productRegisterDay
 				+ ", smallProductId=" + smallProductId + ", isDib=" + isDib
-				+ ", minPrice=" + minPrice + ", searchTime=" + searchTime + "]";
+				+ ", minPrice=" + minPrice + ", searchTime=" + searchTime
+				+ ", detailViewCount=" + detailViewCount
+				+ ", productDbInsertDate=" + productDbInsertDate + "]";
 	}
-
+	
 }

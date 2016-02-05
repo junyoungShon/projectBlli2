@@ -419,7 +419,7 @@
 				</div>
 				<div style="height:245px;">
 					<div class="result_foto fl">
-						<a href="goPosting.do?postingUrl=${postingList.postingUrl}&smallProductId=${postingList.smallProductId}+'&postingTitle='${postingList.postingTitle}">
+						<a href="goPosting.do?postingUrl=${postingList.postingUrl}&smallProductId=${postingList.smallProductId}&postingTitle=${postingList.postingTitle}">
 							<img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${postingList.postingPhotoLink}" style="width: 342px; max-height: 247px;">
 						</a>
 					</div>

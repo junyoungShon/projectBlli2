@@ -371,4 +371,24 @@ public class ProductDAOImpl implements ProductDAO{
 		return  sqlSessionTemplate.selectList("product.selectAllSmallProduct");
 	}
 
+	@Override
+	public int selectPostingNumBySmallProductId(String smallProductId) {
+		return sqlSessionTemplate.selectOne("product.selectPostingNumBySmallProductId", smallProductId);
+	}
+
+	@Override
+	public int selectBuyLinkClickCountBySmallProductId(String smallProductId) {
+		return sqlSessionTemplate.selectOne("product.selectBuyLinkClickCountBySmallProductId", smallProductId);
+	}
+
+	@Override
+	public void updateProductScore(BlliSmallProductVO blliSmallProductVO) {
+		sqlSessionTemplate.update("product.updateProductScore", blliSmallProductVO);
+	}
+
+	@Override
+	public int selectSmallProductNumByMidCategoryId(String midCategoryId) {
+		return sqlSessionTemplate.selectOne("product.selectSmallProductNumByMidCategoryId", midCategoryId);
+	}
+
 }

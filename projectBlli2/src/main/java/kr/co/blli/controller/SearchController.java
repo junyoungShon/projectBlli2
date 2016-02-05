@@ -244,6 +244,11 @@ public class SearchController {
 	//임시 메서드
 	@RequestMapping("postingMarker.do")
 	public void postingMarker() throws ParseException{
+		postingMarker.postingMarkering();
+	}
+	//임시 메서드
+	@RequestMapping("productMarker.do")
+	public void productMarker() throws ParseException{
 		postingMarker.productMarkering();
 	}
 }

@@ -49,9 +49,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	
  	<insert id="insertPosting">
  		insert into blli_posting(small_product_id, posting_url, small_product, posting_title, posting_photo_link, posting_media_count, 
- 		posting_content, posting_summary, posting_author, posting_date, posting_rank, posting_reply_count, posting_status)
+ 		posting_content, posting_summary, posting_author, posting_date, posting_rank, posting_reply_count, posting_status, posting_db_insert_date)
  		values(#{smallProductId}, #{postingUrl}, #{smallProduct}, #{postingTitle}, #{postingPhotoLink}, #{postingMediaCount}, 
- 		#{postingContent}, #{postingSummary}, #{postingAuthor}, #{postingDate}, #{postingRank}, #{postingReplyCount}, 'unconfirmed')
+ 		#{postingContent}, #{postingSummary}, #{postingAuthor}, #{postingDate}, #{postingRank}, #{postingReplyCount}, 'unconfirmed', sysdate)
  	</insert>
 
 	<select id="searchPosting" resultMap="bpvRM">

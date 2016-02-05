@@ -23,20 +23,57 @@
 <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
+		var urlAndImage = [];
+		var flag = true;
+		
+		$(".deleteBtn").click(function(){
+			$(this).parent().prev().children("img").css("border", "0px");
+			if(urlAndImage.length == 0){
+				urlAndImage.push({"postingUrl": $(this).children().eq(0).val(), "postingPhotoLink": "", "smallProductId": $(this).children().eq(0).attr("class"), "del": "YES"});
+			}else{
+				for(var i=0;i<urlAndImage.length;i++){
+					if(urlAndImage[i].postingUrl == $(this).children().eq(0).val()){
+						urlAndImage[i].del = "YES";
+						flag = false;
+						break;
+					}
+				}
+				if(flag){
+					urlAndImage.push({"postingUrl": $(this).children().eq(0).val(), "postingPhotoLink": "", "smallProductId": $(this).children().eq(0).attr("class"), "del": "YES"});
+				}
+				flag = true;
+			}
+		});
+		
+		$(".mainImage").click(function(){
+			$(this).parent().children("img").css("border", "0px");
+			$(this).css("border", "5px solid red");
+			$(this).parent().next().children("label").children().first().prop("checked", false);
+			if(urlAndImage.length == 0){
+				urlAndImage.push({"postingUrl": $(this).attr("name"), "postingPhotoLink": $(this).attr("id"), "smallProductId": $(this).next().text(), "del": "NO"});
+			}else{
+				for(var i=0;i<urlAndImage.length;i++){
+					if(urlAndImage[i].postingUrl == $(this).attr("name")){
+						urlAndImage[i].postingPhotoLink = $(this).attr("id");
+						urlAndImage[i].del = "NO";
+						flag = false;
+						break;
+					}
+				}
+				if(flag){
+					urlAndImage.push({"postingUrl": $(this).attr("name"), "postingPhotoLink": $(this).attr("id"), "smallProductId": $(this).next().text(), "del": "NO"});
+				}
+				flag = true;
+			}
+		});
 		
 		$("#confirmBtn").click(function(){
-			if($("input:radio:checked").length == 0){
-				alert("체크 안했다");
+			if(urlAndImage.length.length == 0){
+				alert("대표 이미지 사진을 선택하세요!");
 				return false;
 			}
-			if(confirm("확실해?")){
-				var array = [];
-				for(var i=0;i<"${fn:length(requestScope.resultList.list)}";i++){
-					// 선택한 소제품과 postingUrl을 배열에 저장
-				    array.push({"smallProduct": $("input:radio[name='"+i+"']:checked").next().text(), 
-				    	"postingUrl": $("input:radio[name='"+i+"']:checked").val()});
-				}
-				var json_data=JSON.stringify(array);
+			if(confirm("확실합니까?")){
+				var json_data=JSON.stringify(urlAndImage);
 				$.ajax({
 					url:"registerPosting.do",
 					type:"POST",
@@ -55,7 +92,7 @@
 		});
 		
 		$("#cancel").click(function(){
-			if(confirm("취소할거니?")){
+			if(confirm("취소하시겠습니까?")){
 				location.href="${initParam.root}index.do";
 			}
 		});
@@ -84,21 +121,20 @@
 </tr>
 <c:forEach items="${requestScope.resultList.list}" var="postingList" varStatus="count">
 	<tr>
-		<td style="border-bottom: dotted; border-bottom-color: silver;"><h3><strong>
+		<td colspan="2" style="border-bottom: dotted; border-bottom-color: silver;"><h3><strong>
 		<a href="${postingList.postingUrl}" style="text-decoration:none; color: black;">${postingList.postingTitle}</a>
 		</strong></h3></td>
-		<td><p align="right"><input type="radio" name="${count.index}" value="${postingList.postingUrl}">
-		<span><strong>삭제</strong></span></p></td>
 	</tr>
 	<tr>
 		<td>
 			<c:forEach items="${postingList.imageList}" var="imgList">
-			<img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${imgList}" width="190px" height="150px">
+			<img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${imgList}" width="190px" height="150px" class="mainImage" id="${imgList}" name="${postingList.postingUrl}">
+			<span style="display: none;">${postingList.smallProductId}</span>
 			</c:forEach>
 			<div class="product_text">${postingList.postingContent}</div>
 		</td>
 		<td style="background-color: #f7f7f7;">
-			<input type="radio" name="${count.index}" value="${postingList.postingUrl}"><span>${postingList.smallProduct}</span>
+			${postingList.smallProduct}
 			<br><br>
 			<c:forEach var="map" items="${postingList.smallProductImage}">
 				<!-- 해당 소제품의 대표 이미지 찾아서 보여줌 -->
@@ -106,6 +142,12 @@
 					<img src="${map.value}"><br><br>
 				</c:if>
 			</c:forEach>
+			<!-- </label> -->
+			<hr>
+			<label class="deleteBtn">
+			<input type="radio" name="${count.index}" value="${postingList.postingUrl}" class="${postingList.smallProductId}">
+			<span><strong>삭제</strong></span>
+			</label>
 		</td>
 	</tr>
 </c:forEach>
