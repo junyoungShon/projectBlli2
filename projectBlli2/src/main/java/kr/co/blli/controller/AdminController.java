@@ -1,12 +1,14 @@
 package kr.co.blli.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import kr.co.blli.model.admin.AdminService;
+import kr.co.blli.model.vo.BlliPostingVO;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -112,4 +114,8 @@ public class AdminController {
 	public void registerSmallProduct(@RequestBody List<Map<String, Object>> smallProductInfo){
 		adminService.registerSmallProduct(smallProductInfo);
 	}
+	@RequestMapping("insertSmallProductByAdmin.do")
+	public ModelAndView insertSmallProductByAdmin(){
+		return new ModelAndView("admin/insertSmallProductByAdmin");
+	}	
 }
