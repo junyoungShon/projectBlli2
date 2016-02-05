@@ -142,7 +142,6 @@
 					<img src="${map.value}"><br><br>
 				</c:if>
 			</c:forEach>
-			<!-- </label> -->
 			<hr>
 			<label class="deleteBtn">
 			<input type="radio" name="${count.index}" value="${postingList.postingUrl}" class="${postingList.smallProductId}">

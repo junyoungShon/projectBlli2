@@ -117,11 +117,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<update id="deletePosting">
-		update blli_posting set posting_status = 'dead' where posting_url = #{postingUrl} and small_product_id = #{smallProductId}
-	</update>
-	
-	<update id="addProduct">
-		update blli_posting set small_product = #{smallProduct} where posting_url = #{postingUrl} and small_product = #{preSmallProduct}
+		update blli_posting set posting_status = 'dead' where posting_url = #{postingUrl}
 	</update>
 	
 	<update id="selectProduct">
@@ -129,11 +125,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<update id="deleteProduct">
-		update blli_posting set posting_status = 'dead' where posting_url = #{postingUrl} and posting_status = 'unconfirmed'
+		update blli_posting set posting_status = 'dead' where posting_url = #{postingUrl} and small_product != #{smallProduct}
 	</update>
 	
 	<update id="registerPosting">
-		update blli_posting set posting_status = 'confirmed', posting_photo_link = #{postingPhotoLink} where posting_url = #{postingUrl} and small_product_id = #{smallProductId}
+		update blli_posting set posting_status = 'confirmed', posting_photo_link = #{postingPhotoLink} where posting_url = #{postingUrl}
 	</update>
 	
 	<update id="deleteSmallProduct">

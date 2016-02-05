@@ -31,6 +31,19 @@ drop table test_log
 insert into test_log values('a')
 select * from test_log
 
+select * from(
+	select ceil(row_num/5) as page, posting_url, posting_title, small_product, posting_content, small_product_id from(
+		select (dense_rank() over (order by posting_url)) row_num, posting_url, posting_title, small_product, posting_content, small_product_id from(
+			select count(*) over (partition by posting_url) as small_product_count, posting_url, posting_title, small_product, 
+			posting_content, small_product_id from blli_posting where posting_status = 'unconfirmed'
+		) where small_product_count > 1 order by posting_url
+	)
+) where page = #{pageNo}
+
+select * from blli_posting where posting_title like '%' || '공짜분유 받으세요^^' || '%'
+
+select * from blli_posting where small_product like '%' || '임페리얼드림XO' || '%'
+
 update blli_mid_category set mid_category_whentouse_min = 0 where mid_category_whentouse_min > 0 or mid_category_whentouse_min is null and mid_category = '국내분유'
 
 update blli_posting set posting_db_insert_date = '2016.02.04'

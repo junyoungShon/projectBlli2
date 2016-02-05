@@ -28,9 +28,7 @@ public interface AdminDAO {
 	
 	void deletePosting(BlliPostingVO vo);
 	
-	void addProduct(HashMap<String, String> map);
-	
-	void selectProduct(HashMap<String, String> map);
+	void selectProduct(BlliPostingVO vo);
 	
 	void deleteProduct(String postingUrl);
 	
