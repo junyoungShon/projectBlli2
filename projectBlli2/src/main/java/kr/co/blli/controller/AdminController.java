@@ -83,8 +83,8 @@ public class AdminController {
 	 */
 	@ResponseBody
 	@RequestMapping("selectProduct.do")
-	public void selectProduct(@RequestBody List<Map<String, Object>> urlAndProduct){
-		adminService.selectProduct(urlAndProduct);
+	public void selectProduct(@RequestBody List<Map<String, Object>> urlAndImage){
+		adminService.selectProduct(urlAndImage);
 	}
 	/**
 	 * 

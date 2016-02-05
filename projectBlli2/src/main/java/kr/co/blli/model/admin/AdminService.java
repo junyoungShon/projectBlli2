@@ -23,7 +23,7 @@ public interface AdminService {
 	
 	abstract void selectProduct(List<Map<String, Object>> urlAndImage);
 	
-	abstract void registerPosting(List<Map<String, Object>> urlAndProduct);
+	abstract void registerPosting(List<Map<String, Object>> urlAndImage);
 	
 	public void registerSmallProduct(List<Map<String, Object>> smallProductInfo);
 }

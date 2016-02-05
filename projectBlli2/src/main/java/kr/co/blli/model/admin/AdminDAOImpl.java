@@ -55,12 +55,9 @@ public class AdminDAOImpl implements AdminDAO{
 		sqlSessionTemplate.update("admin.deletePosting", vo);
 	}
 	@Override
-	public void addProduct(HashMap<String, String> map) {
-		sqlSessionTemplate.update("admin.addProduct", map);
-	}
-	@Override
-	public void selectProduct(HashMap<String, String> map) {
-		sqlSessionTemplate.update("admin.selectProduct", map);
+	public void selectProduct(BlliPostingVO vo) {
+		sqlSessionTemplate.update("admin.selectProduct", vo);
+		sqlSessionTemplate.update("admin.deleteProduct", vo);
 	}
 	@Override
 	public void deleteProduct(String postingUrl) {
