@@ -21,11 +21,10 @@ public class BlliSmallProductVO {
 	private String minPrice;
 	//16.02.01 추가
 	private String searchTime;
-	
 	public BlliSmallProductVO() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
-
 	public BlliSmallProductVO(String smallProduct, String midCategory,
 			String midCategoryId, String smallProductMaker,
 			int smallProductWhenToUseMin, int smallProductWhenToUseMax,
@@ -53,143 +52,108 @@ public class BlliSmallProductVO {
 		this.minPrice = minPrice;
 		this.searchTime = searchTime;
 	}
-
 	public String getSmallProduct() {
 		return smallProduct;
 	}
-
 	public void setSmallProduct(String smallProduct) {
 		this.smallProduct = smallProduct;
 	}
-
 	public String getMidCategory() {
 		return midCategory;
 	}
-
 	public void setMidCategory(String midCategory) {
 		this.midCategory = midCategory;
 	}
-
 	public String getMidCategoryId() {
 		return midCategoryId;
 	}
-
 	public void setMidCategoryId(String midCategoryId) {
 		this.midCategoryId = midCategoryId;
 	}
-
 	public String getSmallProductMaker() {
 		return smallProductMaker;
 	}
-
 	public void setSmallProductMaker(String smallProductMaker) {
 		this.smallProductMaker = smallProductMaker;
 	}
-
 	public int getSmallProductWhenToUseMin() {
 		return smallProductWhenToUseMin;
 	}
-
 	public void setSmallProductWhenToUseMin(int smallProductWhenToUseMin) {
 		this.smallProductWhenToUseMin = smallProductWhenToUseMin;
 	}
-
 	public int getSmallProductWhenToUseMax() {
 		return smallProductWhenToUseMax;
 	}
-
 	public void setSmallProductWhenToUseMax(int smallProductWhenToUseMax) {
 		this.smallProductWhenToUseMax = smallProductWhenToUseMax;
 	}
-
 	public int getSmallProductDibsCount() {
 		return smallProductDibsCount;
 	}
-
 	public void setSmallProductDibsCount(int smallProductDibsCount) {
 		this.smallProductDibsCount = smallProductDibsCount;
 	}
-
 	public String getSmallProductMainPhotoLink() {
 		return smallProductMainPhotoLink;
 	}
-
 	public void setSmallProductMainPhotoLink(String smallProductMainPhotoLink) {
 		this.smallProductMainPhotoLink = smallProductMainPhotoLink;
 	}
-
 	public int getSmallProductScore() {
 		return smallProductScore;
 	}
-
 	public void setSmallProductScore(int smallProductScore) {
 		this.smallProductScore = smallProductScore;
 	}
-
 	public String getNaverShoppingLink() {
 		return naverShoppingLink;
 	}
-
 	public void setNaverShoppingLink(String naverShoppingLink) {
 		this.naverShoppingLink = naverShoppingLink;
 	}
-
 	public int getNaverShoppingRank() {
 		return naverShoppingRank;
 	}
-
 	public void setNaverShoppingRank(int naverShoppingRank) {
 		this.naverShoppingRank = naverShoppingRank;
 	}
-
 	public int getSmallProductPostingCount() {
 		return smallProductPostingCount;
 	}
-
 	public void setSmallProductPostingCount(int smallProductPostingCount) {
 		this.smallProductPostingCount = smallProductPostingCount;
 	}
-
 	public String getProductRegisterDay() {
 		return productRegisterDay;
 	}
-
 	public void setProductRegisterDay(String productRegisterDay) {
 		this.productRegisterDay = productRegisterDay;
 	}
-
 	public String getSmallProductId() {
 		return smallProductId;
 	}
-
 	public void setSmallProductId(String smallProductId) {
 		this.smallProductId = smallProductId;
 	}
-
 	public int getIsDib() {
 		return isDib;
 	}
-
 	public void setIsDib(int isDib) {
 		this.isDib = isDib;
 	}
-
 	public String getMinPrice() {
 		return minPrice;
 	}
-
 	public void setMinPrice(String minPrice) {
 		this.minPrice = minPrice;
 	}
-
 	public String getSearchTime() {
 		return searchTime;
 	}
-
 	public void setSearchTime(String searchTime) {
 		this.searchTime = searchTime;
 	}
-
 	@Override
 	public String toString() {
 		return "BlliSmallProductVO [smallProduct=" + smallProduct
@@ -207,5 +171,5 @@ public class BlliSmallProductVO {
 				+ ", smallProductId=" + smallProductId + ", isDib=" + isDib
 				+ ", minPrice=" + minPrice + ", searchTime=" + searchTime + "]";
 	}
-
+	
 }

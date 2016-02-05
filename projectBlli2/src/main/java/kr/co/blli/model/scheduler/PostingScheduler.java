@@ -59,6 +59,7 @@ public class PostingScheduler {
 		int countOfAllPosting = 0;
 		boolean flag = true;
 		int count = 0;
+		Document doc = null;
 		
 		label:
 		while(flag){
@@ -76,7 +77,7 @@ public class PostingScheduler {
 					smallProduct = smallProductList.get(i).getSmallProduct().replaceAll("&", "%26");
 					int totalPosting = 0;
 					
-					Document doc = Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+
+					doc = Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+
 									smallProduct+"&display=100&start=1&target=blog&sort=sim").timeout(0).get();
 					if(doc.select("message").text().contains("Query limit exceeded")){
 						key = "0a044dc7c63b8f3b9394e1a5e49db7ab";
@@ -336,6 +337,7 @@ public class PostingScheduler {
 				System.out.println("총 포스팅 개수 : "+countOfAllPosting);
 				flag = false;
 			}catch(Exception e){
+				System.out.println(doc);
 				e.printStackTrace();
 			}
 		}

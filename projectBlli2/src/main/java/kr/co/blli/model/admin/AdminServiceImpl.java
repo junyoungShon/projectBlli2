@@ -271,7 +271,7 @@ public class AdminServiceImpl implements AdminService{
 			String postingUrl = urlAndProduct.get(i).get("postingUrl").toString();
 			HashMap<String, String> map = new HashMap<String, String>();
 			if(selectProduct.equals("삭제")){
-				adminDAO.deletePosting(postingUrl);
+				//adminDAO.deletePosting(postingUrl);
 			}else{
 				map.put("postingUrl", postingUrl);
 				if(prePostingUrl.equals(postingUrl)){
@@ -297,20 +297,20 @@ public class AdminServiceImpl implements AdminService{
 	 * @param urlAndProduct
 	 */
 	@Override
-	public void registerPosting(List<Map<String, Object>> urlAndProduct) {
-		for(int i=0;i<urlAndProduct.size();i++){
-			String smallProduct = urlAndProduct.get(i).get("smallProduct").toString();
-			if(smallProduct.equals("")){ //선택하지 않은 포스팅에 대해서는 기능 적용X
-				continue;
-			}
-			String postingUrl = urlAndProduct.get(i).get("postingUrl").toString();
-			HashMap<String, String> map = new HashMap<String, String>();
-			if(smallProduct.equals("삭제")){
-				adminDAO.deletePosting(postingUrl);
+	public void registerPosting(List<Map<String, Object>> urlAndImage) {
+		for(int i=0;i<urlAndImage.size();i++){
+			String delete = urlAndImage.get(i).get("del").toString();
+			String postingUrl = urlAndImage.get(i).get("postingUrl").toString();
+			String postingPhotoLink = urlAndImage.get(i).get("postingPhotoLink").toString();
+			String smallProductId = urlAndImage.get(i).get("smallProductId").toString();
+			BlliPostingVO vo = new BlliPostingVO();
+			vo.setPostingUrl(postingUrl);
+			vo.setPostingPhotoLink(postingPhotoLink);
+			vo.setSmallProductId(smallProductId);
+			if(delete.equals("YES")){
+				adminDAO.deletePosting(vo);
 			}else{
-				map.put("smallProduct", smallProduct);
-				map.put("postingUrl", postingUrl);
-				adminDAO.registerPosting(map);
+				adminDAO.registerPosting(vo);
 			}
 		}
 	}
@@ -329,6 +329,7 @@ public class AdminServiceImpl implements AdminService{
 			BlliSmallProductVO vo = new BlliSmallProductVO();
 			vo.setSmallProductId(smallProductInfo.get(i).get("smallProductId").toString());
 			vo.setSmallProduct(smallProductInfo.get(i).get("smallProduct").toString());
+			vo.setMidCategory(adminDAO.getMidCategory(smallProductInfo.get(i).get("smallProductId").toString()));
 			if(delete.equals("삭제")){
 				adminDAO.deleteSmallProduct(vo.getSmallProductId());
 			}else{
@@ -346,6 +347,7 @@ public class AdminServiceImpl implements AdminService{
 					}
 					vo.setSmallProductWhenToUseMin(Integer.parseInt(smallProductWhenToUseMin));
 					vo.setSmallProductWhenToUseMax(Integer.parseInt(smallProductWhenToUseMax));
+					adminDAO.updateMidCategoryWhenToUse(vo);
 					if(vo.getSmallProduct() == null || vo.getSmallProduct() == ""){
 						adminDAO.registerSmallProduct(vo);
 					}else{

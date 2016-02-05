@@ -72,10 +72,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 현석 쿼리 시작 -->
 	<select id="unconfirmedPosting" resultMap="bpvRM">
-		select posting_url, posting_title, posting_content, small_product from(
-			select ceil(rownum/5) as page, posting_url, posting_title, posting_content, small_product from(
+		select posting_url, posting_title, posting_content, small_product, small_product_id from(
+			select ceil(rownum/5) as page, posting_url, posting_title, posting_content, small_product, small_product_id from(
 				select count(*) over (partition by posting_url) as count_posting_url, posting_url, posting_title, 
-				posting_content, small_product from blli_posting where posting_status = 'unconfirmed'
+				posting_content, small_product, small_product_id from blli_posting where posting_status = 'unconfirmed'
 			) where count_posting_url = 1
 		) where page = #{pageNo}
 	</select>
@@ -88,10 +88,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="postingListWithSmallProducts" resultMap="bpvRM">
 		select * from(
-			select ceil(row_num/5) as page, posting_url, posting_title, small_product, posting_content from(
-				select (dense_rank() over (order by posting_url)) row_num, posting_url, posting_title, small_product, posting_content from(
+			select ceil(row_num/5) as page, posting_url, posting_title, small_product, posting_content, small_product_id from(
+				select (dense_rank() over (order by posting_url)) row_num, posting_url, posting_title, small_product, posting_content, small_product_id from(
 					select count(*) over (partition by posting_url) as small_product_count, posting_url, posting_title, small_product, 
-					posting_content from blli_posting where posting_status = 'unconfirmed'
+					posting_content, small_product_id from blli_posting where posting_status = 'unconfirmed'
 				) where small_product_count > 1 order by posting_url
 			)
 		) where page = #{pageNo}
@@ -117,7 +117,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<update id="deletePosting">
-		update blli_posting set posting_status = 'dead' where posting_url = #{postingUrl}
+		update blli_posting set posting_status = 'dead' where posting_url = #{postingUrl} and small_product_id = #{smallProductId}
 	</update>
 	
 	<update id="addProduct">
@@ -133,7 +133,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<update id="registerPosting">
-		update blli_posting set posting_status = 'confirmed' where posting_url = #{postingUrl} and small_product = #{smallProduct}
+		update blli_posting set posting_status = 'confirmed', posting_photo_link = #{postingPhotoLink} where posting_url = #{postingUrl} and small_product_id = #{smallProductId}
 	</update>
 	
 	<update id="deleteSmallProduct">
@@ -154,6 +154,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<update id="updateSmallProductName">
 		update blli_small_product set small_product = #{smallProduct} where small_product_id = #{smallProductId}
+	</update>
+	
+	<select id="getMidCategory" resultType="String">
+		select mid_category from blli_small_product where small_product_id = #{smallProductId}
+	</select>
+	
+	<update id="updateMidCategoryWhenToUseMin">
+		update blli_mid_category set mid_category_whentouse_min = #{smallProductWhenToUseMin} 
+		where mid_category_whentouse_min > ${smallProductWhenToUseMin} or mid_category_whentouse_min is null and mid_category = #{midCategory}
+	</update>
+	
+	<update id="updateMidCategoryWhenToUseMax">
+		update blli_mid_category set mid_category_whentouse_max = #{smallProductWhenToUseMax} 
+		where ${smallProductWhenToUseMax} > mid_category_whentouse_max or mid_category_whentouse_max is null and mid_category = #{midCategory}
 	</update>
 	<!-- 현석 쿼리 끝 -->
 	

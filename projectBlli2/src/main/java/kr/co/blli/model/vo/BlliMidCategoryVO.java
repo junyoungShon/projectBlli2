@@ -8,13 +8,15 @@ public class BlliMidCategoryVO {
 	private int whenToUseMax;
 	private String bigCategory;
 	private String midCategoryId;
+	private int smallProductCount; // 2016.02.05 추가
 	public BlliMidCategoryVO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public BlliMidCategoryVO(String midCategory, String midCategoryInfo,
 			String midCategoryMainPhotoLink, int whenToUseMin,
-			int whenToUseMax, String bigCategory, String midCategoryId) {
+			int whenToUseMax, String bigCategory, String midCategoryId,
+			int smallProductCount) {
 		super();
 		this.midCategory = midCategory;
 		this.midCategoryInfo = midCategoryInfo;
@@ -23,6 +25,7 @@ public class BlliMidCategoryVO {
 		this.whenToUseMax = whenToUseMax;
 		this.bigCategory = bigCategory;
 		this.midCategoryId = midCategoryId;
+		this.smallProductCount = smallProductCount;
 	}
 	public String getMidCategory() {
 		return midCategory;
@@ -66,6 +69,12 @@ public class BlliMidCategoryVO {
 	public void setMidCategoryId(String midCategoryId) {
 		this.midCategoryId = midCategoryId;
 	}
+	public int getSmallProductCount() {
+		return smallProductCount;
+	}
+	public void setSmallProductCount(int smallProductCount) {
+		this.smallProductCount = smallProductCount;
+	}
 	@Override
 	public String toString() {
 		return "BlliMidCategoryVO [midCategory=" + midCategory
@@ -73,6 +82,7 @@ public class BlliMidCategoryVO {
 				+ ", midCategoryMainPhotoLink=" + midCategoryMainPhotoLink
 				+ ", whenToUseMin=" + whenToUseMin + ", whenToUseMax="
 				+ whenToUseMax + ", bigCategory=" + bigCategory
-				+ ", midCategoryId=" + midCategoryId + "]";
+				+ ", midCategoryId=" + midCategoryId + ", smallProductCount="
+				+ smallProductCount + "]";
 	}
 }
