@@ -63,38 +63,27 @@
 				}
 			});
 		});
-		/* //소제품 찜하기 스크립트
-		$('.jbContent').on("click", ".smallProductDibBtn",function(){
-			$.ajax({
-				type:"get",
-				url:"smallProductDib.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(this).siblings('.smallProductId').val(),
-				success:function(result){
-					alert($(this).html());
-					if(result==1){
-						$(this).removeClass("fa-heart-o");
-						$(this).addClass("fa-heart");
-					}else if(result==0){
-						$(this).removeClass("fa-heart-o").addClass("fa-heart");
-					}
-				}
-			});
-		}); */
 		//소제품 찜하기 스크립트
-		$('.smallProductDibBtn').click(function(){
+		$('.in_fr').on("click", ".smallProductDibBtn",function(){
+			var smallProductId = $(this).children('.smallProductId').val();
 			$.ajax({
 				type:"get",
-				url:"smallProductDib.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(this).siblings('.smallProductId').val(),
+				url:"smallProductDib.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+smallProductId,
 				success:function(result){
-					alert($(this));
-					if(result==1){
-						$(this).removeClass("fa-heart");
-						$(this).addClass("fa-heart-o");
-					}else if(result==0){
-						$(this).removeClass("fa-heart").addClass("fa-heart");
-					}
+					alert(result);
+					$('.smallProductDibBtn').each(function(index){
+						if($($('.smallProductDibBtn').get(index)).children('.smallProductId').val()==smallProductId){
+							if(result==1){
+								$($('.smallProductDibBtn').get(index)).children('.fa').removeClass("fa-heart-o").addClass("fa-heart");
+							}else{
+								$($('.smallProductDibBtn').get(index)).children('.fa').removeClass("fa-heart").addClass("fa-heart-o");
+							}
+						}
+					}) 
 				}
 			});
-		});
+		}); 
+
 		//포스팅 스크랩 스크립트
 		$('.postingScrapeBtn').click(function(){
 			$.ajax({
@@ -285,17 +274,15 @@
 				<div class="main_ti">
 					월령별 추천상품 
 				</div>
-				<div style="width:870px; float:left;" class="midRecommProduct">
+				<div style="width:870px; float:left;">
 					<!-- <div class="fl">
 						<a href="#"><img src="./img/allow_l.png" alt="왼쪽화살표" style="margin-top:70px;"></a>
 					</div> -->
 				
 					<div id="menu-wrapper">
-						<ul class="boxy-menu ">
+						<ul class="midRecommProduct">
 						<c:forEach items="${requestScope.blliMidCategoryVOList}" var="recommProductList">
-							<li>
-								<div class="boxy-menu-item-top gallery-cell">
-								<label>
+							<li class="gallery-cell" style="margin-left: 30px;">
 									<div class="yellow_foto">
 									<a href="searchSmallProduct.do?searchWord=${recommProductList.midCategory}"> 
 									<img src='${recommProductList.midCategoryMainPhotoLink}' style="width: 115px;height: 115px;border-radius:20px"></a>
@@ -303,22 +290,6 @@
 									<div class="yellow_ti">
 										${recommProductList.midCategory }
 									</div>
-								</div>
-								
-								<div class="boxy-menu-item-bottom">
-									<ul class="items">
-										<li class="main_yellow_ti">샴푸의자</li>
-										<li style="height:100px; font-weight:normal;">
-											${recommProductList.midCategoryInfo }
-										</li>
-								</label>
-										<li class="recommendMidDelete">
-											[추천제외]
-											<input type="text" value="${recommProductList.midCategory}" class="midCategoryValue" style="display: none"> 
-											<input type="text" value="${recommProductList.midCategoryId}" class="midCategoryIdValue" style="display: none"> 
-										</li>
-									</ul>
-								</div>
 							</li>
 					</c:forEach>
 						</ul>
@@ -363,20 +334,16 @@
 							<p class="result_price">25,000원</p>
 						</div>
 						<div class="fr">
-							<c:if test="${blliSmallProductVOList.isDib==0}">
-								<div style="margin-top: 15px">
-									<i class="fa fa-heart-o fa-2x smallProductDibBtn" style="color: red"></i>
-									<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
-									<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
-								</div>
-							</c:if>
-							<c:if test="${blliSmallProductVOList.isDib==1}">
-								<div style="margin-top: 15px">
-									<i class="fa fa-heart fa-2x smallProductDibBtn" style="color: red"></i>
-										<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
-									<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
-								</div>
-							</c:if>
+							<div style="margin-top: 15px" class="smallProductDibBtn">
+						<c:if test="${blliSmallProductVOList.isDib==0}">
+							<i class="fa fa-heart-o fa-2x" style="color: red"></i>
+						</c:if>
+						<c:if test="${blliSmallProductVOList.isDib==1}">
+							<i class="fa fa-heart fa-2x" style="color: red"></i>
+						</c:if>
+							<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
+							<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
+						</div>
 						</div>
 					</div>
 				</li>
@@ -417,20 +384,16 @@
 				
 					<div class="fr">
 						
+						<div style="margin-top: 15px" class="smallProductDibBtn">
 						<c:if test="${blliSmallProductVOList.isDib==0}">
-								<div style="margin-top: 15px">
-									<i class="fa fa-heart-o fa-2x smallProductDibBtn" style="color: red"></i>
-									<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
-									<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
-								</div>
+							<i class="fa fa-heart-o fa-2x" style="color: red"></i>
 						</c:if>
 						<c:if test="${blliSmallProductVOList.isDib==1}">
-								<div style="margin-top: 15px">
-									<i class="fa fa-heart fa-2x smallProductDibBtn" style="color: red"></i>
-										<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
-									<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
-								</div>
+							<i class="fa fa-heart fa-2x" style="color: red"></i>
 						</c:if>
+							<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
+							<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
+						</div>
 					</div>
 				</div>
 			</div>

@@ -366,4 +366,9 @@ public class ProductDAOImpl implements ProductDAO{
 		return sqlSessionTemplate.selectOne("product.totalPageOfSmallProductRelatedSearchWord", searchWord);
 	}
 
+	@Override
+	public List<BlliSmallProductVO> selectAllSmallProduct() {
+		return  sqlSessionTemplate.selectList("product.selectAllSmallProduct");
+	}
+
 }

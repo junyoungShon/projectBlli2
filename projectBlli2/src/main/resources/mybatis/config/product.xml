@@ -118,7 +118,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="searchMidCategory" resultMap="bspvRM">
 		select * from(
 			select ceil(rownum/10) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, 
-			sp.small_product_whentouse_min, sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score from(
+			sp.small_product_whentouse_min, sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score,sp.small_product_dibs_count from(
 				select b.small_product_id, min(b.buy_link_price) as min_price from (
 					select small_product_id from blli_small_product where mid_category = #{searchWord} and small_product_status = 'confirmed'
 				)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
@@ -128,7 +128,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="searchSmallProduct" resultMap="bspvRM">
 		select sp.mid_category, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_whentouse_min, 
-		sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score from(
+		sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score,sp.small_product_dibs_count from(
 			select b.small_product_id, min(b.buy_link_price) as min_price from (
 				select small_product_id from blli_small_product where small_product = #{searchWord} and small_product_status = 'confirmed'
 			)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
@@ -173,7 +173,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectRecommendingMidCategory" resultMap="bmcvRM">
 		select  mid_category,mid_category_info,mid_category_main_photo_link,mid_category_whentouse_min,mid_category_whentouse_max,big_category,mid_category_id
 		from BLLI_MID_CATEGORY
-		where #{babyMonthAge} <![CDATA[ >= mid_category_whentouse_min and #{babyMonthAge} <= ]]> mid_category_whentouse_min
+		where #{babyMonthAge} <![CDATA[ >= mid_category_whentouse_min and #{babyMonthAge} <= ]]> mid_category_whentouse_max
 	</select>
 	<select id="selectNotRecommMidCategoryList" resultMap="bnrmcvRM">
 		select bnrmc.mid_category,bnrmc.mid_category_id,bnrmc.member_Id as noRecommendMidCategory
@@ -227,6 +227,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where MID_CATEGORY_id = #{value} order by SMALL_PRODUCT_SCORE asc) where rn <= 5
 		]]> 
 	</select>
+	<!-- 전체 소제품 리스트를 출력 -->
+	<!-- <select id="selectAllSmallProduct" resultMap="bspvRM">
+		select small_product_id,
+	</select> -->
 	<!-- 끝 -->
 	
  </mapper> 		

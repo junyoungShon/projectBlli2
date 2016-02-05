@@ -1,6 +1,7 @@
 package kr.co.blli.controller;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import kr.co.blli.model.posting.PostingService;
 import kr.co.blli.model.product.ProductService;
 import kr.co.blli.model.scheduler.CategoryAndProductScheduler;
+import kr.co.blli.model.scheduler.PostingMarker;
 import kr.co.blli.model.scheduler.PostingScheduler;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
@@ -38,6 +40,9 @@ public class SearchController {
 	//스케줄러 완성 전까지 임시 사용
 	@Resource
 	private PostingScheduler postingScheduler;
+	//포스팅 채점기 완성전까지 임시사용
+	@Resource
+	private PostingMarker postingMarker;
 	
 	//스케줄러 완성 전까지 임시 사용
 	@RequestMapping("insertPosting.do")
@@ -235,5 +240,10 @@ public class SearchController {
 		}
 		System.out.println(productService.selectPostingBySmallProductList(blliSmallProductVOList, memberId, pageNum));
 		return productService.selectPostingBySmallProductList(blliSmallProductVOList, memberId, pageNum);
+	}
+	//임시 메서드
+	@RequestMapping("postingMarker.do")
+	public void postingMarker() throws ParseException{
+		postingMarker.productMarkering();
 	}
 }

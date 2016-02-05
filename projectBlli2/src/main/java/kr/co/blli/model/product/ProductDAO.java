@@ -113,4 +113,6 @@ public interface ProductDAO {
 	
 	List<BlliSmallProductVO> selectSmallProductRank(String midCategoryId);
 
+	List<BlliSmallProductVO> selectAllSmallProduct();
+
 }

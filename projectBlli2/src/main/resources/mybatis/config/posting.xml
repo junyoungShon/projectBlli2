@@ -24,6 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="postingReplyCount" column="posting_reply_count"/>
  		<result property="smallProduct" column="small_product"/>
  		<result property="smallProductId" column="small_product_id"/>
+ 		<result property="postingDbInsertDate" column="posting_Db_Insert_Date"/>
  	</resultMap>
  	<!-- 현석 쿼리 시작 -->
  	<select id="countOfPostingUrl" resultType="int">
@@ -143,7 +144,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectThisPostingDisLike" resultType="Integer">
 		select count(*) from blli_posting_dislike where member_Id=#{memberId} and small_product_id=#{smallProductId} and posting_url=#{postingUrl}
 	</select>
-	
+	<!-- 모든 포스팅을 리스트로 반환 -->
+	<select id="selectAllPosting" resultMap="bpvRM">
+		select posting_url,small_product_id,posting_like_count,posting_dislike_count,
+		posting_media_count,posting_total_residence_time,posting_view_count,posting_scrape_count,posting_rank,posting_date,posting_reply_count,posting_db_insert_date
+		from blli_posting
+		where posting_status = 'confirmed'
+	</select>
+	<!-- 포스팅 점수 부여 -->
+	<update id="updatePostingScore">
+		update blli_posting set posting_score = #{postingScore} where small_product_id=#{smallProductId} and posting_url=#{postingUrl}
+	</update>
 	<!-- 준영 쿼리 끝 -->
 	<update id="updatePostingViewCountAndResidenceTime">
 		update blli_posting set posting_total_residence_time = posting_total_residence_time + #{postingTotalResidenceTime} , posting_view_count = posting_view_count+1

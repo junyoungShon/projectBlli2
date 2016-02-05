@@ -218,4 +218,14 @@ select posting_url,small_product,small_product_id,posting_title,posting_summary,
 		
 		select count(*) from blli_posting
 		update blli_small_product set small_product_status = 'confirmed'
+		update blli_posting set posting_status = 'confirmed'
 		
+		select posting_url,small_product_id,posting_like_count,posting_dislike_count,posting_total_residence_time/posting_view_count as avgResi
+		posting_media_count,posting_total_residence_time,posting_view_count,posting_scrape_count,posting_rank,posting_date,posting_reply_count,posting_db_insert_date
+		from blli_posting
+		where posting_status = 'confirmed'
+		order by asc
+		
+		update blli_posting set posting_db_insert_date = sysdate 
+		update blli_posting set posting_db_insert_date = '2015-02-03'
+		select * from blli_posting where posting_url='http://blog.naver.com/mykid0430/220491426583'
