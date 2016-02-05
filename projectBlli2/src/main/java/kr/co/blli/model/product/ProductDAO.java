@@ -113,4 +113,14 @@ public interface ProductDAO {
 	
 	List<BlliSmallProductVO> selectSmallProductRank(String midCategoryId);
 
+	List<BlliSmallProductVO> selectAllSmallProduct();
+
+	int selectPostingNumBySmallProductId(String smallProductId);
+
+	int selectBuyLinkClickCountBySmallProductId(String smallProductId);
+
+	void updateProductScore(BlliSmallProductVO blliSmallProductVO);
+
+	int selectSmallProductNumByMidCategoryId(String midCategoryId);
+
 }

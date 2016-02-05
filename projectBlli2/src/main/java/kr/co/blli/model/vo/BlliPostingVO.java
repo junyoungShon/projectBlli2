@@ -33,6 +33,8 @@ public class BlliPostingVO {
 	private ArrayList<String> imageList;
 	private HashMap<String, String> smallProductImage;
 	private ArrayList<String> smallProductList;
+	//16.02.05추가
+	private String postingDbInsertDate;
 	
 	
 	public final ArrayList<String> regex = new ArrayList<String>(Arrays.asList("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>","<[^>]*>",
@@ -42,247 +44,271 @@ public class BlliPostingVO {
 		super();
 	}
 
-	public BlliPostingVO(String postingUrl, String smallProduct,
-			String smallProductId, String postingTitle, String postingSummary,
-			String postingContent, int postingScore, int postingLikeCount,
-			int postingDislikeCount, int postingMediaCount,
-			String postingPhotoLink, int postingTotalResidenceTime,
-			int postingViewCount, int postingScrapeCount, String postingAuthor,
-			String postingDate, int postingRank, int postingReplyCount,
-			String postingStatus, int isLike, int isDisLike, int isScrapped,
-			ArrayList<String> imageList,
-			HashMap<String, String> smallProductImage,
-			ArrayList<String> smallProductList) {
-		super();
-		this.postingUrl = postingUrl;
-		this.smallProduct = smallProduct;
-		this.smallProductId = smallProductId;
-		this.postingTitle = postingTitle;
-		this.postingSummary = postingSummary;
-		this.postingContent = postingContent;
-		this.postingScore = postingScore;
-		this.postingLikeCount = postingLikeCount;
-		this.postingDislikeCount = postingDislikeCount;
-		this.postingMediaCount = postingMediaCount;
-		this.postingPhotoLink = postingPhotoLink;
-		this.postingTotalResidenceTime = postingTotalResidenceTime;
-		this.postingViewCount = postingViewCount;
-		this.postingScrapeCount = postingScrapeCount;
-		this.postingAuthor = postingAuthor;
-		this.postingDate = postingDate;
-		this.postingRank = postingRank;
-		this.postingReplyCount = postingReplyCount;
-		this.postingStatus = postingStatus;
-		this.isLike = isLike;
-		this.isDisLike = isDisLike;
-		this.isScrapped = isScrapped;
-		this.imageList = imageList;
-		this.smallProductImage = smallProductImage;
-		this.smallProductList = smallProductList;
-	}
+
 	public String getPostingUrl() {
 		return postingUrl;
 	}
+
 
 	public void setPostingUrl(String postingUrl) {
 		this.postingUrl = postingUrl;
 	}
 
+
 	public String getSmallProduct() {
 		return smallProduct;
 	}
+
 
 	public void setSmallProduct(String smallProduct) {
 		this.smallProduct = smallProduct;
 	}
 
+
 	public String getSmallProductId() {
 		return smallProductId;
 	}
+
 
 	public void setSmallProductId(String smallProductId) {
 		this.smallProductId = smallProductId;
 	}
 
+
 	public String getPostingTitle() {
 		return postingTitle;
 	}
+
 
 	public void setPostingTitle(String postingTitle) {
 		this.postingTitle = postingTitle;
 	}
 
+
 	public String getPostingSummary() {
 		return postingSummary;
 	}
+
 
 	public void setPostingSummary(String postingSummary) {
 		this.postingSummary = postingSummary;
 	}
 
+
 	public String getPostingContent() {
 		return postingContent;
 	}
+
 
 	public void setPostingContent(String postingContent) {
 		this.postingContent = postingContent;
 	}
 
+
 	public int getPostingScore() {
 		return postingScore;
 	}
+
 
 	public void setPostingScore(int postingScore) {
 		this.postingScore = postingScore;
 	}
 
+
 	public int getPostingLikeCount() {
 		return postingLikeCount;
 	}
+
 
 	public void setPostingLikeCount(int postingLikeCount) {
 		this.postingLikeCount = postingLikeCount;
 	}
 
+
 	public int getPostingDislikeCount() {
 		return postingDislikeCount;
 	}
+
 
 	public void setPostingDislikeCount(int postingDislikeCount) {
 		this.postingDislikeCount = postingDislikeCount;
 	}
 
+
 	public int getPostingMediaCount() {
 		return postingMediaCount;
 	}
+
 
 	public void setPostingMediaCount(int postingMediaCount) {
 		this.postingMediaCount = postingMediaCount;
 	}
 
+
 	public String getPostingPhotoLink() {
 		return postingPhotoLink;
 	}
+
 
 	public void setPostingPhotoLink(String postingPhotoLink) {
 		this.postingPhotoLink = postingPhotoLink;
 	}
 
+
 	public int getPostingTotalResidenceTime() {
 		return postingTotalResidenceTime;
 	}
+
 
 	public void setPostingTotalResidenceTime(int postingTotalResidenceTime) {
 		this.postingTotalResidenceTime = postingTotalResidenceTime;
 	}
 
+
 	public int getPostingViewCount() {
 		return postingViewCount;
 	}
+
 
 	public void setPostingViewCount(int postingViewCount) {
 		this.postingViewCount = postingViewCount;
 	}
 
+
 	public int getPostingScrapeCount() {
 		return postingScrapeCount;
 	}
+
 
 	public void setPostingScrapeCount(int postingScrapeCount) {
 		this.postingScrapeCount = postingScrapeCount;
 	}
 
+
 	public String getPostingAuthor() {
 		return postingAuthor;
 	}
+
 
 	public void setPostingAuthor(String postingAuthor) {
 		this.postingAuthor = postingAuthor;
 	}
 
+
 	public String getPostingDate() {
 		return postingDate;
 	}
+
 
 	public void setPostingDate(String postingDate) {
 		this.postingDate = postingDate;
 	}
 
+
 	public int getPostingRank() {
 		return postingRank;
 	}
+
 
 	public void setPostingRank(int postingRank) {
 		this.postingRank = postingRank;
 	}
 
+
 	public int getPostingReplyCount() {
 		return postingReplyCount;
 	}
 
+
 	public void setPostingReplyCount(int postingReplyCount) {
 		this.postingReplyCount = postingReplyCount;
 	}
-	
+
+
 	public String getPostingStatus() {
 		return postingStatus;
 	}
+
 
 	public void setPostingStatus(String postingStatus) {
 		this.postingStatus = postingStatus;
 	}
 
-	public ArrayList<String> getImageList() {
-		return imageList;
-	}
-
-	public void setImageList(ArrayList<String> imageList) {
-		this.imageList = imageList;
-	}
-
-	public HashMap<String, String> getSmallProductImage() {
-		return smallProductImage;
-	}
-
-	public void setSmallProductImage(HashMap<String, String> smallProductImage) {
-		this.smallProductImage = smallProductImage;
-	}
-
-	public ArrayList<String> getSmallProductList() {
-		return smallProductList;
-	}
-
-	public void setSmallProductList(ArrayList<String> smallProductList) {
-		this.smallProductList = smallProductList;
-	}
-
-	public ArrayList<String> getRegex() {
-		return regex;
-	}
 
 	public int getIsLike() {
 		return isLike;
 	}
 
+
 	public void setIsLike(int isLike) {
 		this.isLike = isLike;
 	}
+
 
 	public int getIsDisLike() {
 		return isDisLike;
 	}
 
+
 	public void setIsDisLike(int isDisLike) {
 		this.isDisLike = isDisLike;
 	}
+
 
 	public int getIsScrapped() {
 		return isScrapped;
 	}
 
+
 	public void setIsScrapped(int isScrapped) {
 		this.isScrapped = isScrapped;
 	}
+
+
+	public ArrayList<String> getImageList() {
+		return imageList;
+	}
+
+
+	public void setImageList(ArrayList<String> imageList) {
+		this.imageList = imageList;
+	}
+
+
+	public HashMap<String, String> getSmallProductImage() {
+		return smallProductImage;
+	}
+
+
+	public void setSmallProductImage(HashMap<String, String> smallProductImage) {
+		this.smallProductImage = smallProductImage;
+	}
+
+
+	public ArrayList<String> getSmallProductList() {
+		return smallProductList;
+	}
+
+
+	public void setSmallProductList(ArrayList<String> smallProductList) {
+		this.smallProductList = smallProductList;
+	}
+
+
+	public String getPostingDbInsertDate() {
+		return postingDbInsertDate;
+	}
+
+
+	public void setPostingDbInsertDate(String postingDbInsertDate) {
+		this.postingDbInsertDate = postingDbInsertDate;
+	}
+
+
+	public ArrayList<String> getRegex() {
+		return regex;
+	}
+
 
 	@Override
 	public String toString() {
@@ -304,6 +330,9 @@ public class BlliPostingVO {
 				+ ", isDisLike=" + isDisLike + ", isScrapped=" + isScrapped
 				+ ", imageList=" + imageList + ", smallProductImage="
 				+ smallProductImage + ", smallProductList=" + smallProductList
-				+ "]";
+				+ ", postingDbInsertDate=" + postingDbInsertDate + ", regex="
+				+ regex + "]";
 	}
+
+	
 }

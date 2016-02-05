@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.annotation.Resource;
 
 import kr.co.blli.model.product.ProductDAO;
+import kr.co.blli.model.product.ProductService;
 import kr.co.blli.model.vo.BlliBigCategoryVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliSmallProductBuyLinkVO;
@@ -102,6 +103,11 @@ public class CategoryAndProductScheduler {
 							}
 							blliMidCategoryVO.setMidCategoryMainPhotoLink(imgSrc);
 							System.out.println((index++) + " " + blliMidCategoryVO);
+							doc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?pagingIndex=1"+
+									"&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&cat_id="+
+									categoryId+"&frm=NVSHMDL&oldModel=true").timeout(0).get();
+							int smallProductCount = Integer.parseInt(doc.select("#_resultCount").text().replace(",", ""));
+							blliMidCategoryVO.setSmallProductCount(smallProductCount);
 							int updateResult = productDAO.updateMidCategory(blliMidCategoryVO);
 							if(updateResult == 0){
 								productDAO.insertMidCategory(blliMidCategoryVO);
@@ -227,18 +233,21 @@ public class CategoryAndProductScheduler {
 							blliSmallProductVO.setMidCategory(midCategory.get(i).getMidCategory());
 							blliSmallProductVO.setMidCategoryId(midCategory.get(i).getMidCategoryId());
 							blliSmallProductVO.setSmallProduct(smallProduct.replaceAll("%26", "&"));
-							blliSmallProductVO.setSmallProductMainPhotoLink(smallProductMainPhotoLink);
 							blliSmallProductVO.setSmallProductPostingCount(smallProductPostingCount);
 							blliSmallProductVO.setNaverShoppingRank(naverShoppingRank);
 							blliSmallProductVO.setSmallProductMaker(smallProductMaker);
 							blliSmallProductVO.setProductRegisterDay(productRegisterDay);
 							blliSmallProductVO.setSmallProductId(smallProductId);
+							
+							doc = Jsoup.connect("http://shopping.naver.com/detail/detail.nhn?nv_mid="+smallProductId+"&cat_id="+midCategory.get(i).getMidCategoryId()+"&frm=NVSHMDL&query=").timeout(0).get();
+							smallProductMainPhotoLink = doc.select("#summary_thumbnail_img").attr("src");
+							blliSmallProductVO.setSmallProductMainPhotoLink(smallProductMainPhotoLink);
+							
 							int updateResult = productDAO.updateSmallProduct(blliSmallProductVO);
 							if(updateResult == 0){
 								productDAO.insertSmallProduct(blliSmallProductVO);
 							}
 							
-							doc = Jsoup.connect("http://shopping.naver.com/detail/detail.nhn?nv_mid="+smallProductId+"&cat_id="+midCategory.get(i).getMidCategoryId()+"&frm=NVSHMDL&query=").timeout(0).get();
 							Elements ele = doc.select("#price_compare tbody tr");
 							//System.out.println("*************** 구매링크 ***************");
 							for(Element elem : ele){

@@ -42,9 +42,8 @@
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script	src="${initParam.root}js/ie10-viewport-bug-workaround.js"></script> --%>
 <!-- 부트 스트랩 사용을 위한 하단 설정 완료 -->
-
-<link href="${initParam.root}css/boxymenu.css" rel="stylesheet" type="text/css" />
-<script src="${initParam.root}js/boxymenu.js" type="text/javascript"></script>
+<!-- jquery UI -->
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
 <link rel="stylesheet" type="text/css" href="${initParam.root}css/rjaccordion.css">
 
@@ -58,9 +57,9 @@
 </script>
 
 <script type="text/javascript">
-	$(document).ready(function () {
+/* 	$(document).ready(function () {
 		$('#menu-wrapper').boxymenu();
-	});
+	}); */
 </script>
 
 

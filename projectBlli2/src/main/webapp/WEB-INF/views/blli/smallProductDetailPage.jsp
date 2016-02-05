@@ -30,7 +30,20 @@
 									<p class="result_price">${requestScope.smallProductInfo.smallProduct.minPrice}원</p>
 								</div>
 								<div class="fr">
-									<a href="#"><img src="${initParam.root}img/jjim.png" alt="찜" style="margin-top:10px;"></a>
+									<c:if test="${requestScope.smallProductInfo.smallProduct.isDib==0}">
+											<div style="margin-top: 15px">
+												<i class="fa fa-heart-o fa-2x smallProductDibBtn" style="color: red"></i>
+												<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
+												<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
+											</div>
+									</c:if>
+									<c:if test="${requestScope.smallProductInfo.smallProduct.isDib==1}">
+											<div style="margin-top: 15px">
+												<i class="fa fa-heart fa-2x smallProductDibBtn" style="color: red"></i>
+													<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
+												<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
+									</div>
+									</c:if>
 								</div>
 							</div>
 						</div>
@@ -164,7 +177,7 @@
 	<div class="jbMenu2">
 		<div class="gallery js-flickity" data-flickity-options='{ "imagesLoaded": true }'>
 			<c:forEach items="${requestScope.postingList}" var="postingList">
-				<a href="${postingList.postingUrl}"><img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${postingList.postingPhotoLink}" alt="${requestScope.smallProductInfo.smallProduct.smallProduct}"></a>
+				<a href="goPosting.do?postingUrl=${postingList.postingUrl}&smallProductId=${blliSmallProductVOList.smallProductId}&postingTitle=${postingList.postingTitle}"><img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${postingList.postingPhotoLink}" alt="${requestScope.smallProductInfo.smallProduct.smallProduct}"></a>
 			</c:forEach>
 		</div>
 	</div>

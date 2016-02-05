@@ -7,6 +7,7 @@ import java.util.List;
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
+import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
 import kr.co.blli.model.vo.BlliPostingDisLikeVO;
@@ -47,5 +48,7 @@ public interface ProductService {
 	public int totalPageOfSmallProductRelatedSearchWord(String searchWord);
 	
 	public List<BlliSmallProductVO> selectSmallProductRank(String midCategoryId);
+
+	public BlliSmallProductVO productDibChecker(String memberId, BlliSmallProductVO blliSmallProductVO);
 
 }

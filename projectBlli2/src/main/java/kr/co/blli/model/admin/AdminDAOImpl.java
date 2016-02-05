@@ -51,24 +51,21 @@ public class AdminDAOImpl implements AdminDAO{
 		return sqlSessionTemplate.selectOne("admin.totalUnconfirmedSmallProduct");
 	}
 	@Override
-	public void deletePosting(String postingUrl) {
-		sqlSessionTemplate.update("admin.deletePosting", postingUrl);
+	public void deletePosting(BlliPostingVO vo) {
+		sqlSessionTemplate.update("admin.deletePosting", vo);
 	}
 	@Override
-	public void addProduct(HashMap<String, String> map) {
-		sqlSessionTemplate.update("admin.addProduct", map);
-	}
-	@Override
-	public void selectProduct(HashMap<String, String> map) {
-		sqlSessionTemplate.update("admin.selectProduct", map);
+	public void selectProduct(BlliPostingVO vo) {
+		sqlSessionTemplate.update("admin.selectProduct", vo);
+		sqlSessionTemplate.update("admin.deleteProduct", vo);
 	}
 	@Override
 	public void deleteProduct(String postingUrl) {
 		sqlSessionTemplate.update("admin.deleteProduct", postingUrl);
 	}
 	@Override
-	public void registerPosting(HashMap<String, String> map) {
-		sqlSessionTemplate.update("admin.registerPosting", map);
+	public void registerPosting(BlliPostingVO vo) {
+		sqlSessionTemplate.update("admin.registerPosting", vo);
 	}
 	@Override
 	public void deleteSmallProduct(String smallProductId) {
@@ -85,5 +82,14 @@ public class AdminDAOImpl implements AdminDAO{
 	@Override
 	public void updateSmallProductName(BlliSmallProductVO vo) {
 		sqlSessionTemplate.update("admin.updateSmallProductName", vo);
+	}
+	@Override
+	public void updateMidCategoryWhenToUse(BlliSmallProductVO vo) {
+		sqlSessionTemplate.update("admin.updateMidCategoryWhenToUseMin", vo);
+		sqlSessionTemplate.update("admin.updateMidCategoryWhenToUseMax", vo);
+	}
+	@Override
+	public String getMidCategory(String smallProductId) {
+		return sqlSessionTemplate.selectOne("admin.getMidCategory", smallProductId);
 	}
 }

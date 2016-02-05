@@ -31,6 +31,63 @@ drop table test_log
 insert into test_log values('a')
 select * from test_log
 
+select * from(
+	select ceil(row_num/5) as page, posting_url, posting_title, small_product, posting_content, small_product_id from(
+		select (dense_rank() over (order by posting_url)) row_num, posting_url, posting_title, small_product, posting_content, small_product_id from(
+			select count(*) over (partition by posting_url) as small_product_count, posting_url, posting_title, small_product, 
+			posting_content, small_product_id from blli_posting where posting_status = 'unconfirmed'
+		) where small_product_count > 1 order by posting_url
+	)
+) where page = #{pageNo}
+
+select * from blli_posting where posting_title like '%' || '공짜분유 받으세요^^' || '%'
+
+select * from blli_posting where small_product like '%' || '임페리얼드림XO' || '%'
+
+update blli_mid_category set mid_category_whentouse_min = 0 where mid_category_whentouse_min > 0 or mid_category_whentouse_min is null and mid_category = '국내분유'
+
+update blli_posting set posting_db_insert_date = '2016.02.04'
+
+update blli_small_product set product_db_insert_date = '2016.02.04'
+
+update blli_posting set posting_status = 'confirmed'
+
+select * from blli_mid_category;
+
+select  mid_category,mid_category_info,mid_category_main_photo_link,mid_category_whentouse_min,mid_category_whentouse_max,big_category,mid_category_id
+		from BLLI_MID_CATEGORY
+		where 16 >= mid_category_whentouse_min and 16 <= mid_category_whentouse_min
+
+select * from blli_big_category;
+
+select * from blli_mid_category;
+
+select * from blli_small_product where posting_count is not null;
+
+select count(*) from blli_small_product;
+
+select count(*) from blli_posting;
+
+select count(*) from blli_posting where posting_media_count < 30
+
+select avg(posting_media_count) from blli_posting where posting_media_count < 30
+
+select max(posting_media_count) from blli_posting;
+
+select * from blli_posting;
+
+select * from blli_posting where small_product='노발락 AD 450g'
+
+select small_product_id, min_price, small_product, small_product_main_photo_link, small_product_whentouse_min, 
+	small_product_whentouse_max, small_product_posting_count, small_product_score from(
+	select ceil(rownum/10) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_whentouse_min, 
+	sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score from(
+		select b.small_product_id, min(b.buy_link_price) as min_price from (
+			select small_product_id from blli_small_product where small_product like '%' || #{searchWord} || '%' and small_product_status = 'confirmed'
+		)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
+	)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc
+) where page = '1'
+
   select rownum, posting_url,small_product,small_product_id,posting_title,posting_summary,posting_content,posting_score,posting_like_count,
   posting_dislike_count,posting_media_count,posting_photo_link,posting_total_residence_time,posting_view_count,posting_scrape_count,posting_author,posting_date
   from blli_posting

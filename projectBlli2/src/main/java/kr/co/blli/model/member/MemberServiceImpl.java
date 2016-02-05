@@ -90,7 +90,7 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.findMemberByIdForLogin(blliMemberVO.getMemberId());
 	}
 	/**
-	  * @Method Name : insertBabyInfoForKakaoUser
+	  * @Method Name : insertBabyInfo
 	  * @Method 설명 : 카카오톡 가입자의 아이정보와 이메일을 입력해주는 서비스 메서드
 	  * @작성일 : 2016. 1. 16.
 	  * @작성자 : junyoung
@@ -102,35 +102,36 @@ public class MemberServiceImpl implements MemberService {
 	public void insertBabyInfo(BlliMemberVO blliMemberVO,HttpServletRequest request) throws Exception {
 	    ArrayList<BlliBabyVO> list = new ArrayList<BlliBabyVO>();
 		int targetAmount = Integer.parseInt(request.getParameter("targetAmount"));
+		System.out.println(blliMemberVO.getBlliBabyVOList());
+		SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd");
+		Date birthDay = null;
 		for(int i=0;i<targetAmount;i++){
 			System.out.println(targetAmount);
 			BlliBabyVO blliBabyVO = new BlliBabyVO();
 			blliBabyVO.setMemberId(request.getParameter("memberId"));
 			blliBabyVO.setBabyName(request.getParameter("BlliBabyVO["+i+"].babyName"));
-			blliBabyVO.setBabyBirthday(request.getParameter("BlliBabyVO["+i+"].babyBirthday"));
+			birthDay = formatter.parse(request.getParameter("BlliBabyVO["+i+"].babyBirthday"));
+			blliBabyVO.setBabyBirthday(formatter.format(birthDay));
 			blliBabyVO.setBabySex(request.getParameter("BlliBabyVO["+i+"].babySex"));
-			//파일을 업로드 하고, 저장한 파일명을 반환해준다.
-			String storedFileName = blliFileUtils.parseInsertFileInfo(request,blliBabyVO);
-			if(storedFileName!=null){
-				blliBabyVO.setBabyPhoto(storedFileName);
-			}else{
-				blliBabyVO.setBabyPhoto("default");
-			}
 			if(i==0){
 				blliBabyVO.setRecommending(1);
 			}else{
 				blliBabyVO.setRecommending(0);
 			}
+			System.out.println(blliBabyVO);
 			list.add(blliBabyVO);
 		}
 		if(blliMemberVO.getMemberEmail()!=null){ 
 			memberDAO.updateMemberEmail(blliMemberVO);
 		}
+		//파일을 업로드 하고, 저장한 파일명을 반환해준다.
+		blliFileUtils.parseInsertFileInfo(request,list);
 		//아이정보를 입력하면 유저의 권한이 ROLE_USER로 변경
 		 blliMemberVO.setAuthority("ROLE_USER");
 		 memberDAO.updateMemberAuthority(blliMemberVO);
 		 //아이정보를 입력하며 첫째 아이로 아이정보를 수정해줌
 		 for(int i=0;i<list.size();i++){
+			 System.out.println(list.get(i));
 			 memberDAO.insertBabyInfo(list.get(i));
 		 }
 		//아이정보 입력 후 권한을 갱신하여 로그인을 시킨 뒤 페이지 이동 시켜줌
@@ -139,6 +140,7 @@ public class MemberServiceImpl implements MemberService {
 		Authentication authentication = new UsernamePasswordAuthenticationToken(blliUserDetails, null,blliUserDetails.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
+
 	
 	/**
 	 * 
@@ -171,6 +173,7 @@ public class MemberServiceImpl implements MemberService {
 		List<BlliBabyVO> blliBabyVOList = memberDAO.selectBabyListByMemberId(memberId);
 		//아이의 월령 및 태어난 날 수 세팅
 		for(int i=0;i<blliBabyVOList.size();i++){
+			System.out.println(blliBabyVOList.get(i).getBabyBirthday());
 			int babyDayAge = babyDayAgeCounter(blliBabyVOList.get(i).getBabyBirthday());
 			int babyMonthAge = babyMonthAgeCounter(blliBabyVOList.get(i).getBabyBirthday());
 			blliBabyVOList.get(i).setBabyDayAge(babyDayAge);
@@ -256,6 +259,17 @@ public class MemberServiceImpl implements MemberService {
 		//새로운 추천 대상을 등록합니다.
 		blliBabyVO.setRecommending(1);
 		memberDAO.changeRecommendingBaby(blliBabyVO);
-		
+	}
+	
+	@Override
+	public void updateMemberInfoByEmail(BlliMemberVO blliMemberVO) {
+		//비번 암호화
+		blliMemberVO.setMemberPassword(passwordEncoder.encode(blliMemberVO.getMemberPassword()));
+		memberDAO.updateMemberInfoByEmail(blliMemberVO);
+	}
+
+	@Override
+	public void deleteBabyInfo(BlliMemberVO blliMemberVO) {
+		memberDAO.deleteBabyInfo(blliMemberVO);
 	}
 }
