@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliBigCategoryVO;
+import kr.co.blli.model.vo.BlliBuyLinkClickVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
@@ -411,4 +412,13 @@ public class ProductDAOImpl implements ProductDAO{
 		sqlSessionTemplate.update("product.updateSmallProductDetailPageView",smallProductId);
 	}
 
+	@Override
+	public void insertBlliBuyLinkClick(BlliBuyLinkClickVO blliBuyLinkClickVO) {
+		sqlSessionTemplate.insert("product.insertBlliBuyLinkClick", blliBuyLinkClickVO);
+	}
+
+	@Override
+	public void updateBlliBuyLinkClickCount(String smallProductId) {
+		sqlSessionTemplate.update("product.updateBlliBuyLinkClickCount",smallProductId);
+	}
 }

@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<script>
+	function goBuyMidPage(){
+		$('#smallProductLinkInfo').submit();
+	}
+</script>
 <div class="jbContent">
 	<div class="result_bg1">
 			<div class="in_fr" style="height:330px;">
@@ -119,7 +124,14 @@
 										</c:if>
 									</td>
 									<td>
-										<a href="${sellerInfo.buyLink}"><img src="${initParam.root}img/bt_buy.png" alt="사러가기"></a>
+										<a href="#" onclick="goBuyMidPage()"><img src="${initParam.root}img/bt_buy.png" alt="사러가기"></a>
+										<form action="goBuyMidPage.do" method="post" id="smallProductLinkInfo">
+											<input type="hidden" name="buyLink" value="${sellerInfo.buyLink}"> 
+											<input type="hidden" name="smallProductId" value="${sellerInfo.smallProductId}"> 
+											<input type="hidden" name="memberId" value="${sessionScope.blliMemberVO.memberId}"> 
+											<input type="hidden" name="seller" value="${sellerInfo.seller}"> 
+										</form>
+										
 									</td>
 								</tr>
 							</c:forEach>

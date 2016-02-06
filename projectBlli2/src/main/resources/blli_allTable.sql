@@ -160,7 +160,7 @@ CREATE TABLE blli_small_prod_buy_link (
 	constraint fk_small_buy_link_small foreign key(small_product_id) references blli_small_product(small_product_id), -- 변경,
 	constraint pk_blli_small_prod_buy_link primary key (small_product_id, seller) --복합키로 수정 -> seller로 다시 수정
 );
-
+-- 프라이머리키 변경
 
 drop table blli_small_product_photo cascade constraint;
 CREATE TABLE blli_small_product_photo (

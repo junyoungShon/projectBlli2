@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>블리 - 충동구매보다 빠른 합리적 쇼핑!</title>
-
+<link href="${initParam.root}img/favicon/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 <%-- <!-- 부트스트랩 -->
 <link href="${initParam.root}css/bootstrap.css" rel="stylesheet">
 <script src="${initParam.root}js/ie-emulation-modes-warning.js"></script> --%>

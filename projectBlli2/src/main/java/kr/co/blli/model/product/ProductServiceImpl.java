@@ -8,6 +8,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import kr.co.blli.model.vo.BlliBabyVO;
+import kr.co.blli.model.vo.BlliBuyLinkClickVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
@@ -367,6 +368,21 @@ public class ProductServiceImpl implements ProductService{
 			blliSmallProductVO.setIsDib(0);
 		}
 		return blliSmallProductVO;
+	}
+	/**
+	  * @Method Name : buyLinkClick
+	  * @Method 설명 : 구매링크 클릭시 구매링크 기록을 디비에 남기고 클릭 카운트를 늘려준다.
+	  * @작성일 : 2016. 2. 6.
+	  * @작성자 : junyoung
+	  * @param blliBuyLinkClickVO
+	 */
+	@Override
+	public void buyLinkClick(BlliBuyLinkClickVO blliBuyLinkClickVO) {
+		if(blliBuyLinkClickVO.getMemberId()==null){
+			blliBuyLinkClickVO.setMemberId("anonyMousUser");
+		}
+		productDAO.insertBlliBuyLinkClick(blliBuyLinkClickVO);
+		productDAO.updateBlliBuyLinkClickCount(blliBuyLinkClickVO.getSmallProductId());
 	}
 
 }

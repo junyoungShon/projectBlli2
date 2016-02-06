@@ -269,6 +269,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateSmallProductDetailPageView">
 		update blli_small_product set detail_view_count = detail_view_count+1 where small_product_id = #{value}
 	</update>
+	
+	<!-- 구매링크 클릭수를 올려줍니다. -->
+	<update id="updateBlliBuyLinkClickCount">
+		update blli_small_prod_buy_link set buy_link_click_count = buy_link_click_count+1 where small_product_id = #{value}
+	</update>
+	<!-- 구매링크 클릭정보를 테이블에 저장합니다. -->
+	<insert id="insertBlliBuyLinkClick" parameterType="blliSmallProductBuyLinkVO">
+		insert into  blli_buy_link_click (member_id,click_time,seller,small_product_id) values
+		(#{memberId},sysdate,#{seller},#{smallProductId})
+	</insert>
 	<!-- 끝 -->
 		
  </mapper> 		

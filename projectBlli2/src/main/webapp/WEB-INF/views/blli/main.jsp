@@ -36,18 +36,25 @@
 	}
 
 	$(document).ready(function(){
+		
+		$('.productInst').hover(function(){
+			$(this).children('.productInstAfter').css('display','block');
+		}, function(){
+			$(this).children('.productInstAfter').css('display','none');
+		})
+		
 		//사이드 소제품 추천 리스트 고정
 		
 		//중분류 추천 제거 클릭 시 추천 대상에서 제외
 		$('.recommendMidDelete').click(function(){
 			if(confirm('정말 삭제하시겠어요??')){
+				var btn = $(this);
 				$.ajax({
 					type:"get",
 					url:"deleteRecommendMidCategory.do?midCategory="+$(this).children('.midCategoryValue').val()
 							+"&memberId=${sessionScope.blliMemberVO.memberId}&midCategoryId="+$(this).children('.midCategoryIdValue').val(),
 					success:function(){
-						$(this).parent('.gallery-cell').css("display","none");
-						alert($($(this).parent()).html());
+						$(btn).parent().parent('.productInst').css("display","none");
 					}
 				}); 
 			}
@@ -282,10 +289,23 @@
 					<div id="menu-wrapper">
 						<ul class="midRecommProduct">
 						<c:forEach items="${requestScope.blliMidCategoryVOList}" var="recommProductList">
-							<li class="gallery-cell" style="margin-left: 30px;">
+							<li class="gallery-cell productInst" style="margin-left: 30px;">
 									<div class="yellow_foto">
-									<a href="searchSmallProduct.do?searchWord=${recommProductList.midCategory}"> 
-									<img src='${recommProductList.midCategoryMainPhotoLink}' style="width: 115px;height: 115px;border-radius:20px"></a>
+									<img src='${recommProductList.midCategoryMainPhotoLink}' style="width: 115px;height: 115px;border-radius:20px; z-index: -1"></a>
+									</div>
+									<div class="productInstAfter" style="text-align: center;">
+										<i class="fa fa-times fa-1-5x recommendMidDelete" style="margin-left: 120px;">
+											<input type="hidden" class="midCategoryValue" value="${recommProductList.midCategory}">
+											<input type="hidden" class="midCategoryIdValue" value="${recommProductList.midCategoryId}">
+										</i>
+										<div class="productName" style="font-size: 15px;font-weight: bold; margin-top:-15px">${recommProductList.midCategory}</div>
+										<div clss="productInstDetail" style="color: white; padding: 10px; text-align: justify;">
+											일회용 기저귀는 아이가 항상 철결함을 유지할 수 있게 도와주며, 엄마는 쉽게 아이의 큰일을 처리할 수 있어요!(50자 설명)
+										</div>
+										<div class="smallProductDetailBtn">
+											<a href="searchSmallProduct.do?searchWord=${recommProductList.midCategory}" style="color: white"> 
+											상세보기</a>
+										</div>
 									</div>
 									<div class="yellow_ti">
 										${recommProductList.midCategory }

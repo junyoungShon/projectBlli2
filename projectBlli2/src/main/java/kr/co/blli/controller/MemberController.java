@@ -104,35 +104,40 @@ public class MemberController {
 	public ModelAndView goMainPage(HttpServletRequest request) throws ParseException{
 		HttpSession session =  request.getSession();
 		BlliMemberVO blliMemberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
-		//메인페이지로 이동할 때 회원이 가진 아이리스트를 전달 받는다.
-		List <BlliBabyVO> blliBabyVOList=memberService.selectBabyListByMemberId(blliMemberVO.getMemberId());
-		blliMemberVO.setBlliBabyVOList(blliBabyVOList);
-		BlliBabyVO blliBabyVO = null;
-		//추천 받을 아이 추출
-		for(int i=0;i<blliBabyVOList.size();i++){
-			if(blliBabyVOList.get(i).getRecommending()==1){
-				blliBabyVO = blliBabyVOList.get(i);
-			}
-		}
-		//메인페이지로 이동할 때 회원에게 추천될 상품 리스트를 전달받는다.
-		List<BlliMidCategoryVO> blliMidCategoryVOList = productService.selectRecommendingMidCategory(blliBabyVO);
-		
-		//메인페이지로 이동할 때 회원에게 추천 될 소분류 상품 리스트를 전달 받는다.(또래엄마가 많이 찜한 상품)
-		List<BlliSmallProductVO> blliSmallProductVOList = productService.selectSameAgeMomBestPickedSmallProductList(blliMidCategoryVOList,blliBabyVO);
-		
-		//메인페이지로 이동할 때 회원에게 추천 될 소분류 상품과 관련 된 포스팅을 보여준다.<으아아아 여기있으면 아니되오!!>
-		List<BlliPostingVO> blliPostingVOList = productService.selectPostingBySmallProductList(blliSmallProductVOList,blliMemberVO.getMemberId(),"1");
-		
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("home");
-		//회원정보 삽입
-		mav.addObject("blliMemberVO", blliMemberVO);
-		//회원에게 추천될 중분류 상품 리스트 삽입
-		mav.addObject("blliMidCategoryVOList", blliMidCategoryVOList);
-		//회원에게 추천될 소분류 상품 리스트 삽입
-		mav.addObject("blliSmallProductVOList", blliSmallProductVOList);
-		//회원에게 추천될 소분류 관련 포스팅 리스트 삽입
-		mav.addObject("blliPostingVOList", blliPostingVOList);
+		if(blliMemberVO!=null){
+			//메인페이지로 이동할 때 회원이 가진 아이리스트를 전달 받는다.
+			List <BlliBabyVO> blliBabyVOList=memberService.selectBabyListByMemberId(blliMemberVO.getMemberId());
+			blliMemberVO.setBlliBabyVOList(blliBabyVOList);
+			BlliBabyVO blliBabyVO = null;
+			//추천 받을 아이 추출
+			for(int i=0;i<blliBabyVOList.size();i++){
+				if(blliBabyVOList.get(i).getRecommending()==1){
+					blliBabyVO = blliBabyVOList.get(i);
+				}
+			}
+			//메인페이지로 이동할 때 회원에게 추천될 상품 리스트를 전달받는다.
+			List<BlliMidCategoryVO> blliMidCategoryVOList = productService.selectRecommendingMidCategory(blliBabyVO);
+			
+			//메인페이지로 이동할 때 회원에게 추천 될 소분류 상품 리스트를 전달 받는다.(또래엄마가 많이 찜한 상품)
+			List<BlliSmallProductVO> blliSmallProductVOList = productService.selectSameAgeMomBestPickedSmallProductList(blliMidCategoryVOList,blliBabyVO);
+			
+			//메인페이지로 이동할 때 회원에게 추천 될 소분류 상품과 관련 된 포스팅을 보여준다.<으아아아 여기있으면 아니되오!!>
+			List<BlliPostingVO> blliPostingVOList = productService.selectPostingBySmallProductList(blliSmallProductVOList,blliMemberVO.getMemberId(),"1");
+		
+			mav.setViewName("home");
+			//회원정보 삽입
+			mav.addObject("blliMemberVO", blliMemberVO);
+			//회원에게 추천될 중분류 상품 리스트 삽입
+			mav.addObject("blliMidCategoryVOList", blliMidCategoryVOList);
+			//회원에게 추천될 소분류 상품 리스트 삽입
+			mav.addObject("blliSmallProductVOList", blliSmallProductVOList);
+			//회원에게 추천될 소분류 관련 포스팅 리스트 삽입
+			mav.addObject("blliPostingVOList", blliPostingVOList);
+		}else{
+			session.invalidate();
+			mav.setViewName("loginPage");
+		}
 		
 		return mav;
 	}
