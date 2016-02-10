@@ -52,7 +52,7 @@
 				<div class="result_last fr">
 					<ul>
 						<li>
-							<p class="result_sns">${requestScope.smallProductInfo.smallProduct.smallProductPostingCount}</p>
+							<p class="result_sns">${requestScope.smallProductInfo.smallProduct.dbInsertPostingCount}</p>
 							<p class="result_sns_text">blog</p>
 						</li>
 						<li>
@@ -175,7 +175,7 @@
 		</div>
 	</div>
 	<div class="jbMenu2">
-		<div class="gallery js-flickity" data-flickity-options='{ "imagesLoaded": true }'>
+		<div class="gallery js-flickity" data-flickity-options='{ "imagesLoaded": true , "wrapAround": true}'>
 			<c:forEach items="${requestScope.postingList}" var="postingList">
 				<a href="goPosting.do?postingUrl=${postingList.postingUrl}&smallProductId=${blliSmallProductVOList.smallProductId}&postingTitle=${postingList.postingTitle}"><img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${postingList.postingPhotoLink}" alt="${requestScope.smallProductInfo.smallProduct.smallProduct}"></a>
 			</c:forEach>

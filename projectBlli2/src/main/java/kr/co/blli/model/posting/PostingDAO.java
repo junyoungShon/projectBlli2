@@ -33,4 +33,9 @@ public interface PostingDAO {
 	List<BlliPostingVO> selectAllPosting();
 
 	void updatePostingScore(BlliPostingVO blliPostingVO);
+
+	String getPostingStatus(BlliPostingVO blliPostingVO);
+
+	void insertDeadPosting(BlliPostingVO blliPostingVO);
+
 }

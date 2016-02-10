@@ -64,8 +64,8 @@ public class AdminDAOImpl implements AdminDAO{
 		sqlSessionTemplate.update("admin.deleteProduct", postingUrl);
 	}
 	@Override
-	public void registerPosting(BlliPostingVO vo) {
-		sqlSessionTemplate.update("admin.registerPosting", vo);
+	public int registerPosting(BlliPostingVO vo) {
+		return sqlSessionTemplate.update("admin.registerPosting", vo);
 	}
 	@Override
 	public void deleteSmallProduct(String smallProductId) {
@@ -91,5 +91,9 @@ public class AdminDAOImpl implements AdminDAO{
 	@Override
 	public String getMidCategory(String smallProductId) {
 		return sqlSessionTemplate.selectOne("admin.getMidCategory", smallProductId);
+	}
+	@Override
+	public void updatePostingCount(BlliPostingVO vo) {
+		sqlSessionTemplate.update("admin.updatePostingCount", vo);
 	}
 }

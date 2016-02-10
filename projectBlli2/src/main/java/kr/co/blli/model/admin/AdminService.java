@@ -26,4 +26,6 @@ public interface AdminService {
 	abstract void registerPosting(List<Map<String, Object>> urlAndImage);
 	
 	public void registerSmallProduct(List<Map<String, Object>> smallProductInfo);
+
+	public void insertCafeArticle();
 }

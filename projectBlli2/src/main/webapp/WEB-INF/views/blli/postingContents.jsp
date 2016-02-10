@@ -59,7 +59,7 @@
 		
 
 <body style="height: 100%; overflow-y: hidden">
-	    <div class="jbMenu">
+<div class="jbMenu">
       <div class="in_fr">
 		<a href="/main.html"><img src="./img/top_logo.png" alt="탑로고" class="logo"></a>
 		<div class="top_blog">
@@ -81,6 +81,6 @@
 		</div>
 	  </div>
 </div>
-<iframe id="socialbar-frame" name="socialbar-frame" height="94%" width="100%" src="${requestScope.blliPostingVO.postingUrl}" frameborder="0"></iframe>
+<iframe id="socialbar-frame" name="socialbar-frame" height="100%" width="100%" src="${requestScope.blliPostingVO.postingUrl}" frameborder="0"></iframe>
 </body>
 </html>

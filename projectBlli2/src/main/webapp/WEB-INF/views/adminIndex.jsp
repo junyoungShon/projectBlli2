@@ -22,6 +22,7 @@
 		<li><a href="${initParam.root}insertMidCategory.do">중분류 리스트 긁어모아</a></li>
 		<li><a href="${initParam.root}insertSmallProduct.do">소분류 리스트 긁어모아</a></li>
 		<li><a href="${initParam.root}insertPosting.do">포스팅 리스트 긁어모아</a></li>
+		<li><a href="${initParam.root}insertCafeArticle.do">카페글 리스트 긁어모아</a></li>
 		<li><input type = "text" name="searchWord"><input type="submit" value="검색"></li>
 		<li><a href="${initParam.root}postingListWithSmallProducts.do">소제품 하나로 추려줘</a></li>
 		<li><a href="${initParam.root}unconfirmedSmallProduct.do">소제품 등록해줘</a></li>

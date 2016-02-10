@@ -39,6 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="searchTime" column="search_time"/>
  		<result property="productDbInsertDate" column="product_db_insert_date"/>
  		<result property="detailViewCount" column="detail_View_Count"/>
+ 		<result property="dbInsertPostingCount" column="db_insert_posting_count"/>
  	</resultMap>
  	<!-- BlliSmallProductBuyLinkVO Result Map 설정 -->
  	<resultMap type="blliSmallProductBuyLinkVO" id="bspblvRM">
@@ -85,7 +86,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<select id="getMidCategory" resultMap="bmcvRM">
-		select mid_category_id, mid_category from blli_mid_category
+		select mid_category_id, mid_category from blli_mid_category order by mid_category_id
+	</select>
+	
+	<select id="getSmallProductStatus" resultType="String">
+		select small_product_status from blli_small_product where small_product_id = #{smallProductId}
 	</select>
 	
 	<insert id="insertSmallProduct">
@@ -96,12 +101,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<update id="updateSmallProduct">
-		update blli_small_product set mid_category = #{midCategory}, small_product_maker = #{smallProductMaker}, 
-		small_product_main_photo_link = #{smallProductMainPhotoLink}, 
-		small_product_posting_count = #{smallProductPostingCount}, naver_shopping_rank = #{naverShoppingRank}, 
-		product_register_day = #{productRegisterDay}
+		update blli_small_product set small_product_posting_count = #{smallProductPostingCount}, naver_shopping_rank = #{naverShoppingRank}
 		where small_product_id = #{smallProductId}
 	</update>
+	
+	<insert id="insertDeadSmallProduct">
+		insert into blli_small_product(small_product_id, small_product, mid_category, small_product_maker, small_product_main_photo_link, 
+		small_product_posting_count, naver_shopping_rank, product_register_day, mid_category_id, small_product_status, product_db_insert_date)
+		values(#{smallProductId}, ' ', #{midCategory}, ' ', ' ', 0, 0, sysdate, #{midCategoryId}, 'dead', sysdate)
+	</insert>
+	
+	<select id="isSmallProductSeller" resultType="int">
+		select count(*) from blli_small_prod_buy_link where small_product_id = #{smallProductId} and seller = #{seller}
+	</select>
 	
 	<insert id="insertSmallProductBuyLink">
 		insert into blli_small_prod_buy_link(small_product_id, buy_link, buy_link_price, buy_link_delivery_cost, buy_link_option, seller)
@@ -121,7 +133,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="searchMidCategory" resultMap="bspvRM">
 		select * from(
 			select ceil(rownum/10) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, 
-			sp.small_product_whentouse_min, sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score,sp.small_product_dibs_count from(
+			sp.small_product_whentouse_min, sp.small_product_whentouse_max, sp.db_insert_posting_count, sp.small_product_score,sp.small_product_dibs_count from(
 				select b.small_product_id, min(b.buy_link_price) as min_price from (
 					select small_product_id from blli_small_product where mid_category = #{searchWord} and small_product_status = 'confirmed'
 				)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
@@ -131,7 +143,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="searchSmallProduct" resultMap="bspvRM">
 		select sp.mid_category, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_whentouse_min, 
-		sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score,sp.small_product_dibs_count from(
+		sp.small_product_whentouse_max, sp.db_insert_posting_count, sp.small_product_score,sp.small_product_dibs_count from(
 			select b.small_product_id, min(b.buy_link_price) as min_price from (
 				select small_product_id from blli_small_product where small_product = #{searchWord} and small_product_status = 'confirmed'
 			)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
@@ -149,9 +161,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="searchSmallProductList" resultMap="bspvRM">
 		select small_product_id, min_price, small_product, small_product_main_photo_link, small_product_whentouse_min, 
-			small_product_whentouse_max, small_product_posting_count, small_product_score from(
+			small_product_whentouse_max, db_insert_posting_count, small_product_score from(
 			select ceil(rownum/10) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_whentouse_min, 
-			sp.small_product_whentouse_max, sp.small_product_posting_count, sp.small_product_score from(
+			sp.small_product_whentouse_max, sp.db_insert_posting_count, sp.small_product_score from(
 				select b.small_product_id, min(b.buy_link_price) as min_price from (
 					select small_product_id from blli_small_product where small_product like '%' || #{searchWord} || '%' and small_product_status = 'confirmed'
 				)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
