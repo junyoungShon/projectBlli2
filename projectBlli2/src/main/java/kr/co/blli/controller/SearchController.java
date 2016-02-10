@@ -15,6 +15,7 @@ import kr.co.blli.model.product.ProductService;
 import kr.co.blli.model.scheduler.CategoryAndProductScheduler;
 import kr.co.blli.model.scheduler.PostingMarker;
 import kr.co.blli.model.scheduler.PostingScheduler;
+import kr.co.blli.model.vo.BlliBuyLinkClickVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliPostingVO;
@@ -241,6 +242,20 @@ public class SearchController {
 		System.out.println(productService.selectPostingBySmallProductList(blliSmallProductVOList, memberId, pageNum));
 		return productService.selectPostingBySmallProductList(blliSmallProductVOList, memberId, pageNum);
 	}
+	
+	@RequestMapping("goBuyMidPage.do")
+	public ModelAndView goBuyMidPage(BlliBuyLinkClickVO blliBuyLinkClickVO,HttpServletRequest request){
+		System.out.println(blliBuyLinkClickVO);
+		ModelAndView mav = new ModelAndView();
+		String targetURL = request.getParameter("buyLink");
+		System.out.println(targetURL);
+		mav.setViewName("buyMidPage");
+		mav.addObject("blliBuyLinkClickVO", blliBuyLinkClickVO);
+		mav.addObject("targetURL", targetURL);
+		productService.buyLinkClick(blliBuyLinkClickVO);
+		return mav;
+	}
+	
 	//임시 메서드
 	@RequestMapping("postingMarker.do")
 	public void postingMarker() throws ParseException{
@@ -250,5 +265,10 @@ public class SearchController {
 	@RequestMapping("productMarker.do")
 	public void productMarker() throws ParseException{
 		postingMarker.productMarkering();
+	}
+	//임시 메서드
+	@RequestMapping("smallProductRankingMaker.do")
+	public void smallProductRankingMaker() throws ParseException{
+		postingMarker.smallProductRankingMaker();
 	}
 }

@@ -7,8 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
-<title>블리</title>
+<title>블리 - 충동구매보다 빠른 합리적 쇼핑!</title>
+<link href="${initParam.root}img/favicon/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 <meta name="Keywords" content="" />
 <meta name="Description" content="" />
 <link rel="stylesheet" type="text/css" href="${initParam.root}css/reset.css" />
@@ -281,8 +281,10 @@
 	
 	<!-- 회원가입페이지에 ROLE_USER접근 시 alert과 메인페이지 이동 -->
 	<sec:authorize access="hasRole('ROLE_USER')">
+		<script type="text/javascript">
 			alert('이미 로그인은 완료하셨습니다^^ 메인으로 이동할게요~');
-			location.replace('${initParam.root}member_proceedingToMain.do')	;
+			location.replace('${initParam.root}member_proceedingToMain.do');
+		</script>
 	</sec:authorize>
 	
 	<!-- 미인증 유저에게는 로그인 폼이 제공된다. -->

@@ -161,9 +161,56 @@ public class PostingMarker {
 			System.out.println("총점 : "+blliSmallProductVO.getSmallProductScore());
 			productDAO.updateProductScore(blliSmallProductVO);
 		}
+		//점수 부여 후 순위를 재정렬하는 메서드를 실행시킨다.
+		smallProductRankingMaker();
 		
 	}
 	
+	/**
+	  * @Method Name : smallProductRankingMaker
+	  * @Method 설명 : 소제품의 중분류 랭킹을 설정해준다.
+	  * @작성일 : 2016. 2. 5.
+	  * @작성자 : junyoung
+	  * @param blliProductVOList
+	 */
+	public void smallProductRankingMaker( ) {
+		//중분류 제품의 아이디리스트를 받아온다.
+		List<String> list = productDAO.selectMidCategoryVOList();
+		//중분류 제품의 아이디를 활용하여 점수 오름차순으로 정렬하여 랭킹을 설정한다.
+		for(int i=0;i<list.size();i++){
+			//점수 내림차순으로 받아온다.
+			System.out.println(list.get(i));
+			List<BlliSmallProductVO> blliSmallProductVOList = productDAO.selectAllSmallProductByMidCategoryId(list.get(i));
+			Boolean flag =  false;
+			int tempPoint = 0; 
+			int ranking = 0;
+			int interval = 0;
+			for (int j=0;j<blliSmallProductVOList.size();j++){
+				BlliSmallProductVO blliSmallProductVO = blliSmallProductVOList.get(j);
+				if(tempPoint!=blliSmallProductVO.getSmallProductScore()){
+					tempPoint = blliSmallProductVO.getSmallProductScore();
+					int currentRanking = (ranking+1)+interval;
+					blliSmallProductVO.setSmallProductRanking(currentRanking);
+					flag = true;
+				}else{
+					interval++;
+					if(interval==0){
+						blliSmallProductVO.setSmallProductRanking(ranking+1);
+					}else{
+						blliSmallProductVO.setSmallProductRanking(ranking);
+					}
+					flag = false;
+				}
+				if(flag){
+					ranking= ranking+1+interval;
+					interval=0;
+				}
+				System.out.println("소제품 아이디 : "+blliSmallProductVO.getSmallProductId()+" 소제품 점수"+blliSmallProductVO.getSmallProductScore()+" 소제품 랭킹 : "+blliSmallProductVO.getSmallProductRanking());
+				productDAO.updateSmallProductRanking(blliSmallProductVO);
+			}
+		}
+	}
+
 	/**
 	  * @Method Name : dayCounter
 	  * @Method 설명 : 기준 날짜 입력 시 현재 날짜와 차이를 계산해줍니다.
@@ -423,7 +470,6 @@ public class PostingMarker {
 			blliPostingVO.setPostingScore(blliPostingVO.getPostingScore()+postingSearchRankPoint);
 			System.out.println("총점 : "+blliPostingVO.getPostingScore());
 			postingDAO.updatePostingScore(blliPostingVO);
-			System.out.println(i);
 		}
 		
 	}

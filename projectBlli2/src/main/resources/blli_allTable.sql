@@ -104,11 +104,14 @@ CREATE TABLE blli_small_product ( -- naver_shopping_link  VARCHAR2(300) NOT NULL
    small_product_status VARCHAR2(30) NOT NULL, -- 추가
    search_time DATE NULL, -- 추가
    detail_view_count number(8) default 0, --추가
+   blli_small_product number(8) not null, --추가
+   small_product_ranking number(4) not null, --추가
    constraint fk_small_prod_mid_cate foreign key(mid_category, mid_category_id) references blli_mid_category(mid_category, mid_category_id) -- mid_category_id 추가
 );
 
 alter table blli_small_product add( detail_view_count number(8))
 alter table blli_small_product add( product_db_insert_date date)
+alter table blli_small_product add( small_Product_Ranking number(4))
 
 ALTER TABLE  blli_small_product  RENAME COLUMN naver_shopping_rank TO naver_shopping_rank
 
@@ -159,7 +162,7 @@ CREATE TABLE blli_small_prod_buy_link (
 	constraint fk_small_buy_link_small foreign key(small_product_id) references blli_small_product(small_product_id), -- 변경,
 	constraint pk_blli_small_prod_buy_link primary key (small_product_id, seller) --복합키로 수정 -> seller로 다시 수정
 );
-
+-- 프라이머리키 변경
 
 drop table blli_small_product_photo cascade constraint;
 CREATE TABLE blli_small_product_photo (

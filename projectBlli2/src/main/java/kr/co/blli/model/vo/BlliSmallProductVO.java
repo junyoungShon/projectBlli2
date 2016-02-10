@@ -15,6 +15,7 @@ public class BlliSmallProductVO {
 	private int smallProductPostingCount;
 	private String productRegisterDay;
 	private String smallProductId;
+	private int smallProductRanking;
 	//16.01.22 추가
 	private int isDib;
 	//16.02.01 추가
@@ -37,9 +38,10 @@ public class BlliSmallProductVO {
 			int smallProductDibsCount, String smallProductMainPhotoLink,
 			int smallProductScore, String naverShoppingLink,
 			int naverShoppingRank, int smallProductPostingCount,
-			String productRegisterDay, String smallProductId, int isDib,
-			String minPrice, String searchTime, int detailViewCount,
-			String productDbInsertDate, int dbInsertPostingCount) {
+			String productRegisterDay, String smallProductId,
+			int smallProductRanking, int isDib, String minPrice,
+			String searchTime, int detailViewCount, String productDbInsertDate,
+			int dbInsertPostingCount) {
 		super();
 		this.smallProduct = smallProduct;
 		this.midCategory = midCategory;
@@ -55,6 +57,7 @@ public class BlliSmallProductVO {
 		this.smallProductPostingCount = smallProductPostingCount;
 		this.productRegisterDay = productRegisterDay;
 		this.smallProductId = smallProductId;
+		this.smallProductRanking = smallProductRanking;
 		this.isDib = isDib;
 		this.minPrice = minPrice;
 		this.searchTime = searchTime;
@@ -146,6 +149,12 @@ public class BlliSmallProductVO {
 	public void setSmallProductId(String smallProductId) {
 		this.smallProductId = smallProductId;
 	}
+	public int getSmallProductRanking() {
+		return smallProductRanking;
+	}
+	public void setSmallProductRanking(int smallProductRanking) {
+		this.smallProductRanking = smallProductRanking;
+	}
 	public int getIsDib() {
 		return isDib;
 	}
@@ -196,10 +205,12 @@ public class BlliSmallProductVO {
 				+ ", naverShoppingRank=" + naverShoppingRank
 				+ ", smallProductPostingCount=" + smallProductPostingCount
 				+ ", productRegisterDay=" + productRegisterDay
-				+ ", smallProductId=" + smallProductId + ", isDib=" + isDib
-				+ ", minPrice=" + minPrice + ", searchTime=" + searchTime
-				+ ", detailViewCount=" + detailViewCount
+				+ ", smallProductId=" + smallProductId
+				+ ", smallProductRanking=" + smallProductRanking + ", isDib="
+				+ isDib + ", minPrice=" + minPrice + ", searchTime="
+				+ searchTime + ", detailViewCount=" + detailViewCount
 				+ ", productDbInsertDate=" + productDbInsertDate
 				+ ", dbInsertPostingCount=" + dbInsertPostingCount + "]";
 	}
+	
 }

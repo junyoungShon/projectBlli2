@@ -5,6 +5,7 @@ import java.util.List;
 
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliBigCategoryVO;
+import kr.co.blli.model.vo.BlliBuyLinkClickVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
@@ -128,5 +129,17 @@ public interface ProductDAO {
 	int isSmallProductSeller(BlliSmallProductBuyLinkVO blliSmallProductBuyLinkVO);
 
 	void insertDeadSmallProduct(BlliSmallProductVO blliSmallProductVO);
+	
+	List<String> selectMidCategoryVOList();
+
+	List<BlliSmallProductVO> selectAllSmallProductByMidCategoryId(String string);
+
+	void updateSmallProductRanking(BlliSmallProductVO blliSmallProductVO);
+
+	void updateSmallProductDetailViewCount(String smallProductId);
+
+	void insertBlliBuyLinkClick(BlliBuyLinkClickVO blliBuyLinkClickVO);
+
+	void updateBlliBuyLinkClickCount(String smallProductId);
 
 }

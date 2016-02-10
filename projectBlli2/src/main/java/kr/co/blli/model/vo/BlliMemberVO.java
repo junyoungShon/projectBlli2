@@ -13,7 +13,7 @@ public class BlliMemberVO{
 	private List<BlliBabyVO> blliBabyVOList ;
 	private List<BlliScheduleVO> blliScheduleVOList;
 	private List<BlliMidCategoryVO> blliRecommendingMidCategoryVOList;
-
+	
 	
 	public BlliMemberVO() {
 		super();

@@ -252,3 +252,5 @@ select posting_url,small_product,small_product_id,posting_title,posting_summary,
 		select sum(buy_link_click_count) from blli_small_prod_buy_link where small_product_id =7909155651
 		update blli_small_prod_buy_link set buy_link_click_count = 1   where small_product_id =7909155651
 		
+		select small_product_id,small_product_score from blli_small_product where mid_category_id = '50000217' and small_product_status ='confirmed' order by small_product_score desc;
+		
