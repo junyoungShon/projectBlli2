@@ -78,7 +78,7 @@ CREATE TABLE blli_mid_category (
 	mid_category_whentouse_min NUMBER(20) NULL , -- 컬럼명 변경
 	mid_category_whentouse_max NUMBER(20) NULL , -- 추가
 	big_category         VARCHAR2(50) NOT NULL ,
-	small_product_count     NUMBER(5) NOT NULL, -- 추가
+	small_product_count     NUMBER(5) default 0, -- 추가, NOT NULL을 default 0으로 변경
 	constraint pk_mid_category primary key(mid_category_id, mid_category),
 	constraint fk_mid_cate_big_cate foreign key(big_category) references blli_big_category(big_category)
 );
@@ -109,9 +109,10 @@ CREATE TABLE blli_small_product ( -- naver_shopping_link  VARCHAR2(300) NOT NULL
    constraint fk_small_prod_mid_cate foreign key(mid_category, mid_category_id) references blli_mid_category(mid_category, mid_category_id) -- mid_category_id 추가
 );
 
-alter table blli_small_product add( detail_view_count number(8))
+alter table blli_small_product add( detail_view_count number(8) default 0)
 alter table blli_small_product add( product_db_insert_date date)
 alter table blli_small_product add( small_Product_Ranking number(4))
+
 
 ALTER TABLE  blli_small_product  RENAME COLUMN naver_shopping_rank TO naver_shopping_rank
 

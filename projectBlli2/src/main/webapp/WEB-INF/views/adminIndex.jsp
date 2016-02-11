@@ -27,6 +27,7 @@
 		<li><a href="${initParam.root}postingListWithSmallProducts.do">소제품 하나로 추려줘</a></li>
 		<li><a href="${initParam.root}unconfirmedSmallProduct.do">소제품 등록해줘</a></li>
 		<li><a href="${initParam.root}unconfirmedPosting.do">포스팅 등록해줘</a></li>
+		<li><a href="${initParam.root}checkLog.do">로그 조회</a></li>
 		<li><a href="${initParam.root}j_spring_security_logout">로그아웃</a></li>
 	</ul>
 	

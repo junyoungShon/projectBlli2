@@ -1,12 +1,14 @@
 package kr.co.blli.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import kr.co.blli.model.admin.AdminService;
+import kr.co.blli.model.vo.BlliLogVO;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -115,5 +117,10 @@ public class AdminController {
 	@RequestMapping("insertCafeArticle.do")
 	public void insertCafeArticle(){
 		adminService.insertCafeArticle();
+	}	
+	@RequestMapping("checkLog.do")
+	public ModelAndView checkLog(){
+		ArrayList<BlliLogVO> list = (ArrayList<BlliLogVO>)adminService.checkLog();
+		return new ModelAndView("admin/log", "logList", list);
 	}	
 }

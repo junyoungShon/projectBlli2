@@ -1,6 +1,8 @@
 package kr.co.blli.model.admin;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
@@ -16,6 +18,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 
+import kr.co.blli.model.vo.BlliDetailException;
+import kr.co.blli.model.vo.BlliLogVO;
 import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliPagingBean;
@@ -367,5 +371,85 @@ public class AdminServiceImpl implements AdminService{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	@Override
+	public ArrayList<BlliLogVO> checkLog() {
+		ArrayList<BlliLogVO> list = new ArrayList<BlliLogVO>();
+		BlliLogVO vo = null;
+		ArrayList<BlliDetailException> detailException = new ArrayList<BlliDetailException>();
+		BlliDetailException exceptionVO = null;
+		int number = 1;
+		try {
+			BufferedReader in = new BufferedReader(new FileReader("C:\\Users\\용호\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\logFile\\blliLog.log"));
+			String message;
+			while ((message = in.readLine()) != null) {
+				if(message.startsWith("start")){
+					vo = new BlliLogVO();
+					vo.setNumber(number++);
+					vo.setMethodName(message.substring(message.lastIndexOf(":")+2));
+				}else if(message.startsWith("발생 일자")){
+					vo.setStartTime(message.substring(message.indexOf(":")+2));
+				}else if(message.startsWith("실행 시간")){
+					vo.setRunTime(message.substring(message.lastIndexOf(":")+2));
+				}else if(message.startsWith("요청자")){
+					vo.setExecutor(message.substring(message.lastIndexOf(":")+2));
+				}else if(message.startsWith("총 대분류 개수")){
+					if(vo.getMethodName().equals("insertBigCategory")){
+						vo.setCategoryCount(message.substring(message.lastIndexOf(":")+2));
+					}else{
+						vo.setHighRankCategoryCount(message.substring(message.lastIndexOf(":")+2));
+					}
+				}else if(message.startsWith("총 중분류 개수")){
+					if(vo.getMethodName().equals("insertMidCategory")){
+						vo.setCategoryCount(message.substring(message.lastIndexOf(":")+2));
+					}else{
+						vo.setHighRankCategoryCount(message.substring(message.lastIndexOf(":")+2));
+					}
+				}else if(message.startsWith("총 소제품 개수")){
+					if(vo.getMethodName().equals("insertPosting")){
+						vo.setCategoryCount(message.substring(message.lastIndexOf(":")+2));
+					}else{
+						vo.setCategoryCount(message.substring(message.lastIndexOf(":")+2));
+					}
+				}else if(message.startsWith("총 포스팅 개수")){
+					vo.setCategoryCount(message.substring(message.lastIndexOf(":")+2));
+				}else if(message.startsWith("insert")){
+					if(message.startsWith("insert한 조건에 맞지 않는 소제품 개수")){
+						vo.setDenySmallProductCount(message.substring(message.lastIndexOf(":")+2));
+					}else if(message.startsWith("insert하지 않은 조건에 맞지 않는 포스팅 개수")){
+						vo.setDenyPostingCount(message.substring(message.lastIndexOf(":")+2));
+					}else{
+						vo.setInsertCategoryCount(message.substring(message.lastIndexOf(":")+2));
+					}
+				}else if(message.startsWith("update")){
+					if(message.startsWith("update하지 않은 소제품 개수")){
+						vo.setNotUpdateProductCount(message.substring(message.lastIndexOf(":")+2));
+					}else if(message.startsWith("update하지 않은 포스팅 개수")){
+						vo.setNotUpdatePostingCount(message.substring(message.lastIndexOf(":")+2));
+					}else{
+						vo.setUpdateCategoryCount(message.substring(message.lastIndexOf(":")+2));
+					}
+				}else if(message.startsWith("Exception 발생 횟수")){
+					vo.setExceptionCount(message.substring(message.lastIndexOf(":")+2));
+				}else if(message.startsWith("Exception이 발생한")){
+					exceptionVO = new BlliDetailException();
+					exceptionVO.setCategoryId(message.substring(message.lastIndexOf(":")+2));
+				}else if(message.startsWith("Exception 내용")){
+					exceptionVO.setExceptionContent(message.substring(message.indexOf(":")+1));
+					detailException.add(exceptionVO);
+				}else if(message.startsWith("end")){
+					vo.setDetailException(detailException);
+					list.add(vo);
+				}
+			}
+			in.close();
+		} catch (IOException e) {
+			System.err.println(e); // 에러가 있다면 메시지 출력
+			System.exit(1);
+		}
+		for(int i=0;i<list.size();i++){
+			System.out.println(list.get(i));
+		}
+		return list;
 	}
 }

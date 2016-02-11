@@ -2,7 +2,9 @@ package kr.co.blli.model.scheduler;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
@@ -16,7 +18,6 @@ import kr.co.blli.model.vo.BlliSmallProductVO;
 import kr.co.blli.utility.BlliFileDownLoader;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.chainsaw.Main;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -45,6 +46,14 @@ public class CategoryAndProductScheduler {
 	public void insertBigCategory() throws IOException {
 		long start = System.currentTimeMillis(); // 시작시간 
 		
+		Logger logger = Logger.getLogger(getClass());
+		logger.info("start : insertBigCategory");
+		logger.info("요청자 : scheduler");
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+		String datetime = sdf.format(cal.getTime());
+		logger.info("발생 일자 : "+datetime);
+		
 		int bigCategoryCount = 0;
 		int insertBigCategoryCount = 0;
 		int updateBigCategoryCount = 0;
@@ -69,7 +78,6 @@ public class CategoryAndProductScheduler {
 					}else{
 						updateBigCategoryCount++;
 					}
-					System.out.println(bigCategory);
 					bigCategoryCount++;
 				}
 				flag = false;
@@ -81,22 +89,22 @@ public class CategoryAndProductScheduler {
 				}
 			}
 		}
-		System.out.println("*****************************************");
-		System.out.println("총 대분류 개수 : "+bigCategoryCount);
-		System.out.println("insert한 대분류 개수 : "+insertBigCategoryCount);
-		System.out.println("update한 대분류 개수 : "+updateBigCategoryCount);
-		System.out.println("Exception 발생 횟수 : "+exceptionCount);
+		logger.info("총 대분류 개수 : "+bigCategoryCount);
+		logger.info("insert한 대분류 개수 : "+insertBigCategoryCount);
+		logger.info("update한 대분류 개수 : "+updateBigCategoryCount);
+		logger.info("Exception 발생 횟수 : "+exceptionCount);
 		Iterator<String> bigCategoryIdList = detailException.keySet().iterator();
 		while(bigCategoryIdList.hasNext()){
 			bigCategoryId = bigCategoryIdList.next();
-			System.out.println("Exception 발생한 bigCategoryId : "+bigCategoryId);
-			System.out.println("Exception 내용 : "+detailException.get(bigCategoryId));
+			logger.info("Exception이 발생한 bigCategoryId : "+bigCategoryId);
+			logger.info("Exception 내용 : "+detailException.get(bigCategoryId));
 		}
 		
 		long end = System.currentTimeMillis();  //종료시간
 		
 		//종료-시작=실행시간		
-		System.out.println("실행시간  : "+(end-start)/1000.0+"초");
+		logger.info("실행 시간  : "+(int)Math.ceil((end-start)/1000.0)+"초");
+		logger.info("end : insertBigCategory");
 	}
 	
 	/**
@@ -111,6 +119,14 @@ public class CategoryAndProductScheduler {
 	//@Scheduled(cron = "00 10 01 * * *")
 	public void insertMidCategory() {
 		long start = System.currentTimeMillis(); // 시작시간 
+		
+		Logger logger = Logger.getLogger(getClass());
+		logger.info("start : insertMidCategory");
+		logger.info("요청자 : scheduler");
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+		String datetime = sdf.format(cal.getTime());
+		logger.info("발생 일자 : "+datetime);
 		
 		ArrayList<BlliBigCategoryVO> bigCategory = (ArrayList<BlliBigCategoryVO>)productDAO.getBigCategory();
 		String midCategoryId = "";
@@ -154,7 +170,7 @@ public class CategoryAndProductScheduler {
 							}
 							
 							blliMidCategoryVO.setMidCategoryMainPhotoLink(blliFileDownLoader.imgFileDownLoader(imgSrc, midCategoryId, "midCategory"));
-							System.out.println((index++) + " " + blliMidCategoryVO);
+							//System.out.println((index++) + " " + blliMidCategoryVO);
 							doc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?pagingIndex=1"+
 									"&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&cat_id="+
 									midCategoryId+"&frm=NVSHMDL&oldModel=true").timeout(0).get();
@@ -178,22 +194,28 @@ public class CategoryAndProductScheduler {
 				detailException.put(midCategoryId, e.toString());
 			}
 		}
-		System.out.println("*****************************************");
-		System.out.println("총 대분류 개수 : "+bigCategory.size());
-		System.out.println("총 중분류 개수 : "+midCategoryCount);
-		System.out.println("insert한 중분류 개수 : "+insertMidCategoryCount);
-		System.out.println("update한 중분류 개수 : "+updateMidCategoryCount);
-		System.out.println("Exception 발생 횟수 : "+allExceptionCount);
+		logger.info("총 대분류 개수 : "+bigCategory.size());
+		logger.info("총 중분류 개수 : "+midCategoryCount);
+		logger.info("insert한 중분류 개수 : "+insertMidCategoryCount);
+		logger.info("update한 중분류 개수 : "+updateMidCategoryCount);
+		logger.info("Exception 발생 횟수 : "+allExceptionCount);
 		Iterator<String> midCategoryIdList = detailException.keySet().iterator();
 		while(midCategoryIdList.hasNext()){
 			midCategoryId = midCategoryIdList.next();
-			System.out.println("Exception 발생한 midCategoryId : "+midCategoryId);
-			System.out.println("Exception 내용 : "+detailException.get(midCategoryId));
+			logger.info("Exception이 발생한 midCategoryId : "+midCategoryId);
+			logger.info("Exception 내용 : "+detailException.get(midCategoryId));
 		}
 		long end = System.currentTimeMillis();  //종료시간
 		
 		//종료-시작=실행시간		
-		System.out.println("실행시간  : "+(end-start)/1000.0+"초");
+		if((end-start/1000) > 60){
+			int minute = (int)Math.floor(((end-start)/1000.0)/60);
+			int second = (int)Math.ceil((end-start)/1000.0-minute*60);
+			logger.info("실행 시간  : "+minute+"분 "+second+"초");
+		}else{
+			logger.info("실행 시간  : "+(end-start)/1000.0+"초");
+		}
+		logger.info("end : insertMidCategory");
 	}
 	
 	/**
@@ -208,6 +230,14 @@ public class CategoryAndProductScheduler {
 	//@Scheduled(cron = "00 00 02 * * *")
 	public void insertSmallProduct() {
 		long start = System.currentTimeMillis(); // 시작시간 
+		
+		Logger logger = Logger.getLogger(getClass());
+		logger.info("start : insertSmallProduct");
+		logger.info("요청자 : scheduler");
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+		String datetime = sdf.format(cal.getTime());
+		logger.info("발생 일자 : "+datetime);
 		
 		ArrayList<BlliMidCategoryVO> midCategory = (ArrayList<BlliMidCategoryVO>)productDAO.getMidCategory();
 		String key = "6694c8294c8d04cdfe78262583a13052"; //네이버 검색API 이용하기 위해 발급받은 key값
@@ -224,6 +254,7 @@ public class CategoryAndProductScheduler {
 		LinkedHashMap<String, String> detailException = new LinkedHashMap<String, String>();
 		int naverShoppingRank = 0;
 		
+		label:
 		while(flag){
 			try{	
 				for(int i=count;i<midCategory.size();i++){
@@ -425,33 +456,50 @@ public class CategoryAndProductScheduler {
 						page++;
 						allSmallProductCount += naverShoppingRank;
 						naverShoppingRank = 0;
+						
+						long end = System.currentTimeMillis();  //종료시간
+						//종료-시작=실행시간		
+						if((end-start)/1000.0 > 60*3){ //3시간을 초과하면 실행 중지
+							break label;
+						}
 					}while(page <= lastPage);
 				}
 				flag = false;
 			}catch(Exception e){
 				exceptionCount++;
 				allExceptionCount++;
-				detailException.put(smallProductId, e.toString());
+				detailException.put(smallProductId, e.getMessage());
 			}
 		}
-		System.out.println("*****************************************");
-		System.out.println("총 중분류 개수 : "+midCategory.size());
-		System.out.println("총 소제품 개수 : "+allSmallProductCount);
-		System.out.println("insert한 소제품 개수 : "+insertSmallProductCount);
-		System.out.println("update한 소제품 개수 : "+updateSmallProductCount);
-		System.out.println("insert한 조건에 맞지 않는 소제품 개수 : "+denySmallProductCount);
-		System.out.println("update하지 않은 소제품 개수"+notUpdateProductCount);
-		System.out.println("Exception 발생 횟수 : "+allExceptionCount);
+		logger.info("총 중분류 개수 : "+midCategory.size());
+		logger.info("총 소제품 개수 : "+allSmallProductCount);
+		logger.info("insert한 소제품 개수 : "+insertSmallProductCount);
+		logger.info("update한 소제품 개수 : "+updateSmallProductCount);
+		logger.info("insert한 조건에 맞지 않는 소제품 개수 : "+denySmallProductCount);
+		logger.info("update하지 않은 소제품 개수"+notUpdateProductCount);
+		logger.info("Exception 발생 횟수 : "+allExceptionCount);
 		Iterator<String> smallProductIdList = detailException.keySet().iterator();
 		while(smallProductIdList.hasNext()){
 			smallProductId = smallProductIdList.next();
-			System.out.println("Exception 발생한 smallProductId : "+smallProductId);
-			System.out.println("Exception 내용 : "+detailException.get(smallProductId));
+			logger.info("Exception 발생한 smallProductId : "+smallProductId);
+			logger.info("Exception 내용 : "+detailException.get(smallProductId));
 		}
 		long end = System.currentTimeMillis();  //종료시간
 		
 		//종료-시작=실행시간		
-		System.out.println("실행시간  : "+(end-start)/1000.0+"초");
+		if((end-start/1000) > 60*60){
+			double hour = (((end-start)/1000.0)/60.0)/60;
+			double minute = ((end-start)/1000.0)/60-hour*60;
+			int second = (int)Math.ceil((end-start)/1000.0-minute*60);
+			logger.info("실행 시간  : "+hour+"시간 "+minute+"분 "+second+"초");
+		}else if((end-start/1000) > 60){
+			double minute = ((end-start)/1000.0)/60.0;
+			int second = (int)Math.ceil((end-start)/1000.0-minute*60);
+			logger.info("실행 시간  : "+minute+"분 "+second+"초");
+		}else{
+			logger.info("실행 시간  : "+(int)Math.ceil((end-start)/1000.0)+"초");
+		}
+		logger.info("end : insertSmallProduct");
 	}
 	
 }
