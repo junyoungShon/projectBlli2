@@ -3,6 +3,8 @@ package kr.co.blli.model.scheduler;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 
 import javax.annotation.Resource;
 
@@ -41,21 +43,60 @@ public class CategoryAndProductScheduler {
 	 */
 	//@Scheduled(cron = "00 00 01 * * *")
 	public void insertBigCategory() throws IOException {
-		Logger logger = Logger.getLogger(Main.class.getName());
-		Document doc = Jsoup.connect("http://shopping.naver.com/category/category.nhn?cat_id=50000005").timeout(0).get();
-		Elements bigCategories = doc.select(".category_cell h3 a");
-		for(Element e : bigCategories){
-			String categoryId = e.attr("href");
-			categoryId = categoryId.substring(categoryId.lastIndexOf("=")+1);
-			String bigCategory = e.select("strong").text();
-			BlliBigCategoryVO blliBigCategoryVO = new BlliBigCategoryVO(bigCategory, categoryId);
-			int updateResult = productDAO.updateBigCategory(blliBigCategoryVO);
-			if(updateResult == 0){
-				productDAO.insertBigCategory(blliBigCategoryVO);
+		long start = System.currentTimeMillis(); // 시작시간 
+		
+		int bigCategoryCount = 0;
+		int insertBigCategoryCount = 0;
+		int updateBigCategoryCount = 0;
+		int exceptionCount = 0;
+		LinkedHashMap<String, String> detailException = new LinkedHashMap<String, String>();
+		String bigCategoryId = "";
+		boolean flag = true;
+		
+		while(flag){
+			try{
+				Document doc = Jsoup.connect("http://shopping.naver.com/category/category.nhn?cat_id=50000005").timeout(0).get();
+				Elements bigCategories = doc.select(".category_cell h3 a");
+				for(Element e : bigCategories){
+					bigCategoryId = e.attr("href");
+					bigCategoryId = bigCategoryId.substring(bigCategoryId.lastIndexOf("=")+1);
+					String bigCategory = e.select("strong").text();
+					BlliBigCategoryVO blliBigCategoryVO = new BlliBigCategoryVO(bigCategory, bigCategoryId);
+					int updateResult = productDAO.updateBigCategory(blliBigCategoryVO);
+					if(updateResult == 0){
+						productDAO.insertBigCategory(blliBigCategoryVO);
+						insertBigCategoryCount++;
+					}else{
+						updateBigCategoryCount++;
+					}
+					System.out.println(bigCategory);
+					bigCategoryCount++;
+				}
+				flag = false;
+			}catch(Exception e){
+				exceptionCount++;
+				detailException.put(bigCategoryId, e.toString());
+				if(exceptionCount > 5){
+					flag = false;
+				}
 			}
-			System.out.println(bigCategory);
-			logger.warn("대분류명 : "+bigCategory);
 		}
+		System.out.println("*****************************************");
+		System.out.println("총 대분류 개수 : "+bigCategoryCount);
+		System.out.println("insert한 대분류 개수 : "+insertBigCategoryCount);
+		System.out.println("update한 대분류 개수 : "+updateBigCategoryCount);
+		System.out.println("Exception 발생 횟수 : "+exceptionCount);
+		Iterator<String> bigCategoryIdList = detailException.keySet().iterator();
+		while(bigCategoryIdList.hasNext()){
+			bigCategoryId = bigCategoryIdList.next();
+			System.out.println("Exception 발생한 bigCategoryId : "+bigCategoryId);
+			System.out.println("Exception 내용 : "+detailException.get(bigCategoryId));
+		}
+		
+		long end = System.currentTimeMillis();  //종료시간
+		
+		//종료-시작=실행시간		
+		System.out.println("실행시간  : "+(end-start)/1000.0+"초");
 	}
 	
 	/**
@@ -69,11 +110,19 @@ public class CategoryAndProductScheduler {
 	 */
 	//@Scheduled(cron = "00 10 01 * * *")
 	public void insertMidCategory() {
+		long start = System.currentTimeMillis(); // 시작시간 
+		
+		ArrayList<BlliBigCategoryVO> bigCategory = (ArrayList<BlliBigCategoryVO>)productDAO.getBigCategory();
+		String midCategoryId = "";
 		int index = 1;
 		int count = 0;
-		boolean flag = true;
+		int midCategoryCount = 0;
+		int insertMidCategoryCount = 0;
+		int updateMidCategoryCount = 0;
 		int exceptionCount = 0;
-		ArrayList<BlliBigCategoryVO> bigCategory = (ArrayList<BlliBigCategoryVO>)productDAO.getBigCategory();
+		int allExceptionCount = 0;
+		boolean flag = true;
+		LinkedHashMap<String, String> detailException = new LinkedHashMap<String, String>();
 		
 		while(flag){
 			try{
@@ -93,37 +142,58 @@ public class CategoryAndProductScheduler {
 							BlliMidCategoryVO blliMidCategoryVO = new BlliMidCategoryVO();
 							String midCategory = e.attr("title");
 							midCategory = midCategory.substring(midCategory.lastIndexOf(" ")+1);
-							String categoryId = e.attr("_value");
+							midCategoryId = e.attr("_value");
 							blliMidCategoryVO.setMidCategory(midCategory);
-							blliMidCategoryVO.setMidCategoryId(categoryId);
+							blliMidCategoryVO.setMidCategoryId(midCategoryId);
 							blliMidCategoryVO.setBigCategory(bigCategory.get(i).getBigCategory());
-							String imgSrc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?cat_id="+categoryId).
+							String imgSrc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?cat_id="+midCategoryId).
 									          timeout(0).get().select("._model_list .img_area img").attr("data-original");
 							if(imgSrc == null || imgSrc.equals("")){
-								imgSrc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?cat_id="+categoryId).timeout(0).
+								imgSrc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?cat_id="+midCategoryId).timeout(0).
 										  get().select("._product_list .img_area img").attr("data-original");
 							}
-							String filePostion = blliFileDownLoader.imgFileDownLoader(imgSrc,categoryId,"midCategory");
-							blliMidCategoryVO.setMidCategoryMainPhotoLink(filePostion);
+							
+							blliMidCategoryVO.setMidCategoryMainPhotoLink(blliFileDownLoader.imgFileDownLoader(imgSrc, midCategoryId, "midCategory"));
 							System.out.println((index++) + " " + blliMidCategoryVO);
 							doc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?pagingIndex=1"+
 									"&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&cat_id="+
-									categoryId+"&frm=NVSHMDL&oldModel=true").timeout(0).get();
+									midCategoryId+"&frm=NVSHMDL&oldModel=true").timeout(0).get();
 							int smallProductCount = Integer.parseInt(doc.select("#_resultCount").text().replace(",", ""));
 							blliMidCategoryVO.setSmallProductCount(smallProductCount);
 							int updateResult = productDAO.updateMidCategory(blliMidCategoryVO);
 							if(updateResult == 0){
 								productDAO.insertMidCategory(blliMidCategoryVO);
+								insertMidCategoryCount++;
+							}else{
+								updateMidCategoryCount++;
 							}
+							midCategoryCount++;
 						} //if
 					} //for
 				} //for
 				flag = false;
 			}catch(Exception e){
 				exceptionCount++;
-				e.printStackTrace();
+				allExceptionCount++;
+				detailException.put(midCategoryId, e.toString());
 			}
 		}
+		System.out.println("*****************************************");
+		System.out.println("총 대분류 개수 : "+bigCategory.size());
+		System.out.println("총 중분류 개수 : "+midCategoryCount);
+		System.out.println("insert한 중분류 개수 : "+insertMidCategoryCount);
+		System.out.println("update한 중분류 개수 : "+updateMidCategoryCount);
+		System.out.println("Exception 발생 횟수 : "+allExceptionCount);
+		Iterator<String> midCategoryIdList = detailException.keySet().iterator();
+		while(midCategoryIdList.hasNext()){
+			midCategoryId = midCategoryIdList.next();
+			System.out.println("Exception 발생한 midCategoryId : "+midCategoryId);
+			System.out.println("Exception 내용 : "+detailException.get(midCategoryId));
+		}
+		long end = System.currentTimeMillis();  //종료시간
+		
+		//종료-시작=실행시간		
+		System.out.println("실행시간  : "+(end-start)/1000.0+"초");
 	}
 	
 	/**
@@ -139,164 +209,245 @@ public class CategoryAndProductScheduler {
 	public void insertSmallProduct() {
 		long start = System.currentTimeMillis(); // 시작시간 
 		
-		int countOfMidCategory = 0;
-		int countOfAllSmallProduct = 0;
 		ArrayList<BlliMidCategoryVO> midCategory = (ArrayList<BlliMidCategoryVO>)productDAO.getMidCategory();
 		String key = "6694c8294c8d04cdfe78262583a13052"; //네이버 검색API 이용하기 위해 발급받은 key값
 		int count = 0;
 		int exceptionCount = 0;
 		boolean flag = true;
+		int allSmallProductCount = 0;
+		int insertSmallProductCount = 0;
+		int updateSmallProductCount = 0;
+		int denySmallProductCount = 0;
+		int notUpdateProductCount = 0;
+		int allExceptionCount = 0;
+		String smallProductId = "";
+		LinkedHashMap<String, String> detailException = new LinkedHashMap<String, String>();
+		int naverShoppingRank = 0;
 		
 		while(flag){
 			try{	
 				for(int i=count;i<midCategory.size();i++){
-					if(exceptionCount > 5){
+					if(exceptionCount > 3){
 						count = i+1;
 						exceptionCount = 0;
 					}else{
 						count = i;
 					}
 					BlliSmallProductVO blliSmallProductVO = new BlliSmallProductVO();
-					int naverShoppingRank = 0;
 					int page = 1;
 					double lastPage = 0;
 					
 					System.out.println("중분류 카테고리 : "+midCategory.get(i).getMidCategory());
 					System.out.println("중분류 카운트 : "+(i+1));
-					if(midCategory.size() == (i+1)){
-						countOfMidCategory = (i+1);
-					}
-					int countOfSmallProduct = 0;
+					
 					do{
 						Document doc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?pagingIndex="+
 								page+"&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&cat_id="+
 								midCategory.get(i).getMidCategoryId()+"&frm=NVSHMDL&oldModel=true").timeout(0).get();
 						int resultCount = Integer.parseInt(doc.select("#_resultCount").text().replace(",", ""));
 						lastPage = Math.ceil(resultCount/40.0);
-						double maxSmallProduct = 10.0;
-						if(resultCount > 10){
-							if(Math.ceil(resultCount/10.0) < 10){
-								maxSmallProduct = Math.ceil(resultCount/10.0);
-							}
+						double maxSmallProduct = 10;
+						if(resultCount > 10 && resultCount < 100){
+							maxSmallProduct = resultCount/10;
 						}
 						Elements e = doc.select(".goods_list ._model_list");
 						for(Element el : e){
-							countOfSmallProduct++;
-							naverShoppingRank++;
 							//System.out.println("*************** 소제품 ***************");
+							naverShoppingRank++;
 							
-							String smallProduct = el.select(".info .tit").text();
-							smallProduct = smallProduct.replaceAll("&", "%26");
-							try{
-								doc = Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+smallProduct+
-										"&display=1&start=1&target=blog&sort=sim").timeout(5000).get();
-								if(doc.select("message").text().contains("Query limit exceeded")){
-									key = "0a044dc7c63b8f3b9394e1a5e49db7ab";
+							smallProductId = el.select(".img_area .report").attr("product_id");
+							String smallProductStatus = productDAO.getSmallProductStatus(smallProductId);
+							
+							if(smallProductStatus == null){
+								String smallProduct = el.select(".info .tit").text();
+								smallProduct = smallProduct.replaceAll("&", "%26");
+								try{
+									doc = Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+smallProduct+
+											"&display=1&start=1&target=blog&sort=sim").timeout(5000).get();
+									if(doc.select("message").text().contains("Query limit exceeded")){
+										key = "0a044dc7c63b8f3b9394e1a5e49db7ab";
+										doc = Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+smallProduct+
+												"&display=1&start=1&target=blog&sort=sim").timeout(5000).get();
+									}
+								}catch(SocketTimeoutException se){
+									se.printStackTrace();
 									continue;
 								}
-							}catch(SocketTimeoutException se){
-								se.printStackTrace();
-								continue;
-							}
-							String totalPostingText = doc.select("total").text().trim();
-							if(totalPostingText.equals("")){
-								totalPostingText = "0";
-							}
-							int smallProductPostingCount = Integer.parseInt(totalPostingText);
-							
-							if(smallProductPostingCount >= 20 && smallProductPostingCount <= 50 && resultCount > 10){
-								if(countOfSmallProduct > maxSmallProduct){
-									countOfSmallProduct--;
+								String totalPostingText = doc.select("total").text().trim();
+								if(totalPostingText.equals("")){
+									totalPostingText = "0";
+								}
+								int smallProductPostingCount = Integer.parseInt(totalPostingText);
+								
+								if(smallProductPostingCount >= 20 && smallProductPostingCount <= 50 && resultCount > 10){
+									if(naverShoppingRank > maxSmallProduct){
+										denySmallProductCount++;
+										blliSmallProductVO.setSmallProductId(smallProductId);
+										blliSmallProductVO.setMidCategoryId(midCategory.get(i).getMidCategoryId());
+										blliSmallProductVO.setMidCategory(midCategory.get(i).getMidCategory());
+										productDAO.insertDeadSmallProduct(blliSmallProductVO);
+										continue;
+									}
+								}else if(smallProductPostingCount < 50 || smallProductPostingCount > 1000){
+									denySmallProductCount++;
+									blliSmallProductVO.setSmallProductId(smallProductId);
+									blliSmallProductVO.setMidCategoryId(midCategory.get(i).getMidCategoryId());
+									blliSmallProductVO.setMidCategory(midCategory.get(i).getMidCategory());
+									productDAO.insertDeadSmallProduct(blliSmallProductVO);
 									continue;
 								}
-							}else if(smallProductPostingCount < 50 || smallProductPostingCount > 1000){
-								countOfSmallProduct--;
-								continue;
-							}
-							
-							String smallProductMainPhotoLink = el.select(".img_area ._productLazyImg").attr("data-original");
-							String smallProductMaker = el.select(".info_mall .mall_txt .mall_img").attr("title");
-							if(smallProductMaker.equals("")){
-								smallProductMaker = "-";
-							}
-							String productRegisterDay = el.select(".etc .date").text();
-							productRegisterDay = productRegisterDay.substring(productRegisterDay.indexOf(" ")+1, productRegisterDay.lastIndexOf("."))+".01";
-							String smallProductId = el.select(".img_area .report").attr("product_id");
-							
-							
-							/*System.out.println("중분류 : "+midCategory.get(i).getMidCategory());
-							System.out.println("제품명 : "+smallProduct);
-							System.out.println("이미지 : "+smallProductMainPhotoLink);
-							System.out.println("포스팅 개수 : "+smallProductPostingCount);
-							System.out.println("네이버 쇼핑 검색 순서 : "+(naverShoppingRank));
-							System.out.println("제조사 : "+smallProductMaker);
-							System.out.println("제조일 : "+productRegisterDay);
-							System.out.println("제품ID : "+smallProductId);*/
-							blliSmallProductVO.setMidCategory(midCategory.get(i).getMidCategory());
-							blliSmallProductVO.setMidCategoryId(midCategory.get(i).getMidCategoryId());
-							blliSmallProductVO.setSmallProduct(smallProduct.replaceAll("%26", "&"));
-							blliSmallProductVO.setSmallProductPostingCount(smallProductPostingCount);
-							blliSmallProductVO.setNaverShoppingRank(naverShoppingRank);
-							blliSmallProductVO.setSmallProductMaker(smallProductMaker);
-							blliSmallProductVO.setProductRegisterDay(productRegisterDay);
-							blliSmallProductVO.setSmallProductId(smallProductId);
-							
-							doc = Jsoup.connect("http://shopping.naver.com/detail/detail.nhn?nv_mid="+smallProductId+"&cat_id="+midCategory.get(i).getMidCategoryId()+"&frm=NVSHMDL&query=").timeout(0).get();
-							smallProductMainPhotoLink = doc.select("#summary_thumbnail_img").attr("src");
-							blliSmallProductVO.setSmallProductMainPhotoLink(blliFileDownLoader.imgFileDownLoader(smallProductMainPhotoLink, smallProductId, "smallProduct"));
-							System.out.println(blliSmallProductVO);
-							int updateResult = productDAO.updateSmallProduct(blliSmallProductVO);
-							if(updateResult == 0){
+								
+								String smallProductMainPhotoLink = el.select(".img_area ._productLazyImg").attr("data-original");
+								String smallProductMaker = el.select(".info_mall .mall_txt .mall_img").attr("title");
+								if(smallProductMaker.equals("")){
+									smallProductMaker = "-";
+								}
+								String productRegisterDay = el.select(".etc .date").text();
+								productRegisterDay = productRegisterDay.substring(productRegisterDay.indexOf(" ")+1, productRegisterDay.lastIndexOf("."))+".01";
+								
+								
+								/*System.out.println("중분류 : "+midCategory.get(i).getMidCategory());
+								System.out.println("제품명 : "+smallProduct);
+								System.out.println("이미지 : "+smallProductMainPhotoLink);
+								System.out.println("포스팅 개수 : "+smallProductPostingCount);
+								System.out.println("네이버 쇼핑 검색 순서 : "+(naverShoppingRank));
+								System.out.println("제조사 : "+smallProductMaker);
+								System.out.println("제조일 : "+productRegisterDay);
+								System.out.println("제품ID : "+smallProductId);*/
+								
+								blliSmallProductVO.setMidCategory(midCategory.get(i).getMidCategory());
+								blliSmallProductVO.setMidCategoryId(midCategory.get(i).getMidCategoryId());
+								blliSmallProductVO.setSmallProduct(smallProduct.replaceAll("%26", "&"));
+								blliSmallProductVO.setSmallProductPostingCount(smallProductPostingCount);
+								blliSmallProductVO.setNaverShoppingRank(naverShoppingRank);
+								blliSmallProductVO.setSmallProductMaker(smallProductMaker);
+								blliSmallProductVO.setProductRegisterDay(productRegisterDay);
+								blliSmallProductVO.setSmallProductId(smallProductId);
+								
+								doc = Jsoup.connect("http://shopping.naver.com/detail/detail.nhn?nv_mid="+smallProductId+"&cat_id="+midCategory.get(i).getMidCategoryId()+"&frm=NVSHMDL&query=").timeout(0).get();
+								smallProductMainPhotoLink = doc.select("#summary_thumbnail_img").attr("src");
+								blliSmallProductVO.setSmallProductMainPhotoLink(blliFileDownLoader.imgFileDownLoader(smallProductMainPhotoLink, smallProductId, "smallProduct"));
+								
 								productDAO.insertSmallProduct(blliSmallProductVO);
-							}
-							
-							Elements ele = doc.select("#price_compare tbody tr");
-							//System.out.println("*************** 구매링크 ***************");
-							for(Element elem : ele){
-								BlliSmallProductBuyLinkVO blliSmallProductBuyLinkVO = new BlliSmallProductBuyLinkVO();
-								String buyLink = elem.select(".buy_area a").attr("href");
-								String buyLinkPrice = elem.select(".price a").text().replace(",", "");
-								String buyLinkDeliveryCost = elem.select(".gift").first().text().trim();
-								String buyLinkOption = elem.select(".gift").last().text().trim();
-								String seller = elem.select(".mall a").text();
-								if(seller.equals("")){
-									seller = elem.select(".mall a img").attr("alt");
-								}
-								/*System.out.println("구매 링크 : "+buyLink);
-								System.out.println("판매 가격 : "+buyLinkPrice);
-								System.out.println("배송비 : "+buyLinkDeliveryCost);
-								System.out.println("부가정보 : "+buyLinkOption);
-								System.out.println("쇼핑몰 : "+seller);*/
 								
-								blliSmallProductBuyLinkVO.setSmallProductId(smallProductId);
-								blliSmallProductBuyLinkVO.setBuyLink(buyLink);
-								blliSmallProductBuyLinkVO.setBuyLinkPrice(buyLinkPrice);
-								blliSmallProductBuyLinkVO.setBuyLinkDeliveryCost(buyLinkDeliveryCost);
-								blliSmallProductBuyLinkVO.setBuyLinkOption(buyLinkOption);
-								blliSmallProductBuyLinkVO.setSeller(seller);
-								
-								updateResult = productDAO.updateSmallProductBuyLink(blliSmallProductBuyLinkVO);
-								if(updateResult == 0){
-									productDAO.insertSmallProductBuyLink(blliSmallProductBuyLinkVO);
+								Elements ele = doc.select("#price_compare tbody tr");
+								//System.out.println("*************** 구매링크 ***************");
+								for(Element elem : ele){
+									BlliSmallProductBuyLinkVO blliSmallProductBuyLinkVO = new BlliSmallProductBuyLinkVO();
+									String buyLink = elem.select(".buy_area a").attr("href");
+									String buyLinkPrice = elem.select(".price a").text().replace(",", "");
+									String buyLinkDeliveryCost = elem.select(".gift").first().text().trim();
+									String buyLinkOption = elem.select(".gift").last().text().trim();
+									String seller = elem.select(".mall a").text();
+									if(seller.equals("")){
+										seller = elem.select(".mall a img").attr("alt");
+									}
+									/*System.out.println("구매 링크 : "+buyLink);
+									System.out.println("판매 가격 : "+buyLinkPrice);
+									System.out.println("배송비 : "+buyLinkDeliveryCost);
+									System.out.println("부가정보 : "+buyLinkOption);
+									System.out.println("쇼핑몰 : "+seller);
+									System.out.println("제품 ID : "+smallProductId);*/
+									
+									blliSmallProductBuyLinkVO.setSmallProductId(smallProductId);
+									blliSmallProductBuyLinkVO.setBuyLink(buyLink);
+									blliSmallProductBuyLinkVO.setBuyLinkPrice(buyLinkPrice);
+									blliSmallProductBuyLinkVO.setBuyLinkDeliveryCost(buyLinkDeliveryCost);
+									blliSmallProductBuyLinkVO.setBuyLinkOption(buyLinkOption);
+									blliSmallProductBuyLinkVO.setSeller(seller);
+									
+									int isSmallProductSeller = productDAO.isSmallProductSeller(blliSmallProductBuyLinkVO);
+									if(isSmallProductSeller == 0){
+										productDAO.insertSmallProductBuyLink(blliSmallProductBuyLinkVO);
+									}
 								}
+								insertSmallProductCount++;
+								//System.out.println("*****************************************");
+							}else if(smallProductStatus.equals("confirmed")){
+								String smallProduct = el.select(".info .tit").text();
+								smallProduct = smallProduct.replaceAll("&", "%26");
+								try{
+									doc = Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+smallProduct+
+											"&display=1&start=1&target=blog&sort=sim").timeout(5000).get();
+									if(doc.select("message").text().contains("Query limit exceeded")){
+										key = "0a044dc7c63b8f3b9394e1a5e49db7ab";
+										doc = Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+smallProduct+
+												"&display=1&start=1&target=blog&sort=sim").timeout(5000).get();
+									}
+								}catch(SocketTimeoutException se){
+									se.printStackTrace();
+									continue;
+								}
+								String totalPostingText = doc.select("total").text().trim();
+								if(totalPostingText.equals("")){
+									totalPostingText = "0";
+								}
+								int smallProductPostingCount = Integer.parseInt(totalPostingText);
+								blliSmallProductVO.setSmallProductPostingCount(smallProductPostingCount);
+								blliSmallProductVO.setNaverShoppingRank(naverShoppingRank);
+								blliSmallProductVO.setSmallProductId(smallProductId);
+								
+								productDAO.updateSmallProduct(blliSmallProductVO);
+								
+								doc = Jsoup.connect("http://shopping.naver.com/detail/detail.nhn?nv_mid="+smallProductId+"&cat_id="+midCategory.get(i).getMidCategoryId()+"&frm=NVSHMDL&query=").timeout(0).get();
+								Elements ele = doc.select("#price_compare tbody tr");
+								//System.out.println("*************** 구매링크 ***************");
+								for(Element elem : ele){
+									BlliSmallProductBuyLinkVO blliSmallProductBuyLinkVO = new BlliSmallProductBuyLinkVO();
+									String buyLink = elem.select(".buy_area a").attr("href");
+									String buyLinkPrice = elem.select(".price a").text().replace(",", "");
+									String buyLinkDeliveryCost = elem.select(".gift").first().text().trim();
+									String buyLinkOption = elem.select(".gift").last().text().trim();
+									String seller = elem.select(".mall a").text();
+									if(seller.equals("")){
+										seller = elem.select(".mall a img").attr("alt");
+									}
+									/*System.out.println("구매 링크 : "+buyLink);
+									System.out.println("판매 가격 : "+buyLinkPrice);
+									System.out.println("배송비 : "+buyLinkDeliveryCost);
+									System.out.println("부가정보 : "+buyLinkOption);
+									System.out.println("쇼핑몰 : "+seller);*/
+									
+									blliSmallProductBuyLinkVO.setSmallProductId(smallProductId);
+									blliSmallProductBuyLinkVO.setBuyLink(buyLink);
+									blliSmallProductBuyLinkVO.setBuyLinkPrice(buyLinkPrice);
+									blliSmallProductBuyLinkVO.setBuyLinkDeliveryCost(buyLinkDeliveryCost);
+									blliSmallProductBuyLinkVO.setBuyLinkOption(buyLinkOption);
+									blliSmallProductBuyLinkVO.setSeller(seller);
+									
+									productDAO.updateSmallProductBuyLink(blliSmallProductBuyLinkVO);
+								}
+								updateSmallProductCount++;
+							}else{
+								notUpdateProductCount++;
 							}
-							//System.out.println("*****************************************");
 						}
 						page++;
+						allSmallProductCount += naverShoppingRank;
+						naverShoppingRank = 0;
 					}while(page <= lastPage);
-					System.out.println("소제품 카운트 : "+countOfSmallProduct);
-					countOfAllSmallProduct += countOfSmallProduct;
 				}
 				flag = false;
 			}catch(Exception e){
 				exceptionCount++;
-				e.printStackTrace();
+				allExceptionCount++;
+				detailException.put(smallProductId, e.toString());
 			}
 		}
 		System.out.println("*****************************************");
-		System.out.println("총 중분류 개수 : "+countOfMidCategory);
-		System.out.println("총 소제품 개수 : "+countOfAllSmallProduct);
-		
+		System.out.println("총 중분류 개수 : "+midCategory.size());
+		System.out.println("총 소제품 개수 : "+allSmallProductCount);
+		System.out.println("insert한 소제품 개수 : "+insertSmallProductCount);
+		System.out.println("update한 소제품 개수 : "+updateSmallProductCount);
+		System.out.println("insert한 조건에 맞지 않는 소제품 개수 : "+denySmallProductCount);
+		System.out.println("update하지 않은 소제품 개수"+notUpdateProductCount);
+		System.out.println("Exception 발생 횟수 : "+allExceptionCount);
+		Iterator<String> smallProductIdList = detailException.keySet().iterator();
+		while(smallProductIdList.hasNext()){
+			smallProductId = smallProductIdList.next();
+			System.out.println("Exception 발생한 smallProductId : "+smallProductId);
+			System.out.println("Exception 내용 : "+detailException.get(smallProductId));
+		}
 		long end = System.currentTimeMillis();  //종료시간
 		
 		//종료-시작=실행시간		

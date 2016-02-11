@@ -110,7 +110,7 @@ $(document).ready(function(){
 						div += "<div class='result_last fr'>";
 						div += "<ul>";
 						div += "<li>";
-						div += "<p class='result_sns'>"+resultData[i].smallProductPostingCount+"</p>";
+						div += "<p class='result_sns'>"+resultData[i].dbInsertPostingCount+"</p>";
 						div += "<p class='result_sns_text'>blog</p>";
 						div += "</li>";
 						div += "<li>";
@@ -161,7 +161,7 @@ $(document).ready(function(){
 						div += "<div class='result_last fr'>";
 						div += "<ul>";
 						div += "<li>";
-						div += "<p class='result_sns'>"+resultData[i].smallProductPostingCount+"</p>";
+						div += "<p class='result_sns'>"+resultData[i].dbInsertPostingCount+"</p>";
 						div += "<p class='result_sns_text'>blog</p>";
 						div += "</li>";
 						div += "<li>";
@@ -235,7 +235,7 @@ $(document).ready(function(){
 		<div class="result_last fr">
 			<ul>
 				<li>
-					<p class="result_sns">${smallProductList.smallProductPostingCount}</p>
+					<p class="result_sns">${smallProductList.dbInsertPostingCount}</p>
 					<p class="result_sns_text">blog</p>
 				</li>
 				<li>
@@ -298,7 +298,7 @@ $(document).ready(function(){
 		<div class="result_last fr">
 			<ul>
 				<li>
-					<p class="result_sns">${smallProductList.smallProductPostingCount}</p>
+					<p class="result_sns">${smallProductList.dbInsertPostingCount}</p>
 					<p class="result_sns_text">blog</p>
 				</li>
 				<li>

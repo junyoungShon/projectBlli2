@@ -96,14 +96,16 @@ CREATE TABLE blli_small_product ( -- naver_shopping_link  VARCHAR2(300) NOT NULL
    small_product_main_photo_link VARCHAR2(300) NOT NULL ,
    small_product_score  NUMBER(4) default 0 ,
    small_product_posting_count NUMBER(8) NOT NULL , -- default 0을 NOT NULL로 변경
+   db_insert_posting_count     NUMBER(3) default 0, -- 추가
    naver_shopping_rank NUMBER(5) NOT NULL, -- 추가, naver_shopping_order를 naver_shopping_rank로 변경
    product_register_day DATE NOT NULL, -- 추가
    product_db_insert_date DATE NOT NULL, -- 추가
    mid_category_id      VARCHAR2(30) NOT NULL, -- 추가
    small_product_status VARCHAR2(30) NOT NULL, -- 추가
    search_time DATE NULL, -- 추가
-   detail_view_count number(8) not null, --추가
-   small_Product_Ranking number(4) not null, --추가
+   detail_view_count number(8) default 0, --추가
+   blli_small_product number(8) not null, --추가
+   small_product_ranking number(4) not null, --추가
    constraint fk_small_prod_mid_cate foreign key(mid_category, mid_category_id) references blli_mid_category(mid_category, mid_category_id) -- mid_category_id 추가
 );
 

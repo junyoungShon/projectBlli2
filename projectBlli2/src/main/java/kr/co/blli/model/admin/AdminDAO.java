@@ -32,7 +32,7 @@ public interface AdminDAO {
 	
 	void deleteProduct(String postingUrl);
 	
-	void registerPosting(BlliPostingVO vo);
+	int registerPosting(BlliPostingVO vo);
 	
 	void deleteSmallProduct(String smallProductId);
 
@@ -45,6 +45,8 @@ public interface AdminDAO {
 	void updateMidCategoryWhenToUse(BlliSmallProductVO vo);
 
 	String getMidCategory(String smallProductId);
+
+	void updatePostingCount(BlliPostingVO vo);
 	
 }
  

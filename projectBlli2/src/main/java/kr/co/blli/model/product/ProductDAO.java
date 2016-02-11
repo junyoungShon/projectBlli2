@@ -124,6 +124,12 @@ public interface ProductDAO {
 
 	int selectSmallProductNumByMidCategoryId(String midCategoryId);
 
+	String getSmallProductStatus(String smallProductId);
+
+	int isSmallProductSeller(BlliSmallProductBuyLinkVO blliSmallProductBuyLinkVO);
+
+	void insertDeadSmallProduct(BlliSmallProductVO blliSmallProductVO);
+	
 	List<String> selectMidCategoryVOList();
 
 	List<BlliSmallProductVO> selectAllSmallProductByMidCategoryId(String string);

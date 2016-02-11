@@ -132,6 +132,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update blli_posting set posting_status = 'confirmed', posting_photo_link = #{postingPhotoLink} where posting_url = #{postingUrl}
 	</update>
 	
+	<update id="updatePostingCount">
+		update blli_small_product set db_insert_posting_count = db_insert_posting_count + 1 where small_product_id = #{smallProductId}
+	</update>
+	
 	<update id="deleteSmallProduct">
 		update blli_small_product set small_product_status = 'dead' where small_product_id = #{smallProductId}
 	</update>

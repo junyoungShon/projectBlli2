@@ -69,4 +69,12 @@ public class PostingDAOImpl implements PostingDAO{
 	public void updatePostingScore(BlliPostingVO blliPostingVO) {
 		sqlSessionTemplate.update("posting.updatePostingScore", blliPostingVO);
 	}
+	@Override
+	public String getPostingStatus(BlliPostingVO blliPostingVO) {
+		return sqlSessionTemplate.selectOne("posting.getPostingStatus", blliPostingVO);
+	}
+	@Override
+	public void insertDeadPosting(BlliPostingVO blliPostingVO) {
+		sqlSessionTemplate.insert("posting.insertDeadPosting", blliPostingVO);
+	}
 }

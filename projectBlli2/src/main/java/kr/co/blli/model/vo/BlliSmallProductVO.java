@@ -26,8 +26,11 @@ public class BlliSmallProductVO {
 	private int detailViewCount;
 	//16.02.05 추가
 	private String productDbInsertDate;
+	//16.02.06 추가
+	private int dbInsertPostingCount;
 	public BlliSmallProductVO() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
 	public BlliSmallProductVO(String smallProduct, String midCategory,
 			String midCategoryId, String smallProductMaker,
@@ -37,7 +40,8 @@ public class BlliSmallProductVO {
 			int naverShoppingRank, int smallProductPostingCount,
 			String productRegisterDay, String smallProductId,
 			int smallProductRanking, int isDib, String minPrice,
-			String searchTime, int detailViewCount, String productDbInsertDate) {
+			String searchTime, int detailViewCount, String productDbInsertDate,
+			int dbInsertPostingCount) {
 		super();
 		this.smallProduct = smallProduct;
 		this.midCategory = midCategory;
@@ -59,6 +63,7 @@ public class BlliSmallProductVO {
 		this.searchTime = searchTime;
 		this.detailViewCount = detailViewCount;
 		this.productDbInsertDate = productDbInsertDate;
+		this.dbInsertPostingCount = dbInsertPostingCount;
 	}
 	public String getSmallProduct() {
 		return smallProduct;
@@ -180,6 +185,12 @@ public class BlliSmallProductVO {
 	public void setProductDbInsertDate(String productDbInsertDate) {
 		this.productDbInsertDate = productDbInsertDate;
 	}
+	public int getDbInsertPostingCount() {
+		return dbInsertPostingCount;
+	}
+	public void setDbInsertPostingCount(int dbInsertPostingCount) {
+		this.dbInsertPostingCount = dbInsertPostingCount;
+	}
 	@Override
 	public String toString() {
 		return "BlliSmallProductVO [smallProduct=" + smallProduct
@@ -198,6 +209,8 @@ public class BlliSmallProductVO {
 				+ ", smallProductRanking=" + smallProductRanking + ", isDib="
 				+ isDib + ", minPrice=" + minPrice + ", searchTime="
 				+ searchTime + ", detailViewCount=" + detailViewCount
-				+ ", productDbInsertDate=" + productDbInsertDate + "]";
+				+ ", productDbInsertDate=" + productDbInsertDate
+				+ ", dbInsertPostingCount=" + dbInsertPostingCount + "]";
 	}
+	
 }

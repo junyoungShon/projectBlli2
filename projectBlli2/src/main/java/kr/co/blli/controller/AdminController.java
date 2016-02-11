@@ -112,4 +112,8 @@ public class AdminController {
 	public void registerSmallProduct(@RequestBody List<Map<String, Object>> smallProductInfo){
 		adminService.registerSmallProduct(smallProductInfo);
 	}
+	@RequestMapping("insertCafeArticle.do")
+	public void insertCafeArticle(){
+		adminService.insertCafeArticle();
+	}	
 }

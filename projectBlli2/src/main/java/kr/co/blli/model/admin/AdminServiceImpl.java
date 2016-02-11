@@ -305,7 +305,10 @@ public class AdminServiceImpl implements AdminService{
 			if(delete.equals("YES")){
 				adminDAO.deletePosting(vo);
 			}else{
-				adminDAO.registerPosting(vo);
+				int updateResult = adminDAO.registerPosting(vo);
+				if(updateResult != 0){
+					adminDAO.updatePostingCount(vo);
+				}
 			}
 		}
 	}
@@ -350,6 +353,19 @@ public class AdminServiceImpl implements AdminService{
 					}
 				}
 			}
+		}
+	}
+	@Override
+	public void insertCafeArticle() {
+		try {
+			Document doc = Jsoup.connect("http://openapi.naver.com/search?key=2a636a785d0e03f7048319f8adb3d912&query=요리&target=cafearticle&start=1&display=10&sort=sim").get();
+			//System.out.println(doc);
+			String cafeUrl = doc.select("item link").text();
+			System.out.println(cafeUrl);
+			doc = Jsoup.connect(cafeUrl).get();
+			System.out.println(doc);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }
