@@ -124,7 +124,11 @@ public class MemberController {
 			
 			//메인페이지로 이동할 때 회원에게 추천 될 소분류 상품과 관련 된 포스팅을 보여준다.<으아아아 여기있으면 아니되오!!>
 			List<BlliPostingVO> blliPostingVOList = productService.selectPostingBySmallProductList(blliSmallProductVOList,blliMemberVO.getMemberId(),"1");
-		
+			System.out.println(blliSmallProductVOList);
+			for(int i=0;i<blliSmallProductVOList.size();i++){
+				System.out.println(i+"소제품 명"+blliSmallProductVOList.get(i).getSmallProduct());
+			}
+			System.out.println(blliPostingVOList);
 			mav.setViewName("home");
 			//회원정보 삽입
 			mav.addObject("blliMemberVO", blliMemberVO);

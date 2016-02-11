@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
@@ -21,6 +22,7 @@ import kr.co.blli.model.vo.BlliPagingBean;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 import kr.co.blli.model.vo.ListVO;
+import kr.co.blli.utility.BlliFileDownLoader;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -40,6 +42,9 @@ public class AdminServiceImpl implements AdminService{
 	private JavaMailSender mailSender;
 	@Resource
 	private VelocityConfig velocityConfig;
+	@Resource
+	private BlliFileDownLoader blliFileDownLoader;
+	
 	
 	
 	/**
@@ -293,8 +298,9 @@ public class AdminServiceImpl implements AdminService{
 			String postingPhotoLink = urlAndImage.get(i).get("postingPhotoLink").toString();
 			String smallProductId = urlAndImage.get(i).get("smallProductId").toString();
 			BlliPostingVO vo = new BlliPostingVO();
+			//이미지 파일 다운로드
+			vo.setPostingPhotoLink(blliFileDownLoader.imgFileDownLoader(postingPhotoLink,UUID.randomUUID().toString().replace("-", ""), "postingImage"));
 			vo.setPostingUrl(postingUrl);
-			vo.setPostingPhotoLink(postingPhotoLink);
 			vo.setSmallProductId(smallProductId);
 			if(delete.equals("YES")){
 				adminDAO.deletePosting(vo);

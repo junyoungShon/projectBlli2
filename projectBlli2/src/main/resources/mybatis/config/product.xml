@@ -91,11 +91,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<insert id="insertSmallProduct">
 		insert into blli_small_product(small_product_id, small_product, mid_category, small_product_maker, small_product_main_photo_link, 
-		small_product_posting_count, naver_shopping_rank, product_register_day, mid_category_id, small_product_status, product_db_insert_date)
+		small_product_posting_count, naver_shopping_rank, product_register_day, mid_category_id, small_product_status, product_db_insert_date,detail_view_count,small_Product_Ranking)
 		values(#{smallProductId}, #{smallProduct}, #{midCategory}, #{smallProductMaker}, #{smallProductMainPhotoLink}, 
-		#{smallProductPostingCount}, #{naverShoppingRank}, #{productRegisterDay}, #{midCategoryId}, 'unconfirmed', sysdate)
+		#{smallProductPostingCount}, #{naverShoppingRank}, #{productRegisterDay}, #{midCategoryId}, 'unconfirmed', sysdate,0,0)
 	</insert>
-	
 	<update id="updateSmallProduct">
 		update blli_small_product set mid_category = #{midCategory}, small_product_maker = #{smallProductMaker}, 
 		small_product_main_photo_link = #{smallProductMainPhotoLink}, 
@@ -193,7 +192,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from (select rownum as rn,SMALL_PRODUCT, MID_CATEGORY,mid_CATEGORY_ID, SMALL_PRODUCT_MAKER, SMALL_PRODUCT_WHENTOUSE_MIN, SMALL_PRODUCT_WHENTOUSE_MAX, SMALL_PRODUCT_DIBS_COUNT, 
 		SMALL_PRODUCT_MAIN_PHOTO_LINK, SMALL_PRODUCT_SCORE, SMALL_PRODUCT_POSTING_COUNT, NAVER_SHOPPING_RANK, PRODUCT_REGISTER_DAY,small_product_id
 		from BLLI_SMALL_PRODUCT
-		where MID_CATEGORY = #{recommMid} and #{babyMonthAge}  >= SMALL_PRODUCT_WHENTOUSE_MIN and #{babyMonthAge} <= SMALL_PRODUCT_WHENTOUSE_MAX
+		where MID_CATEGORY_id = #{recommMid} and #{babyMonthAge}  >= SMALL_PRODUCT_WHENTOUSE_MIN and #{babyMonthAge} <= SMALL_PRODUCT_WHENTOUSE_MAX
 		order by SMALL_PRODUCT_DIBS_COUNT desc) where rn<3
 		]]> 
 	</select>
@@ -202,7 +201,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from (select rownum as rn,SMALL_PRODUCT, MID_CATEGORY,mid_CATEGORY_ID, SMALL_PRODUCT_MAKER, SMALL_PRODUCT_WHENTOUSE_MIN, SMALL_PRODUCT_WHENTOUSE_MAX, SMALL_PRODUCT_DIBS_COUNT, 
 		SMALL_PRODUCT_MAIN_PHOTO_LINK, SMALL_PRODUCT_SCORE, SMALL_PRODUCT_POSTING_COUNT,  NAVER_SHOPPING_RANK, PRODUCT_REGISTER_DAY,small_product_id
 		from BLLI_SMALL_PRODUCT
-		where MID_CATEGORY = #{recommMid} and #{babyMonthAge}  >= SMALL_PRODUCT_WHENTOUSE_MIN and #{babyMonthAge} <= SMALL_PRODUCT_WHENTOUSE_MAX
+		where MID_CATEGORY_id = #{recommMid} and #{babyMonthAge}  >= SMALL_PRODUCT_WHENTOUSE_MIN and #{babyMonthAge} <= SMALL_PRODUCT_WHENTOUSE_MAX
 		order by SMALL_PRODUCT_DIBS_COUNT desc) where rn=1
 		]]> 
 	</select>

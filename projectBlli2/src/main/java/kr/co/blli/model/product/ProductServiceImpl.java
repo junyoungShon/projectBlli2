@@ -90,11 +90,12 @@ public class ProductServiceImpl implements ProductService{
 		}else{
 			for(int i=0;i<blliMidCategoryVOList.size();i++){
 				HashMap<String,String> paraMap = new HashMap<String, String>();
-				paraMap.put("recommMid", blliMidCategoryVOList.get(i).getMidCategory());
+				paraMap.put("recommMid", blliMidCategoryVOList.get(i).getMidCategoryId());
 				paraMap.put("babyMonthAge",Integer.toString(blliBabyVO.getBabyMonthAge()));
 				// 중제품 당 찜 상위 2개씩을 가져온다.
 				List<BlliSmallProductVO> tempList = productDAO.selectSameAgeMomBestPickedSmallProductList(paraMap);
 				for(int j=0;j<tempList.size();j++){
+					System.out.println(tempList.get(j).getSmallProduct());
 					blliSmallProductVOList.add(tempList.get(j));
 				}
 			}

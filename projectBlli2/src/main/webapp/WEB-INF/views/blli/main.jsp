@@ -18,7 +18,39 @@
 	        scrollController();
 	    });
 	}
-	     
+	//블로그로 이동시키며 체류시간을 측정하는 함수
+	function goBlogPosting(targetURL,smallProductId){
+		//도착시간 체크를 위해 
+		var connectDate = new Date();
+		var connectTime = connectDate.getTime();
+		window.open(targetURL, "_blank");
+		//중복 실행 방지 메서드
+		var count = 0;
+		//다시 사용자가 본 서비스 브라우져에서 움직였을 때 메서드 체류시간 기록
+		setTimeout(function(){
+			$('body').mouseover(function(){
+				if(count==0){
+					count=1;
+					var exitDate = new Date();
+					var exitTime = exitDate.getTime();
+					var residenceTime = Math.round((exitTime - connectTime)/1000);
+					$.ajax({
+						type:"get",
+						url:"recordResidenceTime.do?postingUrl="
+							+targetURL+"&smallProductId="
+							+smallProductId+"&postingTotalResidenceTime="
+							+residenceTime,
+							success:function(date){
+							alert('체류시간 기록 완료 : '+residenceTime+'초');
+							}
+					});
+				}else{
+					return false;
+				}
+		 	}); 
+		},2000);
+		
+	}
 	// 메인 메뉴의 위치를 제어하는 함수
 	function scrollController() {
 	    currentScrollTop = $(window).scrollTop();
@@ -221,7 +253,7 @@
 						'</div></div><div style="height:245px;"><div class="result_foto fl"><a href="goPosting.do?postingUrl='+
 						data[i].postingUrl+
 						'&smallProductId='+
-						data[i].smallProductId+'&postingTitle='+data[i].postingTitle+'"><img src="http://t1.daumcdn.net/thumb/R1024x0/?fname='+
+						data[i].smallProductId+'&postingTitle='+data[i].postingTitle+'"><img src="'+
 						data[i].postingPhotoLink+
 						'" style="width: 342px; max-height: 247px;"></a></div><div class="fl"><div class="product_text2">'+
 						data[i].postingSummary+
@@ -282,9 +314,6 @@
 					월령별 추천상품 
 				</div>
 				<div style="width:870px; float:left;">
-					<!-- <div class="fl">
-						<a href="#"><img src="./img/allow_l.png" alt="왼쪽화살표" style="margin-top:70px;"></a>
-					</div> -->
 				
 					<div id="menu-wrapper">
 						<ul class="midRecommProduct">
@@ -314,9 +343,6 @@
 					</c:forEach>
 						</ul>
 					</div>
-					<!-- <div class="fr">
-						<a href="#"><img src="./img/allow_r.png" alt="오른쪽화살표" style="margin-top:50px;"></a>
-					</div> -->
 				</div>
 			</div>
 		</div>
@@ -439,8 +465,9 @@
 				</div>
 				<div style="height:245px;">
 					<div class="result_foto fl">
-						<a href="goPosting.do?postingUrl=${postingList.postingUrl}&smallProductId=${postingList.smallProductId}&postingTitle=${postingList.postingTitle}">
-							<img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${postingList.postingPhotoLink}" style="width: 342px; max-height: 247px;">
+					
+						<a href="#" onclick="goBlogPosting('${postingList.postingUrl}','${postingList.smallProductId}')">
+							<img src="${postingList.postingPhotoLink}" style="width: 342px; max-height: 247px;">
 						</a>
 					</div>
 					<div class="fl">
@@ -486,7 +513,7 @@
 					</div>
 				</div>
 			</div>
-			<p align="center"><img id="loading" src="${initParam.root}image/loading.gif" style="width: 50px"></p>
+			<%-- <p align="center"><img id="loading" src="${initParam.root}image/loading.gif" style="width: 50px"></p> --%>
 			</c:forEach>
 		</div>
 		<div class="main_right_list">

@@ -102,7 +102,7 @@ CREATE TABLE blli_small_product ( -- naver_shopping_link  VARCHAR2(300) NOT NULL
    mid_category_id      VARCHAR2(30) NOT NULL, -- 추가
    small_product_status VARCHAR2(30) NOT NULL, -- 추가
    search_time DATE NULL, -- 추가
-   blli_small_product number(8) not null, --추가
+   detail_view_count number(8) not null, --추가
    small_Product_Ranking number(4) not null, --추가
    constraint fk_small_prod_mid_cate foreign key(mid_category, mid_category_id) references blli_mid_category(mid_category, mid_category_id) -- mid_category_id 추가
 );

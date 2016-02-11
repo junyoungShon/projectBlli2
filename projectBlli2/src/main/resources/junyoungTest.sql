@@ -45,7 +45,11 @@ CREATE TABLE BLLI_NOT_RECOMM_MID_CATEGORY(
 	constraint fk_NOT_recomm_mid_mid_cate foreign key(mid_category,category_id) references blli_mid_category(mid_category,category_id), --수정
 	constraint pk_NOT_recomm_mid_cate primary key (member_id, mid_category)
 )
-
+select * from (select rownum as rn,SMALL_PRODUCT, MID_CATEGORY,mid_CATEGORY_ID, SMALL_PRODUCT_MAKER, SMALL_PRODUCT_WHENTOUSE_MIN, SMALL_PRODUCT_WHENTOUSE_MAX, SMALL_PRODUCT_DIBS_COUNT, 
+		SMALL_PRODUCT_MAIN_PHOTO_LINK, SMALL_PRODUCT_SCORE, SMALL_PRODUCT_POSTING_COUNT, NAVER_SHOPPING_RANK, PRODUCT_REGISTER_DAY,small_product_id
+		from BLLI_SMALL_PRODUCT
+		where MID_CATEGORY = '8191428972' and '1' >= SMALL_PRODUCT_WHENTOUSE_MIN and '1' <= SMALL_PRODUCT_WHENTOUSE_MAX
+		order by SMALL_PRODUCT_DIBS_COUNT desc) where rn<3
 
 select 
 from recommMidCategory

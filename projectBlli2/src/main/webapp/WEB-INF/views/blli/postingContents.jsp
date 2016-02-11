@@ -25,9 +25,7 @@
 		  }
 		});
 		
-		//도착시간 체크를 위해 
-		var connectDate = new Date();
-		var connectTime = connectDate.getTime();
+		
 		//뒤로 가기 버튼 클릭 시 뒤로 간다.
 		$('.backBtn').click(function(){
 			history.back();
@@ -36,19 +34,7 @@
 		//사용자가 페이지를 벗어나면 체류시간을 기록한다.
 		 $(window).on("beforeunload", function(){
 		        //체류시간 체크를 위해 새로운 시간 객체 생성
-				var exitDate = new Date();
-				var exitTime = exitDate.getTime();
-				var residenceTime = Math.round((exitTime - connectTime)/1000);
-				$.ajax({
-					type:"get",
-					url:"recordResidenceTime.do?postingUrl="
-						+"${requestScope.blliPostingVO.postingUrl}&smallProductId="
-							+"${requestScope.blliPostingVO.smallProductId}&postingTotalResidenceTime="
-							+residenceTime,
-					success:function(){
-						history.back();
-					}
-				});
+				
 		 });
 	});
 	

@@ -161,8 +161,11 @@ public class SearchController {
 	  * @param blliPostingVO
 	 */
 	@RequestMapping("recordResidenceTime.do")
-	public void recordResidenceTime(BlliPostingVO blliPostingVO){
+	@ResponseBody
+	public String recordResidenceTime(BlliPostingVO blliPostingVO){
+		System.out.println("오긴오냐");
 		postingService.recordResidenceTime(blliPostingVO);
+		return "success";
 	}
 	
 	@RequestMapping("goMidCategoryDetailView.do")

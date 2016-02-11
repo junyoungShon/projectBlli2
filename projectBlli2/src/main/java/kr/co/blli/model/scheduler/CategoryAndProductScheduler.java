@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import javax.annotation.Resource;
 
 import kr.co.blli.model.product.ProductDAO;
-import kr.co.blli.model.product.ProductService;
 import kr.co.blli.model.vo.BlliBigCategoryVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliSmallProductBuyLinkVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
+import kr.co.blli.utility.BlliFileDownLoader;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.chainsaw.Main;
@@ -27,6 +27,8 @@ public class CategoryAndProductScheduler {
 	
 	@Resource
 	private ProductDAO productDAO;
+	@Resource
+	private BlliFileDownLoader blliFileDownLoader;
 	
 	/**
 	 * 
@@ -101,7 +103,8 @@ public class CategoryAndProductScheduler {
 								imgSrc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?cat_id="+categoryId).timeout(0).
 										  get().select("._product_list .img_area img").attr("data-original");
 							}
-							blliMidCategoryVO.setMidCategoryMainPhotoLink(imgSrc);
+							String filePostion = blliFileDownLoader.imgFileDownLoader(imgSrc,categoryId,"midCategory");
+							blliMidCategoryVO.setMidCategoryMainPhotoLink(filePostion);
 							System.out.println((index++) + " " + blliMidCategoryVO);
 							doc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?pagingIndex=1"+
 									"&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&cat_id="+
@@ -229,7 +232,6 @@ public class CategoryAndProductScheduler {
 							System.out.println("제조사 : "+smallProductMaker);
 							System.out.println("제조일 : "+productRegisterDay);
 							System.out.println("제품ID : "+smallProductId);*/
-							
 							blliSmallProductVO.setMidCategory(midCategory.get(i).getMidCategory());
 							blliSmallProductVO.setMidCategoryId(midCategory.get(i).getMidCategoryId());
 							blliSmallProductVO.setSmallProduct(smallProduct.replaceAll("%26", "&"));
@@ -241,8 +243,8 @@ public class CategoryAndProductScheduler {
 							
 							doc = Jsoup.connect("http://shopping.naver.com/detail/detail.nhn?nv_mid="+smallProductId+"&cat_id="+midCategory.get(i).getMidCategoryId()+"&frm=NVSHMDL&query=").timeout(0).get();
 							smallProductMainPhotoLink = doc.select("#summary_thumbnail_img").attr("src");
-							blliSmallProductVO.setSmallProductMainPhotoLink(smallProductMainPhotoLink);
-							
+							blliSmallProductVO.setSmallProductMainPhotoLink(blliFileDownLoader.imgFileDownLoader(smallProductMainPhotoLink, smallProductId, "smallProduct"));
+							System.out.println(blliSmallProductVO);
 							int updateResult = productDAO.updateSmallProduct(blliSmallProductVO);
 							if(updateResult == 0){
 								productDAO.insertSmallProduct(blliSmallProductVO);
