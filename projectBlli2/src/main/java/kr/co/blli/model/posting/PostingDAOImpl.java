@@ -61,4 +61,20 @@ public class PostingDAOImpl implements PostingDAO{
 	public List<BlliPostingVO> searchPostingListInProductDetail(String searchWord) {
 		return sqlSessionTemplate.selectList("posting.searchPostingListInProductDetail", searchWord);
 	}
+	@Override
+	public List<BlliPostingVO> selectAllPosting() {
+		return sqlSessionTemplate.selectList("posting.selectAllPosting");
+	}
+	@Override
+	public void updatePostingScore(BlliPostingVO blliPostingVO) {
+		sqlSessionTemplate.update("posting.updatePostingScore", blliPostingVO);
+	}
+	@Override
+	public String getPostingStatus(BlliPostingVO blliPostingVO) {
+		return sqlSessionTemplate.selectOne("posting.getPostingStatus", blliPostingVO);
+	}
+	@Override
+	public void insertDeadPosting(BlliPostingVO blliPostingVO) {
+		sqlSessionTemplate.insert("posting.insertDeadPosting", blliPostingVO);
+	}
 }

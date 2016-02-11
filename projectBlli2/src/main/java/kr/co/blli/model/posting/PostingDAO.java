@@ -29,5 +29,13 @@ public interface PostingDAO {
 	int totalPageOfPosting(String searchWord);
 
 	List<BlliPostingVO> searchPostingListInProductDetail(String searchWord);
+	
+	List<BlliPostingVO> selectAllPosting();
+
+	void updatePostingScore(BlliPostingVO blliPostingVO);
+
+	String getPostingStatus(BlliPostingVO blliPostingVO);
+
+	void insertDeadPosting(BlliPostingVO blliPostingVO);
 
 }

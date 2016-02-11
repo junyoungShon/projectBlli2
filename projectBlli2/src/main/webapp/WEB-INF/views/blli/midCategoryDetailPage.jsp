@@ -12,7 +12,32 @@ $(document).ready(function(){
 		$( '.jbMenu' ).removeClass( 'jbFixed' );
 	  }
 	});
+	
+	//소제품 찜하기 스크립트
+	$('.in_fr').on("click", ".smallProductDibBtn",function(){
+		var smallProductId = $(this).children('.smallProductId').val();
+		$.ajax({
+			type:"get",
+			url:"smallProductDib.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+smallProductId,
+			success:function(result){
+				alert(result);
+				$('.smallProductDibBtn').each(function(index){
+					if($($('.smallProductDibBtn').get(index)).children('.smallProductId').val()==smallProductId){
+						if(result==1){
+							$($('.smallProductDibBtn').get(index)).children('.fa').removeClass("fa-heart-o").addClass("fa-heart");
+							$($('.smallProductDibBtn').get(index)).children('.dibsCount').text(Number($($('.smallProductDibBtn').get(index)).children('.dibsCount').text())+1);							
+						}else{
+							$($('.smallProductDibBtn').get(index)).children('.fa').removeClass("fa-heart").addClass("fa-heart-o");
+							$($('.smallProductDibBtn').get(index)).children('.dibsCount').text(Number($($('.smallProductDibBtn').get(index)).children('.dibsCount').text())-1);		
+						}
+					}
+				}) 
+			}
+		});
+	}); 
 
+	
+	
 	var count = 2;
 	var searchWord = "${requestScope.searchWord}";
 	var totalPage = ${requestScope.totalPage};
@@ -85,7 +110,7 @@ $(document).ready(function(){
 						div += "<div class='result_last fr'>";
 						div += "<ul>";
 						div += "<li>";
-						div += "<p class='result_sns'>"+resultData[i].smallProductPostingCount+"</p>";
+						div += "<p class='result_sns'>"+resultData[i].dbInsertPostingCount+"</p>";
 						div += "<p class='result_sns_text'>blog</p>";
 						div += "</li>";
 						div += "<li>";
@@ -136,7 +161,7 @@ $(document).ready(function(){
 						div += "<div class='result_last fr'>";
 						div += "<ul>";
 						div += "<li>";
-						div += "<p class='result_sns'>"+resultData[i].smallProductPostingCount+"</p>";
+						div += "<p class='result_sns'>"+resultData[i].dbInsertPostingCount+"</p>";
 						div += "<p class='result_sns_text'>blog</p>";
 						div += "</li>";
 						div += "<li>";
@@ -192,20 +217,16 @@ $(document).ready(function(){
 							<p class="result_price">${smallProductList.minPrice}원</p>
 						</div>
 						<div class="fr">
-							<c:if test="${smallProductList.isDib==0}">
-											<div style="margin-top: 15px">
-												<i class="fa fa-heart-o fa-2x smallProductDibBtn" style="color: red"></i>
-												<span style="font-size: 15px ;color: gray;">${smallProductList.smallProductDibsCount}</span>
-												<input type="hidden" value="${smallProductList.smallProductId}" class="smallProductId">
-											</div>
-									</c:if>
-									<c:if test="${smallProductList.isDib==1}">
-											<div style="margin-top: 15px">
-												<i class="fa fa-heart fa-2x smallProductDibBtn" style="color: red"></i>
-													<span style="font-size: 15px ;color: gray;">${smallProductList.smallProductDibsCount}</span>
-												<input type="hidden" value="${smallProductList.smallProductId}" class="smallProductId">
-									</div>
-									</c:if>
+								<div style="margin-top: 15px" class="smallProductDibBtn">
+						<c:if test="${smallProductList.isDib==0}">
+							<i class="fa fa-heart-o fa-2x" style="color: red"></i>
+						</c:if>
+						<c:if test="${smallProductList.isDib==1}">
+							<i class="fa fa-heart fa-2x" style="color: red"></i>
+						</c:if>
+							<span class="dibsCount" style="font-size: 15px ;color: gray;">${smallProductList.smallProductDibsCount}</span>
+							<input type="hidden" value="${smallProductList.smallProductId}" class="smallProductId">
+						</div>
 						</div>
 					</div>
 				</div>
@@ -214,7 +235,7 @@ $(document).ready(function(){
 		<div class="result_last fr">
 			<ul>
 				<li>
-					<p class="result_sns">${smallProductList.smallProductPostingCount}</p>
+					<p class="result_sns">${smallProductList.dbInsertPostingCount}</p>
 					<p class="result_sns_text">blog</p>
 				</li>
 				<li>
@@ -259,20 +280,16 @@ $(document).ready(function(){
 							<p class="result_price">${smallProductList.minPrice}원</p>
 						</div>
 						<div class="fr">
-							<c:if test="${smallProductList.isDib==0}">
-											<div style="margin-top: 15px">
-												<i class="fa fa-heart-o fa-2x smallProductDibBtn" style="color: red"></i>
-												<span style="font-size: 15px ;color: gray;">${smallProductList.smallProductDibsCount}</span>
-												<input type="hidden" value="${smallProductList.smallProductId}" class="smallProductId">
-											</div>
-									</c:if>
-									<c:if test="${smallProductList.isDib==1}">
-											<div style="margin-top: 15px">
-												<i class="fa fa-heart fa-2x smallProductDibBtn" style="color: red"></i>
-													<span style="font-size: 15px ;color: gray;">${smallProductList.smallProductDibsCount}</span>
-												<input type="hidden" value="${smallProductList.smallProductId}" class="smallProductId">
-									</div>
-									</c:if>
+						<div style="margin-top: 15px" class="smallProductDibBtn">
+						<c:if test="${smallProductList.isDib==0}">
+							<i class="fa fa-heart-o fa-2x" style="color: red"></i>
+						</c:if>
+						<c:if test="${smallProductList.isDib==1}">
+							<i class="fa fa-heart fa-2x" style="color: red"></i>
+						</c:if>
+							<span class="dibsCount" style="font-size: 15px ;color: gray;">${smallProductList.smallProductDibsCount}</span>
+							<input type="hidden" value="${smallProductList.smallProductId}" class="smallProductId">
+						</div>
 						</div>
 					</div>
 				</div>
@@ -281,7 +298,7 @@ $(document).ready(function(){
 		<div class="result_last fr">
 			<ul>
 				<li>
-					<p class="result_sns">${smallProductList.smallProductPostingCount}</p>
+					<p class="result_sns">${smallProductList.dbInsertPostingCount}</p>
 					<p class="result_sns_text">blog</p>
 				</li>
 				<li>

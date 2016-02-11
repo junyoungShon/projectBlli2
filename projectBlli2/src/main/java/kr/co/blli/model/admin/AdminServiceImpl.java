@@ -1,6 +1,8 @@
 package kr.co.blli.model.admin;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
@@ -15,12 +18,15 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 
+import kr.co.blli.model.vo.BlliDetailException;
+import kr.co.blli.model.vo.BlliLogVO;
 import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliPagingBean;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 import kr.co.blli.model.vo.ListVO;
+import kr.co.blli.utility.BlliFileDownLoader;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -40,6 +46,9 @@ public class AdminServiceImpl implements AdminService{
 	private JavaMailSender mailSender;
 	@Resource
 	private VelocityConfig velocityConfig;
+	@Resource
+	private BlliFileDownLoader blliFileDownLoader;
+	
 	
 	
 	/**
@@ -255,37 +264,26 @@ public class AdminServiceImpl implements AdminService{
 	
 	/**
 	 * @Method Name : selectProduct
-	 * @Method 설명 : 두개 이상의 소제품을 가지고 있는 포스팅을 한개 또는 두개 이상의 소제품으로 변경해주는 메서드
+	 * @Method 설명 : 두개 이상의 소제품을 가지고 있는 포스팅을 한개의 소제품으로 변경해주는 메서드
 	 * @작성일 : 2016. 1. 19.
 	 * @param urlAndProduct
 	 */
 	@Override
-	public void selectProduct(List<Map<String, Object>> urlAndProduct) {
-		String prePostingUrl = "";
-		String preSmallProduct = "";
-		for(int i=0;i<urlAndProduct.size();i++){
-			String selectProduct = urlAndProduct.get(i).get("smallProduct").toString();
-			if(selectProduct.equals("")){ //선택하지 않은 포스팅에 대해서는 기능 적용X
-				continue;
-			}
-			String postingUrl = urlAndProduct.get(i).get("postingUrl").toString();
-			HashMap<String, String> map = new HashMap<String, String>();
-			if(selectProduct.equals("삭제")){
-				adminDAO.deletePosting(postingUrl);
+	public void selectProduct(List<Map<String, Object>> urlAndImage) {
+		for(int i=0;i<urlAndImage.size();i++){
+			String delete = urlAndImage.get(i).get("del").toString();
+			String postingUrl = urlAndImage.get(i).get("postingUrl").toString();
+			String postingPhotoLink = urlAndImage.get(i).get("postingPhotoLink").toString();
+			String smallProduct = urlAndImage.get(i).get("smallProduct").toString();
+			BlliPostingVO vo = new BlliPostingVO();
+			vo.setPostingUrl(postingUrl);
+			vo.setPostingPhotoLink(postingPhotoLink);
+			vo.setSmallProduct(smallProduct);
+			if(delete.equals("YES")){
+				adminDAO.deletePosting(vo);
 			}else{
-				map.put("postingUrl", postingUrl);
-				if(prePostingUrl.equals(postingUrl)){
-					map.put("smallProduct", preSmallProduct+" / "+selectProduct);
-					map.put("preSmallProduct", preSmallProduct);
-					adminDAO.addProduct(map);
-				}else{
-					map.put("smallProduct", selectProduct);
-					adminDAO.selectProduct(map);
-					adminDAO.deleteProduct(postingUrl);
-				}
+				adminDAO.selectProduct(vo);
 			}
-			prePostingUrl = postingUrl;
-			preSmallProduct = selectProduct;
 		}
 	}
 	/**
@@ -297,20 +295,24 @@ public class AdminServiceImpl implements AdminService{
 	 * @param urlAndProduct
 	 */
 	@Override
-	public void registerPosting(List<Map<String, Object>> urlAndProduct) {
-		for(int i=0;i<urlAndProduct.size();i++){
-			String smallProduct = urlAndProduct.get(i).get("smallProduct").toString();
-			if(smallProduct.equals("")){ //선택하지 않은 포스팅에 대해서는 기능 적용X
-				continue;
-			}
-			String postingUrl = urlAndProduct.get(i).get("postingUrl").toString();
-			HashMap<String, String> map = new HashMap<String, String>();
-			if(smallProduct.equals("삭제")){
-				adminDAO.deletePosting(postingUrl);
+	public void registerPosting(List<Map<String, Object>> urlAndImage) {
+		for(int i=0;i<urlAndImage.size();i++){
+			String delete = urlAndImage.get(i).get("del").toString();
+			String postingUrl = urlAndImage.get(i).get("postingUrl").toString();
+			String postingPhotoLink = urlAndImage.get(i).get("postingPhotoLink").toString();
+			String smallProductId = urlAndImage.get(i).get("smallProductId").toString();
+			BlliPostingVO vo = new BlliPostingVO();
+			//이미지 파일 다운로드
+			vo.setPostingPhotoLink(blliFileDownLoader.imgFileDownLoader(postingPhotoLink,UUID.randomUUID().toString().replace("-", ""), "postingImage"));
+			vo.setPostingUrl(postingUrl);
+			vo.setSmallProductId(smallProductId);
+			if(delete.equals("YES")){
+				adminDAO.deletePosting(vo);
 			}else{
-				map.put("smallProduct", smallProduct);
-				map.put("postingUrl", postingUrl);
-				adminDAO.registerPosting(map);
+				int updateResult = adminDAO.registerPosting(vo);
+				if(updateResult != 0){
+					adminDAO.updatePostingCount(vo);
+				}
 			}
 		}
 	}
@@ -329,6 +331,7 @@ public class AdminServiceImpl implements AdminService{
 			BlliSmallProductVO vo = new BlliSmallProductVO();
 			vo.setSmallProductId(smallProductInfo.get(i).get("smallProductId").toString());
 			vo.setSmallProduct(smallProductInfo.get(i).get("smallProduct").toString());
+			vo.setMidCategory(adminDAO.getMidCategory(smallProductInfo.get(i).get("smallProductId").toString()));
 			if(delete.equals("삭제")){
 				adminDAO.deleteSmallProduct(vo.getSmallProductId());
 			}else{
@@ -346,6 +349,7 @@ public class AdminServiceImpl implements AdminService{
 					}
 					vo.setSmallProductWhenToUseMin(Integer.parseInt(smallProductWhenToUseMin));
 					vo.setSmallProductWhenToUseMax(Integer.parseInt(smallProductWhenToUseMax));
+					adminDAO.updateMidCategoryWhenToUse(vo);
 					if(vo.getSmallProduct() == null || vo.getSmallProduct() == ""){
 						adminDAO.registerSmallProduct(vo);
 					}else{
@@ -354,5 +358,98 @@ public class AdminServiceImpl implements AdminService{
 				}
 			}
 		}
+	}
+	@Override
+	public void insertCafeArticle() {
+		try {
+			Document doc = Jsoup.connect("http://openapi.naver.com/search?key=2a636a785d0e03f7048319f8adb3d912&query=요리&target=cafearticle&start=1&display=10&sort=sim").get();
+			//System.out.println(doc);
+			String cafeUrl = doc.select("item link").text();
+			System.out.println(cafeUrl);
+			doc = Jsoup.connect(cafeUrl).get();
+			System.out.println(doc);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	@Override
+	public ArrayList<BlliLogVO> checkLog() {
+		ArrayList<BlliLogVO> list = new ArrayList<BlliLogVO>();
+		BlliLogVO vo = null;
+		ArrayList<BlliDetailException> detailException = new ArrayList<BlliDetailException>();
+		BlliDetailException exceptionVO = null;
+		int number = 1;
+		try {
+			BufferedReader in = new BufferedReader(new FileReader("C:\\Users\\용호\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\logFile\\blliLog.log"));
+			String message;
+			while ((message = in.readLine()) != null) {
+				if(message.startsWith("start")){
+					vo = new BlliLogVO();
+					vo.setNumber(number++);
+					vo.setMethodName(message.substring(message.lastIndexOf(":")+2));
+				}else if(message.startsWith("발생 일자")){
+					vo.setStartTime(message.substring(message.indexOf(":")+2));
+				}else if(message.startsWith("실행 시간")){
+					vo.setRunTime(message.substring(message.lastIndexOf(":")+2));
+				}else if(message.startsWith("요청자")){
+					vo.setExecutor(message.substring(message.lastIndexOf(":")+2));
+				}else if(message.startsWith("총 대분류 개수")){
+					if(vo.getMethodName().equals("insertBigCategory")){
+						vo.setCategoryCount(message.substring(message.lastIndexOf(":")+2));
+					}else{
+						vo.setHighRankCategoryCount(message.substring(message.lastIndexOf(":")+2));
+					}
+				}else if(message.startsWith("총 중분류 개수")){
+					if(vo.getMethodName().equals("insertMidCategory")){
+						vo.setCategoryCount(message.substring(message.lastIndexOf(":")+2));
+					}else{
+						vo.setHighRankCategoryCount(message.substring(message.lastIndexOf(":")+2));
+					}
+				}else if(message.startsWith("총 소제품 개수")){
+					if(vo.getMethodName().equals("insertPosting")){
+						vo.setCategoryCount(message.substring(message.lastIndexOf(":")+2));
+					}else{
+						vo.setCategoryCount(message.substring(message.lastIndexOf(":")+2));
+					}
+				}else if(message.startsWith("총 포스팅 개수")){
+					vo.setCategoryCount(message.substring(message.lastIndexOf(":")+2));
+				}else if(message.startsWith("insert")){
+					if(message.startsWith("insert한 조건에 맞지 않는 소제품 개수")){
+						vo.setDenySmallProductCount(message.substring(message.lastIndexOf(":")+2));
+					}else if(message.startsWith("insert하지 않은 조건에 맞지 않는 포스팅 개수")){
+						vo.setDenyPostingCount(message.substring(message.lastIndexOf(":")+2));
+					}else{
+						vo.setInsertCategoryCount(message.substring(message.lastIndexOf(":")+2));
+					}
+				}else if(message.startsWith("update")){
+					if(message.startsWith("update하지 않은 소제품 개수")){
+						vo.setNotUpdateProductCount(message.substring(message.lastIndexOf(":")+2));
+					}else if(message.startsWith("update하지 않은 포스팅 개수")){
+						vo.setNotUpdatePostingCount(message.substring(message.lastIndexOf(":")+2));
+					}else{
+						vo.setUpdateCategoryCount(message.substring(message.lastIndexOf(":")+2));
+					}
+				}else if(message.startsWith("Exception 발생 횟수")){
+					vo.setExceptionCount(message.substring(message.lastIndexOf(":")+2));
+				}else if(message.startsWith("Exception이 발생한")){
+					exceptionVO = new BlliDetailException();
+					exceptionVO.setCategoryId(message.substring(message.lastIndexOf(":")+2));
+				}else if(message.startsWith("Exception 내용")){
+					exceptionVO.setExceptionContent(message.substring(message.indexOf(":")+1));
+					detailException.add(exceptionVO);
+				}else if(message.startsWith("end")){
+					vo.setDetailException(detailException);
+					list.add(vo);
+				}
+			}
+			in.close();
+		} catch (IOException e) {
+			System.err.println(e); // 에러가 있다면 메시지 출력
+			System.exit(1);
+		}
+		for(int i=0;i<list.size();i++){
+			System.out.println(list.get(i));
+		}
+		return list;
 	}
 }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import kr.co.blli.model.vo.BlliBabyVO;
+import kr.co.blli.model.vo.BlliBuyLinkClickVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
@@ -50,5 +51,7 @@ public interface ProductService {
 	public List<BlliSmallProductVO> selectSmallProductRank(String midCategoryId);
 
 	public BlliSmallProductVO productDibChecker(String memberId, BlliSmallProductVO blliSmallProductVO);
+
+	public void buyLinkClick(BlliBuyLinkClickVO blliBuyLinkClickVO);
 
 }

@@ -9,8 +9,6 @@
 <title>Insert title here</title>
 <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-<link rel="stylesheet" href="${initParam.root}css/flickity.css" media="screen">
-<script src="${initParam.root}js/flickity.pkgd.min.js"></script>
 </head>
 <body>
 <a href="iframeTest.do">아이프레임테스트</a>
@@ -24,51 +22,14 @@
 		<li><a href="${initParam.root}insertMidCategory.do">중분류 리스트 긁어모아</a></li>
 		<li><a href="${initParam.root}insertSmallProduct.do">소분류 리스트 긁어모아</a></li>
 		<li><a href="${initParam.root}insertPosting.do">포스팅 리스트 긁어모아</a></li>
+		<li><a href="${initParam.root}insertCafeArticle.do">카페글 리스트 긁어모아</a></li>
 		<li><input type = "text" name="searchWord"><input type="submit" value="검색"></li>
 		<li><a href="${initParam.root}postingListWithSmallProducts.do">소제품 하나로 추려줘</a></li>
 		<li><a href="${initParam.root}unconfirmedSmallProduct.do">소제품 등록해줘</a></li>
 		<li><a href="${initParam.root}unconfirmedPosting.do">포스팅 등록해줘</a></li>
+		<li><a href="${initParam.root}checkLog.do">로그 조회</a></li>
 		<li><a href="${initParam.root}j_spring_security_logout">로그아웃</a></li>
 	</ul>
-	<div class="gallery js-flickity"
-   data-flickity-options='{ "lazyLoad": 2, "initialIndex": 2 }'>
-  <div class="gallery-cell">
-    <img class="gallery-cell-image"
-      data-flickity-lazyload="https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/tulip.jpg" alt="tulip" />
-  </div>
-  <div class="gallery-cell">
-    <img class="gallery-cell-image"
-      data-flickity-lazyload="https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/grapes.jpg" alt="grapes" />
-  </div>
-  <div class="gallery-cell">
-    <img class="gallery-cell-image"
-      data-flickity-lazyload="https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/raspberries.jpg" alt="raspberries" />
-  </div>
-  <div class="gallery-cell">
-    <img class="gallery-cell-image"
-      data-flickity-lazyload="https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/wolf.jpg" alt="wolf" />
-  </div>
-  <div class="gallery-cell">
-    <img class="gallery-cell-image"
-      data-flickity-lazyload="https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/shore.jpg" alt="sea" />
-  </div>
-  <div class="gallery-cell">
-    <img class="gallery-cell-image"
-      data-flickity-lazyload="https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/leaf-droplets.jpg" alt="leaf droplets" />
-  </div>
-  <div class="gallery-cell">
-    <img class="gallery-cell-image"
-      data-flickity-lazyload="https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/gulls.jpg" alt="gulls" />
-  </div>
-  <div class="gallery-cell">
-    <img class="gallery-cell-image"
-      data-flickity-lazyload="https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/touch-screen.jpg" alt="touch screen" />
-  </div>
-  <div class="gallery-cell">
-    <img class="gallery-cell-image"
-      data-flickity-lazyload="https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/van.jpg" alt="van" />
-  </div>
-</div>
 	
 </form>
 <!--

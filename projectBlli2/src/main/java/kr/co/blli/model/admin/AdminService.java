@@ -4,11 +4,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.mail.MessagingException;
 
+import kr.co.blli.model.vo.BlliLogVO;
 import kr.co.blli.model.vo.ListVO;
 
 public interface AdminService {
@@ -21,9 +23,13 @@ public interface AdminService {
 	
 	public ListVO unconfirmedSmallProduct(String pageNo);
 	
-	abstract void selectProduct(List<Map<String, Object>> urlAndProduct);
+	abstract void selectProduct(List<Map<String, Object>> urlAndImage);
 	
-	abstract void registerPosting(List<Map<String, Object>> urlAndProduct);
+	abstract void registerPosting(List<Map<String, Object>> urlAndImage);
 	
 	public void registerSmallProduct(List<Map<String, Object>> smallProductInfo);
+
+	public void insertCafeArticle();
+
+	public ArrayList<BlliLogVO> checkLog();
 }

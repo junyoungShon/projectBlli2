@@ -4,7 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>쌍둥이 정보 입력</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>블리 - 충동구매보다 빠른 합리적 쇼핑!</title>
+<link href="${initParam.root}img/favicon/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 </head>
 <META http-equiv="Expires" content="-1"> 
 <META http-equiv="Pragma" content="no-cache"> 

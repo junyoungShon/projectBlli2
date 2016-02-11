@@ -26,15 +26,13 @@ public interface AdminDAO {
 	
 	int totalUnconfirmedSmallProduct();
 	
-	void deletePosting(String postingUrl);
+	void deletePosting(BlliPostingVO vo);
 	
-	void addProduct(HashMap<String, String> map);
-	
-	void selectProduct(HashMap<String, String> map);
+	void selectProduct(BlliPostingVO vo);
 	
 	void deleteProduct(String postingUrl);
 	
-	void registerPosting(HashMap<String, String> map);
+	int registerPosting(BlliPostingVO vo);
 	
 	void deleteSmallProduct(String smallProductId);
 
@@ -43,6 +41,12 @@ public interface AdminDAO {
 	void registerAndUpdateSmallProduct(BlliSmallProductVO vo);
 
 	void updateSmallProductName(BlliSmallProductVO vo);
+
+	void updateMidCategoryWhenToUse(BlliSmallProductVO vo);
+
+	String getMidCategory(String smallProductId);
+
+	void updatePostingCount(BlliPostingVO vo);
 	
 }
  

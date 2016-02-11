@@ -4,6 +4,8 @@ package kr.co.blli;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -13,7 +15,9 @@ import kr.co.blli.model.member.MemberService;
 import kr.co.blli.model.product.ProductDAO;
 import kr.co.blli.model.product.ProductService;
 import kr.co.blli.model.vo.BlliBabyVO;
+import kr.co.blli.model.vo.BlliPostingVO;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -44,29 +48,11 @@ public class JunyoungTest {
 	private ProductService productService;
 	@Resource
 	private ProductDAO productDAO;
+	@Resource
+	private PostingDAO postingDAO;
 	
 	@Test
-	public void test() throws ParseException{
-		List<BlliBabyVO> list =  memberService.selectBabyListByMemberId("imvestt@hanmail.net");
-		System.out.println(list);
-		for(int i=0;i<list.size();i++){
-			list.get(i).getBabyBirthday();
-			SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd");
-			Date birthDay = null;
-			try {
-				birthDay = formatter.parse(list.get(i).getBabyBirthday());
-			} catch (ParseException e) {
-			}
-			Date NowDate = new Date();
-			long diff = NowDate.getTime() - birthDay.getTime() ;
-			long diffDays = diff/(24*60*60*1000);
-			if(diffDays==0){
-				System.out.println("오늘 생일입니다.");
-			}else if(diffDays>0){
-				System.out.println(i+"번째아이는 태어난지"+diffDays);
-			}else if(diffDays<0){
-				System.out.println(i+"번째아이의 예정일은"+diffDays+"남았습니다.");
-			}
-		}
-	}
+	public void test(){
+	
+}
 }

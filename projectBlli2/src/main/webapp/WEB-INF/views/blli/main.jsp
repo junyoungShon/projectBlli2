@@ -18,7 +18,39 @@
 	        scrollController();
 	    });
 	}
-	     
+	//블로그로 이동시키며 체류시간을 측정하는 함수
+	function goBlogPosting(targetURL,smallProductId){
+		//도착시간 체크를 위해 
+		var connectDate = new Date();
+		var connectTime = connectDate.getTime();
+		window.open(targetURL, "_blank");
+		//중복 실행 방지 메서드
+		var count = 0;
+		//다시 사용자가 본 서비스 브라우져에서 움직였을 때 메서드 체류시간 기록
+		setTimeout(function(){
+			$('body').mouseover(function(){
+				if(count==0){
+					count=1;
+					var exitDate = new Date();
+					var exitTime = exitDate.getTime();
+					var residenceTime = Math.round((exitTime - connectTime)/1000);
+					$.ajax({
+						type:"get",
+						url:"recordResidenceTime.do?postingUrl="
+							+targetURL+"&smallProductId="
+							+smallProductId+"&postingTotalResidenceTime="
+							+residenceTime,
+							success:function(date){
+							alert('체류시간 기록 완료 : '+residenceTime+'초');
+							}
+					});
+				}else{
+					return false;
+				}
+		 	}); 
+		},2000);
+		
+	}
 	// 메인 메뉴의 위치를 제어하는 함수
 	function scrollController() {
 	    currentScrollTop = $(window).scrollTop();
@@ -36,18 +68,25 @@
 	}
 
 	$(document).ready(function(){
+		
+		$('.productInst').hover(function(){
+			$(this).children('.productInstAfter').css('display','block');
+		}, function(){
+			$(this).children('.productInstAfter').css('display','none');
+		})
+		
 		//사이드 소제품 추천 리스트 고정
 		
 		//중분류 추천 제거 클릭 시 추천 대상에서 제외
 		$('.recommendMidDelete').click(function(){
 			if(confirm('정말 삭제하시겠어요??')){
+				var btn = $(this);
 				$.ajax({
 					type:"get",
 					url:"deleteRecommendMidCategory.do?midCategory="+$(this).children('.midCategoryValue').val()
 							+"&memberId=${sessionScope.blliMemberVO.memberId}&midCategoryId="+$(this).children('.midCategoryIdValue').val(),
 					success:function(){
-						$(this).parent('.gallery-cell').css("display","none");
-						alert($($(this).parent()).html());
+						$(btn).parent().parent('.productInst').css("display","none");
 					}
 				}); 
 			}
@@ -63,38 +102,27 @@
 				}
 			});
 		});
-		/* //소제품 찜하기 스크립트
-		$('.jbContent').on("click", ".smallProductDibBtn",function(){
-			$.ajax({
-				type:"get",
-				url:"smallProductDib.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(this).siblings('.smallProductId').val(),
-				success:function(result){
-					alert($(this).html());
-					if(result==1){
-						$(this).removeClass("fa-heart-o");
-						$(this).addClass("fa-heart");
-					}else if(result==0){
-						$(this).removeClass("fa-heart-o").addClass("fa-heart");
-					}
-				}
-			});
-		}); */
 		//소제품 찜하기 스크립트
-		$('.smallProductDibBtn').click(function(){
+		$('.in_fr').on("click", ".smallProductDibBtn",function(){
+			var smallProductId = $(this).children('.smallProductId').val();
 			$.ajax({
 				type:"get",
-				url:"smallProductDib.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(this).siblings('.smallProductId').val(),
+				url:"smallProductDib.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+smallProductId,
 				success:function(result){
-					alert($(this));
-					if(result==1){
-						$(this).removeClass("fa-heart");
-						$(this).addClass("fa-heart-o");
-					}else if(result==0){
-						$(this).removeClass("fa-heart").addClass("fa-heart");
-					}
+					alert(result);
+					$('.smallProductDibBtn').each(function(index){
+						if($($('.smallProductDibBtn').get(index)).children('.smallProductId').val()==smallProductId){
+							if(result==1){
+								$($('.smallProductDibBtn').get(index)).children('.fa').removeClass("fa-heart-o").addClass("fa-heart");
+							}else{
+								$($('.smallProductDibBtn').get(index)).children('.fa').removeClass("fa-heart").addClass("fa-heart-o");
+							}
+						}
+					}) 
 				}
 			});
-		});
+		}); 
+
 		//포스팅 스크랩 스크립트
 		$('.postingScrapeBtn').click(function(){
 			$.ajax({
@@ -225,7 +253,7 @@
 						'</div></div><div style="height:245px;"><div class="result_foto fl"><a href="goPosting.do?postingUrl='+
 						data[i].postingUrl+
 						'&smallProductId='+
-						data[i].smallProductId+'&postingTitle='+data[i].postingTitle+'"><img src="http://t1.daumcdn.net/thumb/R1024x0/?fname='+
+						data[i].smallProductId+'&postingTitle='+data[i].postingTitle+'"><img src="'+
 						data[i].postingPhotoLink+
 						'" style="width: 342px; max-height: 247px;"></a></div><div class="fl"><div class="product_text2">'+
 						data[i].postingSummary+
@@ -285,47 +313,36 @@
 				<div class="main_ti">
 					월령별 추천상품 
 				</div>
-				<div style="width:870px; float:left;" class="midRecommProduct">
-					<!-- <div class="fl">
-						<a href="#"><img src="./img/allow_l.png" alt="왼쪽화살표" style="margin-top:70px;"></a>
-					</div> -->
+				<div style="width:870px; float:left;">
 				
 					<div id="menu-wrapper">
-						<ul class="boxy-menu ">
+						<ul class="midRecommProduct">
 						<c:forEach items="${requestScope.blliMidCategoryVOList}" var="recommProductList">
-							<li>
-								<div class="boxy-menu-item-top gallery-cell">
-								<label>
+							<li class="gallery-cell productInst" style="margin-left: 30px;">
 									<div class="yellow_foto">
-									<a href="searchSmallProduct.do?searchWord=${recommProductList.midCategory}"> 
-									<img src='${recommProductList.midCategoryMainPhotoLink}' style="width: 115px;height: 115px;border-radius:20px"></a>
+									<img src='${recommProductList.midCategoryMainPhotoLink}' style="width: 115px;height: 115px;border-radius:20px; z-index: -1"></a>
+									</div>
+									<div class="productInstAfter" style="text-align: center;">
+										<i class="fa fa-times fa-1-5x recommendMidDelete" style="margin-left: 120px;">
+											<input type="hidden" class="midCategoryValue" value="${recommProductList.midCategory}">
+											<input type="hidden" class="midCategoryIdValue" value="${recommProductList.midCategoryId}">
+										</i>
+										<div class="productName" style="font-size: 15px;font-weight: bold; margin-top:-15px">${recommProductList.midCategory}</div>
+										<div clss="productInstDetail" style="color: white; padding: 10px; text-align: justify;">
+											일회용 기저귀는 아이가 항상 철결함을 유지할 수 있게 도와주며, 엄마는 쉽게 아이의 큰일을 처리할 수 있어요!(50자 설명)
+										</div>
+										<div class="smallProductDetailBtn">
+											<a href="searchSmallProduct.do?searchWord=${recommProductList.midCategory}" style="color: white"> 
+											상세보기</a>
+										</div>
 									</div>
 									<div class="yellow_ti">
 										${recommProductList.midCategory }
 									</div>
-								</div>
-								
-								<div class="boxy-menu-item-bottom">
-									<ul class="items">
-										<li class="main_yellow_ti">샴푸의자</li>
-										<li style="height:100px; font-weight:normal;">
-											${recommProductList.midCategoryInfo }
-										</li>
-								</label>
-										<li class="recommendMidDelete">
-											[추천제외]
-											<input type="text" value="${recommProductList.midCategory}" class="midCategoryValue" style="display: none"> 
-											<input type="text" value="${recommProductList.midCategoryId}" class="midCategoryIdValue" style="display: none"> 
-										</li>
-									</ul>
-								</div>
 							</li>
 					</c:forEach>
 						</ul>
 					</div>
-					<!-- <div class="fr">
-						<a href="#"><img src="./img/allow_r.png" alt="오른쪽화살표" style="margin-top:50px;"></a>
-					</div> -->
 				</div>
 			</div>
 		</div>
@@ -363,20 +380,16 @@
 							<p class="result_price">25,000원</p>
 						</div>
 						<div class="fr">
-							<c:if test="${blliSmallProductVOList.isDib==0}">
-								<div style="margin-top: 15px">
-									<i class="fa fa-heart-o fa-2x smallProductDibBtn" style="color: red"></i>
-									<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
-									<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
-								</div>
-							</c:if>
-							<c:if test="${blliSmallProductVOList.isDib==1}">
-								<div style="margin-top: 15px">
-									<i class="fa fa-heart fa-2x smallProductDibBtn" style="color: red"></i>
-										<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
-									<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
-								</div>
-							</c:if>
+							<div style="margin-top: 15px" class="smallProductDibBtn">
+						<c:if test="${blliSmallProductVOList.isDib==0}">
+							<i class="fa fa-heart-o fa-2x" style="color: red"></i>
+						</c:if>
+						<c:if test="${blliSmallProductVOList.isDib==1}">
+							<i class="fa fa-heart fa-2x" style="color: red"></i>
+						</c:if>
+							<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
+							<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
+						</div>
 						</div>
 					</div>
 				</li>
@@ -417,20 +430,16 @@
 				
 					<div class="fr">
 						
+						<div style="margin-top: 15px" class="smallProductDibBtn">
 						<c:if test="${blliSmallProductVOList.isDib==0}">
-								<div style="margin-top: 15px">
-									<i class="fa fa-heart-o fa-2x smallProductDibBtn" style="color: red"></i>
-									<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
-									<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
-								</div>
+							<i class="fa fa-heart-o fa-2x" style="color: red"></i>
 						</c:if>
 						<c:if test="${blliSmallProductVOList.isDib==1}">
-								<div style="margin-top: 15px">
-									<i class="fa fa-heart fa-2x smallProductDibBtn" style="color: red"></i>
-										<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
-									<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
-								</div>
+							<i class="fa fa-heart fa-2x" style="color: red"></i>
 						</c:if>
+							<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
+							<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
+						</div>
 					</div>
 				</div>
 			</div>
@@ -456,8 +465,9 @@
 				</div>
 				<div style="height:245px;">
 					<div class="result_foto fl">
-						<a href="goPosting.do?postingUrl=${postingList.postingUrl}&smallProductId=${postingList.smallProductId}+'&postingTitle='${postingList.postingTitle}">
-							<img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${postingList.postingPhotoLink}" style="width: 342px; max-height: 247px;">
+					
+						<a href="#" onclick="goBlogPosting('${postingList.postingUrl}','${postingList.smallProductId}')">
+							<img src="${postingList.postingPhotoLink}" style="width: 342px; max-height: 247px;">
 						</a>
 					</div>
 					<div class="fl">
@@ -503,7 +513,7 @@
 					</div>
 				</div>
 			</div>
-			<p align="center"><img id="loading" src="${initParam.root}image/loading.gif" style="width: 50px"></p>
+			<%-- <p align="center"><img id="loading" src="${initParam.root}image/loading.gif" style="width: 50px"></p> --%>
 			</c:forEach>
 		</div>
 		<div class="main_right_list">

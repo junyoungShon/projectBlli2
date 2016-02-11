@@ -5,6 +5,7 @@ import java.util.List;
 
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliBigCategoryVO;
+import kr.co.blli.model.vo.BlliBuyLinkClickVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
@@ -112,5 +113,33 @@ public interface ProductDAO {
 	int totalPageOfSmallProductRelatedSearchWord(String searchWord);
 	
 	List<BlliSmallProductVO> selectSmallProductRank(String midCategoryId);
+
+	List<BlliSmallProductVO> selectAllSmallProduct();
+
+	int selectPostingNumBySmallProductId(String smallProductId);
+
+	int selectBuyLinkClickCountBySmallProductId(String smallProductId);
+
+	void updateProductScore(BlliSmallProductVO blliSmallProductVO);
+
+	int selectSmallProductNumByMidCategoryId(String midCategoryId);
+
+	String getSmallProductStatus(String smallProductId);
+
+	int isSmallProductSeller(BlliSmallProductBuyLinkVO blliSmallProductBuyLinkVO);
+
+	void insertDeadSmallProduct(BlliSmallProductVO blliSmallProductVO);
+	
+	List<String> selectMidCategoryVOList();
+
+	List<BlliSmallProductVO> selectAllSmallProductByMidCategoryId(String string);
+
+	void updateSmallProductRanking(BlliSmallProductVO blliSmallProductVO);
+
+	void updateSmallProductDetailViewCount(String smallProductId);
+
+	void insertBlliBuyLinkClick(BlliBuyLinkClickVO blliBuyLinkClickVO);
+
+	void updateBlliBuyLinkClickCount(String smallProductId);
 
 }

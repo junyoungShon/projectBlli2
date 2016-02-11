@@ -8,6 +8,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import kr.co.blli.model.vo.BlliBabyVO;
+import kr.co.blli.model.vo.BlliBuyLinkClickVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
@@ -89,11 +90,12 @@ public class ProductServiceImpl implements ProductService{
 		}else{
 			for(int i=0;i<blliMidCategoryVOList.size();i++){
 				HashMap<String,String> paraMap = new HashMap<String, String>();
-				paraMap.put("recommMid", blliMidCategoryVOList.get(i).getMidCategory());
+				paraMap.put("recommMid", blliMidCategoryVOList.get(i).getMidCategoryId());
 				paraMap.put("babyMonthAge",Integer.toString(blliBabyVO.getBabyMonthAge()));
 				// 중제품 당 찜 상위 2개씩을 가져온다.
 				List<BlliSmallProductVO> tempList = productDAO.selectSameAgeMomBestPickedSmallProductList(paraMap);
 				for(int j=0;j<tempList.size();j++){
+					System.out.println(tempList.get(j).getSmallProduct());
 					blliSmallProductVOList.add(tempList.get(j));
 				}
 			}
@@ -266,6 +268,8 @@ public class ProductServiceImpl implements ProductService{
 			map.put("midCategory", midCategory);
 			map.put("smallProduct", searchWord);
 			otherSmallProductList = (ArrayList<BlliSmallProductVO>)productDAO.getOtherSmallProductList(map);
+			//smallProductDetailCount를 올려줍니다.
+			productDAO.updateSmallProductDetailViewCount(smallProduct.getSmallProductId());
 		}
 		smallProductInfo.put("smallProduct", smallProduct);
 		smallProductInfo.put("buyLink", buyLink);
@@ -365,6 +369,21 @@ public class ProductServiceImpl implements ProductService{
 			blliSmallProductVO.setIsDib(0);
 		}
 		return blliSmallProductVO;
+	}
+	/**
+	  * @Method Name : buyLinkClick
+	  * @Method 설명 : 구매링크 클릭시 구매링크 기록을 디비에 남기고 클릭 카운트를 늘려준다.
+	  * @작성일 : 2016. 2. 6.
+	  * @작성자 : junyoung
+	  * @param blliBuyLinkClickVO
+	 */
+	@Override
+	public void buyLinkClick(BlliBuyLinkClickVO blliBuyLinkClickVO) {
+		if(blliBuyLinkClickVO.getMemberId()==null){
+			blliBuyLinkClickVO.setMemberId("anonyMousUser");
+		}
+		productDAO.insertBlliBuyLinkClick(blliBuyLinkClickVO);
+		productDAO.updateBlliBuyLinkClickCount(blliBuyLinkClickVO.getSmallProductId());
 	}
 
 }

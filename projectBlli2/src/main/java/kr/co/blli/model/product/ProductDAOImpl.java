@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliBigCategoryVO;
+import kr.co.blli.model.vo.BlliBuyLinkClickVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
@@ -366,4 +367,73 @@ public class ProductDAOImpl implements ProductDAO{
 		return sqlSessionTemplate.selectOne("product.totalPageOfSmallProductRelatedSearchWord", searchWord);
 	}
 
+	@Override
+	public List<BlliSmallProductVO> selectAllSmallProduct() {
+		return  sqlSessionTemplate.selectList("product.selectAllSmallProduct");
+	}
+
+	@Override
+	public int selectPostingNumBySmallProductId(String smallProductId) {
+		return sqlSessionTemplate.selectOne("product.selectPostingNumBySmallProductId", smallProductId);
+	}
+
+	@Override
+	public int selectBuyLinkClickCountBySmallProductId(String smallProductId) {
+		return sqlSessionTemplate.selectOne("product.selectBuyLinkClickCountBySmallProductId", smallProductId);
+	}
+
+	@Override
+	public void updateProductScore(BlliSmallProductVO blliSmallProductVO) {
+		sqlSessionTemplate.update("product.updateProductScore", blliSmallProductVO);
+	}
+
+	@Override
+	public int selectSmallProductNumByMidCategoryId(String midCategoryId) {
+		return sqlSessionTemplate.selectOne("product.selectSmallProductNumByMidCategoryId", midCategoryId);
+	}
+
+	@Override
+	public String getSmallProductStatus(String smallProductId) {
+		return sqlSessionTemplate.selectOne("product.getSmallProductStatus", smallProductId);
+	}
+
+	@Override
+	public int isSmallProductSeller(BlliSmallProductBuyLinkVO blliSmallProductBuyLinkVO) {
+		return sqlSessionTemplate.selectOne("product.isSmallProductSeller", blliSmallProductBuyLinkVO);
+	}
+
+	@Override
+	public void insertDeadSmallProduct(BlliSmallProductVO blliSmallProductVO) {
+		sqlSessionTemplate.insert("product.insertDeadSmallProduct", blliSmallProductVO);
+	}
+
+	@Override
+	public List<String> selectMidCategoryVOList() {
+		return sqlSessionTemplate.selectList("product.selectMidCategoryVOList");
+	}
+
+	@Override
+	public List<BlliSmallProductVO> selectAllSmallProductByMidCategoryId(String midCategoryId) {
+		return sqlSessionTemplate.selectList("product.selectAllSmallProductByMidCategoryId",midCategoryId);
+	}
+
+	@Override
+	public void updateSmallProductRanking(BlliSmallProductVO blliSmallProductVO) {
+		sqlSessionTemplate.update("product.updateSmallProductRanking",blliSmallProductVO);
+	}
+
+	@Override
+	public void updateSmallProductDetailViewCount(String smallProductId) {
+		sqlSessionTemplate.update("product.updateSmallProductDetailPageView",smallProductId);
+	}
+
+	@Override
+	public void insertBlliBuyLinkClick(BlliBuyLinkClickVO blliBuyLinkClickVO) {
+		sqlSessionTemplate.insert("product.insertBlliBuyLinkClick", blliBuyLinkClickVO);
+	}
+
+	@Override
+	public void updateBlliBuyLinkClickCount(String smallProductId) {
+		sqlSessionTemplate.update("product.updateBlliBuyLinkClickCount",smallProductId);
+	}
 }

@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<script>
+	function goBuyMidPage(){
+		$('#smallProductLinkInfo').submit();
+	}
+</script>
 <div class="jbContent">
 	<div class="result_bg1">
 			<div class="in_fr" style="height:330px;">
@@ -52,7 +57,7 @@
 				<div class="result_last fr">
 					<ul>
 						<li>
-							<p class="result_sns">${requestScope.smallProductInfo.smallProduct.smallProductPostingCount}</p>
+							<p class="result_sns">${requestScope.smallProductInfo.smallProduct.dbInsertPostingCount}</p>
 							<p class="result_sns_text">blog</p>
 						</li>
 						<li>
@@ -119,7 +124,14 @@
 										</c:if>
 									</td>
 									<td>
-										<a href="${sellerInfo.buyLink}"><img src="${initParam.root}img/bt_buy.png" alt="사러가기"></a>
+										<a href="#" onclick="goBuyMidPage()"><img src="${initParam.root}img/bt_buy.png" alt="사러가기"></a>
+										<form action="goBuyMidPage.do" method="post" id="smallProductLinkInfo">
+											<input type="hidden" name="buyLink" value="${sellerInfo.buyLink}"> 
+											<input type="hidden" name="smallProductId" value="${sellerInfo.smallProductId}"> 
+											<input type="hidden" name="memberId" value="${sessionScope.blliMemberVO.memberId}"> 
+											<input type="hidden" name="seller" value="${sellerInfo.seller}"> 
+										</form>
+										
 									</td>
 								</tr>
 							</c:forEach>
@@ -175,9 +187,9 @@
 		</div>
 	</div>
 	<div class="jbMenu2">
-		<div class="gallery js-flickity" data-flickity-options='{ "imagesLoaded": true }'>
+		<div class="gallery js-flickity" data-flickity-options='{ "imagesLoaded": true , "wrapAround": true}'>
 			<c:forEach items="${requestScope.postingList}" var="postingList">
-				<a href="${postingList.postingUrl}"><img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${postingList.postingPhotoLink}" alt="${requestScope.smallProductInfo.smallProduct.smallProduct}"></a>
+				<a href="goPosting.do?postingUrl=${postingList.postingUrl}&smallProductId=${blliSmallProductVOList.smallProductId}&postingTitle=${postingList.postingTitle}"><img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${postingList.postingPhotoLink}" alt="${requestScope.smallProductInfo.smallProduct.smallProduct}"></a>
 			</c:forEach>
 		</div>
 	</div>

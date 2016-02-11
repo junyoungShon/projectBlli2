@@ -1,12 +1,14 @@
 package kr.co.blli.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import kr.co.blli.model.admin.AdminService;
+import kr.co.blli.model.vo.BlliLogVO;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -83,8 +85,8 @@ public class AdminController {
 	 */
 	@ResponseBody
 	@RequestMapping("selectProduct.do")
-	public void selectProduct(@RequestBody List<Map<String, Object>> urlAndProduct){
-		adminService.selectProduct(urlAndProduct);
+	public void selectProduct(@RequestBody List<Map<String, Object>> urlAndImage){
+		adminService.selectProduct(urlAndImage);
 	}
 	/**
 	 * 
@@ -96,8 +98,8 @@ public class AdminController {
 	 */
 	@ResponseBody
 	@RequestMapping("registerPosting.do")
-	public void registerPosting(@RequestBody List<Map<String, Object>> urlAndProduct){
-		adminService.registerPosting(urlAndProduct);
+	public void registerPosting(@RequestBody List<Map<String, Object>> urlAndImage){
+		adminService.registerPosting(urlAndImage);
 	}
 	/**
 	 * 
@@ -112,4 +114,13 @@ public class AdminController {
 	public void registerSmallProduct(@RequestBody List<Map<String, Object>> smallProductInfo){
 		adminService.registerSmallProduct(smallProductInfo);
 	}
+	@RequestMapping("insertCafeArticle.do")
+	public void insertCafeArticle(){
+		adminService.insertCafeArticle();
+	}	
+	@RequestMapping("checkLog.do")
+	public ModelAndView checkLog(){
+		ArrayList<BlliLogVO> list = (ArrayList<BlliLogVO>)adminService.checkLog();
+		return new ModelAndView("admin/log", "logList", list);
+	}	
 }

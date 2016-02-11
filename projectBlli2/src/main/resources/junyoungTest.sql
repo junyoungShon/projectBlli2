@@ -45,7 +45,11 @@ CREATE TABLE BLLI_NOT_RECOMM_MID_CATEGORY(
 	constraint fk_NOT_recomm_mid_mid_cate foreign key(mid_category,category_id) references blli_mid_category(mid_category,category_id), --수정
 	constraint pk_NOT_recomm_mid_cate primary key (member_id, mid_category)
 )
-
+select * from (select rownum as rn,SMALL_PRODUCT, MID_CATEGORY,mid_CATEGORY_ID, SMALL_PRODUCT_MAKER, SMALL_PRODUCT_WHENTOUSE_MIN, SMALL_PRODUCT_WHENTOUSE_MAX, SMALL_PRODUCT_DIBS_COUNT, 
+		SMALL_PRODUCT_MAIN_PHOTO_LINK, SMALL_PRODUCT_SCORE, SMALL_PRODUCT_POSTING_COUNT, NAVER_SHOPPING_RANK, PRODUCT_REGISTER_DAY,small_product_id
+		from BLLI_SMALL_PRODUCT
+		where MID_CATEGORY = '8191428972' and '1' >= SMALL_PRODUCT_WHENTOUSE_MIN and '1' <= SMALL_PRODUCT_WHENTOUSE_MAX
+		order by SMALL_PRODUCT_DIBS_COUNT desc) where rn<3
 
 select 
 from recommMidCategory
@@ -214,8 +218,43 @@ select posting_url,small_product,small_product_id,posting_title,posting_summary,
 		order by posting_score desc)
 		) where rn = 3
 		
-		
-		
+		select count(*) from blli_small_product
+		select * from
+		(select rownum as rn,mid_category_id,small_product_id,small_product_dibs_count,detail_view_count,naver_shopping_rank,product_register_day,product_db_insert_date from blli_small_product
+		)where rn>500
+		select rownum as rn,mid_category_id,small_product_id,small_product_dibs_count,detail_view_count,naver_shopping_rank,product_register_day,product_db_insert_date from blli_small_product where small_product_id = null
 		select count(*) from blli_posting
 		update blli_small_product set small_product_status = 'confirmed'
+		update blli_posting set posting_status = 'confirmed'
+		
+		select posting_url,small_product_id,posting_like_count,posting_dislike_count,posting_total_residence_time/posting_view_count as avgResi
+		posting_media_count,posting_total_residence_time,posting_view_count,posting_scrape_count,posting_rank,posting_date,posting_reply_count,posting_db_insert_date
+		from blli_posting
+		where posting_status = 'confirmed'
+		order by asc
+		select small_product_id,small_product_dibs_count,detail_view_count,naver_shopping_rank,product_register_day,product_db_insert_date from blli_small_product
+		update blli_posting set posting_db_insert_date = sysdate 
+		update blli_small_product set product_db_insert_date = sysdate 
+		update blli_small_product set detail_view_count = 0 
+		update blli_small_product set detail_view_count = 0 
+		update blli_posting set posting_db_insert_date = '2015-02-03'
+		select * from blli_posting where posting_url='http://blog.naver.com/mykid0430/220491426583'
+		select * from blli_small_product where small_product_score < 70
+		
+		select avg(small_product_score) from blli_small_product where small_product_status = 'confirmed'
+		select avg(posting_score) from blli_posting where posting_status = 'confirmed' 
+		
+		select small_product_score from blli_small_product where small_product_score>100 and  small_product_status = 'confirmed'
+		select posting_score from blli_posting where posting_score>100 and posting_status = 'confirmed' 
+		
+		select posting_score from blli_posting
+		
+		select count(*) from blli_posting where posting_status = 'confirmed'
+		
+		update blli_mid_category set small_product_count = 1000;
+		select mid_category_id,small_product_id,small_product_dibs_count,detail_view_count,naver_shopping_rank,product_register_day,product_db_insert_date from blli_small_product
+		select sum(buy_link_click_count) from blli_small_prod_buy_link where small_product_id =7909155651
+		update blli_small_prod_buy_link set buy_link_click_count = 1   where small_product_id =7909155651
+		
+		select small_product_id,small_product_score from blli_small_product where mid_category_id = '50000217' and small_product_status ='confirmed' order by small_product_score desc;
 		
