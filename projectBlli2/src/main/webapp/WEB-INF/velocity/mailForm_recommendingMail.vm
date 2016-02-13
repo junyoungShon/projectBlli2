@@ -1,18 +1,18 @@
 <body>
 	<div id='readFrame'>
-		<div style='width: 100%; background: #fff; text-align: center; font: normal 12px dotum, '돋움''>
+		<div style="width: 100%; background: #fff; text-align: center;">
 			<table align='center' width='700' border='0' cellpadding='0' cellspacing='0' style='width: 700px; margin: 0 auto; text-align: left;'>
 				<tbody>
 					<tr>
-						<td style='height: 60px; background: #ebebeb; border-bottom: 2px solid #ed402e;'>
-							<a href='http:///bllidev.dev/projectBlli2/index.do' target='_blank' style='margin: 0 0 0 45px;'>
+						<td style='height: 60px; background: #ffffe6; border-bottom: 2px solid #ffcc00;'>
+							<a href='http://bllidev.dev/projectBlli2/index.do' target='_blank' style='margin: 0 0 0 45px;'>
 								<img src='http://bllidev.dev/projectBlli2/image/blliLogo_orange.jpg' width='150' alt='블리'>
 							</a>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<table width='700' border='0' cellpadding='0' cellspacing='0' style='background: #f5f5f5;'>
+							<table width='700' border='0' cellpadding='0' cellspacing='0' style='background: #ffffe6;'>
 								<tbody>
 									<tr>
 										<td style='width: 45px;'></td>
@@ -20,51 +20,32 @@
 											<table width='610' border='0' cellpadding='0' cellspacing='0'>
 												<tbody>
 													<tr>
-														<td height='75' style='border-bottom: 1px solid #1e2024;'>
-															<h4>지금 ${memberBabyName}에게 맞는 제품!</h4> <!-- 이게 null이면 null로 표시가 안되고 그냥 ${memberPassword} 그대로 출력 -->
+														<td height="75" align="center">
+															<h2>지금 ${memberBabyName}에게 필요한 제품!</h2>
 														</td>
 													</tr>
 													<tr>
-														<td height='50'style='background: #d2d5d9; color: #fb661e; font: bold 15px Tahoma; text-align: center;'>
-															<ul class="boxy-menu ">
+														<td height='50' style='background: #ffd9b3; font: bold 15px Tahoma; text-align: center;'>
+															<ul style='list-style:none; padding-left:0px; display:inline;'>
 																#foreach($rplist in $recommendingProductList)
-																	<p> ${rplist.smallProduct} </p>
 																	<li>
-																		<div class="boxy-menu-item-top gallery-cell">
-																		<label>
-																			<div class="yellow_foto">
-																				<a href="searchSmallProduct.do?searchWord=${recommProductList.midCategory}"> 
-																					<img src='${rplist.midCategoryMainPhotoLink}' style="width: 115px;height: 115px;border-radius:20px">
-																				</a>
-																			</div>
-																			<div class="yellow_ti">
-																				${rplist.midCategory}
-																			</div>
-																		</div>
-																		
-																		<div class="boxy-menu-item-bottom">
-																			<ul class="items">
-																				<li class="main_yellow_ti">샴푸의자</li>
-																				<li style="height:100px; font-weight:normal;">
-																					${rplist.midCategoryInfo} 
-																				</li>
-																		</label>
-																				<li class="recommendMidDelete">
-																					[추천제외]
-																					<input type="text" value="${rplist.midCategory}" class="midCategoryValue" style="display: none"> 
-																					<input type="text" value="${rplist.midCategoryId}" class="midCategoryIdValue" style="display: none"> 
-																				</li>
-																			</ul>
+																		<div style='float:left; text-align:center; margin:15px'>
+																			<a href='http://bllidev.dev/projectBlli2/searchSmallProduct.do?searchWord=${rplist.midCategory}' style="text-decoration:none;">
+																				<img src='http://cfile9.uf.tistory.com/image/120D56354DD0D75F24F8A4' style='width:115px; height: 115px; border-radius:15px;'>
+																				<p style="font-size:15px; font-weight: bold; font-family:'Nanum Barun Gothic';">
+																					${rplist.midCategory}
+																				</p>
+																			</a>
 																		</div>
 																	</li>
 																#end
 															</ul>
-														</td> 
+														</td>
 													</tr>
-													<tr>
+													<tr> 
 														<td style='padding: 22px 0 50px; color: #363636;'>
-															<p style='margin: 0;'>항상 블리를 사랑해주셔서 감사드리며, 보다 나은 서비스를 위해 최선을 다하겠습니다.</p>
-															<p style='margin: 11px 0 0;'>감사합니다!</p>
+															<h4 align="center"'>항상 블리를 사랑해주셔서 감사합니다. 보다 나은 서비스를 위해 최선을 다하겠습니다.</h4>
+															<h4 align="center"'>감사합니다!</h4>
 														</td>
 													</tr>
 												</tbody>
@@ -82,8 +63,10 @@
 	</div>
 </body>
 
-<!-- 
-	- 콘솔에만 한번뜨고 실행(메일 발송)은 두번 되고있음
+<!-- 그냥 메모
+	- 콘솔에만 한번뜨고 실행(메일 발송)은 두번 되고있음 (두번뜨고 두번될때도.. 뭐지)
 	- $변수 == ${변수}
-
+	- 변수가 null이면 null로 표시가 안되고 그냥 ${변수명} 그대로 출력
+	- 뭐가 안먹히면 문법상 오류 의심(그냥 텍스트 파일이니까 안잡아준다. 주의할 것)
+	- ul, li에서 안먹히면 그 안에 div지 뭐
 -->

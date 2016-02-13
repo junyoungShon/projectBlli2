@@ -58,7 +58,7 @@ $(document).ready(function(){
 			<img src="./img/login_ti.png" style="margin-top:20px; margin-bottom:20px;">
 			<p>
 				블리는 내 아이에게 필요한 것을 해결하는 서비스 입니다.<br/>
-				이미 블리 회원이신가요? 로그인
+				이미 블리 회원이신가요? <a href="${initParam.root}loginPage.do"><font color="white"><b>로그인</b></font></a>
 			</p>
 			<div class="login_bt">
 				<p><a href="#" onclick="checkLoginState()"><img src="./img/login_bt1.png" alt="페이스북으로 가입하기"></a>	</p>	

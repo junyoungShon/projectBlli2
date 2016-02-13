@@ -27,16 +27,12 @@ public interface MemberDAO {
 	
 	//용호 메소드 영역
 	public BlliMemberVO findMemberInfoById(String memberId);
-	
 	public BlliMailVO findMailSubjectAndContentByMailForm(String mailForm);
-	
 	public List<BlliMemberVO> getMemberHavingBabyAgeChangedList();
-	
 	public List<BlliBabyVO> getBabyAgeChangedListOfMember(String memberId);
-
 	public void updateMemberInfoByEmail(BlliMemberVO blliMemberVO);
-
 	public void deleteBabyInfo(BlliMemberVO blliMemberVO);
-
+	public String findMemberNameByEmail(String memberEmail);
+	public void updateMemberPasswordToTemporaryPassword(BlliMemberVO blliMemberVO);
 
 }

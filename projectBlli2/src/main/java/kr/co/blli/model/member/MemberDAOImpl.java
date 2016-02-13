@@ -57,11 +57,19 @@ public class MemberDAOImpl implements MemberDAO{
 	public void changeRecommendingBaby(BlliBabyVO blliBabyVO) {
 		sqlSessionTemplate.update("member.changeRecommendingBaby", blliBabyVO);
 	}
+	
 	@Override
 	public void updateMemberInfoByEmail(BlliMemberVO blliMemberVO) {
 		System.out.println("dao: "+blliMemberVO);
 		sqlSessionTemplate.update("member.updateMemberInfoByEmail", blliMemberVO);
 	}
+	
+	@Override
+	public void deleteBabyInfo(BlliMemberVO blliMemberVO) {
+		sqlSessionTemplate.delete("member.deleteBabyInfo", blliMemberVO);
+	}
+	
+	
 	
 	//용호 메소드 영역
 	@Override
@@ -80,12 +88,14 @@ public class MemberDAOImpl implements MemberDAO{
 	public List<BlliBabyVO> getBabyAgeChangedListOfMember(String memberId) {
 		return sqlSessionTemplate.selectList("member.getBabyAgeChangedListOfMember", memberId);	
 	}
-
 	@Override
-	public void deleteBabyInfo(BlliMemberVO blliMemberVO) {
-		sqlSessionTemplate.delete("member.deleteBabyInfo", blliMemberVO);
+	public String findMemberNameByEmail(String memberEmail) {
+		return sqlSessionTemplate.selectOne("member.findMemberNameByEmail", memberEmail);
 	}
-
+	@Override
+	public void updateMemberPasswordToTemporaryPassword(BlliMemberVO blliMemberVO) {
+		sqlSessionTemplate.update("member.updateMemberPasswordToTemporaryPassword", blliMemberVO);
+	}
 
 
 }

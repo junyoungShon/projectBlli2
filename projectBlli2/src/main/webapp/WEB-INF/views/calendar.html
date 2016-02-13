@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="stylesheet" type="text/css" href="./css/reset.css" />
+<link rel="stylesheet" type="text/css" href="./css/css2.css" />
+<link href='https://cdn.rawgit.com/openhiun/hangul/14c0f6faa2941116bb53001d6a7dcd5e82300c3f/nanumbarungothic.css' rel='stylesheet' type='text/css'>
+<meta charset="utf-8">
+<title>블리</title>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script>
+  $( document ).ready( function() {
+	var jbOffset = $( '.jbMenu' ).offset();
+	$( window ).scroll( function() {
+	  if ( $( document ).scrollTop() > jbOffset.top ) {
+		$( '.jbMenu' ).addClass( 'jbFixed' );
+	  }
+	  else {
+		$( '.jbMenu' ).removeClass( 'jbFixed' );
+	  }
+	});
+  } );
+</script>
+</head>
+<body>
+    <div class="jbMenu">
+      <div class="in_fr">
+		<a href="/main.html"><img src="./img/top_logo.png" alt="탑로고" class="logo"></a>
+		<div class="top_search">
+			<input type="text" class="search_text" placeholder="검색어를 입력하세요">
+			<a href="#"><img src="./img/search.png" alt="검색"></a>
+		</div>
+		<div class="top_nav">
+			<a href="#">회원정보수정</a>   ㅣ   <a href="#">아이정보수정</a>   ㅣ   <a href="#">스크랩</a>   ㅣ   <a href="#">알림</a>   ㅣ   <a href="#">아이일정</a>
+		</div>
+	  </div>
+    </div>
+    <div class="jbContent">
+		<div class="in_fr">
+			<div class="result_ti">
+				이달의 아이 일정 
+			</div>
+			<div style="margin-top:30px;">
+				<a href="#"><img src="./img/allow_lgray.jpg" alt="왼쪽 화살표" class="fl"></a>
+				<div class="fl cal">
+					<p class="cal_year">2016년</p>
+					<p class="cal_month">1월</p>
+				</div>
+				<a href="#"><img src="./img/allow_rgray.jpg" alt="오른쪽 화살표" class="fr"></a>
+			</div>
+			<div class="calendar">
+				<table>
+					<colgroup>
+						<col width="148px">
+						<col width="148px">
+						<col width="148px">
+						<col width="148px">
+						<col width="148px">
+						<col width="148px">
+						<col width="148px">
+					</colgroup>
+					<tr>
+						<th>
+							Su
+						</th>
+						<th>
+							Mo
+						</th>
+						<th>
+							Tu
+						</th>
+						<th>
+							We
+						</th>
+						<th>
+							Th
+						</th>
+						<th>
+							Fr
+						</th>
+						<th>
+							Sa
+						</th>
+					</tr>
+					<tr>
+						<td>
+							<p class="fr cal_day">
+								1
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								2
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								3
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								4
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								5
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								6
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="cal_day">
+								7
+							</p>
+							<p class="cal_bg1" onclick="location.href='./calendar1.html'">
+								첫째생일
+							</p>
+							<p class="cal_bg2" onclick="location.href='./calendar2.html'">
+								둘째생일
+							</p>
+							<p class="cal_bg3" onclick="location.href='./calendar3.html'">
+								셋째생일
+							</p>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p class="fr cal_day">
+								8
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								9
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								10
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								11
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								12
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								13
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								14
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p class="fr cal_day">
+								15
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								16
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								17
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								18
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								19
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								20
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								21
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p class="fr cal_day">
+								22
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								23
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								24
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								25
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								26
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								27
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								28
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p class="fr cal_day">
+								29
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								30
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								31
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								 
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								 
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								 
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+						<td>
+							<p class="fr cal_day">
+								 
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+							<p>
+							</p>
+						</td>
+					</tr>
+				</table>
+				<div>
+					<a href="./calendar_plus.html"><img src="./img/cal_plus2.jpg" alt="일정 추가하기" class="fr"></a>
+				</div>
+			</div>
+		</div>
+    </div>
+</body>
+</html>

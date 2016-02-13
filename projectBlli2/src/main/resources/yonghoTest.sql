@@ -52,7 +52,7 @@ select * from blli_baby;
 
 drop table blli_mailing cascade constraint;
 CREATE TABLE blli_mailing (
-	mail_form			VARCHAR2(20) NOT NULL primary key,
+	mail_form			VARCHAR2(40) NOT NULL primary key,
 	mail_subject		VARCHAR2(100) NOT NULL,
 	mail_content_file		VARCHAR2(30) NOT NULL
 );
@@ -63,9 +63,13 @@ insert into blli_member(member_id, member_email, member_password, member_name, m
 	
 select * from blli_member;
 
-insert into blli_mailing(mail_form, mail_subject, mail_content_file) values('findPassword', '비밀번호를 잊으셨군요!', 'mailForm_findPassword.vm');
-insert into blli_mailing(mail_form, mail_subject, mail_content_file) values('recommendingMail', '블리가 제안하는 지금 아이에게 맞는 제품!', 'mailForm_recommendingMail.vm');
+insert into blli_mailing(mail_form, mail_subject, mail_content_file) values('getTemporaryPassword', '임시비밀번호입니다!', 'mailForm_getTemporaryPassword.vm');
+insert into blli_mailing(mail_form, mail_subject, mail_content_file) values('recommendingMail', '블리가 제안하는 지금 아이에게 필요한 제품!', 'mailForm_recommendingMail.vm');
+insert into blli_mailing(mail_form, mail_subject, mail_content_file) values('receiveLinkToGetTemporaryPasswordMail', '비밀번호를 잊으셨군요!', 'mailForm_receiveLinkToGetTemporaryPasswordMail.vm');
 
 select * from blli_mailing;
 
 select * from blli_small_product;
+
+select product_db_insert_date from blli_small_product;
+

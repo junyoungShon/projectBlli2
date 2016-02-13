@@ -1,21 +1,4 @@
 drop table blli_member cascade constraint;
-drop table blli_baby cascade constraint;
-drop table blli_schedule cascade constraint;
-drop table blli_auto_login cascade constraint;
-drop table blli_big_category cascade constraint;
-drop table blli_mid_category cascade constraint;
-drop table blli_small_product cascade constraint;
-drop table blli_posting cascade constraint;
-drop table blli_small_buy_link cascade constraint;
-drop table blli_small_product_photo cascade constraint;
-drop table blli_recomm_mid_category cascade constraint;
-drop table blli_member_dibs cascade constraint;
-drop table blli_buy_link_click cascade constraint;
-drop table blli_member_scrape cascade constraint;
-drop table blli_mailing cascade constraint;
-
-
-drop table blli_member cascade constraint;
 CREATE TABLE blli_member (
 	member_id            VARCHAR2(30) NOT NULL primary key,
 	member_email         VARCHAR2(50) NULL ,
@@ -82,7 +65,7 @@ CREATE TABLE blli_mid_category (
 	constraint pk_mid_category primary key(mid_category_id, mid_category),
 	constraint fk_mid_cate_big_cate foreign key(big_category) references blli_big_category(big_category)
 );
-alter table blli_mid_category add(small_product_count NUMBER(5))
+-- alter table blli_mid_category add(small_product_count NUMBER(5));
 
 drop table blli_small_product cascade constraint;
 CREATE TABLE blli_small_product ( -- naver_shopping_link  VARCHAR2(300) NOT NULL 삭제
@@ -104,17 +87,17 @@ CREATE TABLE blli_small_product ( -- naver_shopping_link  VARCHAR2(300) NOT NULL
    small_product_status VARCHAR2(30) NOT NULL, -- 추가
    search_time DATE NULL, -- 추가
    detail_view_count number(8) default 0, --추가
-   blli_small_product number(8) not null, --추가
-   small_product_ranking number(4) not null, --추가
+   small_product_ranking number(4) default 0, --추가
    constraint fk_small_prod_mid_cate foreign key(mid_category, mid_category_id) references blli_mid_category(mid_category, mid_category_id) -- mid_category_id 추가
 );
 
-alter table blli_small_product add( detail_view_count number(8) default 0)
-alter table blli_small_product add( product_db_insert_date date)
-alter table blli_small_product add( small_Product_Ranking number(4))
+update blli_small_product set small_product_status='confirmed' where small_product_status='unconfirmed';
+-- alter table blli_small_product add( detail_view_count number(8) default 0);
+-- alter table blli_small_product add( product_db_insert_date date);
+-- alter table blli_small_product add( small_Product_Ranking number(4));
 
 
-ALTER TABLE  blli_small_product  RENAME COLUMN naver_shopping_rank TO naver_shopping_rank
+-- ALTER TABLE  blli_small_product  RENAME COLUMN naver_shopping_rank TO naver_shopping_rank;
 
 drop table blli_posting cascade constraint;
 CREATE TABLE blli_posting (
@@ -142,13 +125,13 @@ CREATE TABLE blli_posting (
 	constraint pk_posting primary key(posting_url, small_product_id) -- 복합키로 변경
 );
 --신규 테이블 컬럼 추가
-alter table blli_posting add (posting_db_insert_date date)
+-- alter table blli_posting add (posting_db_insert_date date);
 --기존 프라이머리키 제거
-alter table blli_posting drop primary key;
+-- alter table blli_posting drop primary key;
 -- 프라이머리키 변경
-alter table blli_posting add constraint pk_posting primary key(posting_url, small_product_id)
+-- alter table blli_posting add constraint pk_posting primary key(posting_url, small_product_id);
 -- 컬럼명 변경
-alter table blli_posting rename column posting_order to posting_rank
+-- alter table blli_posting rename column posting_order to posting_rank;
 
 
 drop table blli_small_prod_buy_link cascade constraint;
@@ -261,9 +244,9 @@ CREATE TABLE blli_posting_dislike (
 
 drop table blli_mailing cascade constraint;
 CREATE TABLE blli_mailing (
-	mail_form			VARCHAR2(20) NOT NULL primary key,
+	mail_form			VARCHAR2(40) NOT NULL primary key, -- VARCHAR2(20)에서 VARCHAR2(40)으로 변경
 	mail_subject		VARCHAR2(100) NOT NULL,
-	mail_content_file		VARCHAR2(30) NOT NULL
+	mail_content_file		VARCHAR2(50) NOT NULL -- VARCHAR2(30)에서 VARCHAR2(50)으로 변경
 );
 
 

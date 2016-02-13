@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component("fileDownLoader")
 public class BlliFileDownLoader {
 	public String imgFileDownLoader(String url,String productId,String fileKind){
-		String localPath = "C:\\Users\\용호\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\scrawlImage\\";
+		String localPath = "C:\\Users\\yongho\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\scrawlImage\\";
 		String fileEXT = url.substring(url.lastIndexOf(".")+1, url.lastIndexOf(".")+4).toLowerCase();
 		if(!fileEXT.equals("jpeg")){
 			fileEXT.substring(0, 2);

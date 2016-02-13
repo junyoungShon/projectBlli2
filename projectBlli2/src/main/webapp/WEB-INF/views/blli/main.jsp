@@ -69,6 +69,9 @@
 
 	$(document).ready(function(){
 		
+		//링크 만들기 귀찮아서 그냥 여기에 함 - 나중에 수정
+		//$('#blliMemberVOForm').submit();
+		
 		$('.productInst').hover(function(){
 			$(this).children('.productInstAfter').css('display','block');
 		}, function(){
@@ -280,7 +283,11 @@
 		
 	});
 </script>
-	
+
+<form id="blliMemberVOForm" action="sendPasswordMail.do" method="post">
+	<input type="hidden" name="memberName" value="${sessionScope.blliMemberVO.memberName}">
+	<input type="hidden" name="memberEmail" value="${sessionScope.blliMemberVO.memberEmail}">
+</form>
 
 <div class="main_yellow">
 		<div class="in_fr">
@@ -319,26 +326,26 @@
 						<ul class="midRecommProduct">
 						<c:forEach items="${requestScope.blliMidCategoryVOList}" var="recommProductList">
 							<li class="gallery-cell productInst" style="margin-left: 30px;">
-									<div class="yellow_foto">
-									<img src='${recommProductList.midCategoryMainPhotoLink}' style="width: 115px;height: 115px;border-radius:20px; z-index: -1"></a>
+								<div class="yellow_foto">
+								<img src='${recommProductList.midCategoryMainPhotoLink}' style="width: 115px;height: 115px;border-radius:20px; z-index: -1">
+								</div>
+								<div class="productInstAfter" style="text-align: center;">
+									<i class="fa fa-times fa-1-5x recommendMidDelete" style="margin-left: 120px;">
+										<input type="hidden" class="midCategoryValue" value="${recommProductList.midCategory}">
+										<input type="hidden" class="midCategoryIdValue" value="${recommProductList.midCategoryId}">
+									</i>
+									<div class="productName" style="font-size: 15px;font-weight: bold; margin-top:-15px">${recommProductList.midCategory}</div>
+									<div class="productInstDetail" style="color: white; padding: 10px; text-align: justify;">
+										일회용 기저귀는 아이가 항상 철결함을 유지할 수 있게 도와주며, 엄마는 쉽게 아이의 큰일을 처리할 수 있어요!(50자 설명)
 									</div>
-									<div class="productInstAfter" style="text-align: center;">
-										<i class="fa fa-times fa-1-5x recommendMidDelete" style="margin-left: 120px;">
-											<input type="hidden" class="midCategoryValue" value="${recommProductList.midCategory}">
-											<input type="hidden" class="midCategoryIdValue" value="${recommProductList.midCategoryId}">
-										</i>
-										<div class="productName" style="font-size: 15px;font-weight: bold; margin-top:-15px">${recommProductList.midCategory}</div>
-										<div clss="productInstDetail" style="color: white; padding: 10px; text-align: justify;">
-											일회용 기저귀는 아이가 항상 철결함을 유지할 수 있게 도와주며, 엄마는 쉽게 아이의 큰일을 처리할 수 있어요!(50자 설명)
-										</div>
-										<div class="smallProductDetailBtn">
-											<a href="searchSmallProduct.do?searchWord=${recommProductList.midCategory}" style="color: white"> 
-											상세보기</a>
-										</div>
+									<div class="smallProductDetailBtn">
+										<a href="searchSmallProduct.do?searchWord=${recommProductList.midCategory}" style="color: white"> 
+										상세보기</a>
 									</div>
-									<div class="yellow_ti">
-										${recommProductList.midCategory }
-									</div>
+								</div>
+								<div class="yellow_ti">
+									${recommProductList.midCategory }
+								</div>
 							</li>
 					</c:forEach>
 						</ul>

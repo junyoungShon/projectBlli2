@@ -1,13 +1,22 @@
 package kr.co.blli.model.member;
 
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 
 
+
+
+
+
+
+
 import kr.co.blli.model.vo.BlliBabyVO;
+import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 
 public interface MemberService {
@@ -31,6 +40,12 @@ public interface MemberService {
 
 	public void deleteBabyInfo(BlliMemberVO blliMemberVO);
 
-
-
+	
+	
+	//용호 작성 영역
+	public List<BlliMemberVO> getMemberHavingBabyAgeChangedList();
+	public List<BlliBabyVO> getBabyAgeChangedListOfMember(String memberId) throws ParseException;
+	public void sendLinkToGetTemporaryPassword(String memberEmail) throws UnsupportedEncodingException, MessagingException;
+	public String updateMemberPasswordToTemporaryPassword(String memberEmail);
+	public void sendTemporaryPasswordMail(String memberEmail, String TemporaryPassword) throws UnsupportedEncodingException, MessagingException;
 }
