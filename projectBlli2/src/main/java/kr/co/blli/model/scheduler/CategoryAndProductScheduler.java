@@ -46,11 +46,11 @@ public class CategoryAndProductScheduler {
 	public void insertBigCategory() throws IOException {
 		long start = System.currentTimeMillis(); // 시작시간 
 		
-		Logger logger = Logger.getLogger(getClass());
+		Logger logger = Logger.getLogger(CategoryAndProductScheduler.class);
 		logger.info("start : insertBigCategory");
 		logger.info("요청자 : scheduler");
-		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+		Calendar cal = Calendar.getInstance();
 		String datetime = sdf.format(cal.getTime());
 		logger.info("발생 일자 : "+datetime);
 		
@@ -476,24 +476,24 @@ public class CategoryAndProductScheduler {
 		logger.info("insert한 소제품 개수 : "+insertSmallProductCount);
 		logger.info("update한 소제품 개수 : "+updateSmallProductCount);
 		logger.info("insert한 조건에 맞지 않는 소제품 개수 : "+denySmallProductCount);
-		logger.info("update하지 않은 소제품 개수"+notUpdateProductCount);
+		logger.info("update하지 않은 소제품 개수 : "+notUpdateProductCount);
 		logger.info("Exception 발생 횟수 : "+allExceptionCount);
 		Iterator<String> smallProductIdList = detailException.keySet().iterator();
 		while(smallProductIdList.hasNext()){
 			smallProductId = smallProductIdList.next();
-			logger.info("Exception 발생한 smallProductId : "+smallProductId);
+			logger.info("Exception이 발생한 smallProductId : "+smallProductId);
 			logger.info("Exception 내용 : "+detailException.get(smallProductId));
 		}
 		long end = System.currentTimeMillis();  //종료시간
 		
 		//종료-시작=실행시간		
-		if((end-start/1000) > 60*60){
-			double hour = (((end-start)/1000.0)/60.0)/60;
-			double minute = ((end-start)/1000.0)/60-hour*60;
+		if((end-start)/1000 > 60*60){
+			double hour = (int)Math.floor((((end-start)/1000.0)/60.0)/60);
+			double minute = (int)Math.floor(((end-start)/1000.0)/60-hour*60);
 			int second = (int)Math.ceil((end-start)/1000.0-minute*60);
 			logger.info("실행 시간  : "+hour+"시간 "+minute+"분 "+second+"초");
-		}else if((end-start/1000) > 60){
-			double minute = ((end-start)/1000.0)/60.0;
+		}else if((end-start)/1000 > 60){
+			double minute = (int)Math.floor(((end-start)/1000.0)/60.0);
 			int second = (int)Math.ceil((end-start)/1000.0-minute*60);
 			logger.info("실행 시간  : "+minute+"분 "+second+"초");
 		}else{

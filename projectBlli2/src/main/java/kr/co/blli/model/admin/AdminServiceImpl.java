@@ -382,6 +382,7 @@ public class AdminServiceImpl implements AdminService{
 		try {
 			BufferedReader in = new BufferedReader(new FileReader("C:\\Users\\용호\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\logFile\\blliLog.log"));
 			String message;
+			String exceptionContent = "";
 			while ((message = in.readLine()) != null) {
 				if(message.startsWith("start")){
 					vo = new BlliLogVO();
@@ -390,6 +391,10 @@ public class AdminServiceImpl implements AdminService{
 				}else if(message.startsWith("발생 일자")){
 					vo.setStartTime(message.substring(message.indexOf(":")+2));
 				}else if(message.startsWith("실행 시간")){
+					if(!exceptionContent.equals("")){
+						exceptionVO.setExceptionContent(exceptionContent);
+						detailException.add(exceptionVO);
+					}
 					vo.setRunTime(message.substring(message.lastIndexOf(":")+2));
 				}else if(message.startsWith("요청자")){
 					vo.setExecutor(message.substring(message.lastIndexOf(":")+2));
@@ -432,23 +437,34 @@ public class AdminServiceImpl implements AdminService{
 				}else if(message.startsWith("Exception 발생 횟수")){
 					vo.setExceptionCount(message.substring(message.lastIndexOf(":")+2));
 				}else if(message.startsWith("Exception이 발생한")){
+					if(!exceptionContent.equals("")){
+						exceptionVO.setExceptionContent(exceptionContent);
+						detailException.add(exceptionVO);
+					}
 					exceptionVO = new BlliDetailException();
 					exceptionVO.setCategoryId(message.substring(message.lastIndexOf(":")+2));
 				}else if(message.startsWith("Exception 내용")){
-					exceptionVO.setExceptionContent(message.substring(message.indexOf(":")+1));
-					detailException.add(exceptionVO);
+					if(message.length() != 15){
+						exceptionVO.setExceptionContent(message.substring(message.indexOf(":")+1));
+						detailException.add(exceptionVO);
+					}else{
+						exceptionContent = "";
+					}
+				}else if(message.startsWith("###")){
+					exceptionContent += message.replaceAll("\"", "'")+"<br>";
 				}else if(message.startsWith("end")){
 					vo.setDetailException(detailException);
 					list.add(vo);
+					detailException = new ArrayList<BlliDetailException>();
+					if(number > 20){
+						break;
+					}
 				}
 			}
 			in.close();
 		} catch (IOException e) {
 			System.err.println(e); // 에러가 있다면 메시지 출력
 			System.exit(1);
-		}
-		for(int i=0;i<list.size();i++){
-			System.out.println(list.get(i));
 		}
 		return list;
 	}

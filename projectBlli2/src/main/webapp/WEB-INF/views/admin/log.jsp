@@ -16,9 +16,17 @@ table {
 	border-left: 1px solid #cccccc;
 	border-collapse: collapse;
 	margin: auto;
+	table-layout: fixed;
+}
+#mainTable {
 	margin-top: 100px;
 }
-
+#subTable {
+	margin-top: 20px;
+}
+#subTable2 {
+	margin-bottom: 20px;
+}
 table th, table td {
 	color: #678197;
 	text-align: center;
@@ -27,7 +35,6 @@ table th, table td {
 	padding: 3px 0;
 	text-align: center;
 }
-
 table th {
 	background-color: #eeeeee;
 }
@@ -38,26 +45,102 @@ table th {
 <script type="text/javascript">
 $(document).ready(function(){
 	$(".detail").click(function(){
+		var table = "<table id='subTable'>";
 		var methodName = $(this).attr("name");
-		var categoryCount = $(this).parent().children().eq(0).val();
-		var insertCategoryCount = $(this).parent().children().eq(1).val();
-		var updateCategoryCount = $(this).parent().children().eq(2).val();
-		var exceptionCount = $(this).parent().children().eq(3).val();
-		$("#bigCategoryCount").html(categoryCount);
-		$("#insertCategoryCount").html(insertCategoryCount);
-		$("#updateCategoryCount").html(updateCategoryCount);
-		$("#exceptionCount").html(exceptionCount);
+		var highRankCategoryCount = $(this).parent().children("input[name=highRankCategoryCount]").val();
+		var categoryCount = $(this).parent().children("input[name=categoryCount]").val();
+		var insertCategoryCount = $(this).parent().children("input[name=insertCategoryCount]").val();
+		var denySmallProductCount = $(this).parent().children("input[name=denySmallProductCount]").val();
+		var updateCategoryCount = $(this).parent().children("input[name=updateCategoryCount]").val();
+		var notUpdateProductCount = $(this).parent().children("input[name=notUpdateProductCount]").val();
+		var exceptionCount = $(this).parent().children("input[name=exceptionCount]").val();
+		var detailException = $(this).parent().children("input[name=detailException]").val();
 		if(methodName == "insertBigCategory"){
-			$("#detailBigCategory").bPopup();
+			table += "<tr>";
+			table += "<th>총 대분류 개수</th>";
+			table += "<th>insert한 대분류 개수</th>";
+			table += "<th>update한 대분류 개수</th>";
+			table += "<th>Exception 발생 횟수</th>";
+			table += "</tr>";
+			table += "<tr>";
+			table += "<td>"+categoryCount+"</td>";
+			table += "<td>"+insertCategoryCount+"</td>";
+			table += "<td>"+updateCategoryCount+"</td>";
+			table += "<td>"+exceptionCount+"</td>";
+			table += "</tr>";
+		}else if(methodName == "insertMidCategory"){
+			table += "<tr>";
+			table += "<th>총 대분류 개수</th>";
+			table += "<th>총 중분류 개수</th>";
+			table += "<th>insert한 중분류 개수</th>";
+			table += "<th>update한 중분류 개수</th>";
+			table += "<th>Exception 발생 횟수</th>";
+			table += "</tr>";
+			table += "<tr>";
+			table += "<td>"+highRankCategoryCount+"</td>";
+			table += "<td>"+categoryCount+"</td>";
+			table += "<td>"+insertCategoryCount+"</td>";
+			table += "<td>"+updateCategoryCount+"</td>";
+			table += "<td>"+exceptionCount+"</td>";
+			table += "</tr>";
+		}else if(methodName == "insertSmallProduct"){
+			table += "<tr>";
+			table += "<th>총 중분류 개수</th>";
+			table += "<th>총 소제품 개수</th>";
+			table += "<th>insert한 소제품 개수</th>";
+			table += "<th>update한 소제품 개수</th>";
+			table += "<th>insert한 조건에 맞지 않는 소제품 개수</th>";
+			table += "<th>update하지 않은 소제품 개수</th>";
+			table += "<th>Exception 발생 횟수</th>";
+			table += "</tr>";
+			table += "<tr>";
+			table += "<td>"+highRankCategoryCount+"</td>";
+			table += "<td>"+categoryCount+"</td>";
+			table += "<td>"+insertCategoryCount+"</td>";
+			table += "<td>"+updateCategoryCount+"</td>";
+			table += "<td>"+denySmallProductCount+"</td>";
+			table += "<td>"+notUpdateProductCount+"</td>";
+			table += "<td>"+exceptionCount+"</td>";
+			table += "</tr>";
 		}
+		table += "</table><table id='subTable2'>";
+		for(var i=0;i<detailException;i++){
+			if(i%2 == 0){
+				table += "<tr>";
+				table += "<th>Exception이 발생한 bigCategoryId</th>";
+				table += "<th>Exception 내용</th>";
+				table += "<th>Exception이 발생한 bigCategoryId</th>";
+				table += "<th>Exception 내용</th>";
+				table += "</tr>";
+				table += "<tr>";
+				table += "<td>"+$(this).parent().children("input[name=categoryId]").eq(i).val()+"</td>";
+				table += "<td><div style='display:none; width:50%; height:auto; background-color: white; padding: 20px; margin: auto;'>"+$(this).parent().children("input[name=exceptionContent]").eq(i).val()+"</div>";
+				table += "<img src='${initParam.root}img/상세보기.PNG' alt='상세보기' width='20px' style='cursor: pointer;' class='exceptionPopUp'></td>";
+				if(i == (detailException-1)){
+					table += "<td></td><td></td></tr>";
+				}
+			}else{
+				table += "<td>"+$(this).parent().children("input[name=categoryId]").eq(i).val()+"</td>";
+				table += "<td><div style='display:none; width:50%; height:auto; background-color: white; padding: 20px; margin: auto;'>"+$(this).parent().children("input[name=exceptionContent]").eq(i).val()+"</div>";
+				table += "<img src='${initParam.root}img/상세보기.PNG' alt='상세보기' width='20px' style='cursor: pointer;' class='exceptionPopUp'></td>";
+				table += "</tr>";
+			}
+		}
+		table += "</table>";
+		$("#detailPopUp").html(table);
+		$("#detailPopUp").bPopup();
 	});
+});
+$(document).on("click", ".exceptionPopUp", function(){
+	$(this).prev().bPopup();
 });
 </script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>로그 조회</title>
 </head>
 <body>
-<table>
+<div style='margin: auto; padding: 10px;'></div>
+<table id="mainTable">
 	<tr>
 		<th>번호</th>
 		<th>method</th>
@@ -74,42 +157,24 @@ $(document).ready(function(){
 		<td>${log.runTime}</td>
 		<td>${log.startTime}</td>
 		<td>
-			<input type="hidden" value="${log.categoryCount}">
-			<input type="hidden" value="${log.insertCategoryCount}">
-			<input type="hidden" value="${log.updateCategoryCount}">
-			<input type="hidden" value="${log.exceptionCount}">
+			<input type="hidden" value="${log.highRankCategoryCount}" name="highRankCategoryCount">
+			<input type="hidden" value="${log.denySmallProductCount}" name="denySmallProductCount">
+			<input type="hidden" value="${log.notUpdateProductCount}" name="notUpdateProductCount">
+			<input type="hidden" value="${log.categoryCount}" name="categoryCount">
+			<input type="hidden" value="${log.insertCategoryCount}" name="insertCategoryCount">
+			<input type="hidden" value="${log.updateCategoryCount}" name="updateCategoryCount">
+			<input type="hidden" value="${log.exceptionCount}" name="exceptionCount">
+			<input type="hidden" value="${fn:length(log.detailException)}" name="detailException">
+			<c:forEach items="${log.detailException}" var="exceptionInfo">
+				<input type="hidden" value="${exceptionInfo.categoryId}" name="categoryId">
+				<input type="hidden" value="${exceptionInfo.exceptionContent}" name="exceptionContent">
+			</c:forEach>
 			<img src="${initParam.root}img/상세보기.PNG" alt="상세보기" width="20px" class="detail" style="cursor: pointer;" name="${log.methodName}" id="${index.index}">
 		</td>
 	</tr>
 	</c:forEach>
 </table>
-<div id="detailBigCategory" style="display:none; width:70%; height:70%; background-color: white;">
-<table>
-	<tr>
-		<th>총 대분류 개수</th>
-		<th>insert한 대분류 개수</th>
-		<th>update한 대분류 개수</th>
-		<th>Exception 발생 횟수</th>
-	</tr>
-	<tr>
-		<td id="bigCategoryCount"></td>
-		<td id="insertCategoryCount"></td>
-		<td id="updateCategoryCount"></td>
-		<td id="exceptionCount"></td>
-	</tr>
-	<tr>
-		<th>Exception이 발생한 bigCategoryId</th>
-		<th>Exception 내용</th>
-		<th>Exception이 발생한 bigCategoryId</th>
-		<th>Exception 내용</th>
-	</tr>
-	<tr>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td></td>
-	</tr>
-</table>
+<div id="detailPopUp" style="display:none; width:70%; height:auto; background-color: white; overflow-y: auto;">
 </div>
 </body>
 </html>

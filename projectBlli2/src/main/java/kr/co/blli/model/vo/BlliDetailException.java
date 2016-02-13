@@ -19,5 +19,9 @@ public class BlliDetailException {
 	public void setExceptionContent(String exceptionContent) {
 		this.exceptionContent = exceptionContent;
 	}
-	
+	@Override
+	public String toString() {
+		return "BlliDetailException [categoryId=" + categoryId
+				+ ", exceptionContent=" + exceptionContent + "]";
+	}
 }
