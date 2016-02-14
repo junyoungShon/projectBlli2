@@ -1,10 +1,14 @@
 package kr.co.blli.model.posting;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import kr.co.blli.model.vo.BlliMemberScrapeVO;
+import kr.co.blli.model.vo.BlliPostingDisLikeVO;
+import kr.co.blli.model.vo.BlliPostingLikeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -76,5 +80,26 @@ public class PostingDAOImpl implements PostingDAO{
 	@Override
 	public void insertDeadPosting(BlliPostingVO blliPostingVO) {
 		sqlSessionTemplate.insert("posting.insertDeadPosting", blliPostingVO);
+	}
+	@Override
+	public int selectThisPostingScrape(BlliMemberScrapeVO blliMemberScrapeVO) {
+		return sqlSessionTemplate.selectOne("posting.selectThisPostingScrape", blliMemberScrapeVO);
+	}
+	@Override
+	public int selectThisPostingLike(BlliPostingLikeVO blliPostingLikeVO) {
+		return sqlSessionTemplate.selectOne("posting.selectThisPostingLike", blliPostingLikeVO);
+	}
+	@Override
+	public int selectThisPostingDisLike(BlliPostingDisLikeVO blliPostingDisLikeVO) {
+		return sqlSessionTemplate.selectOne("posting.selectThisPostingDisLike", blliPostingDisLikeVO);
+	}
+	@Override
+	public List<BlliPostingVO> selectPostingBySmallProductId(HashMap<String, String> paraMap) {
+		System.out.println(paraMap);
+		return sqlSessionTemplate.selectList("posting.selectPostingBySmallProductId", paraMap);
+	}
+	@Override
+	public String selectTotalPostingtNum() {
+		return sqlSessionTemplate.selectOne("posting.selectTotalPostingtNum");
 	}
 }

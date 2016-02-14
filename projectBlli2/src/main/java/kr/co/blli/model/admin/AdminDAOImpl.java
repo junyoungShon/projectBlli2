@@ -9,6 +9,7 @@ import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
+import kr.co.blli.model.vo.BlliWordCloudVO;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
@@ -95,5 +96,21 @@ public class AdminDAOImpl implements AdminDAO{
 	@Override
 	public void updatePostingCount(BlliPostingVO vo) {
 		sqlSessionTemplate.update("admin.updatePostingCount", vo);
+	}
+	@Override
+	public List<BlliPostingVO> makingWordCloud(String smallProductId) {
+		return sqlSessionTemplate.selectList("admin.makingWordCloud", smallProductId);
+	}
+	@Override
+	public String selectPostingContentByPostingUrl(String postingUrl) {
+		return sqlSessionTemplate.selectOne("admin.selectPostingContentByPostingUrl", postingUrl);
+	}
+	@Override
+	public int updateWordCloud(BlliWordCloudVO blliWordCloudVO) {
+		return sqlSessionTemplate.update("admin.updateWordCloud", blliWordCloudVO);
+	}
+	@Override
+	public void insertWordCloud(BlliWordCloudVO blliWordCloudVO) {
+		sqlSessionTemplate.insert("admin.insertWordCloud", blliWordCloudVO);
 	}
 }

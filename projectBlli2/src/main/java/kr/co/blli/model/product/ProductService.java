@@ -15,6 +15,7 @@ import kr.co.blli.model.vo.BlliPostingDisLikeVO;
 import kr.co.blli.model.vo.BlliPostingLikeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
+import kr.co.blli.model.vo.BlliWordCloudVO;
 import kr.co.blli.model.vo.ListVO;
 
 public interface ProductService {
@@ -53,5 +54,10 @@ public interface ProductService {
 	public BlliSmallProductVO productDibChecker(String memberId, BlliSmallProductVO blliSmallProductVO);
 
 	public void buyLinkClick(BlliBuyLinkClickVO blliBuyLinkClickVO);
+
+	public List<BlliWordCloudVO> selectWordCloudList(String smallProductId);
+
+	public String selectTotalProductNum();
+
 
 }

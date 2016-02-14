@@ -19,8 +19,6 @@
 			emailValidity = true;
 		}
 	});
-	
-	
 	function setUpdateBabyPhotoNum(updateBabyPhotoNum){
 		this.updateBabyPhotoNum = updateBabyPhotoNum;
 	}

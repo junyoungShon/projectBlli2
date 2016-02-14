@@ -9,6 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <title>블리 - 충동구매보다 빠른 합리적 쇼핑!</title>
 <link href="${initParam.root}img/favicon/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link href="${initParam.root}img/favicon/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 <meta name="Keywords" content="" />
 <meta name="Description" content="" />
 <link rel="stylesheet" type="text/css" href="${initParam.root}css/reset.css" />
@@ -47,6 +48,16 @@
 		window.open("${initParam.root}addTwinsName.do","popup",popOption);
 	}
 	$(document).ready(function(){
+		
+		$.ajax({
+			type:"get",
+			url:"footerStatics.do",
+			success:function(data){
+				$('.footerProductStatics').text(data.productStatics);
+				$('.footerPostingStatics').text(data.postingStatics);
+			}
+		});
+		
 		//사진 업로드 시 실시간 미리보기 및 용량 체크
 		$('.babyPhoto').change(function(){
 			var fileName = $(this).val(); 
@@ -129,7 +140,7 @@
 				openAddTwinsNamePage();
 			}
 		});
-		$(':input[name="memberId"]').keyup(function(){
+		$(':input[name="memberEmail"]').keyup(function(){
 			//유저의 입력값
 			var userMail = $(this).val();
 			//이메일 정규식
@@ -231,7 +242,7 @@
 		//이메일 유효성 검증 실패
 		if(!emailValidity){
 			alert('이메일을 확인해주세요');
-			$(':input[name="memberId"]').focus();
+			$(':input[name="memberEmail"]').focus();
 			return false;
 		}
 		flag = checkFirstBabyInfo(targetAmount);
@@ -302,7 +313,7 @@
 			
 			<c:if test="${sessionScope.blliMemberVO.memberEmail=='needsYourEmail'}">
 				<div class="email_bg" style="top: 15%;">
-					이메일 주소 <input type="text" name="memberId" placeholder="Email 주소">
+					이메일 주소 <input type="text" name="memberEmail" placeholder="Email 주소">
 				</div>
 			</c:if>
 			
@@ -408,6 +419,17 @@
 	</div>
 	</form>
 	</sec:authorize>
+			<div class="login_bottom">
+			<div class="fl login_bottom_ft">
+				블리는 <span class="footerProductStatics"></span>개의 상품을 소개하고, 관련된 <span class="footerPostingStatics"></span>개의 블로그를 분석하고 소개합니다.
+			</div>
+			<div class="fr">
+				<div class="login_bottom_right">
+				<a href="${initParam.root}adminIndex.do"><img src="./img/bottom_app1.png" alt="안드로이드 다운로드받기"></a>
+				<a href="#"><img src="./img/bottom_app2.png" alt="애플 다운로드받기"></a>
+				</div>
+			</div>
+		</div>
 	
 </body>
 </html>

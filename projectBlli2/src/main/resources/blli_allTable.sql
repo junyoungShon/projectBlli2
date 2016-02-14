@@ -91,11 +91,9 @@ CREATE TABLE blli_small_product ( -- naver_shopping_link  VARCHAR2(300) NOT NULL
    constraint fk_small_prod_mid_cate foreign key(mid_category, mid_category_id) references blli_mid_category(mid_category, mid_category_id) -- mid_category_id 추가
 );
 
-update blli_small_product set small_product_status='confirmed' where small_product_status='unconfirmed';
 -- alter table blli_small_product add( detail_view_count number(8) default 0);
 -- alter table blli_small_product add( product_db_insert_date date);
 -- alter table blli_small_product add( small_Product_Ranking number(4));
-
 
 -- ALTER TABLE  blli_small_product  RENAME COLUMN naver_shopping_rank TO naver_shopping_rank;
 
@@ -249,7 +247,13 @@ CREATE TABLE blli_mailing (
 	mail_content_file		VARCHAR2(50) NOT NULL -- VARCHAR2(30)에서 VARCHAR2(50)으로 변경
 );
 
-
+drop table blli_word_cloud cascade constraint;
+CREATE TABLE blli_word_cloud (
+	small_product_id   VARCHAR2(30) NOT NULL , -- 추가
+	word		VARCHAR2(40) NOT NULL,
+	word_count		number(6) NOT NULL,
+	constraint fk_blli_word_cloud_sp_id foreign key(small_product_id) references blli_small_product(small_product_id)
+);
 ------------------------------------------------------------------------------------------------------------
 
 drop sequence blli_schedule_seq;

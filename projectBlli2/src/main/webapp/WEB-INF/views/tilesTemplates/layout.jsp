@@ -32,6 +32,7 @@
 <!-- 폰트 -->
 <link href="https://cdn.rawgit.com/openhiun/hangul/14c0f6faa2941116bb53001d6a7dcd5e82300c3f/nanumbarungothic.css" rel="stylesheet" type="text/css">
 <!-- 부트 스트랩 사용을 위한 하단 설정 -->
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
 <script src="${initParam.root}js/jquery.js"></script>
 <script src="${initParam.root}js/jquery-ui.min.js"></script>

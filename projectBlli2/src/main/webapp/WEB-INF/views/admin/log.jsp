@@ -53,6 +53,9 @@ $(document).ready(function(){
 		var denySmallProductCount = $(this).parent().children("input[name=denySmallProductCount]").val();
 		var updateCategoryCount = $(this).parent().children("input[name=updateCategoryCount]").val();
 		var notUpdateProductCount = $(this).parent().children("input[name=notUpdateProductCount]").val();
+		var denyPostingCount = $(this).parent().children("input[name=denyPostingCount]").val();
+		var notUpdatePostingCount = $(this).parent().children("input[name=notUpdatePostingCount]").val();
+		var delayConnectionCount = $(this).parent().children("input[name=delayConnectionCount]").val();
 		var exceptionCount = $(this).parent().children("input[name=exceptionCount]").val();
 		var detailException = $(this).parent().children("input[name=detailException]").val();
 		if(methodName == "insertBigCategory"){
@@ -102,6 +105,27 @@ $(document).ready(function(){
 			table += "<td>"+notUpdateProductCount+"</td>";
 			table += "<td>"+exceptionCount+"</td>";
 			table += "</tr>";
+		}else if(methodName == "insertPosting"){
+			table += "<tr>";
+			table += "<th>총 소제품 개수</th>";
+			table += "<th>총 포스팅 개수</th>";
+			table += "<th>insert한 포스팅 개수</th>";
+			table += "<th>update한 포스팅 개수</th>";
+			table += "<th>insert하지 않은 조건에 맞지 않는 포스팅 개수</th>";
+			table += "<th>update하지 않은 포스팅 개수</th>";
+			table += "<th>시간지연되어 insert하지 않은 포스팅 개수</th>";
+			table += "<th>Exception 발생 횟수</th>";
+			table += "</tr>";
+			table += "<tr>";
+			table += "<td>"+highRankCategoryCount+"</td>";
+			table += "<td>"+categoryCount+"</td>";
+			table += "<td>"+insertCategoryCount+"</td>";
+			table += "<td>"+updateCategoryCount+"</td>";
+			table += "<td>"+denyPostingCount+"</td>";
+			table += "<td>"+notUpdatePostingCount+"</td>";
+			table += "<td>"+delayConnectionCount+"</td>";
+			table += "<td>"+exceptionCount+"</td>";
+			table += "</tr>";
 		}
 		table += "</table><table id='subTable2'>";
 		for(var i=0;i<detailException;i++){
@@ -114,14 +138,32 @@ $(document).ready(function(){
 				table += "</tr>";
 				table += "<tr>";
 				table += "<td>"+$(this).parent().children("input[name=categoryId]").eq(i).val()+"</td>";
-				table += "<td><div style='display:none; width:50%; height:auto; background-color: white; padding: 20px; margin: auto;'>"+$(this).parent().children("input[name=exceptionContent]").eq(i).val()+"</div>";
+				table += "<td><div style='display:none; width:50%; height:auto; background-color: white; padding: 20px; margin: auto;'>";
+				table += "<table>";
+				table += "<tr>";
+				table += "<th>Exception 내용</th>";
+				table += "</tr>";
+				table += "<tr>";
+				table += "<td>"+$(this).parent().children("input[name=exceptionContent]").eq(i).val()+"</td>";
+				table += "</tr>";
+				table += "</table>";
+				table += "</div>";
 				table += "<img src='${initParam.root}img/상세보기.PNG' alt='상세보기' width='20px' style='cursor: pointer;' class='exceptionPopUp'></td>";
 				if(i == (detailException-1)){
 					table += "<td></td><td></td></tr>";
 				}
 			}else{
 				table += "<td>"+$(this).parent().children("input[name=categoryId]").eq(i).val()+"</td>";
-				table += "<td><div style='display:none; width:50%; height:auto; background-color: white; padding: 20px; margin: auto;'>"+$(this).parent().children("input[name=exceptionContent]").eq(i).val()+"</div>";
+				table += "<td><div style='display:none; width:50%; height:auto; background-color: white; padding: 20px; margin: auto;'>";
+				table += "<table>";
+				table += "<tr>";
+				table += "<th>Exception 내용</th>";
+				table += "</tr>";
+				table += "<tr>";
+				table += "<td>"+$(this).parent().children("input[name=exceptionContent]").eq(i).val()+"</td>";
+				table += "</tr>";
+				table += "</table>";
+				table += "</div>";
 				table += "<img src='${initParam.root}img/상세보기.PNG' alt='상세보기' width='20px' style='cursor: pointer;' class='exceptionPopUp'></td>";
 				table += "</tr>";
 			}
@@ -163,6 +205,9 @@ $(document).on("click", ".exceptionPopUp", function(){
 			<input type="hidden" value="${log.categoryCount}" name="categoryCount">
 			<input type="hidden" value="${log.insertCategoryCount}" name="insertCategoryCount">
 			<input type="hidden" value="${log.updateCategoryCount}" name="updateCategoryCount">
+			<input type="hidden" value="${log.denyPostingCount}" name="denyPostingCount">
+			<input type="hidden" value="${log.notUpdatePostingCount}" name="notUpdatePostingCount">
+			<input type="hidden" value="${log.delayConnectionCount}" name="delayConnectionCount">
 			<input type="hidden" value="${log.exceptionCount}" name="exceptionCount">
 			<input type="hidden" value="${fn:length(log.detailException)}" name="detailException">
 			<c:forEach items="${log.detailException}" var="exceptionInfo">

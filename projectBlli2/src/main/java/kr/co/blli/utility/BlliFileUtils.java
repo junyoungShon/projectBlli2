@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 @Component("fileUtils")
 public class BlliFileUtils {
     private static final String filePath 
-    = "C:\\Users\\junyoung\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\babyphoto\\";
+    = "C:\\Users\\PARK\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\babyphoto\\";
     public ArrayList<BlliBabyVO> parseInsertFileInfo
     (HttpServletRequest request,ArrayList<BlliBabyVO> list) throws Exception{
         MultipartHttpServletRequest multipartHttpServletRequest  = (MultipartHttpServletRequest)request;

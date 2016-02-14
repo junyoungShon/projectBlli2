@@ -228,6 +228,13 @@
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.2.2</version>
 		</dependency>
+		
+		<!-- 한나눔 라이브러리 추가 -->
+		<dependency>
+			<groupId>kr.ac.kaist.swrc</groupId>
+			<artifactId>jhannanum</artifactId>
+			<version>0.8.4</version>
+		</dependency>
 
 	</dependencies>
 

@@ -7,13 +7,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title>블리</title>
+<title>블리 - 충동구매보다 빠른 합리적 쇼핑!</title>
+<link href="${initParam.root}img/favicon/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 <meta name="Keywords" content="" />
 <meta name="Description" content="" />
 <!-- 스타일 시트 -->
 <link rel="stylesheet" type="text/css" href="./css/reset.css" />
 <link rel="stylesheet" type="text/css" href="./css/css.css" />
-<link href='https://cdn.rawgit.com/openhiun/hangul/14c0f6faa2941116bb53001d6a7dcd5e82300c3f/nanumbarungothic.css' rel='stylesheet' type='text/css'>
 <!-- jquery -->
 <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
@@ -25,8 +25,13 @@
 <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.2.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-	$("#fileUpload").click(function(){
-		$("#imageFile").click();
+	$.ajax({
+		type:"get",
+		url:"footerStatics.do",
+		success:function(data){
+			$('.footerProductStatics').text(data.productStatics);
+			$('.footerPostingStatics').text(data.postingStatics);
+		}
 	});
 });
 </script>
@@ -54,11 +59,11 @@ $(document).ready(function(){
 	</sec:authorize>
 	
 		<div class="login_bg2">
-			<img src="./img/login_logo.png" class="login_logo">
-			<img src="./img/login_ti.png" style="margin-top:20px; margin-bottom:20px;">
-			<p>
-				블리는 내 아이에게 필요한 것을 해결하는 서비스 입니다.<br/>
-				이미 블리 회원이신가요? <a href="${initParam.root}loginPage.do"><font color="white"><b>로그인</b></font></a>
+			<img src="./img/login_logo.png" class="login_logo"><br>
+			<img src="./img/login_ti.png" style="margin-top:20px; margin-bottom:20px;"><br>
+			<p style="margin-bottom: 40px">
+				블리를 통해 충동구매보다 빠르게 합리적인 쇼핑을 즐기세요.<br/>
+				이미 블리 회원이신가요? <a href="${initParam.root}loginPage.do" style="color: gold; font-weight: bolder;">로그인</a>
 			</p>
 			<div class="login_bt">
 				<p><a href="#" onclick="checkLoginState()"><img src="./img/login_bt1.png" alt="페이스북으로 가입하기"></a>	</p>	
@@ -69,11 +74,13 @@ $(document).ready(function(){
 		</div>
 		<div class="login_bottom">
 			<div class="fl login_bottom_ft">
-				블리 3231개의 상품과, 3216400개의 블로그가 있습니다.
+				블리는 <span class="footerProductStatics"></span>개의 상품을 소개하고, 관련된 <span class="footerPostingStatics"></span>개의 블로그를 분석하고 소개합니다.
 			</div>
 			<div class="fr">
+				<div class="login_bottom_right">
 				<a href="${initParam.root}adminIndex.do"><img src="./img/bottom_app1.png" alt="안드로이드 다운로드받기"></a>
 				<a href="#"><img src="./img/bottom_app2.png" alt="애플 다운로드받기"></a>
+				</div>
 			</div>
 		</div>
 	

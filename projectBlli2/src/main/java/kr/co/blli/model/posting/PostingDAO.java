@@ -1,8 +1,12 @@
 package kr.co.blli.model.posting;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import kr.co.blli.model.vo.BlliMemberScrapeVO;
+import kr.co.blli.model.vo.BlliPostingDisLikeVO;
+import kr.co.blli.model.vo.BlliPostingLikeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 
 import org.springframework.stereotype.Repository;
@@ -37,5 +41,15 @@ public interface PostingDAO {
 	String getPostingStatus(BlliPostingVO blliPostingVO);
 
 	void insertDeadPosting(BlliPostingVO blliPostingVO);
+
+	int selectThisPostingScrape(BlliMemberScrapeVO blliMemberScrapVO);
+
+	int selectThisPostingLike(BlliPostingLikeVO blliPostingLikeVO);
+
+	int selectThisPostingDisLike(BlliPostingDisLikeVO blliPostingDisLikeVO);
+
+	List<BlliPostingVO> selectPostingBySmallProductId(HashMap<String, String> paraMap);
+
+	String selectTotalPostingtNum();
 
 }

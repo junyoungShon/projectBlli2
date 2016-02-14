@@ -3,15 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <script type="text/javascript">
 $(document).ready(function(){
-	var jbOffset = $( '.jbMenu' ).offset();
-	$( window ).scroll( function() {
-	  if ( $( document ).scrollTop() > jbOffset.top ) {
-		$( '.jbMenu' ).addClass( 'jbFixed' );
-	  }
-	  else {
-		$( '.jbMenu' ).removeClass( 'jbFixed' );
-	  }
-	});
+	$( '.jbMenu' ).addClass( 'jbFixed' );
 	
 	//소제품 찜하기 스크립트
 	$('.in_fr').on("click", ".smallProductDibBtn",function(){
@@ -74,6 +66,12 @@ $(document).ready(function(){
 			success: function(resultData){
 				var div = "";
 				for(var i=0;i<resultData.length;i++){
+					var wordCloudList = resultData[i].blliWordCloudVOList;
+					var wordCloudHTML = '<div class="midKeyword"><ul>';
+					for(var i=0;i<wordCloudList.length;i++){
+						wordCloudHTML += '<li><span class="midKeyword'+wordCloudList[i].wordLevel+'">'+wordCloudList[i].word+'</span></li>'
+					}
+					wordCloudHTML += '</ul></div>';
 					if(i%2 == 0){
 						div += "<div class='result_bg1'>";
 						div += "<div class='in_fr' style='height:330px;'>";
@@ -91,10 +89,7 @@ $(document).ready(function(){
 						div += "</div>";
 						div += "</div>";
 						div += "<div class='fl'>";
-						div += "<div class='product_text'>";
-						div += "하은맘 프라임 샴푸 의자 이젠 32개월 모야 안고 머리감기는 일 너무 힘들어요~ 무게도 덩치도"+
-								"발육이 남다른 모야 ~ 구상도를보면 참 많은 생각을 하시고 제작하신것 같아요";
-						div += "</div>";
+						div += wordCloudHTML;
 						div += "<div class='product_price'>";
 						div += "<div class='fl'>";
 						div += "<p class='result_gray'>최저가</p>";
@@ -142,10 +137,7 @@ $(document).ready(function(){
 						div += "</div>";
 						div += "</div>";
 						div += "<div class='fl'>";
-						div += "<div class='product_text'>";
-						div += "하은맘 프라임 샴푸 의자 이젠 32개월 모야 안고 머리감기는 일 너무 힘들어요~ 무게도 덩치도"+
-								"발육이 남다른 모야 ~ 구상도를보면 참 많은 생각을 하시고 제작하신것 같아요";
-						div += "</div>";
+						div += wordCloudHTML;
 						div += "<div class='product_price'>";
 						div += "<div class='fl'>";
 						div += "<p class='result_gray'>최저가</p>";
@@ -207,9 +199,14 @@ $(document).ready(function(){
 					</div>
 				</div>
 				<div class="fl">
-					<div class="product_text">
-						하은맘 프라임 샴푸 의자 이젠 32개월 모야 안고 머리감기는 일 너무 힘들어요~ 무게도 덩치도
-						발육이 남다른 모야 ~ 구상도를보면 참 많은 생각을 하시고 제작하신것 같아요
+					<div class="midKeyword">
+					<ul>
+						<c:forEach items="${smallProductList.blliWordCloudVOList}" var="wordList">
+							<li>
+								<span class="midKeyword${wordList.wordLevel}">${wordList.word}</span>
+							</li>
+						</c:forEach>
+					</ul>
 					</div>
 					<div class="product_price">
 						<div class="fl">
@@ -270,10 +267,15 @@ $(document).ready(function(){
 					</div>
 				</div>
 				<div class="fl">
-					<div class="product_text">
-						하은맘 프라임 샴푸 의자 이젠 32개월 모야 안고 머리감기는 일 너무 힘들어요~ 무게도 덩치도
-						발육이 남다른 모야 ~ 구상도를보면 참 많은 생각을 하시고 제작하신것 같아요
-					</div>
+				<div class="midKeyword">
+				<ul>
+					<c:forEach items="${smallProductList.blliWordCloudVOList}" var="wordList">
+						<li>
+							<span class="midKeyword${wordList.wordLevel}">${wordList.word}</span>
+						</li>
+					</c:forEach>
+				</ul>
+				</div>
 					<div class="product_price">
 						<div class="fl">
 							<p class="result_gray">최저가</p>

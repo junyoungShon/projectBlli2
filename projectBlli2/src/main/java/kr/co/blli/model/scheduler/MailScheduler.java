@@ -4,6 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +57,16 @@ public class MailScheduler {
 	public void sendRecommendingMail()
 			throws FileNotFoundException, URISyntaxException, UnsupportedEncodingException, MessagingException, ParseException {
 		
+		long start = System.currentTimeMillis(); // 시작시간 
+		ArrayList<String> logList = new ArrayList<String>();
+		String methodName = new Throwable().getStackTrace()[0].getMethodName();
+		logList.add("start : "+methodName);
+		logList.add("요청자 : scheduler");
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+		String datetime = sdf.format(cal.getTime());
+		logList.add("발생 일자 : "+datetime);
+		
 		//월령이 바뀐 아이를 가진 회원 목록을 불러온다.
 		List<BlliMemberVO> memberList = memberService.getMemberHavingBabyAgeChangedList();
 				
@@ -96,6 +109,11 @@ public class MailScheduler {
 			}
 		
 		}
+		
+		long end = System.currentTimeMillis();  //종료시간
+		//종료-시작=실행시간		
+		logList.add("실행 시간  : "+(int)Math.ceil((end-start)/1000.0)+"초");
+		logList.add("end : "+methodName);
 		
 	}
 	

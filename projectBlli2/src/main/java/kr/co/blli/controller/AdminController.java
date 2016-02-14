@@ -8,8 +8,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import kr.co.blli.model.admin.AdminService;
+import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliLogVO;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -117,7 +117,26 @@ public class AdminController {
 	@RequestMapping("insertCafeArticle.do")
 	public void insertCafeArticle(){
 		adminService.insertCafeArticle();
-	}	
+	}
+	/**
+	  * @Method Name : makingWordCloud
+	  * @Method 설명 : 워드클라우드 만드는 임시 메서드
+	  * @작성일 : 2016. 2. 11.
+	  * @작성자 : junyoung
+	  * @param blliPostingVO
+	 */
+	@RequestMapping("makingWordCloud.do")
+	public void makingWordCloud(BlliPostingVO blliPostingVO){
+		adminService.makingWordCloud(blliPostingVO);
+	}
+	/**
+	 * 
+	 * @Method Name : checkLog
+	 * @Method 설명 : 로그 조회를 위한 메서드
+	 * @작성일 : 2016. 2. 10.
+	 * @작성자 : hyunseok
+	 * @return
+	 */
 	@RequestMapping("checkLog.do")
 	public ModelAndView checkLog(){
 		ArrayList<BlliLogVO> list = (ArrayList<BlliLogVO>)adminService.checkLog();

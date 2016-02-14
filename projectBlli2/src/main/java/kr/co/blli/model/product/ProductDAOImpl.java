@@ -17,6 +17,7 @@ import kr.co.blli.model.vo.BlliPostingLikeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductBuyLinkVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
+import kr.co.blli.model.vo.BlliWordCloudVO;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
@@ -136,7 +137,7 @@ public class ProductDAOImpl implements ProductDAO{
 	// 포스팅 스크랩, 좋아요 , 싫어요 관련 메서드 시작
 	@Override
 	public int deletePostingScrapeInfo(BlliMemberScrapeVO blliMemberScrapeVO) {
-		return sqlSessionTemplate.delete("posting.deletePostingScrapInfo", blliMemberScrapeVO);
+		return sqlSessionTemplate.delete("posting.deletePostingScrapeInfo", blliMemberScrapeVO);
 	}
 	/**
 	  * @Method Name : insertPostingScrap
@@ -435,5 +436,20 @@ public class ProductDAOImpl implements ProductDAO{
 	@Override
 	public void updateBlliBuyLinkClickCount(String smallProductId) {
 		sqlSessionTemplate.update("product.updateBlliBuyLinkClickCount",smallProductId);
+	}
+
+	@Override
+	public List<BlliWordCloudVO> selectWordCloudList(String smallProductId) {
+		return sqlSessionTemplate.selectList("product.selectWordCloudList", smallProductId);
+	}
+
+	@Override
+	public String selectProductMinPrice(String smallProductId) {
+		return sqlSessionTemplate.selectOne("product.selectProductMinPrice", smallProductId);
+	}
+
+	@Override
+	public String selectTotalProductNum() {
+		return sqlSessionTemplate.selectOne("product.selectTotalProductNum");
 	}
 }

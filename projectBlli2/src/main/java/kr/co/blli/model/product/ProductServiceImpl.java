@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Resource;
 
@@ -11,7 +12,6 @@ import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliBuyLinkClickVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
-import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
 import kr.co.blli.model.vo.BlliPagingBean;
@@ -20,6 +20,7 @@ import kr.co.blli.model.vo.BlliPostingLikeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductBuyLinkVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
+import kr.co.blli.model.vo.BlliWordCloudVO;
 import kr.co.blli.model.vo.ListVO;
 
 import org.springframework.stereotype.Service;
@@ -101,6 +102,8 @@ public class ProductServiceImpl implements ProductService{
 			}
 		}
 		for(int i=0;i<blliSmallProductVOList.size();i++){
+			DecimalFormat df = new DecimalFormat("#,##0");
+			blliSmallProductVOList.get(i).setMinPrice(df.format(Integer.parseInt(productDAO.selectProductMinPrice(blliSmallProductVOList.get(i).getSmallProductId()))));
 			blliSmallProductVOList.set(i, productDibChecker(blliBabyVO.getMemberId(), blliSmallProductVOList.get(i)));
 		}
 		return blliSmallProductVOList;
@@ -384,6 +387,46 @@ public class ProductServiceImpl implements ProductService{
 		}
 		productDAO.insertBlliBuyLinkClick(blliBuyLinkClickVO);
 		productDAO.updateBlliBuyLinkClickCount(blliBuyLinkClickVO.getSmallProductId());
+	}
+	/**
+	  * @Method Name : selectWordCloudList
+	  * @Method 설명 :
+	  * @작성일 : 2016. 2. 12.
+	  * @작성자 : junyoung
+	  * @param smallProductId
+	  * @return
+	 */
+	@Override
+	public List<BlliWordCloudVO> selectWordCloudList(String smallProductId) {
+		List<BlliWordCloudVO> wordCloudList = productDAO.selectWordCloudList(smallProductId);
+		Random generator = new Random();
+		//문자열의 레벨을 설정해줌
+		for(int i=0;i<wordCloudList.size();i++){
+			if(i<2){
+				wordCloudList.get(i).setWordLevel(1);
+			}else if(i>=2&&i<7){
+				wordCloudList.get(i).setWordLevel(2);
+			}else if(i>=7&&i<12){
+				wordCloudList.get(i).setWordLevel(3);
+			}else{
+				wordCloudList.get(i).setWordLevel(4);
+			}
+		}
+		//문자들을 랜덤하게 배열해줌
+		for(int i=0;i<wordCloudList.size();i++){
+			int index = generator.nextInt(20);
+			BlliWordCloudVO tempVO = wordCloudList.get(index);
+			wordCloudList.set(index, wordCloudList.get(i));
+			wordCloudList.set(i, tempVO);
+		}
+		System.out.println(wordCloudList);
+		return wordCloudList;
+	}
+	@Override
+	public String selectTotalProductNum() {
+		DecimalFormat df = new DecimalFormat();
+		String totalPostingNum = df.format(Integer.parseInt(productDAO.selectTotalProductNum()));
+		return totalPostingNum;
 	}
 
 }
