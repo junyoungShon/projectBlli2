@@ -9,6 +9,31 @@
 			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
 		</layout>
 	</appender>
+	
+	<appender name="consoleByScheduler" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%m%n" />
+		</layout>
+	</appender>
+	
+	<!-- 일주일 간격으로 로그 파일 생성 -->
+    <appender name="rollingFile" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="C:/Users/PARK/git/projectBlli2/projectBlli2/src/main/webapp/logFile/blliLog.log"/>
+        <param name="Append" value="true"/>
+        <param name="DatePattern" value="'.'yyyy-ww"/> 
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>   
+    </appender>
+	
+	<!-- scheduler Logger -->
+	<logger name="kr.co.blli.aop" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="consoleByScheduler" />
+		<appender-ref ref="rollingFile"/>
+	</logger>
+	
 	<!-- Application Loggers -->
 	<logger name="kr.co.blli">
 		<level value="info" />
@@ -30,7 +55,8 @@
 	<logger name="org.springframework.web">
 		<level value="info" />
 	</logger>
-
+	
+	
 	<!-- Root Logger -->
 	<root>
 		<priority value="warn" />

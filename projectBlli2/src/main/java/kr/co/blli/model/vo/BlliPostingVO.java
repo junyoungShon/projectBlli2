@@ -39,6 +39,8 @@ public class BlliPostingVO {
 	
 	public final ArrayList<String> regex = new ArrayList<String>(Arrays.asList("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>","<[^>]*>",
 			"<!--.*-->","&nbsp;","&#xfeff;","&#x200b;","&lt;","&gt;","&amp;","&#x1112;","\n", "&#xfffd;"));
+	
+	public final ArrayList<String> denyWord = new ArrayList<String>(Arrays.asList("무상", "체험", "무료", "제공", "이벤트", "공짜", "지원"));
 
 	public BlliPostingVO() {
 		super();

@@ -49,6 +49,10 @@ rel='stylesheet' type='text/css'>
 				}
 			}
 		});
+		
+		if("${requestScope.memberEmail}"!="") {
+			alert("회원님의 이메일로 임시 비밀번호가 발송되었습니다.");
+		}
 	})
 </script>
 </head>
@@ -61,17 +65,21 @@ ${requestScope.loginFail}
 </c:if>
 		<div class="loginComp_bg" style="height: 350px; margin-top: 5%">
 			<div class="title" style="margin-top: 40px;">
-				Email Login</div>
-				<form id="loginfrm" name="loginfrm" method="POST" action="${initParam.root}j_spring_security_check">
-					<label><input type="text" name="memberId" placeholder="Email Id" style="width: 
-					250px; margin-top:20px;" id="memberId"></label><br>
-					<label><input type="password" placeholder="Password" name="memberPassword"
-					style="margin-top:20px; width: 250px" id="memberPassword"></label><br>
-					<label>
-					<input type="checkbox" name="remember-me" style="width: 15px; height: 15px; margin-top:20px;" />
-					 자동로그인 체크</label><br>
-					<input type="button" class="loginButton" value="로그인" style="margin-top:20px;" > 
-					</form>
+				Email Login
+			</div>
+			<form id="loginfrm" name="loginfrm" method="POST" action="${initParam.root}j_spring_security_check">
+				<label><input type="text" name="memberId" placeholder="Email Id" style="width: 
+				250px; margin-top:20px;" id="memberId"></label><br>
+				<label><input type="password" placeholder="Password" name="memberPassword"
+				style="margin-top:20px; width: 250px" id="memberPassword"></label><br>
+				<label>
+					<input type="checkbox" name="remember-me" style="width: 15px; height: 15px; margin-top:20px;"/> 자동로그인 체크
+				</label>
+				<br>
+				<input type="button" class="loginButton" value="로그인" style="margin-top:20px;" > 
+			</form>
+			<br>
+			<a href="${initParam.root}goFindPasswordPage.do"><font color="white"><b>비밀번호가 뭐였지..?</b></font></a>
 		</div>
 			<div class="login_bottom">
 			<div class="fl login_bottom_ft">

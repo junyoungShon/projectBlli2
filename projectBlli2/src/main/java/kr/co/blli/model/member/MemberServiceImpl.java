@@ -1,37 +1,44 @@
 package kr.co.blli.model.member;
 
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.annotation.Resource;
+import javax.mail.Message.RecipientType;
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
 import kr.co.blli.model.security.BlliUserDetails;
 import kr.co.blli.model.vo.BlliBabyVO;
+import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.utility.BlliFileUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.ui.velocity.VelocityEngineUtils;
+import org.springframework.web.servlet.view.velocity.VelocityConfig;
 
 @Service
 public class MemberServiceImpl implements MemberService {
 	
 	@Resource
-	private MemberDAO memberDAO ;
+	private MemberDAO memberDAO;
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	@Resource
@@ -273,4 +280,115 @@ public class MemberServiceImpl implements MemberService {
 	public void deleteBabyInfo(BlliMemberVO blliMemberVO) {
 		memberDAO.deleteBabyInfo(blliMemberVO);
 	}
+
+	
+	//용호 작성 영역
+	@Override
+	public List<BlliMemberVO> getMemberHavingBabyAgeChangedList() {
+		return memberDAO.getMemberHavingBabyAgeChangedList();
+	}
+
+	@Override
+	public List<BlliBabyVO> getBabyAgeChangedListOfMember(String memberId) throws ParseException {
+		List<BlliBabyVO> blliBabyVOList = memberDAO.getBabyAgeChangedListOfMember(memberId);
+		//아이의 월령 및 태어난 날 수 세팅
+		for(int i=0;i<blliBabyVOList.size();i++){
+			System.out.println(blliBabyVOList.get(i).getBabyBirthday());
+			int babyDayAge = babyDayAgeCounter(blliBabyVOList.get(i).getBabyBirthday());
+			int babyMonthAge = babyMonthAgeCounter(blliBabyVOList.get(i).getBabyBirthday());
+			blliBabyVOList.get(i).setBabyDayAge(babyDayAge);
+			blliBabyVOList.get(i).setBabyMonthAge(babyMonthAge);
+		}
+		return blliBabyVOList;
+	}
+
+	
+	@Resource
+	private JavaMailSender mailSender;
+	@Resource
+	private VelocityConfig velocityConfig;
+	
+	@Override
+	public void sendLinkToGetTemporaryPassword(String memberEmail) throws UnsupportedEncodingException, MessagingException {
+
+		BlliMailVO mlvo = memberDAO.findMailSubjectAndContentByMailForm("receiveLinkToGetTemporaryPasswordMail");
+		String memberName = memberDAO.findMemberNameByEmail(memberEmail);
+		
+		String subject = mlvo.getMailSubject();
+		String contentFile = mlvo.getMailContentFile();
+		String recipient = memberEmail;
+
+		Map<String, Object> textParams = new HashMap<String, Object>();
+		
+		textParams.put("memberName", memberName);
+		textParams.put("linkToGetTemporaryPassword", "http://bllidev.dev/projectBlli2/getTemporaryPassword.do?memberEmail="+memberEmail);
+		
+		String mailText = VelocityEngineUtils.mergeTemplateIntoString(velocityConfig.getVelocityEngine(), contentFile, "utf-8", textParams);
+		
+		MimeMessage message = mailSender.createMimeMessage();
+
+		message.setFrom(new InternetAddress("admin@blli.co.kr","블리", "utf-8"));
+		message.setSubject(subject);
+		message.addRecipient(RecipientType.TO, new InternetAddress(recipient)); //import javax.mail.Message.RecipientType;
+		message.setText(mailText, "utf-8", "html");
+		
+		mailSender.send(message);
+		System.out.println(memberName+"님의 메일주소 "+recipient+"로 임시비밀번호 받는 링크 발송");
+	}    
+	
+	@Override
+	public String updateMemberPasswordToTemporaryPassword(String memberEmail) {
+		BlliMemberVO blliMemberVO = new BlliMemberVO();
+		String temporaryPassword = createTemporaryPassword();
+		blliMemberVO.setMemberEmail(memberEmail);
+		blliMemberVO.setMemberPassword(passwordEncoder.encode(temporaryPassword));
+		memberDAO.updateMemberPasswordToTemporaryPassword(blliMemberVO);
+		return temporaryPassword;
+	}
+	
+	@Override
+	public void sendTemporaryPasswordMail(String memberEmail, String TemporaryPassword) throws UnsupportedEncodingException, MessagingException {
+		
+		BlliMailVO mlvo = memberDAO.findMailSubjectAndContentByMailForm("getTemporaryPassword");
+		String memberName = memberDAO.findMemberNameByEmail(memberEmail);
+		
+		String subject = mlvo.getMailSubject();
+		String contentFile = mlvo.getMailContentFile();
+		String recipient = memberEmail;
+
+		Map<String, Object> textParams = new HashMap<String, Object>();
+		
+		textParams.put("memberName", memberName);
+		textParams.put("TemporaryPassword",TemporaryPassword);
+		
+		String mailText = VelocityEngineUtils.mergeTemplateIntoString(velocityConfig.getVelocityEngine(), contentFile, "utf-8", textParams);
+		
+		MimeMessage message = mailSender.createMimeMessage();
+
+		message.setFrom(new InternetAddress("admin@blli.co.kr","블리", "utf-8"));
+		message.setSubject(subject);
+		message.addRecipient(RecipientType.TO, new InternetAddress(recipient)); //import javax.mail.Message.RecipientType;
+		message.setText(mailText, "utf-8", "html");
+		
+		mailSender.send(message);
+		System.out.println(memberName+"님의 메일주소 "+recipient+"로 임시비밀번호 발송");
+	}
+	
+	private String createTemporaryPassword() {
+		int index = 0;
+		char[] charSet = new char[] {
+				'0','1','2','3','4','5','6','7','8','9',
+				'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+				'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'
+		};
+		
+		StringBuffer sb = new StringBuffer();
+		for(int i=0;i<10;i++) {
+			index = (int) (charSet.length * Math.random());
+			sb.append(charSet[index]);
+		}
+		return sb.toString();
+	}
+
+	
 }

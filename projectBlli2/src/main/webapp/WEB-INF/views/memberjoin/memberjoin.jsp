@@ -173,7 +173,7 @@
 			</form>
 			<p>
 				가입과 동시에 쿠키 사용 및 약관에 동의하는 것으로 합니다.<br/>
-				<span class="yellow">약관 보기</span>
+				<a href="${initParam.root}loginPage.do" class="yellow"> 로그인 </a> / <span class="yellow"> 약관 보기 </span>
 			</p>
 		<!-- 	<div class="login_bt">
 				<p>

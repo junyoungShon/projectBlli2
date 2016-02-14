@@ -1,6 +1,7 @@
 package kr.co.blli.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +9,7 @@ import javax.annotation.Resource;
 
 import kr.co.blli.model.admin.AdminService;
 import kr.co.blli.model.vo.BlliPostingVO;
-
+import kr.co.blli.model.vo.BlliLogVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -128,4 +129,17 @@ public class AdminController {
 	public void makingWordCloud(BlliPostingVO blliPostingVO){
 		adminService.makingWordCloud(blliPostingVO);
 	}
+	/**
+	 * 
+	 * @Method Name : checkLog
+	 * @Method 설명 : 로그 조회를 위한 메서드
+	 * @작성일 : 2016. 2. 10.
+	 * @작성자 : hyunseok
+	 * @return
+	 */
+	@RequestMapping("checkLog.do")
+	public ModelAndView checkLog(){
+		ArrayList<BlliLogVO> list = (ArrayList<BlliLogVO>)adminService.checkLog();
+		return new ModelAndView("admin/log", "logList", list);
+	}	
 }

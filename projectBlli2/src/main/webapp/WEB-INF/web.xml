@@ -52,6 +52,7 @@
 		<param-name>root</param-name>
 		<param-value>/projectBlli2/</param-value>
 	</context-param>
+	
 	<welcome-file-list>
 		<welcome-file>index.do</welcome-file>
 	</welcome-file-list>

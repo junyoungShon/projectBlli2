@@ -100,10 +100,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
  	<!-- 회원의 월령이 바뀐 아이 VO 목록을 얻어온다. -->
 	<select id="getBabyAgeChangedListOfMember" resultMap="bbvRM">
-		select babyt.baby_name, babyt.baby_birthday, babyt.baby_photo 
-		from (select bb.baby_name, bb.baby_birthday, bb.baby_photo from blli_baby bb where bb.member_id = #{value}) babyt
+		select babyt.member_id, babyt.baby_name, babyt.baby_birthday, babyt.baby_photo 
+		from (select bb.member_id, bb.baby_name, bb.baby_birthday, bb.baby_photo from blli_baby bb where bb.member_id = #{value}) babyt
 		where substr(to_char(babyt.baby_birthday), 7) = substr(to_char(sysdate), 7)
 	</select>
+	<!-- 회원의 메일주소로 회원 이름을 찾는다. -->
+	<select id="findMemberNameByEmail" resultType="java.lang.String">
+		select member_name from blli_member where member_email = #{value}
+	</select>
+	<!-- 회원의 비밀번호를 임시비밀번호로 변경한다. -->
+	<update id="updateMemberPasswordToTemporaryPassword">
+		update blli_member set member_password = #{memberPassword} where member_email = #{memberEmail}
+	</update>
 	<!-- 용호 쿼리 끝 -->
 	
  </mapper>
