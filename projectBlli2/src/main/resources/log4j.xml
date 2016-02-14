@@ -17,15 +17,22 @@
 		</layout>
 	</appender>
 	
-    <appender name="LOGFILE-SIZE" class="org.apache.log4j.RollingFileAppender">
-        <param name="file" value="C:/Users/용호/git/projectBlli2/projectBlli2/src/main/webapp/logFile/blliLog.log"/>
+	<!-- 일주일 간격으로 로그 파일 생성 -->
+    <appender name="rollingFile" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="C:/Users/PARK/git/projectBlli2/projectBlli2/src/main/webapp/logFile/blliLog.log"/>
         <param name="Append" value="true"/>
-        <param name="MaxFileSize" value="10KB"/>
-       <param name="MaxBackupIndex" value="5"/>   
+        <param name="DatePattern" value="'.'yyyy-ww"/> 
         <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%m%n"/>
-        </layout>
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>   
     </appender>
+	
+	<!-- scheduler Logger -->
+	<logger name="kr.co.blli.aop" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="consoleByScheduler" />
+		<appender-ref ref="rollingFile"/>
+	</logger>
 	
 	<!-- Application Loggers -->
 	<logger name="kr.co.blli">
@@ -49,12 +56,6 @@
 		<level value="info" />
 	</logger>
 	
-	<!-- scheduler Logger -->
-	<logger name="kr.co.blli.model.scheduler" additivity="false">
-		<level value="info"/>
-		<appender-ref ref="consoleByScheduler" />
-		<appender-ref ref="LOGFILE-SIZE"/>
-	</logger>
 	
 	<!-- Root Logger -->
 	<root>

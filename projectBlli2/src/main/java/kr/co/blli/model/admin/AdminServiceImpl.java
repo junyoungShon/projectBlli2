@@ -380,7 +380,7 @@ public class AdminServiceImpl implements AdminService{
 		BlliDetailException exceptionVO = null;
 		int number = 1;
 		try {
-			BufferedReader in = new BufferedReader(new FileReader("C:\\Users\\용호\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\logFile\\blliLog.log"));
+			BufferedReader in = new BufferedReader(new FileReader("C:\\Users\\PARK\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\logFile\\blliLog.log"));
 			String message;
 			String exceptionContent = "";
 			while ((message = in.readLine()) != null) {
@@ -412,7 +412,7 @@ public class AdminServiceImpl implements AdminService{
 					}
 				}else if(message.startsWith("총 소제품 개수")){
 					if(vo.getMethodName().equals("insertPosting")){
-						vo.setCategoryCount(message.substring(message.lastIndexOf(":")+2));
+						vo.setHighRankCategoryCount(message.substring(message.lastIndexOf(":")+2));
 					}else{
 						vo.setCategoryCount(message.substring(message.lastIndexOf(":")+2));
 					}
@@ -434,6 +434,8 @@ public class AdminServiceImpl implements AdminService{
 					}else{
 						vo.setUpdateCategoryCount(message.substring(message.lastIndexOf(":")+2));
 					}
+				}else if(message.startsWith("시간지연")){
+					vo.setDelayConnectionCount(message.substring(message.lastIndexOf(":")+2));
 				}else if(message.startsWith("Exception 발생 횟수")){
 					vo.setExceptionCount(message.substring(message.lastIndexOf(":")+2));
 				}else if(message.startsWith("Exception이 발생한")){

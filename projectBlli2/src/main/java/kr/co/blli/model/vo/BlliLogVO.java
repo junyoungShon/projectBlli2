@@ -17,6 +17,7 @@ public class BlliLogVO {
 	private String notUpdateProductCount;
 	private String denyPostingCount;
 	private String notUpdatePostingCount;
+	private String delayConnectionCount;
 	private ArrayList<BlliDetailException> detailException;
 	public BlliLogVO() {
 		super();
@@ -112,6 +113,12 @@ public class BlliLogVO {
 	public void setNotUpdatePostingCount(String notUpdatePostingCount) {
 		this.notUpdatePostingCount = notUpdatePostingCount;
 	}
+	public String getDelayConnectionCount() {
+		return delayConnectionCount;
+	}
+	public void setDelayConnectionCount(String delayConnectionCount) {
+		this.delayConnectionCount = delayConnectionCount;
+	}
 	@Override
 	public String toString() {
 		return "BlliLogVO [number=" + number + ", startTime=" + startTime
@@ -125,6 +132,7 @@ public class BlliLogVO {
 				+ ", notUpdateProductCount=" + notUpdateProductCount
 				+ ", denyPostingCount=" + denyPostingCount
 				+ ", notUpdatePostingCount=" + notUpdatePostingCount
+				+ ", delayConnectionCount=" + delayConnectionCount
 				+ ", detailException=" + detailException + "]";
 	}
 }

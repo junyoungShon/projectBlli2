@@ -44,16 +44,16 @@ public class PostingScheduler {
 	 * @throws IOException
 	 */
 	//@Scheduled(cron = "00 00 04 * * *")
-	public void insertPosting() throws IOException {
+	public ArrayList<String> insertPosting() throws IOException {
 		long start = System.currentTimeMillis(); // 시작시간 
-		
-		Logger logger = Logger.getLogger(getClass());
-		logger.info("start : insertPosting");
-		logger.info("요청자 : scheduler");
+		ArrayList<String> logList = new ArrayList<String>();
+		String methodName = new Throwable().getStackTrace()[0].getMethodName();
+		logList.add("start : "+methodName);
+		logList.add("요청자 : scheduler");
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
 		String datetime = sdf.format(cal.getTime());
-		logger.info("발생 일자 : "+datetime);
+		logList.add("발생 일자 : "+datetime);
 		
 		//0a044dc7c63b8f3b9394e1a5e49db7ab
 		String key = "2a636a785d0e03f7048319f8adb3d912"; //네이버 검색API 이용하기 위해 발급받은 key값 세번째
@@ -420,26 +420,38 @@ public class PostingScheduler {
 			}catch(Exception e){
 				exceptionCount++;
 				allExceptionCount++;
-				detailException.put(postingVO.getPostingUrl(), e.toString());
+				detailException.put(postingVO.getPostingUrl(), e.getMessage());
 			}
 		}
-		logger.info("총 소제품 개수 : "+smallProductList.size());
-		logger.info("총 포스팅 개수 : "+countOfAllPosting);
-		logger.info("insert한 포스팅 개수 : "+insertPostingCount);
-		logger.info("update한 포스팅 개수 : "+updatePostingCount);
-		logger.info("insert하지 않은 조건에 맞지 않는 포스팅 개수 : "+denyPostingCount);
-		logger.info("update하지 않은 포스팅 개수 : "+notUpdatePostingCount);
-		logger.info("시간지연되어 insert하지 않은 포스팅 개수 : "+delayConnectionCount);
-		logger.info("Exception 발생 횟수 : "+allExceptionCount);
+		logList.add("총 소제품 개수 : "+smallProductList.size());
+		logList.add("총 포스팅 개수 : "+countOfAllPosting);
+		logList.add("insert한 포스팅 개수 : "+insertPostingCount);
+		logList.add("update한 포스팅 개수 : "+updatePostingCount);
+		logList.add("insert하지 않은 조건에 맞지 않는 포스팅 개수 : "+denyPostingCount);
+		logList.add("update하지 않은 포스팅 개수 : "+notUpdatePostingCount);
+		logList.add("시간지연되어 insert하지 않은 포스팅 개수 : "+delayConnectionCount);
+		logList.add("Exception 발생 횟수 : "+allExceptionCount);
 		Iterator<String> postingUrlList = detailException.keySet().iterator();
 		while(postingUrlList.hasNext()){
 			postingUrl = postingUrlList.next();
-			logger.info("Exception이 발생한 postingUrl : "+postingUrl);
-			logger.info("Exception 내용 : "+detailException.get(postingUrlList));
+			logList.add("Exception이 발생한 postingUrl : "+postingUrl);
+			logList.add("Exception 내용 : "+detailException.get(postingUrlList));
 		}
 		end = System.currentTimeMillis();  //종료시간
 		//종료-시작=실행시간		
-		logger.info("실행 시간  : "+(end-start)/1000.0+"초");
-		logger.info("end : insertPosting");
+		if((end-start)/1000 > 60*60){
+			int hour = (int)Math.floor((((end-start)/1000.0)/60.0)/60);
+			int minute = (int)Math.floor(((end-start)/1000.0)/60-hour*60);
+			int second = (int)Math.ceil((end-start)/1000.0-minute*60);
+			logList.add("실행 시간  : "+hour+"시간 "+minute+"분 "+second+"초");
+		}else if((end-start)/1000 > 60){
+			int minute = (int)Math.floor(((end-start)/1000.0)/60.0);
+			int second = (int)Math.ceil((end-start)/1000.0-minute*60);
+			logList.add("실행 시간  : "+minute+"분 "+second+"초");
+		}else{
+			logList.add("실행 시간  : "+(int)Math.ceil((end-start)/1000.0)+"초");
+		}
+		logList.add("end : "+methodName);
+		return logList;
 	}
 }

@@ -118,6 +118,14 @@ public class AdminController {
 	public void insertCafeArticle(){
 		adminService.insertCafeArticle();
 	}	
+	/**
+	 * 
+	 * @Method Name : checkLog
+	 * @Method 설명 : 로그 조회를 위한 메서드
+	 * @작성일 : 2016. 2. 10.
+	 * @작성자 : hyunseok
+	 * @return
+	 */
 	@RequestMapping("checkLog.do")
 	public ModelAndView checkLog(){
 		ArrayList<BlliLogVO> list = (ArrayList<BlliLogVO>)adminService.checkLog();
