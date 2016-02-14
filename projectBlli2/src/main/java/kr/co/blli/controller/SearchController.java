@@ -20,6 +20,7 @@ import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
+import kr.co.blli.model.vo.BlliWordCloudVO;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,10 +70,12 @@ public class SearchController {
 		if(smallProductList.isEmpty()){
 			HashMap<String, Object> smallProductInfo = productService.searchSmallProduct(searchWord);
 			if(smallProductInfo.get("smallProduct") != null){
-				ArrayList<BlliPostingVO> postingList = postingService.searchPostingListInProductDetail(searchWord);
+				ArrayList<BlliPostingVO> postingList = 
+						postingService.searchPostingListInProductDetail(((BlliSmallProductVO)smallProductInfo.get("smallProduct")).getSmallProductId(),request,"1");
 				viewName = "smallProductDetailPage";
 				mav.addObject("smallProductInfo", smallProductInfo);
-				mav.addObject("postingList", postingList);
+				mav.addObject("blliPostingVOList", postingList);
+				System.out.println("스몰프로덕트 :" +postingList);
 			}else{
 				smallProductList = productService.searchSmallProductList(pageNo, searchWord);
 				viewName = "midCategoryDetailPage";
@@ -83,6 +86,10 @@ public class SearchController {
 			//ArrayList<BlliPostingVO> postingList = postingService.searchPosting(pageNo, searchWord);
 		}else{
 			viewName = "midCategoryDetailPage";
+			for(int i = 0;i<smallProductList.size();i++){
+				List<BlliWordCloudVO> list = productService.selectWordCloudList(smallProductList.get(i).getSmallProductId());
+				smallProductList.get(i).setBlliWordCloudVOList(list);
+			}
 			mav.addObject("resultList", smallProductList);
 			mav.addObject("totalPage", productService.totalPageOfSmallProductOfMidCategory(searchWord));
 			mav.addObject("searchWord", searchWord);
@@ -189,9 +196,11 @@ public class SearchController {
 		HttpSession session = request.getSession();
 		BlliMemberVO blliMemberVO = null;
 		ModelAndView mav = new ModelAndView();
-		ArrayList<BlliPostingVO> postingList = postingService.searchPostingListInProductDetail(smallProduct);
 		HashMap<String, Object> smallProductInfo = productService.searchSmallProduct(smallProduct);
-		
+		String smallProductId = ((BlliSmallProductVO)smallProductInfo.get("smallProduct")).getSmallProductId() ;
+		ArrayList<BlliPostingVO> postingList = 
+				postingService.searchPostingListInProductDetail(smallProductId,request,"1");
+		List<BlliWordCloudVO> wordCloudList = productService.selectWordCloudList(smallProductId);
 		if(session!=null){
 			blliMemberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
 			BlliSmallProductVO blliSmallProductVO = productService.productDibChecker(blliMemberVO.getMemberId(),(BlliSmallProductVO) smallProductInfo.get("smallProduct"));
@@ -199,8 +208,9 @@ public class SearchController {
 		}
 		
 		mav.addObject("smallProductInfo", smallProductInfo);
-		mav.addObject("postingList", postingList);
+		mav.addObject("blliPostingVOList", postingList);
 		mav.addObject("blliMemberVO",blliMemberVO);
+		mav.addObject("wordCloudList",wordCloudList);
 		mav.setViewName("smallProductDetailPage");
 		return mav;
 	}
@@ -220,6 +230,9 @@ public class SearchController {
 		ArrayList<BlliSmallProductVO> smallProductList = productService.searchMidCategory(pageNo, searchWord);
 		if(smallProductList.isEmpty()){
 			smallProductList = productService.searchSmallProductList(pageNo, searchWord);
+		}
+		for(int i=0;i<smallProductList.size();i++){
+			smallProductList.get(i).setBlliWordCloudVOList(productService.selectWordCloudList(smallProductList.get(i).getSmallProductId()));
 		}
 		return smallProductList;
 	}
@@ -244,6 +257,22 @@ public class SearchController {
 		}
 		System.out.println(productService.selectPostingBySmallProductList(blliSmallProductVOList, memberId, pageNum));
 		return productService.selectPostingBySmallProductList(blliSmallProductVOList, memberId, pageNum);
+	}
+	
+	@RequestMapping("selectPostingBySmallProductInSmallProductDetailView.do")
+	@ResponseBody
+	public List<BlliPostingVO> selectPostingBySmallProductInSmallProductDetailView(String smallProductId ,String pageNum,HttpServletRequest request){
+		ArrayList<BlliPostingVO> postingList = 
+				postingService.searchPostingListInProductDetail(smallProductId,request,pageNum);
+		return postingList;
+	}
+	@RequestMapping("footerStatics.do")
+	@ResponseBody
+	public HashMap<String,String> footerStatics(){
+		HashMap<String,String> map = new HashMap<String, String>();
+		map.put("productStatics", productService.selectTotalProductNum());
+		map.put("postingStatics", postingService.selectTotalPostingtNum());
+		return map;
 	}
 	
 	@RequestMapping("goBuyMidPage.do")

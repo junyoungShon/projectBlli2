@@ -25,7 +25,7 @@ insert into BLLI_MEMBER (member_Id,member_password,member_email,member_name,memb
 		values ('asdf','asdf','asdf','asdf',1,'asdf','ROLE_USER');
 		
 		
-
+select posting_content from blli_posting where small_product_id=5702689300
 drop table blli_recomm_mid_category cascade constraint;
 CREATE TABLE blli_recomm_mid_category (
 	member_id            VARCHAR2(30) NOT NULL ,
@@ -240,12 +240,13 @@ select posting_url,small_product,small_product_id,posting_title,posting_summary,
 		update blli_posting set posting_db_insert_date = '2015-02-03'
 		select * from blli_posting where posting_url='http://blog.naver.com/mykid0430/220491426583'
 		select * from blli_small_product where small_product_score < 70
-		
+		select * from blli_small_product where small_product_status = 'confirmed'
 		select avg(small_product_score) from blli_small_product where small_product_status = 'confirmed'
 		select avg(posting_score) from blli_posting where posting_status = 'confirmed' 
+		select avg(small_product_score) from blli_small_product where small_product_status = 'confirmed' 
 		
 		select small_product_score from blli_small_product where small_product_score>100 and  small_product_status = 'confirmed'
-		select posting_score from blli_posting where posting_score>100 and posting_status = 'confirmed' 
+		select posting_score from blli_posting where posting_score>100 and small_product_status = 'confirmed' 
 		
 		select posting_score from blli_posting
 		
@@ -258,3 +259,45 @@ select posting_url,small_product,small_product_id,posting_title,posting_summary,
 		
 		select small_product_id,small_product_score from blli_small_product where mid_category_id = '50000217' and small_product_status ='confirmed' order by small_product_score desc;
 		
+		update blli_posting set posting_status = 'unconfirmed' where posting_url = 'http://blog.naver.com/hee2752/130575057'
+		update blli_posting set posting_status = 'unconfirmed' where small_product_id = '7610052389'
+		update blli_posting set posting_status = 'unconfirmed' where small_product_id = '5702689300'
+		update blli_posting set posting_status = 'confirmed' where posting_status = 'dead'
+		update blli
+		select * from (select rownum as rn , word,word_count,small_product_id from blli_word_cloud where small_product_id ='5702689300' order by word_count desc) 
+		select rownum as rn , word,word_count,small_product_id from blli_word_cloud where small_product_id ='5702689300' order by word_count desc
+		select * from(
+		select rownum as rn , word,word_count,small_product_id from (
+		select  word,word_count,small_product_id from blli_word_cloud where small_product_id ='5702689300' order by word_count desc))where rn < 21
+		select posting_url from blli_posting where posting_photo_link = 'scrawlImage/postingImage/ff19811141954194a1aa6844a601aa04.jpg' 
+		 
+		
+		select small_product from blli_small_product where small_product_id = 5702689300
+		
+		
+		select * from(
+		select rownum rn ,posting_url,small_product,small_product_id,posting_title,posting_summary,posting_content,posting_score,posting_like_count,
+		posting_dislike_count,posting_media_count,posting_photo_link,posting_total_residence_time,posting_view_count,posting_scrape_count,posting_author,posting_date
+		from(
+		select posting_url,small_product,small_product_id,posting_title,posting_summary,posting_content,posting_score,posting_like_count,
+		posting_dislike_count,posting_media_count,posting_photo_link,posting_total_residence_time,posting_view_count,posting_scrape_count,posting_author,posting_date
+		from blli_posting
+		where posting_status = 'confirmed' and small_product_id = '8191428972'
+		order by posting_score desc)
+		) where rn >= 0 and rn < 6
+		
+		
+		
+		select * from 
+		(select 
+		bsp.rownum as rn,bsp.SMALL_PRODUCT, bsp.MID_CATEGORY,bsp.mid_CATEGORY_ID, bsp.SMALL_PRODUCT_MAKER, 
+		bsp.SMALL_PRODUCT_WHENTOUSE_MIN, bsp.SMALL_PRODUCT_WHENTOUSE_MAX, bsp.SMALL_PRODUCT_DIBS_COUNT, 
+		bsp.SMALL_PRODUCT_MAIN_PHOTO_LINK, bsp.SMALL_PRODUCT_SCORE, bsp.SMALL_PRODUCT_POSTING_COUNT, bsp.NAVER_SHOPPING_RANK, bsp.PRODUCT_REGISTER_DAY,bsp.small_product_id
+		from BLLI_SMALL_PRODUCT bsp,
+		where MID_CATEGORY_id = #{recommMid} and #{babyMonthAge}  >= SMALL_PRODUCT_WHENTOUSE_MIN and #{babyMonthAge} <= SMALL_PRODUCT_WHENTOUSE_MAX
+		order by SMALL_PRODUCT_DIBS_COUNT desc) 
+		where rn<3
+		
+		select * from (
+			select buy_link_price,rownum as rn from blli_small_prod_buy_link where small_product_id = '7909155651' 
+		) where rn =1

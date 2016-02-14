@@ -58,6 +58,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="midCategoryId" column="mid_category_id"/>
  		<result property="memberId" column="member_id"/>
  	</resultMap>
+ 	<!-- BlliWordCloudVO ResultMap 설정 -->
+ 	<resultMap type="blliWordCloudVO" id="bwc">
+ 		<result property="smallProductId" column="small_product_id"/>
+ 		<result property="word" column="word"/>
+ 		<result property="wordCount" column="word_count"/>
+ 	</resultMap>
 	<!-- 현석 쿼리 시작 -->
 	<select id="getSmallProduct" resultMap="bspvRM">
 		select small_product, small_product_id, small_product_posting_count, search_time from blli_small_product 
@@ -155,7 +161,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="getOtherSmallProductList" resultMap="bspvRM">
-		select small_product_id, small_product, small_product_score
+		select small_product_id, small_product, small_product_score, small_product_main_photo_link
 		from blli_small_product where mid_category = #{midCategory} and small_product_status = 'confirmed' and small_product != #{smallProduct} order by small_product_score desc
 	</select>
 	
@@ -290,7 +296,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into  blli_buy_link_click (member_id,click_time,seller,small_product_id) values
 		(#{memberId},sysdate,#{seller},#{smallProductId})
 	</insert>
+	<!-- 워드클라우드 용  단어 출력-->
+	<select id="selectWordCloudList" resultMap="bwc">
+		<![CDATA[
+		select * from(
+		select rownum as rn , word,word_count,small_product_id from (
+		select  word,word_count,small_product_id from blli_word_cloud where small_product_id =#{value} order by word_count desc))where rn < 21
+		]]> 
+	</select>
+	<select id="selectProductMinPrice" resultType="String">
+		select * from (
+			select buy_link_price,rownum as rn from blli_small_prod_buy_link where small_product_id = #{value} 
+		) where rn =1
+	</select>
+	<select id="selectTotalProductNum" resultType="String">
+		select count(*) from blli_small_product
+	</select>
 	<!-- 끝 -->
+		
+	
 		
  </mapper> 		
  

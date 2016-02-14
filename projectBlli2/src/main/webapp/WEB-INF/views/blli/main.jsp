@@ -18,6 +18,21 @@
 	        scrollController();
 	    });
 	}
+	
+	// ===== Scroll to Top ==== 
+	$(window).scroll(function() {
+	    if ($(this).scrollTop() >= 200) {        // If page is scrolled more than 50px
+	        $('#return-to-top').fadeIn(200);    // Fade in the arrow
+	    } else {
+	        $('#return-to-top').fadeOut(200);   // Else fade out the arrow
+	    }
+	});
+	$('#return-to-top').click(function() {      // When arrow is clicked
+		$('body,html').stop().animate({
+	        scrollTop : 0                       // Scroll to top of body
+	    }, 2000);
+	});
+	
 	//블로그로 이동시키며 체류시간을 측정하는 함수
 	function goBlogPosting(targetURL,smallProductId){
 		//도착시간 체크를 위해 
@@ -64,6 +79,8 @@
 	    //사이드의 소분류 제품 리스트를 고정시켜줌
 	    if(currentScrollTop>1080){
 	    	 $('.main_right_list').css("margin-top",currentScrollTop-1080);
+	    }else{
+	    	 $('.main_right_list').css("margin-top",0);
 	    }
 	}
 
@@ -109,13 +126,18 @@
 				type:"get",
 				url:"smallProductDib.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+smallProductId,
 				success:function(result){
-					alert(result);
 					$('.smallProductDibBtn').each(function(index){
 						if($($('.smallProductDibBtn').get(index)).children('.smallProductId').val()==smallProductId){
 							if(result==1){
 								$($('.smallProductDibBtn').get(index)).children('.fa').removeClass("fa-heart-o").addClass("fa-heart");
+								var dibsCount = $($('.smallProductDibBtn').get(index)).children('.dibsCount').text();
+								dibsCount *= 1
+								$($('.smallProductDibBtn').get(index)).children('.dibsCount').text(dibsCount+1);
 							}else{
 								$($('.smallProductDibBtn').get(index)).children('.fa').removeClass("fa-heart").addClass("fa-heart-o");
+								var dibsCount = $($('.smallProductDibBtn').get(index)).children('.dibsCount').text();
+								dibsCount *= 1
+								$($('.smallProductDibBtn').get(index)).children('.dibsCount').text(dibsCount-1);
 							}
 						}
 					}) 
@@ -124,46 +146,67 @@
 		}); 
 
 		//포스팅 스크랩 스크립트
-		$('.postingScrapeBtn').click(function(){
+		$('.in_fr').on("click", ".postingScrapeBtn",function(){
+			var comp = $(this);
 			$.ajax({
 				type:"get",
-				url:"postingScrape.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(this).parent().parent().parent().siblings('.smallProductIdInfo').val()
-						+'&postingUrl='+$(this).parent().parent().parent().siblings('.postingUrlInfo').val(),
+				url:"postingScrape.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(comp).parent('.sns').children('.smallProductIdInfo').val()
+						+'&postingUrl='+$(comp).parent('.sns').children('.postingUrlInfo').val(),
 				success:function(result){
 					if(result==1){
-						alert('스크랩 성공!');
+						$(comp).css('color','orange');
+						var count = $(comp).siblings('.scrapeCount').text();
+						count *= 1;
+						$(comp).siblings('.scrapeCount').text(count+1);
 					}else if(result==0){
-						alert('스크랩 해제!');
+						$(comp).css('color','gray');
+						var count = $(comp).siblings('.scrapeCount').text();
+						count *= 1;
+						$(comp).siblings('.scrapeCount').text(count-1);
 					}
 				}
 			}); 
 		});
 		//포스팅 좋아요 스크립트
-		$('.postingLikeBtn').click(function(){
+		$('.in_fr').on("click", ".postingLikeBtn",function(){
+			var comp = $(this);
 			$.ajax({
 				type:"get",
-				url:"postingLike.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(this).parent().parent().parent().siblings('.smallProductIdInfo').val()
-						+'&postingUrl='+$(this).parent().parent().parent().siblings('.postingUrlInfo').val(),
+				url:"postingLike.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(comp).parent('.sns').children('.smallProductIdInfo').val()
+						+'&postingUrl='+$(comp).parent('.sns').children('.postingUrlInfo').val(),
 				success:function(result){
 					if(result==1){
-						alert('좋아요 성공!');
+						$(comp).css('color','hotpink');
+						var count = $(comp).siblings('.likeCount').text();
+						count *= 1;
+						$(comp).siblings('.likeCount').text(count+1);
 					}else if(result==0){
-						alert('좋아요 해제!');
+						$(comp).css('color','gray');
+						var count = $(comp).siblings('.likeCount').text();
+						count *= 1;
+						$(comp).siblings('.likeCount').text(count-1);
 					}
 				}
 			}); 
 		});
 		//포스팅 싫어요 스크립트
-		$('.postingDisLikeBtn').click(function(){
+		$('.in_fr').on("click", ".postingDisLikeBtn",function(){
+			var comp = $(this);
 			$.ajax({
 				type:"get",
-				url:"postingDisLike.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(this).parent().parent().parent().siblings('.smallProductIdInfo').val()
-						+'&postingUrl='+$(this).parent().parent().parent().siblings('.postingUrlInfo').val(),
+				url:"postingDisLike.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(comp).parent('.sns').children('.smallProductIdInfo').val()
+						+'&postingUrl='+$(comp).parent('.sns').children('.postingUrlInfo').val(),
 				success:function(result){
 					if(result==1){
-						alert('싫어요 성공!');
+						$(comp).css('color','hotpink');
+						var count = $(comp).siblings('.disLikeCount').text();
+						count *= 1;
+						$(comp).siblings('.disLikeCount').text(count+1);
 					}else if(result==0){
-						alert('싫어요 해제!');
+						$(comp).css('color','gray');
+						var count = $(comp).siblings('.disLikeCount').text();
+						count *= 1;
+						$(comp).siblings('.disLikeCount').text(count-1);
 					}
 				}
 			}); 
@@ -221,53 +264,57 @@
 	    		success : function(data){
 	    			var leftProductAjaxHTML = "";
 	    			var rightPostingAjaxHTML = "";
-	    			var postingScrapeAjaxHTML = '<i class="fa fa-bookmark-o postingScrapeBtn" style="color: gray"></i> ';
-	    			var postingLikeAjaxHTML = '<i class="fa fa-thumbs-up postingLikeBtn" style="color: gray"></i> ';
-	    			var postingDisLikeAjaxHTML = '<i class="fa fa-thumbs-down postingDisLikeBtn" style="color: gray"></i> ';
+	    			
 	    			if(data.length==0){
 	    				alert('현재 추천되는 소제품 관련 포스팅은 여기까지 입니다 ^^');
 	    			}
 	    			for(var i=0;i<data.length;i++){
+	    				var postingScrapeAjaxHTML = '<i class="fa fa-bookmark-o postingScrapeBtn" style="color: gray" data-tooltip-text="스크랩해두시면 스크랩페이지에서 다시볼 수 있어요!"></i> ';
+		    			var postingLikeAjaxHTML = '<i class="fa fa-thumbs-up postingLikeBtn" style="color: gray" data-tooltip-text="유익한 블로그였다면 바로 좋아요!"></i> ';
+		    			var postingDisLikeAjaxHTML = '<i class="fa fa-thumbs-down postingDisLikeBtn" style="color: gray" data-tooltip-text="광고,상관없는 포스팅등은 가차없이 싫어요!"></i> ';
+		    			
 	    				if(data[i].isScrapped==1){
-	    					postingScrapeAjaxHTML = '<i class="fa fa-bookmark postingScrapeBtn" style="color: orange"></i>';
+	    					postingScrapeAjaxHTML = '<i class="fa fa-bookmark postingScrapeBtn" style="color: orange" data-tooltip-text="스크랩해두시면 스크랩페이지에서 다시볼 수 있어요!"></i>';
 	    				}
 	    				if(data[i].isLike==1){
-	    					postingLikeAjaxHTML = '<i class="fa fa-thumbs-up postingLikeBtn" style="color: orange"></i>';
+	    					postingLikeAjaxHTML = '<i class="fa fa-thumbs-up postingLikeBtn" style="color: hotpink" data-tooltip-text="유익한 블로그였다면 바로 좋아요!"></i>';
 	    				}
 	    				if(data[i].isDisLike==1){
-	    					postingDisLikeAjaxHTML = '<i class="fa fa-thumbs-down postingDisLikeBtn" style="color: orange"></i>';
+	    					postingDisLikeAjaxHTML = '<i class="fa fa-thumbs-down postingDisLikeBtn" style="color: hotpink" data-tooltip-text="광고,상관없는 포스팅등은 가차없이 싫어요!"></i>';
 	    				}
 	    				$('.postingForSmallProduct').each(function(index){
 	    						if(data[i].smallProductId==$($('.postingForSmallProduct').get(index)).children('.product_price').children('.fr').children().children('.smallProductId').val()){
-		    						leftProductAjaxHTML += '<div style="height:356px;" class="postingForSmallProduct">';
+		    						leftProductAjaxHTML += '<div style="height:357px;margin-left: 30px;width: 120px;" class="postingForSmallProduct">';
 		    						leftProductAjaxHTML += $($('.postingForSmallProduct').get(index)).html();
 		    						leftProductAjaxHTML += '</div>';
 		    						return false;
 			    				}
 	    				})
+						
+					
 						rightPostingAjaxHTML +=
-						'<input type="hidden" class="smallProductIdInfo" value="${postingList.smallProductId}">'+
-						'<input type="hidden" class="postingUrlInfo" value="${postingList.postingUrl}"><div style="height:356px;"><div class="result_ti">'+
+						'<div style="height:325px; border: 1px solid #ccc;border-radius: 10px; margin-bottom:30px;"><div class="result_ti">'+
 						'<div style="width:450px; overflow:hidden;white-space:nowrap; text-overflow:ellipsis;">'+
 						data[i].postingTitle+
-						'</div></div><div style="height:245px;"><div class="result_foto fl"><a href="goPosting.do?postingUrl='+
-						data[i].postingUrl+
-						'&smallProductId='+
-						data[i].smallProductId+'&postingTitle='+data[i].postingTitle+'"><img src="'+
+						'</div></div><div style="height:245px;"><div class="result_foto fl">'
+						+'<a href="#" onclick=goBlogPosting("'+data[i].postingUrl+'","'+data[i].smallProductId+'")>'
+						+'<img src="'+
 						data[i].postingPhotoLink+
-						'" style="width: 342px; max-height: 247px;"></a></div><div class="fl"><div class="product_text2">'+
+						'" style="width: 335px; height: 235px; MARGIN-LEFT:5px;"></a></div><div class="fl"><div class="product_text2">'+
 						data[i].postingSummary+
 						'</div><div class="product_id"><div style="width:180px; overflow:hidden;white-space:nowrap; text-overflow:ellipsis;">'+
 						data[i].postingAuthor+
 						'</div></div></div></div><div class="product_sns"><div class="fl score">'+
 						data[i].postingScore+
 						'점</div><div class="fr sns">'+
+						'<input type="hidden" class="smallProductIdInfo" value="'+data[i].smallProductId+'">'+
+						'<input type="hidden" class="postingUrlInfo" value="'+data[i].postingUrl+'">'+
 						postingScrapeAjaxHTML+
-						data[i].postingScrapeCount+' '+
+						'<span style="font-size: 11px; line-height: 16px ;margin-right:15px" class="scrapeCount">'+data[i].postingScrapeCount+'</span>'+
 						postingLikeAjaxHTML+
-						data[i].postingLikeCount+' '+
+						'<span style="font-size: 11px; line-height: 16px ;margin-right:15px" class="likeCount">'+data[i].postingLikeCount+'</span>'+
 						postingDisLikeAjaxHTML+
-						data[i].postingLikeCount+' '+
+						'<span style="font-size: 11px; line-height: 16px ;margin-right:15px" class="disLikeCount">'+data[i].postingDislikeCount+'</span>'+
 						'</div></div></div>'
 	    			}
 	    			
@@ -377,17 +424,17 @@
 					<div class="product_price" style="margin:0px;">
 						<div class="fl">
 							<p class="result_gray">최저가</p>
-							<p class="result_price">25,000원</p>
+							<p class="result_price">${blliSmallProductVOList.minPrice}원</p>
 						</div>
 						<div class="fr">
-							<div style="margin-top: 15px" class="smallProductDibBtn">
+						<div style="margin-top: 15px" class="smallProductDibBtn" data-tooltip-text="찜해두시면 스크랩페이지에서 다시 보실 수 있어요!">
 						<c:if test="${blliSmallProductVOList.isDib==0}">
 							<i class="fa fa-heart-o fa-2x" style="color: red"></i>
 						</c:if>
 						<c:if test="${blliSmallProductVOList.isDib==1}">
 							<i class="fa fa-heart fa-2x" style="color: red"></i>
 						</c:if>
-							<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
+							<span style="font-size: 15px ;color: gray;" class="dibsCount">${blliSmallProductVOList.smallProductDibsCount}</span>
 							<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
 						</div>
 						</div>
@@ -397,27 +444,27 @@
 			</ul>
 		</div>
 	</div>
-
-
-
-<div class="in_fr" style="margin-top:20px; border-top:1px solid #ccc; clear:both;">
+<div class="in_fr" style="margin-top:20px; clear:both;">
+<div class="main_ti">
+			추천 상품을 포스팅한 블로그들
+		</div>
 		<div class="main_left_product">
 			<c:forEach items="${requestScope.blliPostingVOList}" var="postingList">
 				<c:forEach items="${requestScope.blliSmallProductVOList}" var="blliSmallProductVOList">
 				<c:if test="${postingList.smallProductId==blliSmallProductVOList.smallProductId}">
 				
-			<div style="height:356px;" class="postingForSmallProduct">
+			<div style="height:357px;margin-left: 30px;width: 120px;" class="postingForSmallProduct">
 				<div class="foto170">
 					<a href = "goSmallProductDetailView.do?smallProduct=${blliSmallProductVOList.smallProduct}">
-					<img src="${blliSmallProductVOList.smallProductMainPhotoLink}" style="height: 170px; width: 170px;">
+					<img src="${blliSmallProductVOList.smallProductMainPhotoLink}" style="height: 120px; width: 120px;">
 					</a>
 					<div class="product_month">
-							${blliSmallProductVOList.smallProductWhenToUseMin}~${blliSmallProductVOList.smallProductWhenToUseMax}<br/>
+						 ${blliSmallProductVOList.smallProductWhenToUseMin}~${blliSmallProductVOList.smallProductWhenToUseMax}<br/>
 						개월
 					</div>
 				</div>
 				<div class="main_product_ti">
-						<div style='width:175px; overflow:hidden;white-space:nowrap; text-overflow:ellipsis;'>
+						<div style='width:120px; overflow:hidden;white-space:nowrap; text-overflow:ellipsis;'>
 							${blliSmallProductVOList.smallProduct} / ${blliSmallProductVOList.smallProductMaker}
 						</div>
 				</div>
@@ -425,19 +472,19 @@
 				<div class="product_price" style="margin:0px;">
 					<div class="fl">
 						<p class="result_gray">최저가</p>
-						<p class="result_price">25,000원</p>
+						<p class="result_price">${blliSmallProductVOList.minPrice}원</p>
 					</div>
 				
 					<div class="fr">
 						
-						<div style="margin-top: 15px" class="smallProductDibBtn">
+						<div style="margin-top: 15px" class="smallProductDibBtn" data-tooltip-text="찜해두시면 스크랩페이지에서 다시 보실 수 있어요!">
 						<c:if test="${blliSmallProductVOList.isDib==0}">
 							<i class="fa fa-heart-o fa-2x" style="color: red"></i>
 						</c:if>
 						<c:if test="${blliSmallProductVOList.isDib==1}">
 							<i class="fa fa-heart fa-2x" style="color: red"></i>
 						</c:if>
-							<span style="font-size: 15px ;color: gray;">${blliSmallProductVOList.smallProductDibsCount}</span>
+							<span style="font-size: 15px ;color: gray;" class="dibsCount">${blliSmallProductVOList.smallProductDibsCount}</span>
 							<input type="hidden" value="${blliSmallProductVOList.smallProductId}" class="smallProductId">
 						</div>
 					</div>
@@ -450,13 +497,10 @@
 		</div>
 	
 
+		
 		<div class="main_left_con">
 			<c:forEach items="${requestScope.blliPostingVOList}" var="postingList">
-						
-			<input type="hidden" class="smallProductIdInfo" value="${postingList.smallProductId}">
-			<input type="hidden" class="postingUrlInfo" value="${postingList.postingUrl}">
-						
-			<div style="height:356px;">
+			<div style="height:325px; border: 1px solid #ccc;border-radius: 10px; margin-bottom:30px;">
 				<div class="result_ti">
 					<div style='width:450px; overflow:hidden;white-space:nowrap; text-overflow:ellipsis;'>
 							${postingList.postingTitle}
@@ -467,7 +511,7 @@
 					<div class="result_foto fl">
 					
 						<a href="#" onclick="goBlogPosting('${postingList.postingUrl}','${postingList.smallProductId}')">
-							<img src="${postingList.postingPhotoLink}" style="width: 342px; max-height: 247px;">
+							<img src="${postingList.postingPhotoLink}" style="width: 335px; height: 235px; MARGIN-LEFT:5px;">
 						</a>
 					</div>
 					<div class="fl">
@@ -486,29 +530,33 @@
 						${postingList.postingScore}점
 					</div>
 					<div class="fr sns">
+						<input type="hidden" class="smallProductIdInfo" value="${postingList.smallProductId}">
+						<input type="hidden" class="postingUrlInfo" value="${postingList.postingUrl}">
 						<c:if test="${postingList.isScrapped==0}">
-							<i class="fa fa-bookmark-o postingScrapeBtn" style="color: gray"></i>
-							${postingList.postingScrapeCount}
+							<i class="fa fa-bookmark-o postingScrapeBtn" style="color: gray" data-tooltip-text="스크랩해두시면 스크랩페이지에서 다시 보실 수 있어요!"></i>
+							<span style="font-size: 11px; line-height: 16px ;margin-right:15px" class="scrapeCount">${postingList.postingScrapeCount}</span>
 						</c:if>
 						<c:if test="${postingList.isScrapped==1}">
-							<i class="fa fa-bookmark postingScrapeBtn" style="color: orange"></i>
-							${postingList.postingScrapeCount}
+							<i class="fa fa-bookmark postingScrapeBtn" style="color: orange" data-tooltip-text="스크랩해두시면 스크랩페이지에서 다시 보실 수 있어요!"></i>
+							<span style="font-size: 11px; line-height: 16px ;margin-right:15px" class="scrapeCount">${postingList.postingScrapeCount}</span>
 						</c:if>		
 						<c:if test="${postingList.isLike==0}">
-							<i class="fa fa-thumbs-up postingLikeBtn" style="color: gray"></i>
-							${postingList.postingLikeCount}
+							<i class="fa fa-thumbs-up postingLikeBtn" style="color: gray" data-tooltip-text="유익한 내용의 블로그였다면 좋아요!"></i>
+							<span style="font-size: 11px; line-height: 16px ;margin-right:15px" class="likeCount">${postingList.postingLikeCount}</span>
 						</c:if>
 						<c:if test="${postingList.isLike==1}">
-							<i class="fa fa-thumbs-up postingLikeBtn" style="color: gray"></i>
-							${postingList.postingLikeCount}
+							<i class="fa fa-thumbs-up postingLikeBtn" style="color: hotpink" data-tooltip-text="유익한 내용의 블로그였다면 좋아요!"></i>
+							<span style="font-size: 11px; line-height: 16px ;margin-right:15px" class="likeCount">${postingList.postingLikeCount}</span>
 						</c:if>
 						<c:if test="${postingList.isDisLike==0}">
-							<i class="fa fa-thumbs-down postingDisLikeBtn" style="color: gray"></i>
-							${postingList.postingLikeCount}
+							<i class="fa fa-thumbs-down postingDisLikeBtn" style="color: gray" data-tooltip-text="광고,상관없는 포스팅등은 가차없이 싫어요!"></i>
+							<span style="font-size: 11px; line-height: 16px ;margin-right:15px" class="disLikeCount">${postingList.postingDislikeCount}</span>
+							
 						</c:if>
 						<c:if test="${postingList.isDisLike==1}">
-							<i class="fa fa-thumbs-down postingDisLikeBtn" style="color: gray"></i>
-							${postingList.postingLikeCount}
+							<i class="fa fa-thumbs-down postingDisLikeBtn" style="color: hotpink" data-tooltip-text="광고,상관없는 포스팅등은 가차없이 싫어요!"></i>
+							<span style="font-size: 11px; line-height: 16px ;margin-right:15px" class="disLikeCount">${postingList.postingDislikeCount}</span>
+							
 						</c:if>
 					</div>
 				</div>
@@ -542,6 +590,7 @@
 			</div>
 
 		</div>
+		 <a href="#" id="return-to-top"><i class="fa fa-chevron-up"></i></a>
 </div>
 
 

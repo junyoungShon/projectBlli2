@@ -1,5 +1,7 @@
 package kr.co.blli.model.vo;
 
+import java.util.List;
+
 public class BlliSmallProductVO {
 	private String smallProduct;
 	private String midCategory;
@@ -28,10 +30,9 @@ public class BlliSmallProductVO {
 	private String productDbInsertDate;
 	//16.02.06 추가
 	private int dbInsertPostingCount;
-	public BlliSmallProductVO() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	//16.02.07 추가
+	private List<BlliWordCloudVO> blliWordCloudVOList;
+	
 	public BlliSmallProductVO(String smallProduct, String midCategory,
 			String midCategoryId, String smallProductMaker,
 			int smallProductWhenToUseMin, int smallProductWhenToUseMax,
@@ -41,7 +42,7 @@ public class BlliSmallProductVO {
 			String productRegisterDay, String smallProductId,
 			int smallProductRanking, int isDib, String minPrice,
 			String searchTime, int detailViewCount, String productDbInsertDate,
-			int dbInsertPostingCount) {
+			int dbInsertPostingCount, List<BlliWordCloudVO> blliWordCloudVOList) {
 		super();
 		this.smallProduct = smallProduct;
 		this.midCategory = midCategory;
@@ -64,6 +65,11 @@ public class BlliSmallProductVO {
 		this.detailViewCount = detailViewCount;
 		this.productDbInsertDate = productDbInsertDate;
 		this.dbInsertPostingCount = dbInsertPostingCount;
+		this.blliWordCloudVOList = blliWordCloudVOList;
+	}
+	public BlliSmallProductVO() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 	public String getSmallProduct() {
 		return smallProduct;
@@ -190,6 +196,12 @@ public class BlliSmallProductVO {
 	}
 	public void setDbInsertPostingCount(int dbInsertPostingCount) {
 		this.dbInsertPostingCount = dbInsertPostingCount;
+	}
+	public List<BlliWordCloudVO> getBlliWordCloudVOList() {
+		return blliWordCloudVOList;
+	}
+	public void setBlliWordCloudVOList(List<BlliWordCloudVO> blliWordCloudVOList) {
+		this.blliWordCloudVOList = blliWordCloudVOList;
 	}
 	@Override
 	public String toString() {

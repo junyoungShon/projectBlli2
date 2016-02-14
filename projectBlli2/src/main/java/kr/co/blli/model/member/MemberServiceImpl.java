@@ -153,6 +153,7 @@ public class MemberServiceImpl implements MemberService {
 	 */
 	@Override
 	public BlliMemberVO selectBlliMemberInfoByMemberId(String memberId) {
+		System.out.println(memberId);
 		//1. 비밀번호를 제외한 사용자의 모든 정보
 		BlliMemberVO blliMemberVO= memberDAO.selectBlliMemberInfoByMemberId(memberId);
 		//2. 사용자의 아이정보

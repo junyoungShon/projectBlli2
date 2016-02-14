@@ -58,7 +58,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="midCategoryId" column="mid_category_id"/>
  		<result property="smallProductId" column="small_product_id"/>
  	</resultMap>
- 	
+ 	<!-- BlliWordCloudVO ResultMap 설정 -->
+ 	<resultMap type="blliWordCloudVO" id="bwc">
+ 		<result property="smallProductId" column="small_product_id"/>
+ 		<result property="word" column="word"/>
+ 		<result property="wordCount" column="word_count"/>
+ 	</resultMap>
  	<!-- 용호 작성 쿼리 -->
  	<!-- memberId로 회원의 메일주소를 찾습니다. -->
 	<select id="findMemberInfoById" resultMap="bmbvRM">
@@ -170,7 +175,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where ${smallProductWhenToUseMax} > mid_category_whentouse_max or mid_category_whentouse_max is null and mid_category = #{midCategory}
 	</update>
 	<!-- 현석 쿼리 끝 -->
-	
+	<!-- 준영 쿼리 시작 -->
+	<!-- 소제품 명으로 본문 불러오는 메서드 -->
+	<select id="makingWordCloud" resultMap="bpvRM" parameterType="String">
+		select posting_content from blli_posting where small_product_id=#{value} and posting_status = 'confirmed'
+	</select>
+	<select id="selectPostingContentByPostingUrl" resultType="String" parameterType="String">
+		select posting_content from blli_posting where posting_url = #{value}
+	</select>
+	<update id="updateWordCloud">
+		update blli_word_cloud set word_count = word_count + #{wordCount} where small_product_Id = #{smallProductId} and word = #{word}
+	</update>
+	<insert id="insertWordCloud">
+		insert into blli_word_cloud (word,word_count,small_product_id) values (#{word},#{wordCount},#{smallProductId})
+	</insert>
+	<!-- 준영 끝 -->
  </mapper>
  
  

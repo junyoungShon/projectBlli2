@@ -9,7 +9,6 @@
 			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
 		</layout>
 	</appender>
-	
 	<!-- Application Loggers -->
 	<logger name="kr.co.blli">
 		<level value="info" />

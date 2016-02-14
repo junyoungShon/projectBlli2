@@ -15,6 +15,7 @@ import kr.co.blli.model.vo.BlliPostingLikeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductBuyLinkVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
+import kr.co.blli.model.vo.BlliWordCloudVO;
 
 public interface ProductDAO {
 
@@ -141,5 +142,11 @@ public interface ProductDAO {
 	void insertBlliBuyLinkClick(BlliBuyLinkClickVO blliBuyLinkClickVO);
 
 	void updateBlliBuyLinkClickCount(String smallProductId);
+
+	List<BlliWordCloudVO> selectWordCloudList(String smallProductId);
+
+	String selectProductMinPrice(String smallProductId);
+
+	String selectTotalProductNum();
 
 }

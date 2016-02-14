@@ -6,7 +6,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title>블리</title>
+<title>블리 - 충동구매보다 빠른 합리적 쇼핑!</title>
+<link href="${initParam.root}img/favicon/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 <meta name="Keywords" content="" />
 <meta name="Description" content="" />
 <link rel="stylesheet" type="text/css" href="./css/reset.css" />
@@ -18,6 +19,16 @@ rel='stylesheet' type='text/css'>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
+		
+		$.ajax({
+			type:"get",
+			url:"footerStatics.do",
+			success:function(data){
+				$('.footerProductStatics').text(data.productStatics);
+				$('.footerPostingStatics').text(data.postingStatics);
+			}
+		});
+		
 		$('.loginButton').click(function(){
 			if($('#memberId').val()==""){
 				alert('id를 입력해주세요');
@@ -62,15 +73,17 @@ ${requestScope.loginFail}
 					<input type="button" class="loginButton" value="로그인" style="margin-top:20px;" > 
 					</form>
 		</div>
-	<div class="login_bottom">
-		<div class="fl login_bottom_ft">
-			블리 3231개의 상품과, 3216400개의 블로그가 있습니다.
+			<div class="login_bottom">
+			<div class="fl login_bottom_ft">
+				블리는 <span class="footerProductStatics"></span>개의 상품을 소개하고, 관련된 <span class="footerPostingStatics"></span>개의 블로그를 분석하고 소개합니다.
+			</div>
+			<div class="fr">
+				<div class="login_bottom_right">
+				<a href="${initParam.root}adminIndex.do"><img src="./img/bottom_app1.png" alt="안드로이드 다운로드받기"></a>
+				<a href="#"><img src="./img/bottom_app2.png" alt="애플 다운로드받기"></a>
+				</div>
+			</div>
 		</div>
-		<div class="fr">
-			<a href="#"><img src="./img/bottom_app1.png" alt="안드로이드 다운로드받기"></a>
-			<a href="#"><img src="./img/bottom_app2.png" alt="애플 다운로드받기"></a>
-		</div>
-	</div>
 </body>
 </html>      
 

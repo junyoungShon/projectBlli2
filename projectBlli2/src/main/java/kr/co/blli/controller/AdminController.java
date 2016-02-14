@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import kr.co.blli.model.admin.AdminService;
+import kr.co.blli.model.vo.BlliPostingVO;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -115,5 +116,16 @@ public class AdminController {
 	@RequestMapping("insertCafeArticle.do")
 	public void insertCafeArticle(){
 		adminService.insertCafeArticle();
-	}	
+	}
+	/**
+	  * @Method Name : makingWordCloud
+	  * @Method 설명 : 워드클라우드 만드는 임시 메서드
+	  * @작성일 : 2016. 2. 11.
+	  * @작성자 : junyoung
+	  * @param blliPostingVO
+	 */
+	@RequestMapping("makingWordCloud.do")
+	public void makingWordCloud(BlliPostingVO blliPostingVO){
+		adminService.makingWordCloud(blliPostingVO);
+	}
 }

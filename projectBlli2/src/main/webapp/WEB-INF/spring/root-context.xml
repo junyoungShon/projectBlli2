@@ -20,6 +20,10 @@
 	</context:component-scan>
 	<context:component-scan base-package="org.springframework.security.crypto.bcrypt"/>
 	<bean class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" autowire="default"/>
+	<context:component-scan base-package="kr.ac.kaist.swrc.jhannanum"/>
+	<bean class="kr.ac.kaist.swrc.jhannanum.hannanum.Workflow" autowire="default">
+		<constructor-arg name="baseDir" value="C:\Users\junyoung\git\projectBlli2\projectBlli2\src\main\resources\jhannanum"/>
+	</bean>
 	
 	<!-- model 계층 빈 설정 , AOP설정 비워둠 -->
 
@@ -87,6 +91,7 @@
 		/>                
 		<security:logout
 			invalidate-session="true"
+			logout-url="/logout.do"
 			logout-success-url="/index.do"
 			delete-cookies="JSESSIONID"
 		/>

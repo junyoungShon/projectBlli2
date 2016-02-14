@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -21,8 +22,10 @@ import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliPagingBean;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
+import kr.co.blli.model.vo.BlliWordCloudVO;
 import kr.co.blli.model.vo.ListVO;
 import kr.co.blli.utility.BlliFileDownLoader;
+import kr.co.blli.utility.BlliWordCounter;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -44,6 +47,8 @@ public class AdminServiceImpl implements AdminService{
 	private VelocityConfig velocityConfig;
 	@Resource
 	private BlliFileDownLoader blliFileDownLoader;
+	@Resource
+	private BlliWordCounter blliWordCounter;
 	
 	
 	
@@ -292,6 +297,7 @@ public class AdminServiceImpl implements AdminService{
 	 */
 	@Override
 	public void registerPosting(List<Map<String, Object>> urlAndImage) {
+		ArrayList<BlliPostingVO> blliPostingVOList = new ArrayList<BlliPostingVO>();
 		for(int i=0;i<urlAndImage.size();i++){
 			String delete = urlAndImage.get(i).get("del").toString();
 			String postingUrl = urlAndImage.get(i).get("postingUrl").toString();
@@ -299,18 +305,20 @@ public class AdminServiceImpl implements AdminService{
 			String smallProductId = urlAndImage.get(i).get("smallProductId").toString();
 			BlliPostingVO vo = new BlliPostingVO();
 			//이미지 파일 다운로드
-			vo.setPostingPhotoLink(blliFileDownLoader.imgFileDownLoader(postingPhotoLink,UUID.randomUUID().toString().replace("-", ""), "postingImage"));
 			vo.setPostingUrl(postingUrl);
 			vo.setSmallProductId(smallProductId);
 			if(delete.equals("YES")){
 				adminDAO.deletePosting(vo);
 			}else{
+				vo.setPostingPhotoLink(blliFileDownLoader.imgFileDownLoader(postingPhotoLink,UUID.randomUUID().toString().replace("-", ""), "postingImage"));
+				blliPostingVOList.add(vo);
 				int updateResult = adminDAO.registerPosting(vo);
 				if(updateResult != 0){
 					adminDAO.updatePostingCount(vo);
 				}
 			}
 		}
+		insertAndUpdateWordCloud(blliPostingVOList);
 	}
 	/**
 	 * 
@@ -368,4 +376,56 @@ public class AdminServiceImpl implements AdminService{
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public void makingWordCloud(BlliPostingVO blliPostingVO) {
+		String smallProductId = blliPostingVO.getSmallProductId();
+		List<BlliPostingVO> list = adminDAO.makingWordCloud(smallProductId);
+		StringBuffer sb = new StringBuffer();
+		System.out.println("총 조사 포스팅 수 : "+list.size());
+		for (int i = 0; i < list.size(); i++) {
+			sb.append(list.get(i).getPostingContent());
+		}
+		HashMap<String, Integer> wordCounting = blliWordCounter.wordCounting(sb);
+		Iterator<String> it = wordCounting.keySet().iterator();
+		while(it.hasNext()){
+			String key = it.next();
+			int value = wordCounting.get(key);
+			BlliWordCloudVO blliWordCloudVO = new BlliWordCloudVO();
+			blliWordCloudVO.setSmallProductId(smallProductId);
+			blliWordCloudVO.setWord(key);
+			blliWordCloudVO.setWordCount(value);
+			if(adminDAO.updateWordCloud(blliWordCloudVO)!=0){
+				adminDAO.insertWordCloud(blliWordCloudVO);
+			}
+		}
+	}
+	@Override
+	public void insertAndUpdateWordCloud(ArrayList<BlliPostingVO> blliPostingVOList) {
+		if(blliPostingVOList.size()>0){
+			String smallProductId = blliPostingVOList.get(0).getSmallProductId();
+			StringBuffer sb = new StringBuffer();
+			System.out.println("총 조사 포스팅 수 : "+blliPostingVOList.size());
+			for (int i = 0; i < blliPostingVOList.size(); i++) {
+				blliPostingVOList.get(i).setPostingContent(adminDAO.selectPostingContentByPostingUrl(blliPostingVOList.get(i).getPostingUrl()));
+				sb.append(blliPostingVOList.get(i).getPostingContent());
+			}
+			HashMap<String, Integer> wordCounting = blliWordCounter.wordCounting(sb);
+			Iterator<String> it = wordCounting.keySet().iterator();
+			while(it.hasNext()){
+				String key = it.next();
+				int value = wordCounting.get(key);  
+				BlliWordCloudVO blliWordCloudVO = new BlliWordCloudVO();
+				blliWordCloudVO.setSmallProductId(smallProductId);
+				blliWordCloudVO.setWord(key);
+				blliWordCloudVO.setWordCount(value);
+				System.out.println();
+				if(adminDAO.updateWordCloud(blliWordCloudVO)==0){
+					System.out.println("여기와야해");
+					adminDAO.insertWordCloud(blliWordCloudVO);
+				}
+			}
+		}
+	}
+
 }
