@@ -42,7 +42,7 @@ rel='stylesheet' type='text/css'>
 		if("${requestScope.memberEmail}"!="") {
 			alert("회원님의 이메일로 임시 비밀번호가 발송되었습니다.");
 		}
-	})
+	});
 </script>
 </head>
 <body class="loginPage_bg">

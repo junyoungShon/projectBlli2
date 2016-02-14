@@ -27,8 +27,13 @@
 	
 	<definition name="modifyBabyInfoPage" extends="home">
 		<put-attribute name="main"  value="/WEB-INF/views/blli/modifyBabyInfo.jsp" />
-	</definition>	
+	</definition>
+	
 	<definition name="modifyMemberInfoPage" extends="home">
 		<put-attribute name="main"  value="/WEB-INF/views/blli/modifyMemberInfo.jsp" />
+	</definition>
+		
+	<definition name="calendarPage" extends="home">
+		<put-attribute name="main"  value="/WEB-INF/views/calendar/calendar.jsp" />
 	</definition>	
 </tiles-definitions>

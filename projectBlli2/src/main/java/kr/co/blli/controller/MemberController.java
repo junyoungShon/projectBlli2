@@ -382,24 +382,6 @@ public class MemberController {
 		memberService.updateMemberInfoByEmail(blliMemberVO);
 		return "redirect:member_goMain.do";
 	}
-	
-	
-	//용호 메소드 작성 영역
-	@RequestMapping("memberCalendar.do")
-	@ResponseBody
-	public ModelAndView calendar(BlliMemberVO blliMemberVO){
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("member_calender.do");
-		boolean result = false;
-		if(memberService.findMemberById(blliMemberVO)!=null){
-			result = true;
-		}else{
-			result = false;
-		}
-		return mv;
-	}
-	
-	
 	/**
 	  * @Method Name : 사용자가 추천을 제외한 중분류 상품을 지워준다.
 	  * @Method 설명 :
@@ -501,6 +483,23 @@ public class MemberController {
 	    	result = "fail";
 	    }
 	    return result;
+	}
+	
+	
+	
+	//용호 메소드 작성 영역
+	@RequestMapping("goCalenderPage.do")
+	@ResponseBody
+	public ModelAndView calendar(BlliMemberVO blliMemberVO){
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("calendarPage");
+		/*boolean result = false;
+		if(memberService.findMemberById(blliMemberVO)!=null){
+			result = true;
+		}else{
+			result = false;
+		}*/
+		return mv;
 	}
 	
 	@RequestMapping("goFindPasswordPage.do")
