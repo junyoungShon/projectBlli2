@@ -35,5 +35,9 @@
 		
 	<definition name="calendarPage" extends="home">
 		<put-attribute name="main"  value="/WEB-INF/views/calendar/calendar.jsp" />
+	</definition>
+		
+	<definition name="addSchedulePage" extends="home">
+		<put-attribute name="main"  value="/WEB-INF/views/calendar/addSchedule.jsp" />
 	</definition>	
 </tiles-definitions>

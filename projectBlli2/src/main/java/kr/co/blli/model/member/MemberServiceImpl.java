@@ -283,11 +283,27 @@ public class MemberServiceImpl implements MemberService {
 
 	
 	//용호 작성 영역
+	/**
+	  * @Method Name : getMemberHavingBabyAgeChangedList
+	  * @Method 설명 : 월령이 바뀐 아이를 가진 회원 목록을 가져온다.
+	  * @작성일 : 2016. 2. 15.
+	  * @작성자 : yongho
+	  * @return
+	  */
 	@Override
 	public List<BlliMemberVO> getMemberHavingBabyAgeChangedList() {
 		return memberDAO.getMemberHavingBabyAgeChangedList();
 	}
 
+	/**
+	  * @Method Name : getBabyAgeChangedListOfMember
+	  * @Method 설명 : 위에서 가져온 회원들의 아이들 중 월령이 바뀐 아이들의 목록을 불러온다. (생일이 같아 동시에 2명이상이 바뀔수도 있으므로)
+	  * @작성일 : 2016. 2. 15.
+	  * @작성자 : yongho
+	  * @param memberId
+	  * @return
+	  * @throws ParseException
+	  */
 	@Override
 	public List<BlliBabyVO> getBabyAgeChangedListOfMember(String memberId) throws ParseException {
 		List<BlliBabyVO> blliBabyVOList = memberDAO.getBabyAgeChangedListOfMember(memberId);
@@ -308,6 +324,17 @@ public class MemberServiceImpl implements MemberService {
 	@Resource
 	private VelocityConfig velocityConfig;
 	
+	/**
+	  * @Method Name : sendLinkToGetTemporaryPassword
+	  * @Method 설명 : 링크 발송 버튼을 누르면 실행. 
+	  * 				입력받은 회원 이메일로 부터 회원의 이름을 추출한 뒤 회원의 메일로 회원 이메일 주소와 함께 링크를 보내 
+	  * 				링크 클릭시 바로 회원 이메일로 임시비밀번호가 갈 수 있도록 한다.
+	  * @작성일 : 2016. 2. 15.
+	  * @작성자 : yongho
+	  * @param memberEmail
+	  * @throws UnsupportedEncodingException
+	  * @throws MessagingException
+	  */
 	@Override
 	public void sendLinkToGetTemporaryPassword(String memberEmail) throws UnsupportedEncodingException, MessagingException {
 
@@ -336,6 +363,14 @@ public class MemberServiceImpl implements MemberService {
 		System.out.println(memberName+"님의 메일주소 "+recipient+"로 임시비밀번호 받는 링크 발송");
 	}    
 	
+	/**
+	  * @Method Name : updateMemberPasswordToTemporaryPassword
+	  * @Method 설명 : 임시 비밀번호 발송 링크 클릭 시, 발송 전 임시비밀번호를 생성하고 DB에서 회원의 비밀번호를 변경하는 메소드
+	  * @작성일 : 2016. 2. 15.
+	  * @작성자 : yongho
+	  * @param memberEmail
+	  * @return
+	  */
 	@Override
 	public String updateMemberPasswordToTemporaryPassword(String memberEmail) {
 		BlliMemberVO blliMemberVO = new BlliMemberVO();
@@ -346,6 +381,16 @@ public class MemberServiceImpl implements MemberService {
 		return temporaryPassword;
 	}
 	
+	/**
+	  * @Method Name : sendTemporaryPasswordMail
+	  * @Method 설명 : 회원의 메일로 임시비밀번호 발송
+	  * @작성일 : 2016. 2. 15.
+	  * @작성자 : yongho
+	  * @param memberEmail
+	  * @param TemporaryPassword
+	  * @throws UnsupportedEncodingException
+	  * @throws MessagingException
+	  */
 	@Override
 	public void sendTemporaryPasswordMail(String memberEmail, String TemporaryPassword) throws UnsupportedEncodingException, MessagingException {
 		
@@ -374,6 +419,13 @@ public class MemberServiceImpl implements MemberService {
 		System.out.println(memberName+"님의 메일주소 "+recipient+"로 임시비밀번호 발송");
 	}
 	
+	/**
+	  * @Method Name : createTemporaryPassword
+	  * @Method 설명 : 임시비밀번호를 만드는 메소드. private으로 MemberServiceImpl에서만 쓰인다.
+	  * @작성일 : 2016. 2. 15.
+	  * @작성자 : yongho
+	  * @return
+	  */
 	private String createTemporaryPassword() {
 		int index = 0;
 		char[] charSet = new char[] {

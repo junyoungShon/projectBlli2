@@ -486,37 +486,75 @@ public class MemberController {
 	}
 	
 	
-	
 	//용호 메소드 작성 영역
-	@RequestMapping("goCalenderPage.do")
-	@ResponseBody
-	public ModelAndView calendar(BlliMemberVO blliMemberVO){
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("calendarPage");
-		/*boolean result = false;
-		if(memberService.findMemberById(blliMemberVO)!=null){
-			result = true;
-		}else{
-			result = false;
-		}*/
-		return mv;
-	}
-	
+	/**
+	  * @Method Name : goFindPasswordPage
+	  * @Method 설명 : 임시비밀번호를 받는 링크를 받기위한 이메일 입력 페이지로 이동
+	  * @작성일 : 2016. 2. 15.
+	  * @작성자 : yongho
+	  * @return
+	  */
 	@RequestMapping("goFindPasswordPage.do")
 	public String goFindPasswordPage(){
 		return "findPasswordPage";
 	}
 	
+	/**
+	  * @Method Name : sendLinkToGetTemporaryPassword
+	  * @Method 설명 : 이메일 입력 후 링크 받기 버튼을 누르면 임시비밀번호 발송을 위한 링크가 메일로 발송
+	  * @작성일 : 2016. 2. 15.
+	  * @작성자 : yongho
+	  * @param memberEmail
+	  * @return
+	  * @throws UnsupportedEncodingException
+	  * @throws MessagingException
+	  */
 	@RequestMapping("sendLinkToGetTemporaryPassword.do")
 	public String sendLinkToGetTemporaryPassword(String memberEmail) throws UnsupportedEncodingException, MessagingException {
 		memberService.sendLinkToGetTemporaryPassword(memberEmail);
 		return "loginPage";
 	}
 	
+	/**
+	  * @Method Name : sendTemporaryPasswordMail
+	  * @Method 설명 : 본인의 메일로 들어가 수신한 링크를 클릭하면 회원의 이메일로 임시 비밀번호가 발송
+	  * @작성일 : 2016. 2. 15.
+	  * @작성자 : yongho
+	  * @param memberEmail
+	  * @return
+	  * @throws UnsupportedEncodingException
+	  * @throws MessagingException
+	  */
 	@RequestMapping("getTemporaryPassword.do")
 	public ModelAndView sendTemporaryPasswordMail(String memberEmail) throws UnsupportedEncodingException, MessagingException {
 		String temporaryPassword = memberService.updateMemberPasswordToTemporaryPassword(memberEmail);
 		memberService.sendTemporaryPasswordMail(memberEmail, temporaryPassword);
 		return new ModelAndView("loginPage", "memberEmail", memberEmail);
+	}
+	
+	/**
+	  * @Method Name : calendar
+	  * @Method 설명 : 회원 일정을 관리하는 달력 페이지로 이동
+	  * @작성일 : 2016. 2. 15.
+	  * @작성자 : yongho
+	  * @param blliMemberVO
+	  * @return
+	  */
+	@RequestMapping("goCalenderPage.do")
+	public String calendar(BlliMemberVO blliMemberVO){
+		return "calendarPage";
+	}
+	
+	/**
+	  * @Method Name : goToAddScheduleOnCalendar
+	  * @Method 설명 : 달력 페이지에서 일자를 클릭하면 일정 추가 페이지로 변경
+	  * @작성일 : 2016. 2. 15.
+	  * @작성자 : yongho
+	  * @param today
+	  * @return
+	  */
+	@RequestMapping("goToAddScheduleOnCalendar.do")
+	public ModelAndView goToAddScheduleOnCalendar(String today) {
+		return new ModelAndView("addSchedulePage");
 	}
 }

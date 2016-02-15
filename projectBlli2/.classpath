@@ -33,6 +33,6 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/junyoung/Desktop/JHanNanum-0.8.4-ko/jhannanum.jar"/>
+	<classpathentry kind="lib" path="C:/Users/yongho/.m2/repository/kr/ac/kaist/swrc/jhannanum/0.8.4/jhannanum-0.8.4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
