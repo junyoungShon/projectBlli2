@@ -22,11 +22,12 @@
 		<li><a href="${initParam.root}insertMidCategory.do">중분류 리스트 긁어모아</a></li>
 		<li><a href="${initParam.root}insertSmallProduct.do">소분류 리스트 긁어모아</a></li>
 		<li><a href="${initParam.root}insertPosting.do">포스팅 리스트 긁어모아</a></li>
-		<li><a href="${initParam.root}insertCafeArticle.do">카페글 리스트 긁어모아</a></li>
 		<li><input type = "text" name="searchWord"><input type="submit" value="검색"></li>
 		<li><a href="${initParam.root}postingListWithSmallProducts.do">소제품 하나로 추려줘</a></li>
 		<li><a href="${initParam.root}unconfirmedSmallProduct.do">소제품 등록해줘</a></li>
 		<li><a href="${initParam.root}unconfirmedPosting.do">포스팅 등록해줘</a></li>
+		<li><a href="${initParam.root}checkPosting.do">싫어요</a></li>
+		<li><a href="${initParam.root}checkMember.do">회원 목록</a></li>
 		<li><a href="${initParam.root}checkLog.do">로그 조회</a></li>
 		<li><a href="${initParam.root}j_spring_security_logout">로그아웃</a></li>
 	</ul>
@@ -36,7 +37,6 @@
   아래는 소셜 플러그인으로 로그인 버튼을 넣는다.
   이 버튼은 자바스크립트 SDK에 그래픽 기반의 로그인 버튼을 넣어서 클릭시 FB.login() 함수를 실행하게 된다.
 -->
-
 </body>
 <!-- Google 애널리틱스 추적코드 -->
 <script>

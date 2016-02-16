@@ -19,7 +19,7 @@
 	
 	<!-- 일주일 간격으로 로그 파일 생성 -->
     <appender name="rollingFile" class="org.apache.log4j.DailyRollingFileAppender">
-        <param name="File" value="C:/Users/PARK/git/projectBlli2/projectBlli2/src/main/webapp/logFile/blliLog.log"/>
+        <param name="File" value="C:/Users/용호/git/projectBlli2/projectBlli2/src/main/webapp/logFile/blliLog.log"/>
         <param name="Append" value="true"/>
         <param name="DatePattern" value="'.'yyyy-ww"/> 
         <layout class="org.apache.log4j.PatternLayout">
@@ -28,7 +28,7 @@
     </appender>
 	
 	<!-- scheduler Logger -->
-	<logger name="kr.co.blli.aop" additivity="false">
+	<logger name="kr.co.blli.model.scheduler" additivity="false">
 		<level value="info"/>
 		<appender-ref ref="consoleByScheduler" />
 		<appender-ref ref="rollingFile"/>

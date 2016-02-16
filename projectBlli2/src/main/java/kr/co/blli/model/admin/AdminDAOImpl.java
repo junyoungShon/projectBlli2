@@ -113,4 +113,16 @@ public class AdminDAOImpl implements AdminDAO{
 	public void insertWordCloud(BlliWordCloudVO blliWordCloudVO) {
 		sqlSessionTemplate.insert("admin.insertWordCloud", blliWordCloudVO);
 	}
+	@Override
+	public List<BlliPostingVO> checkPosting() {
+		return sqlSessionTemplate.selectList("admin.checkPosting");
+	}
+	@Override
+	public void notAdvertisingPosting(BlliPostingVO postingVO) {
+		sqlSessionTemplate.update("admin.notAdvertisingPosting", postingVO);
+	}
+	@Override
+	public List<BlliMemberVO> checkMember() {
+		return sqlSessionTemplate.selectList("admin.checkMember");
+	}
 }

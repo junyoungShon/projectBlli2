@@ -8,7 +8,8 @@ CREATE TABLE blli_member (
 	--recommending 		NUMBER(1) NOT NULL, 삭제 
 	authority            VARCHAR2(20)
 );
-
+-- 컬럼 추가(0 : 동의O, 1 : 동의X)
+alter table blli_member add(mail_agree NUMBER(1) default 0)
 	
 drop table blli_baby cascade constraint;
 CREATE TABLE blli_baby (
@@ -119,9 +120,12 @@ CREATE TABLE blli_posting (
 	posting_rank            NUMBER(3) NOT NULL, -- 추가, posting_order를 posting_rank로 변경
 	posting_reply_count      NUMBER(4) NOT NULL, -- 추가
 	posting_status            VARCHAR2(30) NOT NULL, -- 추가
+	posting_advertisement     VARCHAR2(5) default NULL, -- 추가
 	constraint fk_posting_small_prod_id foreign key(small_product_id) references blli_small_product(small_product_id),
 	constraint pk_posting primary key(posting_url, small_product_id) -- 복합키로 변경
 );
+-- 컬럼 추가
+alter table blli_posting add(posting_advertisement VARCHAR2(5) default NULL);
 --신규 테이블 컬럼 추가
 -- alter table blli_posting add (posting_db_insert_date date);
 --기존 프라이머리키 제거

@@ -29,7 +29,8 @@ $(document).ready(function(){
 	$(".deleteBtn").click(function(){
 		$(this).parent().prev().children("img").css("border", "0px");
 		if(urlAndImage.length == 0){
-			urlAndImage.push({"postingUrl": $(this).children().eq(0).val(), "postingPhotoLink": "", "smallProduct": "", "del": "YES"});
+			urlAndImage.push({"postingUrl": $(this).children().eq(0).val(), 
+				"postingPhotoLink": "", "smallProduct": "", "del": "YES"});
 		}else{
 			for(var i=0;i<urlAndImage.length;i++){
 				if(urlAndImage[i].postingUrl == $(this).children().eq(0).val()){
@@ -40,7 +41,8 @@ $(document).ready(function(){
 				}
 			}
 			if(flag){
-				urlAndImage.push({"postingUrl": $(this).children().eq(0).val(), "postingPhotoLink": "", "smallProduct": "", "del": "YES"});
+				urlAndImage.push({"postingUrl": $(this).children().eq(0).val(), 
+					"postingPhotoLink": "", "smallProduct": "", "del": "YES"});
 			}
 			flag = true;
 		}
@@ -48,7 +50,8 @@ $(document).ready(function(){
 	
 	$(".productImage").click(function(){
 		if(urlAndImage.length == 0){
-			urlAndImage.push({"postingUrl": $(this).children().first().val(), "postingPhotoLink": "", "smallProduct": $(this).children().eq(1).text(), "del": "NO"});
+			urlAndImage.push({"postingUrl": $(this).children().first().val(), 
+				"postingPhotoLink": "", "smallProduct": $(this).children().eq(1).text(), "del": "NO"});
 		}else{
 			for(var i=0;i<urlAndImage.length;i++){
 				if(urlAndImage[i].postingUrl == $(this).children().first().val()){
@@ -59,7 +62,8 @@ $(document).ready(function(){
 				}
 			}
 			if(flag){
-				urlAndImage.push({"postingUrl": $(this).children().first().val(), "postingPhotoLink": "", "smallProduct": $(this).children().eq(1).text(), "del": "NO"});
+				urlAndImage.push({"postingUrl": $(this).children().first().val(), 
+					"postingPhotoLink": "", "smallProduct": $(this).children().eq(1).text(), "del": "NO"});
 			}
 			flag = true;
 		}
@@ -70,7 +74,8 @@ $(document).ready(function(){
 		$(this).css("border", "5px solid red");
 		$(this).parent().next().children().last().children().first().prop("checked", false);
 		if(urlAndImage.length == 0){
-			urlAndImage.push({"postingUrl": $(this).attr("name"), "postingPhotoLink": $(this).attr("id"), "smallProduct": "", "del": "NO"});
+			urlAndImage.push({"postingUrl": $(this).attr("name"), 
+				"postingPhotoLink": $(this).attr("id"), "smallProduct": "", "del": "NO"});
 		}else{
 			for(var i=0;i<urlAndImage.length;i++){
 				if(urlAndImage[i].postingUrl == $(this).attr("name")){
@@ -81,7 +86,8 @@ $(document).ready(function(){
 				}
 			}
 			if(flag){
-				urlAndImage.push({"postingUrl": $(this).attr("name"), "postingPhotoLink": $(this).attr("id"), "smallProduct": "", "del": "NO"});
+				urlAndImage.push({"postingUrl": $(this).attr("name"), 
+					"postingPhotoLink": $(this).attr("id"), "smallProduct": "", "del": "NO"});
 			}
 			flag = true;
 		}
@@ -153,7 +159,8 @@ $(document).ready(function(){
 	<tr>
 		<td>
 		<c:forEach items="${postingList.imageList}" var="imgList">
-			<img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${imgList}" width="200px" height="150px" class="mainImage" id="${imgList}" name="${postingList.postingUrl}">
+			<img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${imgList}" 
+			width="200px" height="150px" class="mainImage" id="${imgList}" name="${postingList.postingUrl}">
 		</c:forEach>
 			<div class="product_text">${postingList.postingContent}</div>
 		</td>

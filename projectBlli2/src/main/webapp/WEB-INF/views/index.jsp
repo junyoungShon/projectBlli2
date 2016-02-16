@@ -25,6 +25,10 @@
 <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.2.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+	if("${requestScope.deny}" != ""){
+		alert("${requestScope.deny}");
+		location.href="${initParam.root}index.do";
+	}
 	$.ajax({
 		type:"get",
 		url:"footerStatics.do",

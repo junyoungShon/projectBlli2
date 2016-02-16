@@ -31,23 +31,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		select count(posting_url) from blli_posting where posting_url = #{postingUrl}
  	</select>
  	
- 	<!-- <select id="getPostingStatus" resultType="String">
- 		select posting_status from blli_posting where posting_url = #{postingUrl}
- 	</select> -->
- 	
- 	<select id="getAllPostingStatus" resultType="String">
- 		select posting_status from blli_posting where posting_url = #{postingUrl}
- 	</select>
- 	
  	<select id="getPostingStatus" resultType="String">
- 		select posting_status from blli_posting where posting_url like '%' || #{postingUrl} || '%' and small_product_id = #{smallProductId} and posting_title = #{postingTitle}
+ 		select posting_status from blli_posting where posting_url like '%' || #{postingUrl} || '%' and 
+ 		small_product_id = #{smallProductId} and posting_title = #{postingTitle}
  	</select>
  	
  	<update id="updatePosting">
- 		<!-- update blli_posting set posting_rank = #{postingRank}, posting_reply_count = #{postingReplyCount} 
- 		where posting_url like '%' || #{postingUrl} || '%' and small_product_id = #{smallProductId} -->
  		update blli_posting set posting_rank = #{postingRank}
- 		where posting_url like '%' || #{postingUrl} || '%' and small_product_id = #{smallProductId}
+ 		where posting_url like '%' || #{postingUrl} || '%' and small_product_id = #{smallProductId} and posting_title = #{postingTitle}
  	</update>
  	
  	<insert id="insertPosting">
@@ -57,12 +48,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		#{postingContent}, #{postingSummary}, #{postingAuthor}, #{postingDate}, #{postingRank}, #{postingReplyCount}, 'unconfirmed', sysdate)
  	</insert>
  	
- 	<insert id="insertDeadPosting">
- 		insert into blli_posting(small_product_id, posting_url, small_product, posting_title, posting_photo_link, posting_media_count, 
- 		posting_content, posting_summary, posting_author, posting_date, posting_rank, posting_reply_count, posting_status, posting_db_insert_date)
- 		values(#{smallProductId}, #{postingUrl}, ' ', ' ', ' ', 0, ' ', ' ', ' ', sysdate, 0, 0, 'dead', sysdate)
- 	</insert>
-
 	<select id="searchPosting" resultMap="bpvRM">
 		select posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, posting_scrape_count, 
 		posting_like_count, posting_dislike_count, posting_author, posting_date from(

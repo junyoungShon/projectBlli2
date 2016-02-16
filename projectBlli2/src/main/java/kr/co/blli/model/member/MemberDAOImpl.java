@@ -97,5 +97,10 @@ public class MemberDAOImpl implements MemberDAO{
 		sqlSessionTemplate.update("member.updateMemberPasswordToTemporaryPassword", blliMemberVO);
 	}
 
+	@Override
+	public int denySendEmail(String memberEmail) {
+		return sqlSessionTemplate.update("member.denySendEmail", memberEmail);
+	}
+
 
 }

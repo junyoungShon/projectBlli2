@@ -390,5 +390,10 @@ public class MemberServiceImpl implements MemberService {
 		return sb.toString();
 	}
 
+	@Override
+	public int denySendEmail(String memberEmail) {
+		return memberDAO.denySendEmail(memberEmail);
+	}
+
 	
 }

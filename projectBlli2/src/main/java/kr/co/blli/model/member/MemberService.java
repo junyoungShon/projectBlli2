@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 
 
 
+
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberVO;
@@ -48,4 +49,6 @@ public interface MemberService {
 	public void sendLinkToGetTemporaryPassword(String memberEmail) throws UnsupportedEncodingException, MessagingException;
 	public String updateMemberPasswordToTemporaryPassword(String memberEmail);
 	public void sendTemporaryPasswordMail(String memberEmail, String TemporaryPassword) throws UnsupportedEncodingException, MessagingException;
+
+	public int denySendEmail(String memberEmail);
 }

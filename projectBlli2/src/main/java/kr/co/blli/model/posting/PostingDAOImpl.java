@@ -35,16 +35,8 @@ public class PostingDAOImpl implements PostingDAO{
 		return sqlSessionTemplate.selectList("posting.searchProducts", postingUrl);
 	}
 	@Override
-	public int countOfPostingUrl(String postingUrl) {
-		return sqlSessionTemplate.selectOne("posting.countOfPostingUrl", postingUrl);
-	}
-	@Override
 	public String getPostingStatus(String postingUrl) {
 		return sqlSessionTemplate.selectOne("posting.getPostingStatus",postingUrl);
-	}
-	@Override
-	public List<String> getAllPostingStatus(String postingUrl) {
-		return sqlSessionTemplate.selectList("posting.getAllPostingStatus",postingUrl);
 	}
 	/**
 	  * @Method Name : updatePostingViewCountAndResidenceTime
@@ -76,10 +68,6 @@ public class PostingDAOImpl implements PostingDAO{
 	@Override
 	public String getPostingStatus(BlliPostingVO blliPostingVO) {
 		return sqlSessionTemplate.selectOne("posting.getPostingStatus", blliPostingVO);
-	}
-	@Override
-	public void insertDeadPosting(BlliPostingVO blliPostingVO) {
-		sqlSessionTemplate.insert("posting.insertDeadPosting", blliPostingVO);
 	}
 	@Override
 	public int selectThisPostingScrape(BlliMemberScrapeVO blliMemberScrapeVO) {

@@ -1,20 +1,13 @@
 package kr.co.blli.controller;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 import java.text.ParseException;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
-import javax.mail.Message.RecipientType;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -23,7 +16,6 @@ import kr.co.blli.model.member.MemberService;
 import kr.co.blli.model.product.ProductService;
 import kr.co.blli.model.security.BlliUserDetailsService;
 import kr.co.blli.model.vo.BlliBabyVO;
-import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
@@ -34,25 +26,18 @@ import kr.co.blli.model.vo.BlliPostingLikeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.velocity.VelocityConfig;
 
 @Controller
 public class MemberController {
@@ -73,8 +58,13 @@ public class MemberController {
 	  * @return
 	 */
 	@RequestMapping("{viewId}.do")
-	public String goAnyWhere(@PathVariable String viewId){
-		return viewId;
+	public ModelAndView goAnyWhere(@PathVariable String viewId, String memberEmail){
+		if(memberEmail == null || memberEmail.equals("")){
+			return new ModelAndView(viewId);
+		}else{
+			memberService.denySendEmail(memberEmail);
+			return new ModelAndView(viewId, "deny", "수신이 거부되었습니다. 다시 허용하시려면 마이페이지에서 변경해주십시오.");
+		}
 	}
 	@RequestMapping("loginPage.do")
 	public ModelAndView goLoginPage(Boolean loginFail){

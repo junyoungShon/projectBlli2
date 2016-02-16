@@ -214,7 +214,9 @@ $(document).on("click", ".exceptionPopUp", function(){
 				<input type="hidden" value="${exceptionInfo.categoryId}" name="categoryId">
 				<input type="hidden" value="${exceptionInfo.exceptionContent}" name="exceptionContent">
 			</c:forEach>
+			<c:if test="${log.methodName != 'sendRecommendingMail'}">
 			<img src="${initParam.root}img/상세보기.PNG" alt="상세보기" width="20px" class="detail" style="cursor: pointer;" name="${log.methodName}" id="${index.index}">
+			</c:if>
 		</td>
 	</tr>
 	</c:forEach>

@@ -314,7 +314,8 @@ public class AdminServiceImpl implements AdminService{
 			if(delete.equals("YES")){
 				adminDAO.deletePosting(vo);
 			}else{
-				vo.setPostingPhotoLink(blliFileDownLoader.imgFileDownLoader(postingPhotoLink,UUID.randomUUID().toString().replace("-", ""), "postingImage"));
+				vo.setPostingPhotoLink(blliFileDownLoader.imgFileDownLoader(
+						postingPhotoLink,UUID.randomUUID().toString().replace("-", ""), "postingImage"));
 				blliPostingVOList.add(vo);
 				int updateResult = adminDAO.registerPosting(vo);
 				if(updateResult != 0){
@@ -367,20 +368,6 @@ public class AdminServiceImpl implements AdminService{
 			}
 		}
 	}
-	@Override
-	public void insertCafeArticle() {
-		try {
-			Document doc = Jsoup.connect("http://openapi.naver.com/search?key=2a636a785d0e03f7048319f8adb3d912&query=요리&target=cafearticle&start=1&display=10&sort=sim").get();
-			//System.out.println(doc);
-			String cafeUrl = doc.select("item link").text();
-			System.out.println(cafeUrl);
-			doc = Jsoup.connect(cafeUrl).get();
-			System.out.println(doc);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	@Override
 	public void makingWordCloud(BlliPostingVO blliPostingVO) {
 		String smallProductId = blliPostingVO.getSmallProductId();
@@ -440,7 +427,7 @@ public class AdminServiceImpl implements AdminService{
 		BlliDetailException exceptionVO = null;
 		int number = 1;
 		try {
-			BufferedReader in = new BufferedReader(new FileReader("C:\\Users\\PARK\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\logFile\\blliLog.log"));
+			BufferedReader in = new BufferedReader(new FileReader("C:\\Users\\용호\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\logFile\\blliLog.log"));
 			String message;
 			String exceptionContent = "";
 			while ((message = in.readLine()) != null) {
@@ -529,5 +516,21 @@ public class AdminServiceImpl implements AdminService{
 			System.exit(1);
 		}
 		return list;
+	}
+	@Override
+	public ArrayList<BlliPostingVO> checkPosting() {
+		return (ArrayList<BlliPostingVO>)adminDAO.checkPosting();
+	}
+	@Override
+	public void deletePosting(BlliPostingVO postingVO) {
+		adminDAO.deletePosting(postingVO);
+	}
+	@Override
+	public void notAdvertisingPosting(BlliPostingVO postingVO) {
+		adminDAO.notAdvertisingPosting(postingVO);
+	}
+	@Override
+	public ArrayList<BlliMemberVO> checkMember() {
+		return (ArrayList<BlliMemberVO>)adminDAO.checkMember();
 	}
 }

@@ -61,6 +61,17 @@
 			</table>
 		</div>
 	</div>
+	<div style="color: gray; width: 700px; margin: auto; text-align: left;">
+	<hr>
+		본 메일은 정보 통신망법 등 관련 규정에 의거하여 광고메일 수신 동의하에 발송 되는 메일 입니다.<br>
+		메일을 더이상 받지 않으시려면 <a style="color: #ff7f50" href="http://localhost:8888/blli/index.do?memberEmail=${memberEmail}">수신거부</a>를 눌러주십시오.<br>
+		If you don`t want to receive this e-mail anymore, <a style="color: #ff7f50" href="http://localhost:8888/blli/index.do?memberEmail=${memberEmail}">Please click here.</a><br>
+		서울시 XXX XXX X길 XX XXX XX XXXX XXXX호 블리<br>
+		업체명:(주)블리 | 대표자:XXX<br>
+		FAX:XX-XXXX-XXXX<br>
+		사업자 등록번호:XXX-XX-XXXXX<br>
+		통신판매업신고번호:제 XXXX-XXXX-XXXXX호
+	</div>
 </body>
 
 <!-- 그냥 메모

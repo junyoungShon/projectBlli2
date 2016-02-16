@@ -83,7 +83,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<update id="updateMidCategory">
-		update blli_mid_category set mid_category_id = #{midCategoryId}, mid_category_main_photo_link = #{midCategoryMainPhotoLink}, small_product_count = ${smallProductCount}
+		update blli_mid_category set mid_category_id = #{midCategoryId}, 
+		mid_category_main_photo_link = #{midCategoryMainPhotoLink}, small_product_count = ${smallProductCount}
 		where mid_category = #{midCategory} and big_category = #{bigCategory}
 	</update>
 	
@@ -100,16 +101,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select small_product_status from blli_small_product where small_product_id = #{smallProductId}
 	</select>
 	
-	<insert id="insertSmallProduct">
-		insert into blli_small_product(small_product_id, small_product, mid_category, small_product_maker, small_product_main_photo_link, 
-		small_product_posting_count, naver_shopping_rank, product_register_day, mid_category_id, small_product_status, product_db_insert_date,detail_view_count,small_Product_Ranking)
-		values(#{smallProductId}, #{smallProduct}, #{midCategory}, #{smallProductMaker}, #{smallProductMainPhotoLink}, 
-		#{smallProductPostingCount}, #{naverShoppingRank}, #{productRegisterDay}, #{midCategoryId}, 'unconfirmed', sysdate,0,0)
-	</insert>
 	<update id="updateSmallProduct">
 		update blli_small_product set small_product_posting_count = #{smallProductPostingCount}, naver_shopping_rank = #{naverShoppingRank}
 		where small_product_id = #{smallProductId}
 	</update>
+	
+	<insert id="insertSmallProduct">
+		insert into blli_small_product(small_product_id, small_product, mid_category, small_product_maker, small_product_main_photo_link, 
+		small_product_posting_count, naver_shopping_rank, product_register_day, mid_category_id, small_product_status, 
+		product_db_insert_date,detail_view_count,small_Product_Ranking)
+		values(#{smallProductId}, #{smallProduct}, #{midCategory}, #{smallProductMaker}, #{smallProductMainPhotoLink}, 
+		#{smallProductPostingCount}, #{naverShoppingRank}, #{productRegisterDay}, #{midCategoryId}, 'unconfirmed', sysdate,0,0)
+	</insert>
 	
 	<insert id="insertDeadSmallProduct">
 		insert into blli_small_product(small_product_id, small_product, mid_category, small_product_maker, small_product_main_photo_link, 

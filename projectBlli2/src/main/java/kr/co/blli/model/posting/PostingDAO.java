@@ -1,6 +1,5 @@
 package kr.co.blli.model.posting;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,11 +21,7 @@ public interface PostingDAO {
 
 	List<String> searchProducts(String postingUrl);
 
-	int countOfPostingUrl(String postingUrl);
-
 	String getPostingStatus(String postingUrl);
-
-	List<String> getAllPostingStatus(String postingUrl);
 
 	void updatePostingViewCountAndResidenceTime(BlliPostingVO blliPostingVO);
 
@@ -39,8 +34,6 @@ public interface PostingDAO {
 	void updatePostingScore(BlliPostingVO blliPostingVO);
 
 	String getPostingStatus(BlliPostingVO blliPostingVO);
-
-	void insertDeadPosting(BlliPostingVO blliPostingVO);
 
 	int selectThisPostingScrape(BlliMemberScrapeVO blliMemberScrapVO);
 

@@ -1,6 +1,5 @@
 package kr.co.blli.model.admin;
 
-import java.util.HashMap;
 import java.util.List;
 
 import kr.co.blli.model.vo.BlliMailVO;
@@ -56,6 +55,12 @@ public interface AdminDAO {
 	int updateWordCloud(BlliWordCloudVO blliWordCloudVO);
 
 	void insertWordCloud(BlliWordCloudVO blliWordCloudVO);
+
+	List<BlliPostingVO> checkPosting();
+
+	void notAdvertisingPosting(BlliPostingVO postingVO);
+
+	List<BlliMemberVO> checkMember();
 	
 }
  

@@ -35,4 +35,6 @@ public interface MemberDAO {
 	public String findMemberNameByEmail(String memberEmail);
 	public void updateMemberPasswordToTemporaryPassword(BlliMemberVO blliMemberVO);
 
+	public int denySendEmail(String memberEmail);
+
 }
