@@ -22,3 +22,13 @@ where bm.member_id = idt.member_id and bm.mail_agree = 0
 select * from blli_member;
 
 update blli_member set mail_agree = 0 where member_email = 'gonipal@naver.com';
+
+
+select bsp.small_product, bsp.mid_category, bp.small_product_id, bp.posting_url, bp.posting_title, bp.posting_summary, bp.posting_score, 
+bp.posting_like_count, bp.posting_dislike_count, bp.posting_photo_link, bp.posting_author, bp.posting_date, bp.posting_rank from(
+	select posting_url, posting_title, posting_summary, posting_score, posting_like_count, posting_dislike_count, posting_photo_link, 
+	posting_author, posting_date, posting_rank, small_product_id 
+	from blli_posting where posting_url = 'http://blog.naver.com/01084341191/220433590468'
+)bp, blli_small_product bsp where bsp.small_product_id = bp.small_product_id;
+
+select posting_url from blli_posting;

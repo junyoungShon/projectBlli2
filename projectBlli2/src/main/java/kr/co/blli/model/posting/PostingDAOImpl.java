@@ -1,6 +1,5 @@
 package kr.co.blli.model.posting;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -89,5 +88,21 @@ public class PostingDAOImpl implements PostingDAO{
 	@Override
 	public String selectTotalPostingtNum() {
 		return sqlSessionTemplate.selectOne("posting.selectTotalPostingtNum");
+	}
+	@Override
+	public BlliPostingVO getPostingInfo(BlliMemberScrapeVO blliMemberScrapeVO) {
+		return sqlSessionTemplate.selectOne("posting.getPostingInfo", blliMemberScrapeVO);
+	}
+	@Override
+	public int getPostingScrapeCount(BlliMemberScrapeVO scrapeVO) {
+		return sqlSessionTemplate.selectOne("posting.getPostingScrapeCount", scrapeVO);
+	}
+	@Override
+	public int getPostingLikeCount(BlliMemberScrapeVO scrapeVO) {
+		return sqlSessionTemplate.selectOne("posting.getPostingLikeCount", scrapeVO);
+	}
+	@Override
+	public int getPostingDislikeCount(BlliMemberScrapeVO scrapeVO) {
+		return sqlSessionTemplate.selectOne("posting.getPostingDislikeCount", scrapeVO);
 	}
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMailVO;
+import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 
 public interface MemberDAO {
@@ -36,5 +37,7 @@ public interface MemberDAO {
 	public void updateMemberPasswordToTemporaryPassword(BlliMemberVO blliMemberVO);
 
 	public int denySendEmail(String memberEmail);
+
+	public List<BlliMemberScrapeVO> getScrapeInfoByMemberId(BlliMemberVO memberVO);
 
 }

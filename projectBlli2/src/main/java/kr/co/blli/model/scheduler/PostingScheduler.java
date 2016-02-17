@@ -361,7 +361,7 @@ public class PostingScheduler {
 				while(postingUrlList.hasNext()){
 					postingUrl = postingUrlList.next();
 					logger.info("Exception이 발생한 postingUrl : "+postingUrl);
-					logger.info("Exception 내용 : "+detailException.get(postingUrlList));
+					logger.info("Exception 내용 : "+detailException.get(postingUrl));
 				}
 				end = System.currentTimeMillis();  //종료시간
 				//종료-시작=실행시간		

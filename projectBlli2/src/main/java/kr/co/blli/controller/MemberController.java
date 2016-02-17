@@ -3,6 +3,7 @@ package kr.co.blli.controller;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import kr.co.blli.model.member.MemberService;
+import kr.co.blli.model.posting.PostingService;
 import kr.co.blli.model.product.ProductService;
 import kr.co.blli.model.security.BlliUserDetailsService;
 import kr.co.blli.model.vo.BlliBabyVO;
@@ -47,7 +49,8 @@ public class MemberController {
 	private ProductService productService;
 	@Resource
 	private BlliUserDetailsService blliUserDetailsService;
-	
+	@Resource
+	private PostingService postingService;
 	/**
 	 * 
 	  * @Method Name : goAnyWhere
@@ -340,7 +343,7 @@ public class MemberController {
 		blliMemberVO = (BlliMemberVO) request.getSession().getAttribute("blliMemberVO");
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("blliMemberVO", blliMemberVO);
-		mav.setViewName("modifyMemberInfoPage");
+		mav.setViewName("blli_modifyMemberInfoPage");
 		return mav;
 	}
 	
@@ -357,7 +360,7 @@ public class MemberController {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("blliMemberVO", blliMemberVO);
 		System.out.println(blliMemberVO.getBlliBabyVOList());
-		mav.setViewName("modifyBabyInfoPage");
+		mav.setViewName("blli_modifyBabyInfoPage");
 		return mav;
 	}
 	/**
@@ -482,7 +485,7 @@ public class MemberController {
 	@ResponseBody
 	public ModelAndView calendar(BlliMemberVO blliMemberVO){
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("calendarPage");
+		mv.setViewName("calendar_calendarPage");
 		/*boolean result = false;
 		if(memberService.findMemberById(blliMemberVO)!=null){
 			result = true;
@@ -508,5 +511,28 @@ public class MemberController {
 		String temporaryPassword = memberService.updateMemberPasswordToTemporaryPassword(memberEmail);
 		memberService.sendTemporaryPasswordMail(memberEmail, temporaryPassword);
 		return new ModelAndView("loginPage", "memberEmail", memberEmail);
+	}
+	
+	@RequestMapping("goScrapePage.do")
+	public ModelAndView goScrapePage(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		BlliMemberVO memberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
+		ArrayList<BlliPostingVO> postingList = new ArrayList<BlliPostingVO>();
+		ArrayList<BlliMemberScrapeVO> scrapeList =  memberService.getScrapeInfoByMemberId(memberVO);
+		for(int i=0;i<scrapeList.size();i++){
+			postingList.add(postingService.getPostingInfo(scrapeList.get(i), memberVO.getMemberId()));
+		}
+		ArrayList<String> midCategoryList = new ArrayList<String>();
+		for(int i=0;i<postingList.size();i++){
+			String midCategory = postingList.get(i).getMidCategory();
+			if(!midCategoryList.contains(midCategory)){
+				midCategoryList.add(midCategory);
+			}
+		}
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("blli_scrapePage");
+		mav.addObject("midCategoryList", midCategoryList);
+		mav.addObject("scrapeList", postingList);
+		return mav;
 	}
 }

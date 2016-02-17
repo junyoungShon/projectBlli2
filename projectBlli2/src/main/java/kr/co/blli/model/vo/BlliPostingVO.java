@@ -35,6 +35,8 @@ public class BlliPostingVO {
 	private ArrayList<String> smallProductList;
 	//16.02.05추가
 	private String postingDbInsertDate;
+	//16.02.17추가
+	private String midCategory;
 	
 	
 	public final ArrayList<String> regex = new ArrayList<String>(Arrays.asList("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>","<[^>]*>",
@@ -310,6 +312,16 @@ public class BlliPostingVO {
 	public ArrayList<String> getRegex() {
 		return regex;
 	}
+	
+
+	public String getMidCategory() {
+		return midCategory;
+	}
+
+
+	public void setMidCategory(String midCategory) {
+		this.midCategory = midCategory;
+	}
 
 
 	@Override
@@ -332,9 +344,9 @@ public class BlliPostingVO {
 				+ ", isDisLike=" + isDisLike + ", isScrapped=" + isScrapped
 				+ ", imageList=" + imageList + ", smallProductImage="
 				+ smallProductImage + ", smallProductList=" + smallProductList
-				+ ", postingDbInsertDate=" + postingDbInsertDate + ", regex="
-				+ regex + "]";
+				+ ", postingDbInsertDate=" + postingDbInsertDate
+				+ ", midCategory=" + midCategory + "]";
 	}
 
-	
+
 }

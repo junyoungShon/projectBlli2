@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
+import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 
 public interface PostingService {
@@ -19,5 +20,7 @@ public interface PostingService {
 	abstract ArrayList<BlliPostingVO> searchPostingListInProductDetail(String smallProductId, HttpServletRequest request, String pageNo);
 
 	abstract String selectTotalPostingtNum();
+
+	abstract BlliPostingVO getPostingInfo(BlliMemberScrapeVO blliMemberScrapeVO, String memberId);
 
 }

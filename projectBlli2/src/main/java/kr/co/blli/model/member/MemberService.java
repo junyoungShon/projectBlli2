@@ -2,6 +2,7 @@ package kr.co.blli.model.member;
 
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -16,8 +17,11 @@ import javax.servlet.http.HttpServletRequest;
 
 
 
+
+
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMailVO;
+import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 
 public interface MemberService {
@@ -51,4 +55,6 @@ public interface MemberService {
 	public void sendTemporaryPasswordMail(String memberEmail, String TemporaryPassword) throws UnsupportedEncodingException, MessagingException;
 
 	public int denySendEmail(String memberEmail);
+
+	public ArrayList<BlliMemberScrapeVO> getScrapeInfoByMemberId(BlliMemberVO memberVO);
 }

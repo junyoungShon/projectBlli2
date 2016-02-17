@@ -26,6 +26,7 @@
 <div class="main_top">
 		<div class="in_fr">
 			<div class="top_nav">
+				<a href="${initParam.root}goScrapePage.do">스크랩</a>   ㅣ
 				<a href="${initParam.root}goModifyMemberInfoPage.do">회원정보수정</a>   ㅣ   
 				<a href="${initParam.root}goModifyBabyInfoPage.do">아이정보수정</a>   ㅣ  
 				<a href="#">스크랩</a>   ㅣ   <a href="#">알림</a>   ㅣ   

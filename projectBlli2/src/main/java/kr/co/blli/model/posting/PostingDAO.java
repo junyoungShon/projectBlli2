@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PostingDAO {
 
+	int getPostingDislikeCount = 0;
+
 	int updatePosting(BlliPostingVO postingVO);
 
 	void insertPosting(BlliPostingVO postingVO);
@@ -44,5 +46,13 @@ public interface PostingDAO {
 	List<BlliPostingVO> selectPostingBySmallProductId(HashMap<String, String> paraMap);
 
 	String selectTotalPostingtNum();
+
+	BlliPostingVO getPostingInfo(BlliMemberScrapeVO blliMemberScrapeVO);
+
+	int getPostingScrapeCount(BlliMemberScrapeVO scrapeVO);
+
+	int getPostingLikeCount(BlliMemberScrapeVO scrapeVO);
+
+	int getPostingDislikeCount(BlliMemberScrapeVO scrapeVO);
 
 }
