@@ -29,7 +29,8 @@
 		$(".deleteBtn").click(function(){
 			$(this).parent().prev().children("img").css("border", "0px");
 			if(urlAndImage.length == 0){
-				urlAndImage.push({"postingUrl": $(this).children().eq(0).val(), "postingPhotoLink": "", "smallProductId": $(this).children().eq(0).attr("class"), "del": "YES"});
+				urlAndImage.push({"postingUrl": $(this).children().eq(0).val(), "postingPhotoLink": "", 
+					"smallProductId": $(this).children().eq(0).attr("class"), "del": "YES"});
 			}else{
 				for(var i=0;i<urlAndImage.length;i++){
 					if(urlAndImage[i].postingUrl == $(this).children().eq(0).val()){
@@ -39,7 +40,8 @@
 					}
 				}
 				if(flag){
-					urlAndImage.push({"postingUrl": $(this).children().eq(0).val(), "postingPhotoLink": "", "smallProductId": $(this).children().eq(0).attr("class"), "del": "YES"});
+					urlAndImage.push({"postingUrl": $(this).children().eq(0).val(), "postingPhotoLink": "", 
+						"smallProductId": $(this).children().eq(0).attr("class"), "del": "YES"});
 				}
 				flag = true;
 			}
@@ -50,7 +52,8 @@
 			$(this).css("border", "5px solid red");
 			$(this).parent().next().children("label").children().first().prop("checked", false);
 			if(urlAndImage.length == 0){
-				urlAndImage.push({"postingUrl": $(this).attr("name"), "postingPhotoLink": $(this).attr("id"), "smallProductId": $(this).next().text(), "del": "NO"});
+				urlAndImage.push({"postingUrl": $(this).attr("name"), "postingPhotoLink": $(this).attr("id"), 
+					"smallProductId": $(this).next().text(), "del": "NO"});
 			}else{
 				for(var i=0;i<urlAndImage.length;i++){
 					if(urlAndImage[i].postingUrl == $(this).attr("name")){
@@ -61,7 +64,8 @@
 					}
 				}
 				if(flag){
-					urlAndImage.push({"postingUrl": $(this).attr("name"), "postingPhotoLink": $(this).attr("id"), "smallProductId": $(this).next().text(), "del": "NO"});
+					urlAndImage.push({"postingUrl": $(this).attr("name"), "postingPhotoLink": $(this).attr("id"), 
+						"smallProductId": $(this).next().text(), "del": "NO"});
 				}
 				flag = true;
 			}
@@ -128,7 +132,8 @@
 	<tr>
 		<td>
 			<c:forEach items="${postingList.imageList}" var="imgList">
-			<img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${imgList}" width="190px" height="150px" class="mainImage" id="${imgList}" name="${postingList.postingUrl}">
+			<img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${imgList}" width="190px" height="150px" 
+			class="mainImage" id="${imgList}" name="${postingList.postingUrl}">
 			<span style="display: none;">${postingList.smallProductId}</span>
 			</c:forEach>
 			<div class="product_text">${postingList.postingContent}</div>

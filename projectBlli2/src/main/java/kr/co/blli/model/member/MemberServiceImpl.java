@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import kr.co.blli.model.security.BlliUserDetails;
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMailVO;
+import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliScheduleVO;
 import kr.co.blli.utility.BlliFileUtils;
@@ -223,7 +224,7 @@ public class MemberServiceImpl implements MemberService {
 			babyMonthAge = diffYears * 12; 
 		}else if(diffYears==0){
 			babyMonthAge = 0;
-		}else if(diffYears==0){
+		}else if(diffYears<0){
 			//아직 태어나지 않았으므로 월령은 -1로 설정
 			babyMonthAge = -1;
 		}
@@ -444,6 +445,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+<<<<<<< HEAD
 	public int addSchedule(BlliScheduleVO bsvo) {
 		return memberDAO.addSchedule(bsvo);
 	}
@@ -457,4 +459,16 @@ public class MemberServiceImpl implements MemberService {
 	public BlliScheduleVO selectSchedule(BlliScheduleVO bsvo) {
 		return memberDAO.selectSchedule(bsvo);
 	}
+=======
+	public int denySendEmail(String memberEmail) {
+		return memberDAO.denySendEmail(memberEmail);
+	}
+
+	@Override
+	public ArrayList<BlliMemberScrapeVO> getScrapeInfoByMemberId(BlliMemberVO memberVO) {
+		return (ArrayList<BlliMemberScrapeVO>)memberDAO.getScrapeInfoByMemberId(memberVO);
+	}
+
+	
+>>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 }

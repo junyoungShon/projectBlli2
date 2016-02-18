@@ -29,7 +29,8 @@ $(document).ready(function(){
 	$(".deleteBtn").click(function(){
 		$(this).parent().prev().children("img").css("border", "0px");
 		if(urlAndImage.length == 0){
-			urlAndImage.push({"postingUrl": $(this).children().eq(0).val(), "postingPhotoLink": "", "smallProduct": "", "del": "YES"});
+			urlAndImage.push({"postingUrl": $(this).children().eq(0).val(), 
+				"postingPhotoLink": "", "smallProduct": "", "smallProductId": "", "del": "YES"});
 		}else{
 			for(var i=0;i<urlAndImage.length;i++){
 				if(urlAndImage[i].postingUrl == $(this).children().eq(0).val()){
@@ -40,7 +41,8 @@ $(document).ready(function(){
 				}
 			}
 			if(flag){
-				urlAndImage.push({"postingUrl": $(this).children().eq(0).val(), "postingPhotoLink": "", "smallProduct": "", "del": "YES"});
+				urlAndImage.push({"postingUrl": $(this).children().eq(0).val(), 
+					"postingPhotoLink": "", "smallProduct": "", "smallProductId": "", "del": "YES"});
 			}
 			flag = true;
 		}
@@ -48,18 +50,21 @@ $(document).ready(function(){
 	
 	$(".productImage").click(function(){
 		if(urlAndImage.length == 0){
-			urlAndImage.push({"postingUrl": $(this).children().first().val(), "postingPhotoLink": "", "smallProduct": $(this).children().eq(1).text(), "del": "NO"});
+			urlAndImage.push({"postingUrl": $(this).children().first().val(), 
+				"postingPhotoLink": "", "smallProduct": $(this).children("span").eq(0).text(), "smallProductId": $(this).children("input").eq(1).val(), "del": "NO"});
 		}else{
 			for(var i=0;i<urlAndImage.length;i++){
 				if(urlAndImage[i].postingUrl == $(this).children().first().val()){
 					urlAndImage[i].del = "NO";
-					urlAndImage[i].smallProduct = $(this).children().eq(1).text();
+					urlAndImage[i].smallProduct = $(this).children("span").eq(0).text();
+					urlAndImage[i].smallProductId = $(this).children("input").eq(1).val();
 					flag = false;
 					break;
 				}
 			}
 			if(flag){
-				urlAndImage.push({"postingUrl": $(this).children().first().val(), "postingPhotoLink": "", "smallProduct": $(this).children().eq(1).text(), "del": "NO"});
+				urlAndImage.push({"postingUrl": $(this).children().first().val(), 
+					"postingPhotoLink": "", "smallProduct": $(this).children("span").eq(0).text(), "smallProductId": $(this).children("input").eq(1).val(), "del": "NO"});
 			}
 			flag = true;
 		}
@@ -70,7 +75,8 @@ $(document).ready(function(){
 		$(this).css("border", "5px solid red");
 		$(this).parent().next().children().last().children().first().prop("checked", false);
 		if(urlAndImage.length == 0){
-			urlAndImage.push({"postingUrl": $(this).attr("name"), "postingPhotoLink": $(this).attr("id"), "smallProduct": "", "del": "NO"});
+			urlAndImage.push({"postingUrl": $(this).attr("name"), 
+				"postingPhotoLink": $(this).attr("id"), "smallProduct": "", "smallProductId": "", "del": "NO"});
 		}else{
 			for(var i=0;i<urlAndImage.length;i++){
 				if(urlAndImage[i].postingUrl == $(this).attr("name")){
@@ -81,7 +87,8 @@ $(document).ready(function(){
 				}
 			}
 			if(flag){
-				urlAndImage.push({"postingUrl": $(this).attr("name"), "postingPhotoLink": $(this).attr("id"), "smallProduct": "", "del": "NO"});
+				urlAndImage.push({"postingUrl": $(this).attr("name"), 
+					"postingPhotoLink": $(this).attr("id"), "smallProduct": "", "smallProductId": "", "del": "NO"});
 			}
 			flag = true;
 		}
@@ -153,17 +160,20 @@ $(document).ready(function(){
 	<tr>
 		<td>
 		<c:forEach items="${postingList.imageList}" var="imgList">
-			<img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${imgList}" width="200px" height="150px" class="mainImage" id="${imgList}" name="${postingList.postingUrl}">
+			<img src="http://t1.daumcdn.net/thumb/R1024x0/?fname=${imgList}" 
+			width="200px" height="150px" class="mainImage" id="${imgList}" name="${postingList.postingUrl}">
 		</c:forEach>
 			<div class="product_text">${postingList.postingContent}</div>
 		</td>
 		<td style="background-color: #f7f7f7;">
 		<c:forEach items="${postingList.smallProductList}" var="productList">
 			<label class="productImage">
-			<input type="radio" name="${count.index}" value="${postingList.postingUrl}"><span>${productList}</span><br><br>
+			<input type="radio" name="${count.index}" value="${postingList.postingUrl}">
+			<span>${productList.smallProduct}</span><br><br>
+			<input type=hidden value="${productList.smallProductId}">
 			<c:forEach var="map" items="${postingList.smallProductImage}">
 				<!-- 해당 소제품의 대표 이미지 찾아서 보여줌 -->
-				<c:if test="${map.key == productList}">
+				<c:if test="${map.key == productList.smallProduct}">
 					<img src="${map.value}"><br><br>
 				</c:if>
 			</c:forEach>

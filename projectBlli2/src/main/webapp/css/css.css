@@ -9,6 +9,9 @@ body {
 	font-size:12px;
 	font-family:'Nanum Barun Gothic',"돋움",Dotum,tahoma,Helvetica,AppleGothic,Sans-serif;
 }
+body *{
+	font-family:'Nanum Barun Gothic',"돋움",Dotum,tahoma,Helvetica,AppleGothic,Sans-serif;
+}
 
 div table p span{
 	font-family:'Nanum Barun Gothic';
@@ -355,7 +358,7 @@ img {
 	/* display : none; */
 	background-color: #ff7f50;
 	width: 100%;
-	height:60px;
+	height:65px;
 	/* border-bottom:2px solid #fee04a; */
 	position:relative;
 	z-index:1;
@@ -654,7 +657,8 @@ img {
 
 .main_top{
 	height:520px;
-	background:url(../img/main_img.jpg) center no-repeat;
+	background:url(../img/main_img.jpg) ;
+	background-size:cover;
 }
 
 .search_text2{

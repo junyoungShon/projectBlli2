@@ -23,6 +23,7 @@ import kr.co.blli.model.vo.BlliDetailException;
 import kr.co.blli.model.vo.BlliLogVO;
 import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberVO;
+import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliPagingBean;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
@@ -177,7 +178,7 @@ public class AdminServiceImpl implements AdminService{
 		String imgSource = "";
 		HashMap<String, String> smallProductImageList = new HashMap<String, String>();
 		for(int i=0;i<postingList.size();i++){
-			ArrayList<String> smallProductList = new ArrayList<String>();
+			ArrayList<BlliSmallProductVO> smallProductList = new ArrayList<BlliSmallProductVO>();
 			//이전 postingUrl과 현재 postingUrl이 같을 경우 해당 포스팅VO를 지우고 인덱스를 -1 해줌
 			if(postingList.get(i).getPostingUrl().equals(url)){ 
 				postingList.remove(i);
@@ -185,7 +186,10 @@ public class AdminServiceImpl implements AdminService{
 				continue;
 			}else{ //이전 postingUrl과 현재 postingUrl이 다를 경우 현재 postingUrl에 해당하는 소제품 목록과 대표 이미지 vo에 저장
 				url = postingList.get(i).getPostingUrl();
-				smallProductList.add(postingList.get(i).getSmallProduct());
+				BlliSmallProductVO smallProductVO = new BlliSmallProductVO();
+				smallProductVO.setSmallProduct(postingList.get(i).getSmallProduct());
+				smallProductVO.setSmallProductId(postingList.get(i).getSmallProductId());
+				smallProductList.add(smallProductVO);
 				Document doc = Jsoup.connect("http://shopping.naver.com/search/all_search.nhn?query="+postingList.get(i).getSmallProduct()+
 						"&pagingIndex=1&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&frm=NVSHMDL").get();
 				Elements imgTag = doc.select("img");
@@ -198,7 +202,10 @@ public class AdminServiceImpl implements AdminService{
 				}
 				for(int j=i+1;j<postingList.size();j++){
 					if(url.equals(postingList.get(j).getPostingUrl())){
-						smallProductList.add(postingList.get(j).getSmallProduct());
+						smallProductVO = new BlliSmallProductVO();
+						smallProductVO.setSmallProduct(postingList.get(j).getSmallProduct());
+						smallProductVO.setSmallProductId(postingList.get(j).getSmallProductId());
+						smallProductList.add(smallProductVO);
 						if(!smallProductImageList.containsKey(postingList.get(j).getSmallProduct())){
 							doc = Jsoup.connect("http://shopping.naver.com/search/all_search.nhn?query="+postingList.get(j).getSmallProduct()+
 									"&pagingIndex=1&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&frm=NVSHMDL").get();
@@ -280,14 +287,18 @@ public class AdminServiceImpl implements AdminService{
 			String postingUrl = urlAndImage.get(i).get("postingUrl").toString();
 			String postingPhotoLink = urlAndImage.get(i).get("postingPhotoLink").toString();
 			String smallProduct = urlAndImage.get(i).get("smallProduct").toString();
+			String smallProductId = urlAndImage.get(i).get("smallProductId").toString();
 			BlliPostingVO vo = new BlliPostingVO();
 			vo.setPostingUrl(postingUrl);
 			vo.setPostingPhotoLink(postingPhotoLink);
 			vo.setSmallProduct(smallProduct);
+			vo.setSmallProductId(smallProductId);
 			if(delete.equals("YES")){
 				adminDAO.deletePosting(vo);
 			}else{
 				adminDAO.selectProduct(vo);
+				adminDAO.updatePostingCount(vo);
+				adminDAO.updateSmallProductStatus(smallProductId);
 			}
 		}
 	}
@@ -314,13 +325,18 @@ public class AdminServiceImpl implements AdminService{
 			if(delete.equals("YES")){
 				adminDAO.deletePosting(vo);
 			}else{
-				vo.setPostingPhotoLink(blliFileDownLoader.imgFileDownLoader(postingPhotoLink,UUID.randomUUID().toString().replace("-", ""), "postingImage"));
+				vo.setPostingPhotoLink
+				(blliFileDownLoader.imgFileDownLoader(postingPhotoLink,UUID.randomUUID().toString().replace("-", ""),
+						"postingImage"));
+				vo.setPostingPhotoLink(blliFileDownLoader.imgFileDownLoader(
+						postingPhotoLink,UUID.randomUUID().toString().replace("-", ""), "postingImage"));
 				blliPostingVOList.add(vo);
 				int updateResult = adminDAO.registerPosting(vo);
 				if(updateResult != 0){
 					adminDAO.updatePostingCount(vo);
 				}
 			}
+			adminDAO.updateSmallProductStatus(smallProductId);
 		}
 		insertAndUpdateWordCloud(blliPostingVOList);
 	}
@@ -353,7 +369,7 @@ public class AdminServiceImpl implements AdminService{
 						smallProductWhenToUseMin = "0";
 					}
 					if(smallProductWhenToUseMax == null || smallProductWhenToUseMax == ""){
-						smallProductWhenToUseMax = "100";
+						smallProductWhenToUseMax = "36";
 					}
 					vo.setSmallProductWhenToUseMin(Integer.parseInt(smallProductWhenToUseMin));
 					vo.setSmallProductWhenToUseMax(Integer.parseInt(smallProductWhenToUseMax));
@@ -365,22 +381,9 @@ public class AdminServiceImpl implements AdminService{
 					}
 				}
 			}
+			adminDAO.updateSmallProductStatus(vo.getSmallProductId());
 		}
 	}
-	@Override
-	public void insertCafeArticle() {
-		try {
-			Document doc = Jsoup.connect("http://openapi.naver.com/search?key=2a636a785d0e03f7048319f8adb3d912&query=요리&target=cafearticle&start=1&display=10&sort=sim").get();
-			//System.out.println(doc);
-			String cafeUrl = doc.select("item link").text();
-			System.out.println(cafeUrl);
-			doc = Jsoup.connect(cafeUrl).get();
-			System.out.println(doc);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	@Override
 	public void makingWordCloud(BlliPostingVO blliPostingVO) {
 		String smallProductId = blliPostingVO.getSmallProductId();
@@ -407,26 +410,33 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public void insertAndUpdateWordCloud(ArrayList<BlliPostingVO> blliPostingVOList) {
 		if(blliPostingVOList.size()>0){
-			String smallProductId = blliPostingVOList.get(0).getSmallProductId();
-			StringBuffer sb = new StringBuffer();
-			System.out.println("총 조사 포스팅 수 : "+blliPostingVOList.size());
-			for (int i = 0; i < blliPostingVOList.size(); i++) {
-				blliPostingVOList.get(i).setPostingContent(adminDAO.selectPostingContentByPostingUrl(blliPostingVOList.get(i).getPostingUrl()));
-				sb.append(blliPostingVOList.get(i).getPostingContent());
+			HashMap<String, StringBuffer> sbMap = new HashMap<String, StringBuffer>();
+			for(int i=0;i<blliPostingVOList.size();i++){
+				String smallProductId = blliPostingVOList.get(i).getSmallProductId();
+				if(sbMap.get(blliPostingVOList.get(i).getSmallProductId())==null){
+					sbMap.put(smallProductId,new StringBuffer());
+				}
+				blliPostingVOList.get(i).setPostingContent
+				(adminDAO.selectPostingContentByPostingUrl(blliPostingVOList.get(i).getPostingUrl()));
+				sbMap.get(smallProductId).append(blliPostingVOList.get(i).getPostingContent());
 			}
-			HashMap<String, Integer> wordCounting = blliWordCounter.wordCounting(sb);
-			Iterator<String> it = wordCounting.keySet().iterator();
+			Iterator<String> it = sbMap.keySet().iterator();
 			while(it.hasNext()){
-				String key = it.next();
-				int value = wordCounting.get(key);  
-				BlliWordCloudVO blliWordCloudVO = new BlliWordCloudVO();
-				blliWordCloudVO.setSmallProductId(smallProductId);
-				blliWordCloudVO.setWord(key);
-				blliWordCloudVO.setWordCount(value);
-				System.out.println();
-				if(adminDAO.updateWordCloud(blliWordCloudVO)==0){
-					System.out.println("여기와야해");
-					adminDAO.insertWordCloud(blliWordCloudVO);
+				String smallProductId = it.next();
+				HashMap<String, Integer> wordCounting = 
+						blliWordCounter.wordCounting(sbMap.get(smallProductId));
+				Iterator<String> it2 = wordCounting.keySet().iterator();
+				while(it2.hasNext()){
+					String key = it2.next();
+					int value = wordCounting.get(key);  
+					BlliWordCloudVO blliWordCloudVO = new BlliWordCloudVO();
+					blliWordCloudVO.setSmallProductId(smallProductId);
+					blliWordCloudVO.setWord(key);
+					blliWordCloudVO.setWordCount(value);
+					System.out.println();
+					if(adminDAO.updateWordCloud(blliWordCloudVO)==0){
+						adminDAO.insertWordCloud(blliWordCloudVO);
+					}
 				}
 			}
 		}
@@ -440,7 +450,18 @@ public class AdminServiceImpl implements AdminService{
 		BlliDetailException exceptionVO = null;
 		int number = 1;
 		try {
+<<<<<<< HEAD
 			BufferedReader in = new BufferedReader(new FileReader("C:\\Users\\"+System.getProperty("user.name")+"\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\logFile\\blliLog.log"));
+=======
+			String localPath = null;
+			if(System.getProperty("os.name").contains("Windows")){
+				localPath = "C:\\Users\\PARK\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\logFile\\blliLog.log";
+			}else{
+				//서버 환경일 경우 path
+				localPath = "/usr/bin/apache-tomcat-7.0.64/webapps/logFile/blliLog.log";
+			}
+			BufferedReader in = new BufferedReader(new FileReader(localPath));
+>>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 			String message;
 			String exceptionContent = "";
 			while ((message = in.readLine()) != null) {
@@ -529,5 +550,49 @@ public class AdminServiceImpl implements AdminService{
 			System.exit(1);
 		}
 		return list;
+	}
+	/**
+	  * @Method Name : snsShareCountUp
+	  * @Method 설명 : 공유 횟수를 증가시켜줍니다.
+	  * @작성일 : 2016. 2. 18.
+	  * @작성자 : junyoung
+	  * @param smallProductId
+	 */
+	@Override
+	public void snsShareCountUp(String smallProductId) {
+		adminDAO.snsShareCountUp(smallProductId);
+	}
+	/**
+	  * @Method Name : allProductDownLoader
+	  * @Method 설명 : db 내의 모든 중분류 제품과 소분류 제품을 다운로드하는 메서드
+	  * @작성일 : 2016. 2. 18.
+	  * @작성자 : junyoung
+	 */
+	@Override
+	public void allProductDownLoader() {
+		List <BlliMidCategoryVO> midCategoryList = adminDAO.selectAllMidCategory();
+		List <BlliSmallProductVO> smallProductList = adminDAO.selectAllSmallProduct();
+		for (int i = 0; i < midCategoryList.size(); i++) {
+			blliFileDownLoader.imgFileDownLoader(midCategoryList.get(i).getMidCategoryMainPhotoLink(), midCategoryList.get(i).getMidCategoryId(), "midCategory");
+		}
+		for (int i = 0; i < smallProductList.size(); i++) {
+			blliFileDownLoader.imgFileDownLoader(smallProductList.get(i).getSmallProductMainPhotoLink(), smallProductList.get(i).getSmallProductId(), "smallProduct");
+		}
+	}
+	@Override
+	public ArrayList<BlliPostingVO> checkPosting() {
+		return (ArrayList<BlliPostingVO>)adminDAO.checkPosting();
+	}
+	@Override
+	public void deletePosting(BlliPostingVO postingVO) {
+		adminDAO.deletePosting(postingVO);
+	}
+	@Override
+	public void notAdvertisingPosting(BlliPostingVO postingVO) {
+		adminDAO.notAdvertisingPosting(postingVO);
+	}
+	@Override
+	public ArrayList<BlliMemberVO> checkMember() {
+		return (ArrayList<BlliMemberVO>)adminDAO.checkMember();
 	}
 }

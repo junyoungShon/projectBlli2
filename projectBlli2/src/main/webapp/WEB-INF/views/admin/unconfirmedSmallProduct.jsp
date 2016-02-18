@@ -119,8 +119,19 @@
 				<div><p align="center"><img src="${smallProductList.smallProductMainPhotoLink}" width="250px" height="350px"><br><br>
 				<input type="text" name="smallProduct" placeholder="${smallProductList.smallProduct}" 
 				size="${fn:length(smallProductList.smallProduct)+15}" style="padding: 5px"><br>
-				최소 연령 : <input type="text" name="min" size="1px"> 개월<br>
-				최대 연령 : <input type="text" name="max" size="1px"> 개월</p></div>
+				<c:if test="${smallProductList.smallProductWhenToUseMin == 0}">
+					최소 연령 : <input type="text" name="min" size="1px"> 개월<br>
+				</c:if>
+				<c:if test="${smallProductList.smallProductWhenToUseMin != 0}">
+					최소 연령 : <input type="text" name="min" size="1px" value="${smallProductList.smallProductWhenToUseMin}"> 개월<br>
+				</c:if>
+				<c:if test="${smallProductList.smallProductWhenToUseMax == 0}">
+					최대 연령 : <input type="text" name="max" size="1px"> 개월</p>
+				</c:if>
+				<c:if test="${smallProductList.smallProductWhenToUseMax != 0}">
+					최대 연령 : <input type="text" name="max" size="1px" value="${smallProductList.smallProductWhenToUseMax}"> 개월</p>
+				</c:if>
+				</div>
 			</div>
 		</c:when>
 		<c:otherwise>
@@ -139,8 +150,19 @@
 				<div><p align="center"><img src="${smallProductList.smallProductMainPhotoLink}" width="250px" height="350px"><br><br>
 				<input type="text" name="smallProduct" placeholder="${smallProductList.smallProduct}" 
 				size="${fn:length(smallProductList.smallProduct)+15}" style="padding: 5px"><br>
-				최소 연령 : <input type="text" name="min" size="1px"> 개월<br>
-				최대 연령 : <input type="text" name="max" size="1px"> 개월</p></div>
+				<c:if test="${smallProductList.smallProductWhenToUseMin == 0}">
+					최소 연령 : <input type="text" name="min" size="1px"> 개월<br>
+				</c:if>
+				<c:if test="${smallProductList.smallProductWhenToUseMin != 0}">
+					최소 연령 : <input type="text" name="min" size="1px" value="${smallProductList.smallProductWhenToUseMin}"> 개월<br>
+				</c:if>
+				<c:if test="${smallProductList.smallProductWhenToUseMax == 0}">
+					최대 연령 : <input type="text" name="max" size="1px"> 개월</p>
+				</c:if>
+				<c:if test="${smallProductList.smallProductWhenToUseMax != 0}">
+					최대 연령 : <input type="text" name="max" size="1px" value="${smallProductList.smallProductWhenToUseMax}"> 개월</p>
+				</c:if>
+				</div>
 			</div>
 		</c:otherwise>
 	</c:choose>

@@ -22,6 +22,9 @@
 	<bean class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" autowire="default"/>
 	<context:component-scan base-package="kr.ac.kaist.swrc.jhannanum"/>
 	<bean class="kr.ac.kaist.swrc.jhannanum.hannanum.Workflow" autowire="default">
+		<!-- 서버용 -->
+		<!-- <constructor-arg name="baseDir" value="/usr/bin/apache-tomcat-7.0.64/webapps/projectBlli2/WEB-INF/classes/jhannanum"/> -->
+		<!-- 로컬용 -->
 		<constructor-arg name="baseDir" value="C:\Users\junyoung\git\projectBlli2\projectBlli2\src\main\resources\jhannanum"/>
 	</bean>
 	
@@ -33,12 +36,19 @@
 			<value>oracle.jdbc.driver.OracleDriver</value>
 		</property>
 		<property name="url">
+			<!-- 서버용 -->
+			<!-- <value>jdbc:oracle:thin:@bllidb.crmhrt8hv6dt.ap-northeast-2.rds.amazonaws.com:1521:ORCL</value> -->
+			<!-- 로컬용 -->
 			<value>jdbc:oracle:thin:@127.0.0.1:1521:xe</value>
 		</property>
 		<property name="username">
+			<!-- 서버용 -->
+			<!-- <value>bllidbadmin</value> -->
 			<value>scott</value>
 		</property>
 		<property name="password">
+			<!-- 서버용 -->
+			<!-- <value>blliadmin890430</value> -->
 			<value>tiger</value>
 		</property>
 		<property name="maxActive">

@@ -14,12 +14,12 @@ public class BlliInterceptor extends HandlerInterceptorAdapter{
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request,HttpServletResponse response, Object handler) throws Exception {
+		Boolean flag = true;
 		/*//모든 요청에 대해 이전 주소 출력
 		String requestUrl = request.getRequestURL().toString();
 		// session검사
 		HttpSession session = request.getSession(false);
 		System.out.println(requestUrl);
-		Boolean flag = false;
 		if(session!=null){
 			if(session.getAttribute("SPRING_SECURITY_CONTEXT")!=null){
 				System.out.println("스프링 세션 있다.");
@@ -52,6 +52,6 @@ public class BlliInterceptor extends HandlerInterceptorAdapter{
 				flag = false;
 			}
 		}*/
-		return true;
+		return flag;
 	}
 }

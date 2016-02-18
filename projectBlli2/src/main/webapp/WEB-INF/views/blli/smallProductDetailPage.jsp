@@ -1,9 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <script>
 	//현재 스크롤바의 위치를 저장하는 변수 (px)
-	
+	FB.ui({
+  method: 'share',
+  href: 'https://developers.facebook.com/docs/',
+}, function(response){});
 	//무한 스크롤의 현재 페이지 넘버를 저장
 	var pageNum = 1;
 	
@@ -59,7 +63,6 @@
 				}
 		 	}); 
 		},2000);
-		
 	}
 	$(document).ready(function(){
 		$( '.jbMenu' ).addClass( 'jbFixed' );
@@ -299,9 +302,88 @@
 						</li>
 					</ul>
 					<div style="text-align:center;">
-						<a href="#"><img src="${initParam.root}img/facebook.png" alt="페이스북"></a>
-						<a href="#"><img src="${initParam.root}img/twitter.png" alt="트위터"></a>
+					<!-- 페이스북 공유 -->
+					<div id="fb-root"></div>
+				    <script src='http://connect.facebook.net/en_US/all.js'></script>
+				     <script src="https://developers.kakao.com/sdk/js/kakao.story.min.js"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+<script src="/js/kakaolink.js"></script>
+				    <!-- 공유끝 -->
+					<a onclick='postToFeed(); return false;'><img src="${initParam.root}img/fbShareBtn.png" alt="페이스북 공유하기"></a>
+					<a style="cursor:pointer;" id='kakao-login-btn' 
+					onclick="kakaolink_send('블리!', 'http://bllidev.dev/projectBlli2/goSmallProductDetailView.do?smallProduct=${requestScope.smallProductInfo.smallProduct.smallProduct}');" >
+					<img src="${initParam.root}img/kakaoShareBtn.png" alt="카스 공유하기"></a>
+					
 					</div>
+					<script> 
+					      FB.init({appId: "476938162497817", status: true, cookie: true});
+					  	
+					      function postToFeed() {
+					        var obj = {
+					          method: 'feed',
+					          redirect_uri:"http://bllidev.dev/projectBlli2/goSmallProductDetailView.do?smallProduct=${requestScope.smallProductInfo.smallProduct.smallProduct}",
+					          link: "http://bllidev.dev/projectBlli2/goSmallProductDetailView.do?smallProduct=${requestScope.smallProductInfo.smallProduct.smallProduct}",
+					          picture: 'http://bllidev.dev/projectBlli2/scrawlImage/smallProduct/${requestScope.smallProductInfo.smallProduct.smallProductMainPhotoLink}',
+					          name: '충동구매보다 빠른 합리적 소비!',
+					          caption: '블리가 추천하는 유아용품! 포스팅과 함께 확인하세요',
+					          description: '블리가 추천하는 유아용품! 광고없는 !! 포스팅과 함께 확인하세요'
+					        };
+					 
+					        function callback(response) {
+								snsShareCountUp();
+					        }
+					        FB.ui(obj, callback);
+					      }
+					  	 // 사용할 앱의 JavaScript 키를 설정해 주세요.
+					      Kakao.init('7e613c0241d9f07553638f04b7df66ef');
+					
+							
+					      function kakaolink_send(text, targetURL){
+					    	var n = "http://bllidev.dev/projectBlli2/goSmallProductDetailView.do?smallProduct=".length;
+					    	var koreanWord = targetURL.substring(n,targetURL.length);
+					    	var url = targetURL.substring(0,n)+encodeURIComponent(koreanWord);
+					    	alert("koreanWord:"+koreanWord);
+					    	alert("url:"+url);
+					      	Kakao.Auth.login({
+					      		success: function(authObj) {
+					      			 Kakao.API.request( {
+					      				 url : '/v1/api/story/linkinfo',
+					      				 data : {
+					      				   url : url
+					      				 }
+					      			   }).then(function(res) {
+					      				 // 이전 API 호출이 성공한 경우 다음 API를 호출합니다.
+					      				 return Kakao.API.request( {
+					      				   url : '/v1/api/story/post/link',
+					      				   data : {
+					      					 link_info : res
+					      				   }
+					      				 });
+					      			   }).then(function(res) {
+					      				 return Kakao.API.request( {
+					      				   url : '/v1/api/story/mystory',
+					      				   data : { id : res.id }
+					      				 });
+					      			   }).then(function(res) {
+					      				 snsShareCountUp();
+					      			   }, function (err) {
+					      				 alert(JSON.stringify(err));
+					      			   });
+					      		}
+					      	});
+					      }
+					     function snsShareCountUp(){
+					    	 alert('${requestScope.smallProductInfo.smallProduct}');
+					    	 $.ajax({
+									type:"get",
+									url:"snsShareCountUp.do?smallProductId=${requestScope.smallProductInfo.smallProduct.smallProductId}",
+									success:function(){
+										
+								}
+							}); 
+					     }
+					
+				</script>
 				</div>
 			</div>
 		</div>

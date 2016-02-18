@@ -1,11 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- 소제품 상세페이지보기페이지에서만 작동한다. -->
+<c:if test="${fn:startsWith(requestScope['javax.servlet.forward.request_uri'],'/projectBlli2/goSmallProductDetailView.do')}">
+    <meta name="description" content="블리를 통해 충동구매보다 빠르게 합리적인 쇼핑을 즐기세요.">
+    <meta name="keywords" content="유아용품,큐레이션,블로그,포스팅">
+	<meta property="og:url"           content="http://bllidev.dev/${requestScope['javax.servlet.forward.request_uri']}" />
+	<meta property="og:type"          content="website" />
+	<meta property="og:title"         content="블리-충동구매보다 빠른 합리적 소비" />
+	<meta property="og:description"   content="블리를 통해 충동구매보다 빠르게 합리적인 쇼핑을 즐기세요." />
+	<meta property="og:image"         content="http://bllidev.dev/projectBlli2/scrawlImage/smallProduct/${requestScope.smallProductInfo.smallProduct.smallProductMainPhotoLink}" />
+</c:if>
+
 <title>블리 - 충동구매보다 빠른 합리적 쇼핑!</title>
 <link href="${initParam.root}img/favicon/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 <%-- <!-- 부트스트랩 -->
@@ -23,8 +37,6 @@
 <link rel="stylesheet" href="${initParam.root}css/flickity.css" media="screen">
  <!-- 아이콘 만들기 api font-awesome -->
 <link href="${initParam.root}css/font-awesome.min.css" rel="stylesheet" />
-<!-- 구글 웹 폰트 -->
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
  <!-- 초기화 css -->
 <link href="${initParam.root}css/reset.css" rel="stylesheet" />
  <!-- 메인 css -->

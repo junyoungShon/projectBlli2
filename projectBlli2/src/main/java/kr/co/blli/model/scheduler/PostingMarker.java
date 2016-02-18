@@ -19,6 +19,7 @@ import kr.co.blli.model.product.ProductDAO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -48,16 +49,18 @@ public class PostingMarker {
 	
 	//소제품 채점 기준 상수
 	//출시일 기준 배점
-	final int REALEASEDATEPOINTDISTRIBUTION = 10;
+	final int REALEASEDATEPOINTDISTRIBUTION = 8;
 	//상세페이지 조회수 기준 배점
-	final int DETAILVIEWCOUNTPOINTDISTRIBUTION = 15;
+	final int DETAILVIEWCOUNTPOINTDISTRIBUTION = 14;
 	//찜수 기준 배점
-	final int DIBSCOUNTPOINTDISTRIBUTION = 20;
+	final int DIBSCOUNTPOINTDISTRIBUTION = 19;
 	//구매링크 클릭 수
-	final int BUYLINKCLICKPOINTDISTRIBUTION = 25;
+	final int BUYLINKCLICKPOINTDISTRIBUTION = 24;
 	//네이버 쇼핑 순위 기준 점수 배점
 	final int NAVERSHOPINGRANKINGDISTRIBUTION = 30;
-	
+	//공유하기 배점
+	final int PAGESHAREPOINTDISTRIBUTION = 5;
+	//@Scheduled(cron = "00 00 12 * * *")
 	public void productMarkering() throws ParseException{
 		List<BlliSmallProductVO> blliProductVOList = productDAO.selectAllSmallProduct();
 		//전체 소제품 갯수
@@ -73,9 +76,7 @@ public class PostingMarker {
 			BlliSmallProductVO blliSmallProductVO = blliProductVOList.get(i);
 			//포스팅 점수 초기화
 			blliSmallProductVO.setSmallProductScore(0);
-			
 			String smallProductId = blliSmallProductVO.getSmallProductId();
-			
 			//출시일과 현재 시간의 차이를 기록한 변수
 			//double diffNowFromReleaseDate = dayCounter(blliSmallProductVO.getProductRegisterDay());
 			//디비 삽입일과 현재 시간의 차이를 기록한 변수
@@ -83,18 +84,17 @@ public class PostingMarker {
 			//하루 평균 상세페이지 조회수를 기록할 변수
 			double avgDetailViewCount = 0.0;
 			//하루 평균 상세페이지 조회수와 smallProductId를 넣어준다.
-			avgDetailViewCount = (Math.round(((double)blliSmallProductVO.getDetailViewCount()/diffNowFromDbInsertDate)*100))*0.01;
+			avgDetailViewCount = 
+					(Math.round(((double)blliSmallProductVO.getDetailViewCount()/diffNowFromDbInsertDate)*100))*0.01;
 			detailViewCountMap.put(smallProductId, avgDetailViewCount);
-			
-			
 			//하루 평균 찜수를 기록할 변수
 			double avgDibsCount = 0.0;
 			if(diffNowFromDbInsertDate!=0){
-				avgDibsCount = (double)blliSmallProductVO.getSmallProductDibsCount() / (double) diffNowFromDbInsertDate;
+				avgDibsCount = 
+						(double)blliSmallProductVO.getSmallProductDibsCount() / (double) diffNowFromDbInsertDate;
 			}
 			//하루 평균 찜수를 기록
 			dibsCountMap.put(smallProductId, avgDibsCount);
-			
 			//하루 평균 구매링크 클릭 수
 			double avgBuyLinkClickCount = 0.0;
 			//소제품 구매링크 클릭 총 합
@@ -125,25 +125,20 @@ public class PostingMarker {
 			double diffNowFromReleaseDate = dayCounter(blliSmallProductVO.getProductRegisterDay());
 			//디비 삽입일과 현재 시간의 차이를 기록한 변수
 			//double diffNowFromDbInsertDate = dayCounter(blliSmallProductVO.getProductDbInsertDate());	
-		
 			//상세 보기 조회수를 통한 
 			detailViewCountMap = (HashMap<String,Double>)sortByValue(detailViewCountMap);
 			//맵에 담긴 값을 통해 순위를 매긴다.
 			detailViewCountMap = mapRankingMaker(detailViewCountMap);
 			//맵에 담긴 순위를 통해 점수를 할당하고, 포스팅 리스트에 세팅해준다.
 			markByRanking(detailViewCountMap, blliSmallProductVO, productNum, DETAILVIEWCOUNTPOINTDISTRIBUTION);
-			
 			//하루평균 찜수를 통한 채점
 			dibsCountMap = (HashMap<String,Double>)sortByValue(dibsCountMap);
 			dibsCountMap = mapRankingMaker(dibsCountMap);
 			markByRanking(dibsCountMap, blliSmallProductVO, productNum,DIBSCOUNTPOINTDISTRIBUTION);
-			
 			//구매링크 클릭  수 채점
 			buyLinkClickCountMap = (HashMap<String,Double>)sortByValue(buyLinkClickCountMap);
 			buyLinkClickCountMap = mapRankingMaker(buyLinkClickCountMap);
 			markByRanking(buyLinkClickCountMap, blliSmallProductVO, productNum,BUYLINKCLICKPOINTDISTRIBUTION);
-			
-			
 			//제품 출시일을 기준으로한 채점
 			int releaseDatePoint = (int) (REALEASEDATEPOINTDISTRIBUTION-(diffNowFromReleaseDate/180));
 			if(releaseDatePoint<0){
@@ -158,6 +153,18 @@ public class PostingMarker {
 			int naverShoppinRankPoint = (1-(naverShoppingRank/totalSmallProductNum))*NAVERSHOPINGRANKINGDISTRIBUTION;
 			System.out.println("네이버 쇼핑 기준 점수 : "+naverShoppinRankPoint);
 			blliSmallProductVO.setSmallProductScore(blliSmallProductVO.getSmallProductScore()+naverShoppinRankPoint);
+			
+			//공유 횟수를 통한 채점
+			
+			int snsShareCount = blliSmallProductVO.getSnsShareCount();
+			int snsShareCountPoint = 0;
+			if(snsShareCount>=PAGESHAREPOINTDISTRIBUTION){
+				snsShareCountPoint = PAGESHAREPOINTDISTRIBUTION;
+			}else if(snsShareCount>0&&snsShareCount<PAGESHAREPOINTDISTRIBUTION){
+				snsShareCountPoint = PAGESHAREPOINTDISTRIBUTION - (PAGESHAREPOINTDISTRIBUTION-snsShareCount);
+			}
+			System.out.println("공유 횟수를 통한 채점 : "+snsShareCountPoint);
+			blliSmallProductVO.setSmallProductScore(blliSmallProductVO.getSmallProductScore()+snsShareCountPoint);
 			System.out.println("총점 : "+blliSmallProductVO.getSmallProductScore());
 			productDAO.updateProductScore(blliSmallProductVO);
 		}
@@ -205,7 +212,6 @@ public class PostingMarker {
 					ranking= ranking+1+interval;
 					interval=0;
 				}
-				System.out.println("소제품 아이디 : "+blliSmallProductVO.getSmallProductId()+" 소제품 점수"+blliSmallProductVO.getSmallProductScore()+" 소제품 랭킹 : "+blliSmallProductVO.getSmallProductRanking());
 				productDAO.updateSmallProductRanking(blliSmallProductVO);
 			}
 		}
@@ -330,7 +336,7 @@ public class PostingMarker {
 	}
 	
 	/**
-	  * @Method Name : productMarkering
+	  * @Method Name : postingMarkering
 	  * @Method 설명 : posting 채점 메서드
 	  * @작성일 : 2016. 2. 5.
 	  * @작성자 : junyoung
@@ -354,7 +360,6 @@ public class PostingMarker {
 			BlliPostingVO blliPostingVO = allPostingList.get(i);
 			//포스팅 점수 초기화
 			blliPostingVO.setPostingScore(0);
-			
 			String compositeKey = blliPostingVO.getPostingUrl()+","+blliPostingVO.getSmallProductId();
 			//평균 체류시작을 기록할 변수
 			double avgResidenceTime = 0.0;
@@ -366,7 +371,8 @@ public class PostingMarker {
 			
 			//체류 시간과 포스팅 복합키를 맵에 넣어준다
 			if(blliPostingVO.getPostingViewCount()!=0){
-				avgResidenceTime = (Math.round(((double)blliPostingVO.getPostingTotalResidenceTime()/(double)blliPostingVO.getPostingViewCount())*100))*0.01;
+				avgResidenceTime = 
+				(Math.round(((double)blliPostingVO.getPostingTotalResidenceTime()/(double)blliPostingVO.getPostingViewCount())*100))*0.01;
 			}
 			//포스팅의 url과 smallProductId를 복합키로하여 평균 시간을 값에 넣는다.
 			residenceTimeMap.put(compositeKey, avgResidenceTime);
@@ -379,7 +385,6 @@ public class PostingMarker {
 			//포스팅의 url과 smallProductId를 복합키로하여 하루 평균 스크랩수를 값에 넣는다.
 			scrapeNumMap.put(compositeKey, avgScrapeNum);
 			//하루 평균 스크랩 수를 맵에 넣어준다.
-			
 			//하루 평균 조회수와 복합키를 맵에 넣어준다.
 			double avgViewCount = 0.0;
 			if(diffNowFromDbInsertDate!=0){

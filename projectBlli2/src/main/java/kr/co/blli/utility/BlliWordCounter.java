@@ -24,6 +24,8 @@ public class BlliWordCounter {
 	String koreanRegex = ".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*";
 	//한글자음체크 정규식
 	String koreanConsonant = ".*[ㄱ-ㅎ]+.*";
+	//한글모음체크 정규식
+	String koreanVowel = ".*[ㅏ-ㅣ]+.*";
 	//형태소 분리 워크 플로우 설정
 	@Autowired
 	Workflow workflow;
@@ -71,6 +73,9 @@ public class BlliWordCounter {
 							}else if(temp.matches(koreanConsonant)){
 								resultList[i]=resultList[i].replace(temp, "");
 								j--;
+							}else if(temp.matches(koreanVowel)){
+								resultList[i]=resultList[i].replace(temp, "");
+								j--;
 							}
 						}
 						
@@ -94,6 +99,9 @@ public class BlliWordCounter {
 							resultList[i]=resultList[i].replace(temp, "");
 							j--;
 						}else if(temp.matches(koreanConsonant)){
+							resultList[i]=resultList[i].replace(temp, "");
+							j--;
+						}else if(temp.matches(koreanVowel)){
 							resultList[i]=resultList[i].replace(temp, "");
 							j--;
 						}

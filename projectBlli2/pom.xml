@@ -235,7 +235,12 @@
 			<artifactId>jhannanum</artifactId>
 			<version>0.8.4</version>
 		</dependency>
-
+		<!-- 오라클용 jdbc driver -->
+		<dependency>
+			<groupId>ojdbc</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>6</version>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="memberState" column="member_state"/>
  		<result property="recommendingBabyName" column="recommending_baby_name"/>
  		<result property="authority" column="authority"/>
+ 		<result property="mailAgree" column="mail_agree"/>
  	</resultMap>
  	<!-- BlliMailVO Result Map 설정 -->
  	<resultMap type="BlliMailVO" id="bmlvRM">
@@ -40,6 +41,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="postingReplyCount" column="posting_reply_count"/>
  		<result property="smallProduct" column="small_product"/>
  		<result property="smallProductId" column="small_product_id"/>
+ 	</resultMap>
+ 	<!-- BlliMidCategoryVO Result Map 설정 -->
+ 	<resultMap type="blliMidCategoryVO" id="bmcvRM">
+ 		<result property="midCategory" column="mid_category"/>
+ 		<result property="midCategoryInfo" column="mid_category_info"/>
+ 		<result property="midCategoryMainPhotoLink" column="mid_category_main_photo_link"/>
+ 		<result property="whenToUseMin" column="mid_category_whentouse_min"/>
+ 		<result property="whenToUseMax" column="mid_category_whentouse_max"/>
+ 		<result property="bigCategory" column="big_category"/>
+ 		<result property="midCategoryId" column="mid_category_id"/>
+ 		<result property="smallProductCount" column="small_product_count"/>
  	</resultMap>
  	<!-- BlliSmallProductVO Result Map 설정 -->
  	<resultMap type="blliSmallProductVO" id="bspvRM">
@@ -80,7 +92,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select posting_url, posting_title, posting_content, small_product, small_product_id from(
 			select ceil(rownum/5) as page, posting_url, posting_title, posting_content, small_product, small_product_id from(
 				select count(*) over (partition by posting_url) as count_posting_url, posting_url, posting_title, 
-				posting_content, small_product, small_product_id from blli_posting where posting_status = 'unconfirmed'
+				posting_content, small_product, small_product_id from blli_posting where posting_status = 'unconfirmed' order by small_product asc
 			) where count_posting_url = 1
 		) where page = #{pageNo}
 	</select>
@@ -134,11 +146,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<update id="registerPosting">
-		update blli_posting set posting_status = 'confirmed', posting_photo_link = #{postingPhotoLink} where posting_url = #{postingUrl}
+		update blli_posting set posting_status = 'confirmed', posting_photo_link = #{postingPhotoLink} 
+		where posting_url = #{postingUrl}
 	</update>
 	
 	<update id="updatePostingCount">
-		update blli_small_product set db_insert_posting_count = db_insert_posting_count + 1 where small_product_id = #{smallProductId}
+		update blli_small_product set db_insert_posting_count = db_insert_posting_count + 1 
+		where small_product_id = #{smallProductId}
 	</update>
 	
 	<update id="deleteSmallProduct">
@@ -146,13 +160,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<update id="registerSmallProduct">
-		update blli_small_product set small_product_status = 'confirmed', small_product_whentouse_min = #{smallProductWhenToUseMin}, 
+		update blli_small_product set small_product_status = 'confirmedbyadmin', small_product_whentouse_min = #{smallProductWhenToUseMin}, 
 		small_product_whentouse_max = #{smallProductWhenToUseMax}
 		where small_product_id = #{smallProductId}
 	</update>
 	
 	<update id="registerAndUpdateSmallProduct">
-		update blli_small_product set small_product_status = 'confirmed', small_product_whentouse_min = #{smallProductWhenToUseMin}, 
+		update blli_small_product set small_product_status = 'confirmedbyadmin', small_product_whentouse_min = #{smallProductWhenToUseMin}, 
 		small_product_whentouse_max = #{smallProductWhenToUseMax}, small_product = #{smallProduct}
 		where small_product_id = #{smallProductId}
 	</update>
@@ -174,6 +188,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update blli_mid_category set mid_category_whentouse_max = #{smallProductWhenToUseMax} 
 		where ${smallProductWhenToUseMax} > mid_category_whentouse_max or mid_category_whentouse_max is null and mid_category = #{midCategory}
 	</update>
+	
+	<select id="checkPosting" resultMap="bpvRM">
+		select * from blli_posting where posting_dislike_count >= 1 and posting_status = 'confirmed' and posting_advertisement is NULL
+	</select>
+	
+	<update id="notAdvertisingPosting">
+		update blli_posting set posting_advertisement = 'NO' where posting_url = #{postingUrl}
+	</update>
+	
+	<select id="checkMember" resultMap="bmbvRM">
+		select member_id, member_email, member_name, authority, mail_agree from blli_member
+	</select>
+	
+	<update id="updateSmallProductStatus">
+		update blli_small_product set small_product_status = 'confirmed' where small_product_id = #{smallProductId} and db_insert_posting_count >= 5 and small_product_status = 'confirmedbyadmin' 
+	</update>
 	<!-- 현석 쿼리 끝 -->
 	<!-- 준영 쿼리 시작 -->
 	<!-- 소제품 명으로 본문 불러오는 메서드 -->
@@ -184,11 +214,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select posting_content from blli_posting where posting_url = #{value}
 	</select>
 	<update id="updateWordCloud">
-		update blli_word_cloud set word_count = word_count + #{wordCount} where small_product_Id = #{smallProductId} and word = #{word}
+		update blli_word_cloud set word_count = word_count + #{wordCount} where small_product_Id = 
+		#{smallProductId} and word = #{word}
+	</update>
+	<update id="snsShareCountUp">
+		update blli_small_product set sns_share_count =+ 1 where small_product_id = #{value}
 	</update>
 	<insert id="insertWordCloud">
-		insert into blli_word_cloud (word,word_count,small_product_id) values (#{word},#{wordCount},#{smallProductId})
+		insert into blli_word_cloud (word,word_count,small_product_id) 
+		values (#{word},#{wordCount},#{smallProductId})
 	</insert>
+	<select id="selectAllMidCategory" resultMap="bmcvRM">
+		select mid_Category_Id,mid_category_main_photo_link from blli_mid_category 
+	</select>
+	<select id="selectAllSmallProduct" resultMap="bspvRM">
+		select small_product_id,small_product_main_photo_link from blli_small_product 
+	</select>
 	<!-- 준영 끝 -->
  </mapper>
  

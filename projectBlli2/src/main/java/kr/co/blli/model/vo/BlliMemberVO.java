@@ -13,6 +13,8 @@ public class BlliMemberVO{
 	private List<BlliBabyVO> blliBabyVOList ;
 	private List<BlliScheduleVO> blliScheduleVOList;
 	private List<BlliMidCategoryVO> blliRecommendingMidCategoryVOList;
+	//2016.02.16 추가
+	private int mailAgree;
 	
 	
 	public BlliMemberVO() {
@@ -106,7 +108,13 @@ public class BlliMemberVO{
 		this.blliRecommendingMidCategoryVOList = blliRecommendingMidCategoryVOList;
 	}
 
-
+	public int getMailAgree() {
+		return mailAgree;
+	}
+	
+	public void setMailAgree(int mailAgree) {
+		this.mailAgree = mailAgree;
+	}
 	@Override
 	public String toString() {
 		return "BlliMemberVO [memberId=" + memberId + ", memberEmail="
@@ -115,7 +123,8 @@ public class BlliMemberVO{
 				+ ", authority=" + authority + ", blliBabyVOList="
 				+ blliBabyVOList + ", blliScheduleVOList=" + blliScheduleVOList
 				+ ", blliRecommendingMidCategoryVOList="
-				+ blliRecommendingMidCategoryVOList + "]";
+				+ blliRecommendingMidCategoryVOList + ", mailAgree="
+				+ mailAgree + "]";
 	}
-	
+
 }

@@ -3,6 +3,10 @@ package kr.co.blli.controller;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
+<<<<<<< HEAD
+=======
+import java.util.ArrayList;
+>>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import kr.co.blli.model.member.MemberService;
+import kr.co.blli.model.posting.PostingService;
 import kr.co.blli.model.product.ProductService;
 import kr.co.blli.model.security.BlliUserDetailsService;
 import kr.co.blli.model.vo.BlliBabyVO;
@@ -48,7 +53,8 @@ public class MemberController {
 	private ProductService productService;
 	@Resource
 	private BlliUserDetailsService blliUserDetailsService;
-	
+	@Resource
+	private PostingService postingService;
 	/**
 	 * 
 	  * @Method Name : goAnyWhere
@@ -59,8 +65,13 @@ public class MemberController {
 	  * @return
 	 */
 	@RequestMapping("{viewId}.do")
-	public String goAnyWhere(@PathVariable String viewId){
-		return viewId;
+	public ModelAndView goAnyWhere(@PathVariable String viewId, String memberEmail){
+		if(memberEmail == null || memberEmail.equals("")){
+			return new ModelAndView(viewId);
+		}else{
+			memberService.denySendEmail(memberEmail);
+			return new ModelAndView(viewId, "deny", "수신이 거부되었습니다. 다시 허용하시려면 마이페이지에서 변경해주십시오.");
+		}
 	}
 	@RequestMapping("loginPage.do")
 	public ModelAndView goLoginPage(Boolean loginFail){
@@ -126,6 +137,7 @@ public class MemberController {
 			
 			//메인페이지로 이동할 때 회원에게 추천 될 소분류 상품과 관련 된 포스팅을 보여준다.<으아아아 여기있으면 아니되오!!>
 			List<BlliPostingVO> blliPostingVOList = productService.selectPostingBySmallProductList(blliSmallProductVOList,blliMemberVO.getMemberId(),"1");
+<<<<<<< HEAD
 			System.out.println(blliSmallProductVOList);
 			for(int i=0;i<blliSmallProductVOList.size();i++){
 				if(blliSmallProductVOList.get(i)!=null) { //용호 추가 - null포인터 방지
@@ -133,6 +145,8 @@ public class MemberController {
 				}
 			}
 			System.out.println(blliPostingVOList);
+=======
+>>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 			mav.setViewName("home");
 			//회원정보 삽입
 			mav.addObject("blliMemberVO", blliMemberVO);
@@ -142,6 +156,7 @@ public class MemberController {
 			mav.addObject("blliSmallProductVOList", blliSmallProductVOList);
 			//회원에게 추천될 소분류 관련 포스팅 리스트 삽입
 			mav.addObject("blliPostingVOList", blliPostingVOList);
+			System.out.println(mav.toString());
 		}else{
 			session.invalidate();
 			mav.setViewName("loginPage");
@@ -338,7 +353,7 @@ public class MemberController {
 		blliMemberVO = (BlliMemberVO) request.getSession().getAttribute("blliMemberVO");
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("blliMemberVO", blliMemberVO);
-		mav.setViewName("modifyMemberInfoPage");
+		mav.setViewName("blli_modifyMemberInfoPage");
 		return mav;
 	}
 	
@@ -355,7 +370,7 @@ public class MemberController {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("blliMemberVO", blliMemberVO);
 		System.out.println(blliMemberVO.getBlliBabyVOList());
-		mav.setViewName("modifyBabyInfoPage");
+		mav.setViewName("blli_modifyBabyInfoPage");
 		return mav;
 	}
 	/**
@@ -475,6 +490,7 @@ public class MemberController {
 	
 	
 	//용호 메소드 작성 영역
+<<<<<<< HEAD
 	/**
 	  * @Method Name : goFindPasswordPage
 	  * @Method 설명 : 임시비밀번호를 받는 링크를 받기위한 이메일 입력 페이지로 이동
@@ -482,6 +498,22 @@ public class MemberController {
 	  * @작성자 : yongho
 	  * @return
 	  */
+=======
+	@RequestMapping("goCalenderPage.do")
+	@ResponseBody
+	public ModelAndView calendar(BlliMemberVO blliMemberVO){
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("calendar_calendarPage");
+		/*boolean result = false;
+		if(memberService.findMemberById(blliMemberVO)!=null){
+			result = true;
+		}else{
+			result = false;
+		}*/
+		return mv;
+	}
+	
+>>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 	@RequestMapping("goFindPasswordPage.do")
 	public String goFindPasswordPage(){
 		return "findPasswordPage";
@@ -520,6 +552,7 @@ public class MemberController {
 		return new ModelAndView("loginPage", "memberEmail", memberEmail);
 	}
 	
+<<<<<<< HEAD
 	/**
 	  * @Method Name : calendar
 	  * @Method 설명 : 회원 일정을 관리하는 달력 페이지로 이동
@@ -549,4 +582,29 @@ public class MemberController {
 		memberService.updateSchedule(bsvo);
 		return memberService.selectSchedule(bsvo);
 	}
+=======
+	@RequestMapping("goScrapePage.do")
+	public ModelAndView goScrapePage(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		BlliMemberVO memberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
+		ArrayList<BlliPostingVO> postingList = new ArrayList<BlliPostingVO>();
+		ArrayList<BlliMemberScrapeVO> scrapeList =  memberService.getScrapeInfoByMemberId(memberVO);
+		for(int i=0;i<scrapeList.size();i++){
+			postingList.add(postingService.getPostingInfo(scrapeList.get(i), memberVO.getMemberId()));
+		}
+		ArrayList<String> midCategoryList = new ArrayList<String>();
+		for(int i=0;i<postingList.size();i++){
+			String midCategory = postingList.get(i).getMidCategory();
+			if(!midCategoryList.contains(midCategory)){
+				midCategoryList.add(midCategory);
+			}
+		}
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("blli_scrapePage");
+		mav.addObject("midCategoryList", midCategoryList);
+		mav.addObject("scrapeList", postingList);
+		return mav;
+	}
+	
+>>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 }

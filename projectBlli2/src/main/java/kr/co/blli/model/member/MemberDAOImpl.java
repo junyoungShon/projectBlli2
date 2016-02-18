@@ -4,13 +4,17 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.stereotype.Repository;
-
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMailVO;
+import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
+<<<<<<< HEAD
 import kr.co.blli.model.vo.BlliScheduleVO;
+=======
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.stereotype.Repository;
+>>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 @Repository
 public class MemberDAOImpl implements MemberDAO{
 	@Resource
@@ -115,6 +119,16 @@ public class MemberDAOImpl implements MemberDAO{
 	@Override
 	public void deleteSchedule(BlliScheduleVO bsvo) {
 		sqlSessionTemplate.update("member.deleteSchedule", bsvo);
+	}
+
+	@Override
+	public int denySendEmail(String memberEmail) {
+		return sqlSessionTemplate.update("member.denySendEmail", memberEmail);
+	}
+
+	@Override
+	public List<BlliMemberScrapeVO> getScrapeInfoByMemberId(BlliMemberVO memberVO) {
+		return sqlSessionTemplate.selectList("member.getScrapeInfoByMemberId", memberVO);
 	}
 
 

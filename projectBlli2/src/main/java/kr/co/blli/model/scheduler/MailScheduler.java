@@ -5,11 +5,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.annotation.Resource;
 import javax.mail.Message.RecipientType;
@@ -23,6 +23,8 @@ import kr.co.blli.model.product.ProductService;
 import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 
+import org.apache.log4j.Logger;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -52,68 +54,79 @@ public class MailScheduler {
 	  * @param mailForm
 	 * @throws ParseException 
 	  */
+<<<<<<< HEAD
 	@Scheduled(cron = "00 00 00 * * *") // 매일 00시 월령이 바뀐 자녀를 가진 회원에게 월령별 추천 제품 메일 발송
+=======
+	//@Scheduled(cron = "00 06 15 * * *") // 매일 00시 월령이 바뀐 자녀를 가진 회원에게 월령병 추천 제품 메일 발송
+>>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 	//@Scheduled(cron = "00/10 * * * * *") //테스트용
 	public void sendRecommendingMail()
 			throws FileNotFoundException, URISyntaxException, UnsupportedEncodingException, MessagingException, ParseException {
-		
-		long start = System.currentTimeMillis(); // 시작시간 
-		ArrayList<String> logList = new ArrayList<String>();
-		String methodName = new Throwable().getStackTrace()[0].getMethodName();
-		logList.add("start : "+methodName);
-		logList.add("요청자 : scheduler");
-		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
-		String datetime = sdf.format(cal.getTime());
-		logList.add("발생 일자 : "+datetime);
-		
-		//월령이 바뀐 아이를 가진 회원 목록을 불러온다.
-		List<BlliMemberVO> memberList = memberService.getMemberHavingBabyAgeChangedList();
+		Random random = new Random();
+		int r = random.nextInt(3000);
+		try {
+			System.setProperty("random", Integer.toString(r));
+			Thread.sleep(r);
+			if(Integer.parseInt(System.getProperty("random")) != r){
+				long start = System.currentTimeMillis(); // 시작시간 
+				Logger logger = Logger.getLogger(getClass());
+				String methodName = new Throwable().getStackTrace()[0].getMethodName();
+				logger.info("start : "+methodName);
+				logger.info("요청자 : scheduler");
+				Calendar cal = Calendar.getInstance();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+				String datetime = sdf.format(cal.getTime());
+				logger.info("발생 일자 : "+datetime);
 				
-		if(memberList.size()==0) {
-			System.out.println("월령이 바뀐 아기가 한명도 없습니다.");
-		} else {
-			
-			//해당 회원의 아이 중 월령이 바뀐 아이의 정보를 회원VO가 가진 회원아기VOList 변수에 set 해준다.
-			for(int i=0; i<memberList.size(); i++) {
-				memberList.get(i).setBlliBabyVOList(memberService.getBabyAgeChangedListOfMember(memberList.get(i).getMemberId()));
-				memberList.get(i).setBlliRecommendingMidCategoryVOList(productService.selectRecommendingMidCategory(memberService.getBabyAgeChangedListOfMember(memberList.get(i).getMemberId()).get(0)));
+				//월령이 바뀐 아이를 가진 회원 목록을 불러온다.
+				List<BlliMemberVO> memberList = memberService.getMemberHavingBabyAgeChangedList();
+					
+				if(memberList.size()==0) {
+					System.out.println("월령이 바뀐 아기가 한명도 없습니다.");
+				} else {
+					
+					//해당 회원의 아이 중 월령이 바뀐 아이의 정보를 회원VO가 가진 회원아기VOList 변수에 set 해준다.
+					for(int i=0; i<memberList.size(); i++) {
+						memberList.get(i).setBlliBabyVOList(memberService.getBabyAgeChangedListOfMember(memberList.get(i).getMemberId()));
+						memberList.get(i).setBlliRecommendingMidCategoryVOList(productService.selectRecommendingMidCategory(memberService.getBabyAgeChangedListOfMember(memberList.get(i).getMemberId()).get(0)));
+					}
+					
+					Map<String, Object> textParams = new HashMap<String, Object>();
+					
+					BlliMailVO mlvo = memberDAO.findMailSubjectAndContentByMailForm("recommendingMail");
+					
+					String subject = mlvo.getMailSubject();
+					String contentFile = mlvo.getMailContentFile();
+					
+					MimeMessage message = mailSender.createMimeMessage();
+					
+					message.setFrom(new InternetAddress("admin@blli.co.kr","블리", "utf-8"));
+					message.setSubject(subject);
+					
+					String mailText = null;
+					for(int i=0; i<memberList.size(); i++) {
+						String recipient = memberList.get(i).getMemberEmail();
+						textParams.put("memberName", memberList.get(i).getMemberName());
+						textParams.put("memberBabyName", memberList.get(i).getBlliBabyVOList().get(0).getBabyName());
+						textParams.put("recommendingProductList", memberList.get(i).getBlliRecommendingMidCategoryVOList());
+						textParams.put("memberEmail", recipient);
+						//System.out.println(memberList.get(i).getBlliRecommendingMidCategoryVOList());
+						message.setRecipient(RecipientType.TO, new InternetAddress(recipient)); //import javax.mail.Message.RecipientType;
+						mailText = VelocityEngineUtils.mergeTemplateIntoString(velocityConfig.getVelocityEngine(), contentFile, "utf-8", textParams);
+						message.setText(mailText, "utf-8", "html");
+						mailSender.send(message);
+						System.out.println(memberList.get(i).getMemberName()+"님의 메일주소 "+recipient+"로 메일 발송");
+					}
+				}
+				
+				long end = System.currentTimeMillis();  //종료시간
+				//종료-시작=실행시간		
+				logger.info("실행 시간  : "+(int)Math.ceil((end-start)/1000.0)+"초");
+				logger.info("end : "+methodName);
 			}
-			
-			Map<String, Object> textParams = new HashMap<String, Object>();
-			
-			BlliMailVO mlvo = memberDAO.findMailSubjectAndContentByMailForm("recommendingMail");
-			
-			String subject = mlvo.getMailSubject();
-			String contentFile = mlvo.getMailContentFile();
-			
-			MimeMessage message = mailSender.createMimeMessage();
-			
-			message.setFrom(new InternetAddress("admin@blli.co.kr","블리", "utf-8"));
-			message.setSubject(subject);
-			
-			String mailText = null;
-			for(int i=0; i<memberList.size(); i++) {
-				String recipient = memberList.get(i).getMemberEmail();
-				textParams.put("memberName", memberList.get(i).getMemberName());
-				textParams.put("memberBabyName", memberList.get(i).getBlliBabyVOList().get(0).getBabyName());
-				textParams.put("recommendingProductList", memberList.get(i).getBlliRecommendingMidCategoryVOList());
-				//System.out.println(memberList.get(i).getBlliRecommendingMidCategoryVOList());
-				
-				message.addRecipient(RecipientType.TO, new InternetAddress(recipient)); //import javax.mail.Message.RecipientType;
-				mailText = VelocityEngineUtils.mergeTemplateIntoString(velocityConfig.getVelocityEngine(), contentFile, "utf-8", textParams);
-				message.setText(mailText, "utf-8", "html");
-				
-				mailSender.send(message);
-				System.out.println(memberList.get(i).getMemberName()+"님의 메일주소 "+recipient+"로 메일 발송");
-			}
-		
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
-		
-		long end = System.currentTimeMillis();  //종료시간
-		//종료-시작=실행시간		
-		logList.add("실행 시간  : "+(int)Math.ceil((end-start)/1000.0)+"초");
-		logList.add("end : "+methodName);
 		
 	}
 	

@@ -1,12 +1,12 @@
 package kr.co.blli.model.admin;
 
-import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberVO;
+import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 import kr.co.blli.model.vo.BlliWordCloudVO;
@@ -112,5 +112,34 @@ public class AdminDAOImpl implements AdminDAO{
 	@Override
 	public void insertWordCloud(BlliWordCloudVO blliWordCloudVO) {
 		sqlSessionTemplate.insert("admin.insertWordCloud", blliWordCloudVO);
+	}
+	@Override
+	public void snsShareCountUp(String smallProductId) {
+		System.out.println("타겟 아이디"+smallProductId);
+		sqlSessionTemplate.update("admin.snsShareCountUp", smallProductId);
+	}
+	@Override
+	public List<BlliMidCategoryVO> selectAllMidCategory() {
+		return sqlSessionTemplate.selectList("admin.selectAllMidCategory");
+	}
+	@Override
+	public List<BlliSmallProductVO> selectAllSmallProduct() {
+		return sqlSessionTemplate.selectList("admin.selectAllSmallProduct");
+	}
+	@Override
+	public List<BlliPostingVO> checkPosting() {
+		return sqlSessionTemplate.selectList("admin.checkPosting");
+	}
+	@Override
+	public void notAdvertisingPosting(BlliPostingVO postingVO) {
+		sqlSessionTemplate.update("admin.notAdvertisingPosting", postingVO);
+	}
+	@Override
+	public List<BlliMemberVO> checkMember() {
+		return sqlSessionTemplate.selectList("admin.checkMember");
+	}
+	@Override
+	public void updateSmallProductStatus(String smallProductId) {
+		sqlSessionTemplate.update("admin.updateSmallProductStatus", smallProductId);
 	}
 }

@@ -1,6 +1,5 @@
 package kr.co.blli.model.posting;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,16 +34,8 @@ public class PostingDAOImpl implements PostingDAO{
 		return sqlSessionTemplate.selectList("posting.searchProducts", postingUrl);
 	}
 	@Override
-	public int countOfPostingUrl(String postingUrl) {
-		return sqlSessionTemplate.selectOne("posting.countOfPostingUrl", postingUrl);
-	}
-	@Override
 	public String getPostingStatus(String postingUrl) {
 		return sqlSessionTemplate.selectOne("posting.getPostingStatus",postingUrl);
-	}
-	@Override
-	public List<String> getAllPostingStatus(String postingUrl) {
-		return sqlSessionTemplate.selectList("posting.getAllPostingStatus",postingUrl);
 	}
 	/**
 	  * @Method Name : updatePostingViewCountAndResidenceTime
@@ -78,10 +69,6 @@ public class PostingDAOImpl implements PostingDAO{
 		return sqlSessionTemplate.selectOne("posting.getPostingStatus", blliPostingVO);
 	}
 	@Override
-	public void insertDeadPosting(BlliPostingVO blliPostingVO) {
-		sqlSessionTemplate.insert("posting.insertDeadPosting", blliPostingVO);
-	}
-	@Override
 	public int selectThisPostingScrape(BlliMemberScrapeVO blliMemberScrapeVO) {
 		return sqlSessionTemplate.selectOne("posting.selectThisPostingScrape", blliMemberScrapeVO);
 	}
@@ -101,5 +88,21 @@ public class PostingDAOImpl implements PostingDAO{
 	@Override
 	public String selectTotalPostingtNum() {
 		return sqlSessionTemplate.selectOne("posting.selectTotalPostingtNum");
+	}
+	@Override
+	public BlliPostingVO getPostingInfo(BlliMemberScrapeVO blliMemberScrapeVO) {
+		return sqlSessionTemplate.selectOne("posting.getPostingInfo", blliMemberScrapeVO);
+	}
+	@Override
+	public int getPostingScrapeCount(BlliMemberScrapeVO scrapeVO) {
+		return sqlSessionTemplate.selectOne("posting.getPostingScrapeCount", scrapeVO);
+	}
+	@Override
+	public int getPostingLikeCount(BlliMemberScrapeVO scrapeVO) {
+		return sqlSessionTemplate.selectOne("posting.getPostingLikeCount", scrapeVO);
+	}
+	@Override
+	public int getPostingDislikeCount(BlliMemberScrapeVO scrapeVO) {
+		return sqlSessionTemplate.selectOne("posting.getPostingDislikeCount", scrapeVO);
 	}
 }
