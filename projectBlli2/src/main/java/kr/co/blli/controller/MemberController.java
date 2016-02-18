@@ -535,4 +535,5 @@ public class MemberController {
 		mav.addObject("scrapeList", postingList);
 		return mav;
 	}
+	
 }

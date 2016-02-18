@@ -29,7 +29,7 @@
 				<a href="${initParam.root}goScrapePage.do">스크랩</a>   ㅣ
 				<a href="${initParam.root}goModifyMemberInfoPage.do">회원정보수정</a>   ㅣ   
 				<a href="${initParam.root}goModifyBabyInfoPage.do">아이정보수정</a>   ㅣ  
-				<a href="#">스크랩</a>   ㅣ   <a href="#">알림</a>   ㅣ   
+				<a href="#">알림</a>   ㅣ   
 				<a href="${initParam.root}goCalenderPage.do">아이일정</a> ㅣ
 				<a href="${initParam.root}logout.do">로그아웃</a>
 			</div>

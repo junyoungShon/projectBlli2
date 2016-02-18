@@ -32,3 +32,20 @@ bp.posting_like_count, bp.posting_dislike_count, bp.posting_photo_link, bp.posti
 )bp, blli_small_product bsp where bsp.small_product_id = bp.small_product_id;
 
 select posting_url from blli_posting;
+
+select posting_url, posting_title, posting_content, small_product, small_product_id from(
+	select ceil(rownum/5) as page, posting_url, posting_title, posting_content, small_product, small_product_id from(
+		select count(*) over (partition by posting_url) as count_posting_url, posting_url, posting_title, 
+		posting_content, small_product, small_product_id from blli_posting where posting_status = 'unconfirmed' order by small_product asc
+	) where count_posting_url = 1 
+) where page = '1'
+
+select * from blli_small_product where small_product = '위드맘 로히트 2단계 750g';
+
+select * from blli_posting where small_product like '%' || '위드맘' || '%';
+
+update blli_small_product set small_product_status = 'confirmedbyadmin', db_insert_posting_count = 0 where small_product = '위드맘 로히트 2단계 750g';
+
+update blli_posting set posting_status = 'unconfirmed' where small_product = '위드맘 로히트 2단계 750g';
+
+select * from blli_small_product;

@@ -67,7 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 현석 쿼리 시작 -->
 	<select id="getSmallProduct" resultMap="bspvRM">
 		select small_product, small_product_id, small_product_posting_count, search_time from blli_small_product 
-		where small_product_status = 'confirmed' order by search_time asc nulls first
+		where small_product_status = 'confirmed' or small_product_status = 'confirmedbyadmin' order by search_time asc nulls first
 	</select>
 	
 	<update id="updateBigCategory">

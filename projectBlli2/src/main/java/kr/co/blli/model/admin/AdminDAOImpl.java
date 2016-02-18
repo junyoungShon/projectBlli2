@@ -1,6 +1,5 @@
 package kr.co.blli.model.admin;
 
-import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -124,5 +123,9 @@ public class AdminDAOImpl implements AdminDAO{
 	@Override
 	public List<BlliMemberVO> checkMember() {
 		return sqlSessionTemplate.selectList("admin.checkMember");
+	}
+	@Override
+	public void updateSmallProductStatus(String smallProductId) {
+		sqlSessionTemplate.update("admin.updateSmallProductStatus", smallProductId);
 	}
 }

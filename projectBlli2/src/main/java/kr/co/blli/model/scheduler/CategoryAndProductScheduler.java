@@ -66,6 +66,7 @@ public class CategoryAndProductScheduler {
 				int insertBigCategoryCount = 0;
 				int updateBigCategoryCount = 0;
 				int exceptionCount = 0;
+				int allExceptionCount = 0;
 				LinkedHashMap<String, String> detailException = new LinkedHashMap<String, String>();
 				String bigCategoryId = "";
 				boolean flag = true;
@@ -91,7 +92,10 @@ public class CategoryAndProductScheduler {
 						flag = false;
 					}catch(Exception e){
 						exceptionCount++;
-						detailException.put(bigCategoryId, e.getMessage());
+						if(!detailException.containsKey(bigCategoryId)){
+							allExceptionCount++;
+							detailException.put(bigCategoryId, e.getMessage());
+						}
 						if(exceptionCount > 5){
 							flag = false;
 						}
@@ -100,7 +104,7 @@ public class CategoryAndProductScheduler {
 				logger.info("총 대분류 개수 : "+bigCategoryCount);
 				logger.info("insert한 대분류 개수 : "+insertBigCategoryCount);
 				logger.info("update한 대분류 개수 : "+updateBigCategoryCount);
-				logger.info("Exception 발생 횟수 : "+exceptionCount);
+				logger.info("Exception 발생 횟수 : "+allExceptionCount);
 				Iterator<String> bigCategoryIdList = detailException.keySet().iterator();
 				while(bigCategoryIdList.hasNext()){
 					bigCategoryId = bigCategoryIdList.next();
@@ -207,8 +211,10 @@ public class CategoryAndProductScheduler {
 						flag = false;
 					}catch(Exception e){
 						exceptionCount++;
-						allExceptionCount++;
-						detailException.put(midCategoryId, e.getMessage());
+						if(!detailException.containsKey(midCategoryId)){
+							allExceptionCount++;
+							detailException.put(midCategoryId, e.getMessage());
+						}
 					}
 				}
 				logger.info("총 대분류 개수 : "+bigCategory.size());
@@ -355,7 +361,6 @@ public class CategoryAndProductScheduler {
 											continue;
 										}
 										
-										String smallProductMainPhotoLink = el.select(".img_area ._productLazyImg").attr("data-original");
 										String smallProductMaker = el.select(".info_mall .mall_txt .mall_img").attr("title");
 										if(smallProductMaker.equals("")){
 											smallProductMaker = "-";
@@ -385,7 +390,7 @@ public class CategoryAndProductScheduler {
 										
 										doc = Jsoup.connect("http://shopping.naver.com/detail/detail.nhn?nv_mid="+smallProductId+
 												"&cat_id="+midCategory.get(i).getMidCategoryId()+"&frm=NVSHMDL&query=").timeout(0).get();
-										smallProductMainPhotoLink = doc.select("#summary_thumbnail_img").attr("src");
+										String smallProductMainPhotoLink = doc.select("#summary_thumbnail_img").attr("src");
 										blliSmallProductVO.setSmallProductMainPhotoLink(
 											blliFileDownLoader.imgFileDownLoader(smallProductMainPhotoLink, smallProductId, "smallProduct"));
 										
@@ -492,8 +497,10 @@ public class CategoryAndProductScheduler {
 						flag = false;
 					}catch(Exception e){
 						exceptionCount++;
-						allExceptionCount++;
-						detailException.put(smallProductId, e.getMessage());
+						if(!detailException.containsKey(smallProductId)){
+							allExceptionCount++;
+							detailException.put(smallProductId, e.getMessage());
+						}
 					}
 				}
 				logger.info("총 중분류 개수 : "+midCategory.size());

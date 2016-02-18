@@ -345,8 +345,10 @@ public class PostingScheduler {
 						flag = false;
 					}catch(Exception e){
 						exceptionCount++;
-						allExceptionCount++;
-						detailException.put(postingVO.getPostingUrl(), e.getMessage());
+						if(!detailException.containsKey(postingVO.getPostingUrl())){
+							allExceptionCount++;
+							detailException.put(postingVO.getPostingUrl(), e.getMessage());
+						}
 					}
 				}
 				logger.info("총 소제품 개수 : "+smallProductList.size());

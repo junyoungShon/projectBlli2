@@ -32,7 +32,7 @@ public class BlliPostingVO {
 	private int isScrapped;
 	private ArrayList<String> imageList;
 	private HashMap<String, String> smallProductImage;
-	private ArrayList<String> smallProductList;
+	private ArrayList<BlliSmallProductVO> smallProductList;
 	//16.02.05추가
 	private String postingDbInsertDate;
 	//16.02.17추가
@@ -289,12 +289,12 @@ public class BlliPostingVO {
 	}
 
 
-	public ArrayList<String> getSmallProductList() {
+	public ArrayList<BlliSmallProductVO> getSmallProductList() {
 		return smallProductList;
 	}
 
 
-	public void setSmallProductList(ArrayList<String> smallProductList) {
+	public void setSmallProductList(ArrayList<BlliSmallProductVO> smallProductList) {
 		this.smallProductList = smallProductList;
 	}
 

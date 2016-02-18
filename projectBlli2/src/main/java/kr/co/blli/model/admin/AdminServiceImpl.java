@@ -177,7 +177,7 @@ public class AdminServiceImpl implements AdminService{
 		String imgSource = "";
 		HashMap<String, String> smallProductImageList = new HashMap<String, String>();
 		for(int i=0;i<postingList.size();i++){
-			ArrayList<String> smallProductList = new ArrayList<String>();
+			ArrayList<BlliSmallProductVO> smallProductList = new ArrayList<BlliSmallProductVO>();
 			//이전 postingUrl과 현재 postingUrl이 같을 경우 해당 포스팅VO를 지우고 인덱스를 -1 해줌
 			if(postingList.get(i).getPostingUrl().equals(url)){ 
 				postingList.remove(i);
@@ -185,7 +185,10 @@ public class AdminServiceImpl implements AdminService{
 				continue;
 			}else{ //이전 postingUrl과 현재 postingUrl이 다를 경우 현재 postingUrl에 해당하는 소제품 목록과 대표 이미지 vo에 저장
 				url = postingList.get(i).getPostingUrl();
-				smallProductList.add(postingList.get(i).getSmallProduct());
+				BlliSmallProductVO smallProductVO = new BlliSmallProductVO();
+				smallProductVO.setSmallProduct(postingList.get(i).getSmallProduct());
+				smallProductVO.setSmallProductId(postingList.get(i).getSmallProductId());
+				smallProductList.add(smallProductVO);
 				Document doc = Jsoup.connect("http://shopping.naver.com/search/all_search.nhn?query="+postingList.get(i).getSmallProduct()+
 						"&pagingIndex=1&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&frm=NVSHMDL").get();
 				Elements imgTag = doc.select("img");
@@ -198,7 +201,10 @@ public class AdminServiceImpl implements AdminService{
 				}
 				for(int j=i+1;j<postingList.size();j++){
 					if(url.equals(postingList.get(j).getPostingUrl())){
-						smallProductList.add(postingList.get(j).getSmallProduct());
+						smallProductVO = new BlliSmallProductVO();
+						smallProductVO.setSmallProduct(postingList.get(j).getSmallProduct());
+						smallProductVO.setSmallProductId(postingList.get(j).getSmallProductId());
+						smallProductList.add(smallProductVO);
 						if(!smallProductImageList.containsKey(postingList.get(j).getSmallProduct())){
 							doc = Jsoup.connect("http://shopping.naver.com/search/all_search.nhn?query="+postingList.get(j).getSmallProduct()+
 									"&pagingIndex=1&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&frm=NVSHMDL").get();
@@ -280,14 +286,18 @@ public class AdminServiceImpl implements AdminService{
 			String postingUrl = urlAndImage.get(i).get("postingUrl").toString();
 			String postingPhotoLink = urlAndImage.get(i).get("postingPhotoLink").toString();
 			String smallProduct = urlAndImage.get(i).get("smallProduct").toString();
+			String smallProductId = urlAndImage.get(i).get("smallProductId").toString();
 			BlliPostingVO vo = new BlliPostingVO();
 			vo.setPostingUrl(postingUrl);
 			vo.setPostingPhotoLink(postingPhotoLink);
 			vo.setSmallProduct(smallProduct);
+			vo.setSmallProductId(smallProductId);
 			if(delete.equals("YES")){
 				adminDAO.deletePosting(vo);
 			}else{
 				adminDAO.selectProduct(vo);
+				adminDAO.updatePostingCount(vo);
+				adminDAO.updateSmallProductStatus(smallProductId);
 			}
 		}
 	}
@@ -322,6 +332,7 @@ public class AdminServiceImpl implements AdminService{
 					adminDAO.updatePostingCount(vo);
 				}
 			}
+			adminDAO.updateSmallProductStatus(smallProductId);
 		}
 		insertAndUpdateWordCloud(blliPostingVOList);
 	}
@@ -354,7 +365,7 @@ public class AdminServiceImpl implements AdminService{
 						smallProductWhenToUseMin = "0";
 					}
 					if(smallProductWhenToUseMax == null || smallProductWhenToUseMax == ""){
-						smallProductWhenToUseMax = "100";
+						smallProductWhenToUseMax = "36";
 					}
 					vo.setSmallProductWhenToUseMin(Integer.parseInt(smallProductWhenToUseMin));
 					vo.setSmallProductWhenToUseMax(Integer.parseInt(smallProductWhenToUseMax));
@@ -366,6 +377,7 @@ public class AdminServiceImpl implements AdminService{
 					}
 				}
 			}
+			adminDAO.updateSmallProductStatus(vo.getSmallProductId());
 		}
 	}
 	@Override

@@ -61,6 +61,8 @@ public interface AdminDAO {
 	void notAdvertisingPosting(BlliPostingVO postingVO);
 
 	List<BlliMemberVO> checkMember();
-	
+
+	void updateSmallProductStatus(String smallProductId);
+
 }
  

@@ -113,6 +113,10 @@
 	font-weight:bold;
 	font-family:'Nanum Barun Gothic';
 	line-height:30px;
+	margin-top: 65px;
+}
+.scrape_category a:HOVER {
+	color: #ff7f50;
 }
 </style>
 
@@ -152,6 +156,45 @@ function goBlogPosting(targetURL,smallProductId){
 }
 
 $(document).ready(function(){
+	
+	var totalPage = 0;
+	var currPage = 0;
+	var currMidCategory = "";
+	
+	$( '.jbMenu' ).addClass( 'jbFixed' );
+	
+	//스크롤 이벤트
+	$(window).on("scroll",function () {
+		infiniteScroll();
+	});
+	
+	//스크롤 감지 및 호출
+	function infiniteScroll(){
+		var deviceMargin = 0; // 기기별 상단 마진
+		var $scrollTop = $(window).scrollTop();
+		var $contentsHeight = Math.max($("html").height(),$("#body").height());
+		var $screenHeight = window.innerHeight || document.documentElement.clientHeight || 
+								document.getElementsByTagName("body")[0].clientHeight; // 스크린 높이 구하기
+		if($scrollTop ==  $contentsHeight - $screenHeight) {
+			if(currMidCategory == "" || currMidCategory == "allMidCategory"){
+				totalPage = $("#last_page").val();
+			}
+			if(totalPage > currPage){
+				setTimeout(function(){
+					currPage++;
+					if(currMidCategory == "" || currMidCategory == "allMidCategory"){
+						$(".page_"+currPage).slideDown(700);
+					}else{
+						for(var i=((5*currPage)+1);i<(5*(currPage+1)+1);i++){
+							$("."+currMidCategory).children("."+i).parent().slideDown();
+							$("."+currMidCategory).children("."+i).children("div").slideDown(700);
+						}
+					}
+				}, 200);
+			}
+		}
+	}
+	
 	//포스팅 스크랩 스크립트
 	$(".postingScrapeBtn").click(function(){
 		var comp = $(this);
@@ -219,20 +262,41 @@ $(document).ready(function(){
 		}); 
 	});
 	$(".midCategory").click(function(){
-		var midCategory = $(this).text();
+		currMidCategory = $(this).text();
+		$("#"+currMidCategory).css("color", "#ff7f50");
+		$(".allMidCategory").css("color", "black");
+		currPage = 0;
+		totalPage = ($("."+currMidCategory).length)/5;
 		var midCategoryLength = $(this).parent().prev().val();
 		for(var i=0;i<midCategoryLength;i++){
-			if($(this).parent().children("input").eq(i).val() != midCategory){
-				$("."+$(this).parent().children("input").eq(i).val()).hide();
+			var midCategory = $(this).parent().children("input").eq(i).val();
+			if(midCategory != currMidCategory){
+				$("."+midCategory).hide();
+				$("#"+midCategory).css("color", "black");
 			}else{
-				$("."+midCategory).show();
+				for(var j=1;j<6;j++){
+					$("."+currMidCategory).children("."+j).hide();
+					$("."+currMidCategory).children("."+j).show();
+					$("."+currMidCategory).children("."+j).children("div").hide();
+					$("."+currMidCategory).children("."+j).children("div").show();
+					$("."+currMidCategory).children("."+j).parent().hide();
+					$("."+currMidCategory).children("."+j).parent().slideDown(700);
+				}
 			}
 		}
 	});
 	$(".allMidCategory").click(function(){
+		currMidCategory = "allMidCategory";
+		$("."+currMidCategory).css("color", "#ff7f50");
+		$(".midCategory").css("color", "black");
+		currPage = 0;
 		var midCategoryLength = $(this).parent().prev().val();
 		for(var i=0;i<midCategoryLength;i++){
-			$("."+$(this).parent().children("input").eq(i).val()).show();
+			$("."+$(this).parent().children("input").eq(i).val()).hide();
+			$("."+$(this).parent().children("input").eq(i).val()).slideDown(700);
+		}
+		for(var i=1;i<$("#last_page").val()+1;i++){
+			$(".page_"+i).hide();
 		}
 	});
 });
@@ -241,21 +305,39 @@ $(document).ready(function(){
 	<input type="hidden" value="${fn:length(requestScope.midCategoryList)}">
 	<div class="scrape_category">
 		<c:if test="${fn:length(requestScope.midCategoryList) >= 2}">
-			<a href="#" class="allMidCategory">전체</a> &nbsp; &nbsp; 
+			<a href="#" class="allMidCategory">전체</a>(${fn:length(requestScope.scrapeList)}) &nbsp; &nbsp; 
 		</c:if>
 		<c:forEach items="${requestScope.midCategoryList}" var="midCategoryList">
+			<c:set var="midCategoryCount" value="${0}"/>
 			<input type="hidden" value="${midCategoryList}">
-			<a href="#" class="midCategory">${midCategoryList}</a> &nbsp; &nbsp;  	
+			<c:forEach items="${requestScope.scrapeList}" var="scrape">
+				<c:if test="${scrape.midCategory == midCategoryList}">
+					<c:set var="midCategoryCount" value="${midCategoryCount + 1}"/>
+				</c:if>
+			</c:forEach>
+			<a href="#" class="midCategory" id="${midCategoryList}">${midCategoryList}</a>(${midCategoryCount}) &nbsp; &nbsp;  	
 		</c:forEach>
 	</div>
 	<c:forEach items="${requestScope.midCategoryList}" var="midCategoryList">
+		<c:set var="mid_category_index" value="${0}"/>
 		<c:forEach items="${requestScope.scrapeList}" var="postingList" varStatus="index">
-			<c:if test="${midCategoryList == postingList.midCategory}">
+			<c:if test="${midCategoryList == postingList.midCategory}" >
+				<c:set var="bg_color_index" value="${bg_color_index + 1}"/>
+				<c:set var="mid_category_index" value="${mid_category_index + 1}"/>
 				<div class="${midCategoryList}">
-					<c:if test="${index.count%2 == 0}">
+					<div class="${mid_category_index}">
+					<c:if test="${bg_color_index > 5*(page_index) && bg_color_index <= 5*(page_index+1)}">
+						<c:if test="${page_index >= 1}">
+							<div class="page_${page_index}" style="display: none;">
+						</c:if>
+						<c:if test="${bg_color_index == 5*(page_index+1)}">
+							<c:set var="page_index" value="${page_index +1}"/>
+						</c:if>
+					</c:if>
+					<c:if test="${bg_color_index%2 == 0}">
 						<div class="scrape_bg_color_one">
 					</c:if>
-					<c:if test="${index.count%2 == 1}">
+					<c:if test="${bg_color_index%2 == 1}">
 						<div class="scrape_bg_color_two">
 					</c:if>
 					<div class="scrape_info">
@@ -310,15 +392,18 @@ $(document).ready(function(){
 										<i class="fa fa-thumbs-down postingDisLikeBtn" style="color: hotpink" data-tooltip-text="광고,상관없는 포스팅등은 가차없이 싫어요!"></i>
 										<span style="font-size: 11px; line-height: 16px ;margin-right:15px" class="disLikeCount">${postingList.postingDislikeCount}</span>
 									</c:if>
-								</div>
-							</div>
-						</div>
-						</div>
-					</div>
-				</div>
-			</c:if>
-		</c:forEach>
+								</div> <!-- scrape_sns_info -->
+							</div> <!-- scrape_fl -->
+						</div> <!-- scrape_content -->
+					</div> <!-- scrape_info -->
+				</div> <!-- scrape_bg_color_one -->
+			</div> <!-- page_${page_index} -->
+		</div> <!-- ${mid_category_index} -->
+		</div> <!-- ${midCategoryList} -->
+	</c:if>
 	</c:forEach>
+	</c:forEach>
+<input type="hidden" value="${page_index}" id="last_page">
 </c:if>
 <c:if test="${fn:length(requestScope.scrapeList) == 0}">
 스크랩하신 블로그 포스팅이 없습니다.
