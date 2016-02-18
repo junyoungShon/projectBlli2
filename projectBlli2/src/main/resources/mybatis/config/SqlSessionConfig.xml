@@ -17,11 +17,8 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<typeAlias type="kr.co.blli.model.vo.BlliNotRecommMidCategoryVO" alias="blliNotRecommMidCategoryVO"/>
 		<typeAlias type="kr.co.blli.model.vo.BlliSmallProductBuyLinkVO" alias="blliSmallProductBuyLinkVO"/>
 		<typeAlias type="kr.co.blli.model.vo.BlliWordCloudVO" alias="blliWordCloudVO"/>
-<<<<<<< HEAD
 		<typeAlias type="kr.co.blli.model.vo.BlliScheduleVO" alias="blliScheduleVO"/>
-=======
 		<typeAlias type="kr.co.blli.model.vo.BlliMemberScrapeVO" alias="blliMemberScrapeVO"/>
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 	</typeAliases>	
     <!-- mybatis sql 정의 xml을 mapping  -->
 	<mappers>

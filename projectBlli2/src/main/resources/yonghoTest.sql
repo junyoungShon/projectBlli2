@@ -1,5 +1,4 @@
 
-
 drop table blli_member cascade constraint;
 CREATE TABLE blli_member (
 	member_id            VARCHAR2(30) NOT NULL primary key,

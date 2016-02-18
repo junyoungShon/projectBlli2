@@ -18,21 +18,8 @@
 		<put-attribute name="main" value="/WEB-INF/views/blli/{1}.jsp"/>
 	</definition>
 	
-<<<<<<< HEAD
-	<definition name="modifyMemberInfoPage" extends="home">
-		<put-attribute name="main"  value="/WEB-INF/views/blli/modifyMemberInfo.jsp" />
-	</definition>
-		
-	<definition name="calendarPage" extends="home">
-		<put-attribute name="main"  value="/WEB-INF/views/calendar/calendar.jsp" />
-	</definition>
-		
-	<definition name="addSchedulePage" extends="home">
-		<put-attribute name="main"  value="/WEB-INF/views/calendar/addSchedule.jsp" />
-=======
 	<definition name="calendar_*" extends="home">
 		<put-attribute name="main"  value="/WEB-INF/views/calendar/{1}.jsp" />
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 	</definition>	
 	
 </tiles-definitions>
