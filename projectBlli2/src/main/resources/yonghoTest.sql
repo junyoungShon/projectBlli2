@@ -73,3 +73,20 @@ select * from blli_small_product;
 
 select product_db_insert_date from blli_small_product;
 
+update blli_small_product set small_product_status='confirmed' where small_product_status='unconfirmed';
+
+
+insert into blli_schedule (schedule_id, member_id, baby_name, schedule_date, schedule_title, schedule_location, schedule_content)
+		values (blli_schedule_seq.nextval,'sk1597530@gmail.com','떵이','20001216','제모오옥','장소오오','내요오옹');
+		
+select * from blli_schedule;
+
+delete from blli_schedule;
+
+update blli_posting set posting_status='confirmed';
+
+update blli_small_product set small_product_whentouse_min='2' where small_product_status='confirmed';
+update blli_small_product set small_product_whentouse_max='8' where small_product_status='confirmed';
+
+
+update blli_schedule set schedule_location = '0000000000000000', schedule_title = '00000000000000', schedule_content = '000000000000' where schedule_id = '266';

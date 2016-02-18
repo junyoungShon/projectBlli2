@@ -52,7 +52,7 @@ public class MailScheduler {
 	  * @param mailForm
 	 * @throws ParseException 
 	  */
-	@Scheduled(cron = "00 00 00 * * *") // 매일 00시 월령이 바뀐 자녀를 가진 회원에게 월령병 추천 제품 메일 발송
+	@Scheduled(cron = "00 00 00 * * *") // 매일 00시 월령이 바뀐 자녀를 가진 회원에게 월령별 추천 제품 메일 발송
 	//@Scheduled(cron = "00/10 * * * * *") //테스트용
 	public void sendRecommendingMail()
 			throws FileNotFoundException, URISyntaxException, UnsupportedEncodingException, MessagingException, ParseException {

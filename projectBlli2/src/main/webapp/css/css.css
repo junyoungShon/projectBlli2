@@ -451,6 +451,7 @@ img {
 }
 
 .in_fr{
+	position:static;
 	width:1040px;
 	margin:auto;
 }
@@ -517,12 +518,12 @@ img {
 }
 
 .result_ti{
-	height:45px;
+	height:40px;
 	background:url(../img/title_dot.png) no-repeat 5px ;
 	font-family:'Nanum Barun Gothic';
 	padding-left:25px;
 	font-weight:bold;
-	font-size:15px;
+	font-size:20px;
 	line-height:40px;
 }
 
@@ -1082,13 +1083,15 @@ img {
 /* calpendar_plus */
 
 .cal_plus_form{
-	position:fixed;
+	border:1px solid #ff8040;
 	width:280px;
-	height:100%;
-	background:#fee04a;
+	height:90.5%;
+	background:#ffffcc;
 	right:0;
 	font-family:'Nanum Barun Gothic';
 	padding:20px;
+	position:absolute;
+	top:57px;
 }
 
 .cal_plus_ti{

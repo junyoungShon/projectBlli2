@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberVO;
+import kr.co.blli.model.vo.BlliScheduleVO;
 @Repository
 public class MemberDAOImpl implements MemberDAO{
 	@Resource
@@ -95,6 +96,25 @@ public class MemberDAOImpl implements MemberDAO{
 	@Override
 	public void updateMemberPasswordToTemporaryPassword(BlliMemberVO blliMemberVO) {
 		sqlSessionTemplate.update("member.updateMemberPasswordToTemporaryPassword", blliMemberVO);
+	}
+	@Override
+	public int addSchedule(BlliScheduleVO bsvo) {
+		sqlSessionTemplate.insert("member.addSchedule", bsvo);
+		//System.out.println("MemberDAOImpl:"+ bsvo.getScheduleId());
+		return bsvo.getScheduleId();
+	}
+	@Override
+	public BlliScheduleVO selectSchedule(BlliScheduleVO bsvo) {
+		return sqlSessionTemplate.selectOne("member.selectSchedule", bsvo);
+	}
+	@Override
+	public void updateSchedule(BlliScheduleVO bsvo) {
+		System.out.println("MemberDAOImpl: "+bsvo);
+		sqlSessionTemplate.update("member.updateSchedule", bsvo);
+	}
+	@Override
+	public void deleteSchedule(BlliScheduleVO bsvo) {
+		sqlSessionTemplate.update("member.deleteSchedule", bsvo);
 	}
 
 

@@ -1,20 +1,13 @@
 package kr.co.blli.controller;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 import java.text.ParseException;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
-import javax.mail.Message.RecipientType;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -23,7 +16,6 @@ import kr.co.blli.model.member.MemberService;
 import kr.co.blli.model.product.ProductService;
 import kr.co.blli.model.security.BlliUserDetailsService;
 import kr.co.blli.model.vo.BlliBabyVO;
-import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
@@ -32,27 +24,21 @@ import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
 import kr.co.blli.model.vo.BlliPostingDisLikeVO;
 import kr.co.blli.model.vo.BlliPostingLikeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
+import kr.co.blli.model.vo.BlliScheduleVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.velocity.VelocityConfig;
 
 @Controller
 public class MemberController {
@@ -142,7 +128,9 @@ public class MemberController {
 			List<BlliPostingVO> blliPostingVOList = productService.selectPostingBySmallProductList(blliSmallProductVOList,blliMemberVO.getMemberId(),"1");
 			System.out.println(blliSmallProductVOList);
 			for(int i=0;i<blliSmallProductVOList.size();i++){
-				System.out.println(i+"소제품 명"+blliSmallProductVOList.get(i).getSmallProduct());
+				if(blliSmallProductVOList.get(i)!=null) { //용호 추가 - null포인터 방지
+					System.out.println(i+"소제품 명"+blliSmallProductVOList.get(i).getSmallProduct());
+				}
 			}
 			System.out.println(blliPostingVOList);
 			mav.setViewName("home");
@@ -545,16 +533,20 @@ public class MemberController {
 		return "calendarPage";
 	}
 	
-	/**
-	  * @Method Name : goToAddScheduleOnCalendar
-	  * @Method 설명 : 달력 페이지에서 일자를 클릭하면 일정 추가 페이지로 변경
-	  * @작성일 : 2016. 2. 15.
-	  * @작성자 : yongho
-	  * @param today
-	  * @return
-	  */
-	@RequestMapping("goToAddScheduleOnCalendar.do")
-	public ModelAndView goToAddScheduleOnCalendar(String today) {
-		return new ModelAndView("addSchedulePage");
+	
+	@RequestMapping("addSchedule.do")
+	@ResponseBody
+	public BlliScheduleVO addSchedule(BlliScheduleVO bsvo) {
+		System.out.println("MemberController: "+bsvo);
+		bsvo.setScheduleId(memberService.addSchedule(bsvo)); 
+		return bsvo;
+	}
+	
+	@RequestMapping("updateSchedule.do")
+	@ResponseBody
+	public BlliScheduleVO updateSchedule(BlliScheduleVO bsvo) {
+		System.out.println("MemberController: "+bsvo);
+		memberService.updateSchedule(bsvo);
+		return memberService.selectSchedule(bsvo);
 	}
 }

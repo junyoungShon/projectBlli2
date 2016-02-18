@@ -31,7 +31,7 @@
 																	<li>
 																		<div style='float:left; text-align:center; margin:15px'>
 																			<a href='http://bllidev.dev/projectBlli2/searchSmallProduct.do?searchWord=${rplist.midCategory}' style="text-decoration:none;">
-																				<img src='http://cfile9.uf.tistory.com/image/120D56354DD0D75F24F8A4' style='width:115px; height: 115px; border-radius:15px;'>
+																				<img src='http://bllidev.dev/projectBlli2/${rplist.midCategoryMainPhotoLink}' style='width:115px; height: 115px; border-radius:15px;'>
 																				<p style="font-size:15px; font-weight: bold; font-family:'Nanum Barun Gothic';">
 																					${rplist.midCategory}
 																				</p>

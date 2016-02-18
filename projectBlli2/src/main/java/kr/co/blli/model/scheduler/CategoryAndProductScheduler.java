@@ -254,7 +254,6 @@ public class CategoryAndProductScheduler {
 		LinkedHashMap<String, String> detailException = new LinkedHashMap<String, String>();
 		int naverShoppingRank = 0;
 		
-		label:
 		while(flag){
 			try{	
 				for(int i=count;i<midCategory.size();i++){
@@ -457,11 +456,6 @@ public class CategoryAndProductScheduler {
 						allSmallProductCount += naverShoppingRank;
 						naverShoppingRank = 0;
 						
-						long end = System.currentTimeMillis();  //종료시간
-						//종료-시작=실행시간		
-						if((end-start)/1000.0 > 60*3){ //3시간을 초과하면 실행 중지
-							break label;
-						}
 					}while(page <= lastPage);
 				}
 				flag = false;

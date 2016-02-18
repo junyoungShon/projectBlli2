@@ -12,7 +12,7 @@ $(document).ready(function(){
 	});
 });
 </script>
-<footer style="width: 100% ; float: left; text-align: center; background-color: ghostwhite;">
+<footer style="width: 100% ; float: left; text-align: center; background-color: ghostwhite; z-index:1;">
 	<div class="fl login_bottom_ft">
 			</div>
 	

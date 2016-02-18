@@ -412,7 +412,7 @@ public class PostingScheduler {
 					productDAO.updateSearchTime(smallProductList.get(i).getSmallProductId());
 					end = System.currentTimeMillis();  //종료시간
 					//종료-시작=실행시간		
-					if((end-start)/1000.0 > 60*5){ //3시간을 초과하면 실행 중지
+					if((end-start)/1000.0 > 60*60){ //3시간을 초과하면 실행 중지
 						break label;
 					}
 				} //for
@@ -435,7 +435,7 @@ public class PostingScheduler {
 		while(postingUrlList.hasNext()){
 			postingUrl = postingUrlList.next();
 			logList.add("Exception이 발생한 postingUrl : "+postingUrl);
-			logList.add("Exception 내용 : "+detailException.get(postingUrlList));
+			logList.add("Exception 내용 : "+detailException.get(postingUrl));
 		}
 		end = System.currentTimeMillis();  //종료시간
 		//종료-시작=실행시간		

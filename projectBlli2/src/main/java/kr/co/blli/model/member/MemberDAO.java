@@ -5,6 +5,7 @@ import java.util.List;
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberVO;
+import kr.co.blli.model.vo.BlliScheduleVO;
 
 public interface MemberDAO {
 
@@ -34,5 +35,9 @@ public interface MemberDAO {
 	public void deleteBabyInfo(BlliMemberVO blliMemberVO);
 	public String findMemberNameByEmail(String memberEmail);
 	public void updateMemberPasswordToTemporaryPassword(BlliMemberVO blliMemberVO);
+	public int addSchedule(BlliScheduleVO bsvo);
+	public BlliScheduleVO selectSchedule(BlliScheduleVO bsvo);
+	public void updateSchedule(BlliScheduleVO bsvo);
+	public void deleteSchedule(BlliScheduleVO bsvo);
 
 }

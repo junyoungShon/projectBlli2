@@ -27,6 +27,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="mailSubject" column="mail_subject"/>
  		<result property="mailContentFile" column="mail_content_file"/>
  	</resultMap>
+ 	<!-- BlliScheduleVO Result Map 설정 -->
+ 	<resultMap type="blliScheduleVO" id="bsvRM">
+ 		<result property="scheduleId" column="schedule_id"/>
+ 		<result property="memberId" column="member_id"/>
+ 		<result property="babyName" column="baby_name"/>
+ 		<result property="scheduleDate" column="schedule_date"/>
+ 		<result property="scheduleTitle" column="schedule_title"/>
+ 		<result property="scheduleContent" column="schedule_content"/>
+ 		<result property="scheduleLocation" column="schedule_location"/>
+ 		<result property="scheduleCheckState" column="schedule_check_state"/>
+ 	</resultMap>
  	
  	<!-- 준영 작성 쿼리 -->
  	<!-- id로 회원의 존재 여부를 찾습니다. -->
@@ -112,9 +123,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateMemberPasswordToTemporaryPassword">
 		update blli_member set member_password = #{memberPassword} where member_email = #{memberEmail}
 	</update>
+	<!-- 회원의 아이 일정을 추가하고  scheduleId를 받아온다 -->
+	<insert id="addSchedule">
+		<selectKey resultType="Integer" keyProperty="scheduleId" order="BEFORE">
+            select blli_schedule_seq.nextval from dual
+		</selectKey>   
+		insert into blli_schedule (schedule_id, member_id, baby_name, schedule_date, schedule_title, schedule_location, schedule_content)
+		values (#{scheduleId},#{memberId},#{babyName},#{scheduleDate},#{scheduleTitle},#{scheduleLocation},#{scheduleContent})
+	</insert>
+	<!-- 일정을 수정한다. -->
+	<update id="updateSchedule">
+		update blli_schedule set schedule_location = #{scheduleLocation}, schedule_title = #{scheduleTitle}, schedule_content = #{scheduleContent} 
+		where schedule_id = #{scheduleId}
+	</update>
+	<!-- 일정ID로 해당 일정 정보를 가져온다 -->
+	<select id="selectSchedule" resultMap="bsvRM">
+		select member_id, baby_name, to_char(schedule_date) as schedule_date, schedule_title, schedule_content, schedule_location
+		from blli_schedule
+		where schedule_id = #{scheduleId}
+	</select>
 	<!-- 용호 쿼리 끝 -->
 	
- </mapper>
+ </mapper> 
  
  
  

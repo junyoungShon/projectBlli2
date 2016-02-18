@@ -440,7 +440,7 @@ public class AdminServiceImpl implements AdminService{
 		BlliDetailException exceptionVO = null;
 		int number = 1;
 		try {
-			BufferedReader in = new BufferedReader(new FileReader("C:\\Users\\PARK\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\logFile\\blliLog.log"));
+			BufferedReader in = new BufferedReader(new FileReader("C:\\Users\\"+System.getProperty("user.name")+"\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\logFile\\blliLog.log"));
 			String message;
 			String exceptionContent = "";
 			while ((message = in.readLine()) != null) {

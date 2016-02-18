@@ -76,7 +76,7 @@ ${requestScope.loginFail}
 					<input type="checkbox" name="remember-me" style="width: 15px; height: 15px; margin-top:20px;"/> 자동로그인 체크
 				</label>
 				<br>
-				<input type="button" class="loginButton" value="로그인" style="margin-top:20px;" > 
+				<input type="button" class="loginButton" value="로그인" style="margin-top:20px;"> 
 			</form>
 			<br>
 			<a href="${initParam.root}goFindPasswordPage.do"><font color="white"><b>비밀번호가 뭐였지..?</b></font></a>

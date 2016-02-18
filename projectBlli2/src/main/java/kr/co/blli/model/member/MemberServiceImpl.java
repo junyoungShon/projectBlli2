@@ -22,6 +22,7 @@ import kr.co.blli.model.security.BlliUserDetails;
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberVO;
+import kr.co.blli.model.vo.BlliScheduleVO;
 import kr.co.blli.utility.BlliFileUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -442,5 +443,18 @@ public class MemberServiceImpl implements MemberService {
 		return sb.toString();
 	}
 
-	
+	@Override
+	public int addSchedule(BlliScheduleVO bsvo) {
+		return memberDAO.addSchedule(bsvo);
+	}
+
+	@Override
+	public void updateSchedule(BlliScheduleVO bsvo) {
+		memberDAO.updateSchedule(bsvo);
+	}
+
+	@Override
+	public BlliScheduleVO selectSchedule(BlliScheduleVO bsvo) {
+		return memberDAO.selectSchedule(bsvo);
+	}
 }
