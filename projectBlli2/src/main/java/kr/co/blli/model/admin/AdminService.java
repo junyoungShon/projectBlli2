@@ -10,13 +10,9 @@ import java.util.Map;
 
 import javax.mail.MessagingException;
 
-<<<<<<< HEAD
 import kr.co.blli.model.vo.BlliPostingVO;
-=======
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 import kr.co.blli.model.vo.BlliLogVO;
 import kr.co.blli.model.vo.BlliMemberVO;
-import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.ListVO;
 
 public interface AdminService {
@@ -41,11 +37,9 @@ public interface AdminService {
 	
 	public ArrayList<BlliLogVO> checkLog();
 
-<<<<<<< HEAD
 	public void snsShareCountUp(String smallProductId);
 
 	public void allProductDownLoader();
-=======
 	public ArrayList<BlliPostingVO> checkPosting();
 
 	public void deletePosting(BlliPostingVO postingVO);
@@ -53,5 +47,4 @@ public interface AdminService {
 	public void notAdvertisingPosting(BlliPostingVO postingVO);
 
 	public ArrayList<BlliMemberVO> checkMember();
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 }

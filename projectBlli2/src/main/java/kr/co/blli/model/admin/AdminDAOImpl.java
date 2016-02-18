@@ -115,7 +115,6 @@ public class AdminDAOImpl implements AdminDAO{
 		sqlSessionTemplate.insert("admin.insertWordCloud", blliWordCloudVO);
 	}
 	@Override
-<<<<<<< HEAD
 	public void snsShareCountUp(String smallProductId) {
 		System.out.println("타겟 아이디"+smallProductId);
 		sqlSessionTemplate.update("admin.snsShareCountUp", smallProductId);
@@ -127,7 +126,8 @@ public class AdminDAOImpl implements AdminDAO{
 	@Override
 	public List<BlliSmallProductVO> selectAllSmallProduct() {
 		return sqlSessionTemplate.selectList("admin.selectAllSmallProduct");
-=======
+	}
+	@Override
 	public List<BlliPostingVO> checkPosting() {
 		return sqlSessionTemplate.selectList("admin.checkPosting");
 	}
@@ -138,6 +138,5 @@ public class AdminDAOImpl implements AdminDAO{
 	@Override
 	public List<BlliMemberVO> checkMember() {
 		return sqlSessionTemplate.selectList("admin.checkMember");
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 	}
 }

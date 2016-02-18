@@ -152,6 +152,7 @@ public class PostingMarker {
 			int naverShoppingRank = blliSmallProductVO.getNaverShoppingRank();
 			int naverShoppinRankPoint = (1-(naverShoppingRank/totalSmallProductNum))*NAVERSHOPINGRANKINGDISTRIBUTION;
 			System.out.println("네이버 쇼핑 기준 점수 : "+naverShoppinRankPoint);
+			blliSmallProductVO.setSmallProductScore(blliSmallProductVO.getSmallProductScore()+naverShoppinRankPoint);
 			
 			//공유 횟수를 통한 채점
 			
@@ -162,7 +163,8 @@ public class PostingMarker {
 			}else if(snsShareCount>0&&snsShareCount<PAGESHAREPOINTDISTRIBUTION){
 				snsShareCountPoint = PAGESHAREPOINTDISTRIBUTION - (PAGESHAREPOINTDISTRIBUTION-snsShareCount);
 			}
-			blliSmallProductVO.setSmallProductScore(blliSmallProductVO.getSmallProductScore()+naverShoppinRankPoint);
+			System.out.println("공유 횟수를 통한 채점 : "+snsShareCountPoint);
+			blliSmallProductVO.setSmallProductScore(blliSmallProductVO.getSmallProductScore()+snsShareCountPoint);
 			System.out.println("총점 : "+blliSmallProductVO.getSmallProductScore());
 			productDAO.updateProductScore(blliSmallProductVO);
 		}

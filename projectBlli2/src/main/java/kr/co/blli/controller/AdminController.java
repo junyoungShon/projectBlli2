@@ -9,12 +9,8 @@ import javax.annotation.Resource;
 
 import kr.co.blli.model.admin.AdminService;
 import kr.co.blli.model.vo.BlliLogVO;
-<<<<<<< HEAD
-import kr.co.blli.utility.BlliFileDownLoader;
-=======
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliPostingVO;
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -144,7 +140,6 @@ public class AdminController {
 		ArrayList<BlliLogVO> list = (ArrayList<BlliLogVO>)adminService.checkLog();
 		return new ModelAndView("admin/log", "logList", list);
 	}	
-<<<<<<< HEAD
 	/**
 	 * 
 	 * @Method Name : snsShareCountUp
@@ -163,7 +158,6 @@ public class AdminController {
 		adminService.allProductDownLoader();
 	}
 	
-=======
 	@RequestMapping("checkPosting.do")
 	public ModelAndView checkPosting(){
 		ArrayList<BlliPostingVO> list = (ArrayList<BlliPostingVO>)adminService.checkPosting();
@@ -184,5 +178,4 @@ public class AdminController {
 		ArrayList<BlliMemberVO> list = (ArrayList<BlliMemberVO>)adminService.checkMember();
 		return new ModelAndView("admin/checkMember", "memberList", list);
 	}
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 }

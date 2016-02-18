@@ -25,7 +25,7 @@
 		<!-- 서버용 -->
 		<!-- <constructor-arg name="baseDir" value="/usr/bin/apache-tomcat-7.0.64/webapps/projectBlli2/WEB-INF/classes/jhannanum"/> -->
 		<!-- 로컬용 -->
-		<constructor-arg name="baseDir" value="C:\Users\용호\git\projectBlli2\projectBlli2\src\main\resources\jhannanum"/>
+		<constructor-arg name="baseDir" value="C:\Users\junyoung\git\projectBlli2\projectBlli2\src\main\resources\jhannanum"/>
 	</bean>
 	
 	<!-- model 계층 빈 설정 , AOP설정 비워둠 -->
