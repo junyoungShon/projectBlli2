@@ -37,7 +37,7 @@
     </appender>
 	
 	<!-- scheduler Logger -->
-	<logger name="kr.co.blli.aop" additivity="false">
+	<logger name="kr.co.blli.model.scheduler" additivity="false">
 		<level value="info"/>
 		<appender-ref ref="consoleByScheduler" />
 		<appender-ref ref="rollingFileInLocal"/>

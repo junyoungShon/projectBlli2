@@ -7,28 +7,19 @@
 	된 여러 페이지 조합결과 화면이 반환된다. -->
 
 <tiles-definitions>
+
 	<definition name="home" template="/WEB-INF/views/tilesTemplates/layout.jsp">
 		<put-attribute name="header"  value="/WEB-INF/views/tilesTemplates/header.jsp"  />
 		<put-attribute name="footer"  value="/WEB-INF/views/tilesTemplates/footer.jsp"  />
 		<put-attribute name="main"  value="/WEB-INF/views/blli/main.jsp"  />
 	</definition>
 	
-	<definition name="mainPage" extends="home">
-		<put-attribute name="main"  value="/WEB-INF/views/blli/main.jsp" />
+	<definition name="blli_*" extends="home">
+		<put-attribute name="main" value="/WEB-INF/views/blli/{1}.jsp"/>
+	</definition>
+	
+	<definition name="calendar_*" extends="home">
+		<put-attribute name="main"  value="/WEB-INF/views/calendar/{1}.jsp" />
 	</definition>	
 	
-	<definition name="midCategoryDetailPage" extends="home">
-		<put-attribute name="main"  value="/WEB-INF/views/blli/midCategoryDetailPage.jsp" />
-	</definition>	
-	
-	<definition name="smallProductDetailPage" extends="home">
-		<put-attribute name="main"  value="/WEB-INF/views/blli/smallProductDetailPage.jsp" />
-	</definition>	
-	
-	<definition name="modifyBabyInfoPage" extends="home">
-		<put-attribute name="main"  value="/WEB-INF/views/blli/modifyBabyInfo.jsp" />
-	</definition>	
-	<definition name="modifyMemberInfoPage" extends="home">
-		<put-attribute name="main"  value="/WEB-INF/views/blli/modifyMemberInfo.jsp" />
-	</definition>	
 </tiles-definitions>

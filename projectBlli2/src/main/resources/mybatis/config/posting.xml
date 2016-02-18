@@ -25,6 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="smallProduct" column="small_product"/>
  		<result property="smallProductId" column="small_product_id"/>
  		<result property="postingDbInsertDate" column="posting_Db_Insert_Date"/>
+ 		<result property="midCategory" column="mid_category"/>
  	</resultMap>
  	
  	<!-- 현석 쿼리 시작 -->
@@ -32,23 +33,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		select count(posting_url) from blli_posting where posting_url = #{postingUrl}
  	</select>
  	
- 	<!-- <select id="getPostingStatus" resultType="String">
- 		select posting_status from blli_posting where posting_url = #{postingUrl}
- 	</select> -->
- 	
- 	<select id="getAllPostingStatus" resultType="String">
- 		select posting_status from blli_posting where posting_url = #{postingUrl}
- 	</select>
- 	
  	<select id="getPostingStatus" resultType="String">
- 		select posting_status from blli_posting where posting_url like '%' || #{postingUrl} || '%' and small_product_id = #{smallProductId} and posting_title = #{postingTitle}
+ 		select posting_status from blli_posting where posting_url like '%' || #{postingUrl} || '%' and 
+ 		small_product_id = #{smallProductId} and posting_title = #{postingTitle}
  	</select>
  	
  	<update id="updatePosting">
- 		<!-- update blli_posting set posting_rank = #{postingRank}, posting_reply_count = #{postingReplyCount} 
- 		where posting_url like '%' || #{postingUrl} || '%' and small_product_id = #{smallProductId} -->
  		update blli_posting set posting_rank = #{postingRank}
- 		where posting_url like '%' || #{postingUrl} || '%' and small_product_id = #{smallProductId}
+ 		where posting_url like '%' || #{postingUrl} || '%' and small_product_id = #{smallProductId} and posting_title = #{postingTitle}
  	</update>
  	
  	<insert id="insertPosting">
@@ -58,12 +50,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		#{postingContent}, #{postingSummary}, #{postingAuthor}, #{postingDate}, #{postingRank}, #{postingReplyCount}, 'unconfirmed', sysdate)
  	</insert>
  	
- 	<insert id="insertDeadPosting">
- 		insert into blli_posting(small_product_id, posting_url, small_product, posting_title, posting_photo_link, posting_media_count, 
- 		posting_content, posting_summary, posting_author, posting_date, posting_rank, posting_reply_count, posting_status, posting_db_insert_date)
- 		values(#{smallProductId}, #{postingUrl}, ' ', ' ', ' ', 0, ' ', ' ', ' ', sysdate, 0, 0, 'dead', sysdate)
- 	</insert>
-
 	<select id="searchPosting" resultMap="bpvRM">
 		select posting_url, posting_title, posting_photo_link, posting_summary, posting_score, small_product, posting_scrape_count, 
 		posting_like_count, posting_dislike_count, posting_author, posting_date from(
@@ -86,6 +72,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="searchPostingListInProductDetail" resultMap="bpvRM">
 		select posting_url, posting_photo_link, posting_title from blli_posting where small_product = #{searchWord} and posting_status = 'confirmed' order by posting_score desc
+	</select>
+	
+	<select id="getPostingInfo" resultMap="bpvRM">
+		select bsp.small_product, bsp.mid_category, bp.posting_url, bp.posting_title, bp.posting_content, bp.posting_score, 
+		bp.posting_like_count, bp.posting_dislike_count, bp.posting_photo_link, bp.posting_author, bp.posting_date, bp.posting_rank from(
+			select posting_url, posting_title, posting_content, posting_score, posting_like_count, posting_dislike_count, posting_photo_link, 
+			posting_author, posting_date, posting_rank
+			from blli_posting where posting_url = #{postingUrl} and small_product_id = #{smallProductId}
+		)bp, blli_small_product bsp where bsp.small_product_id = #{smallProductId}
+	</select>
+	
+	<select id="getPostingScrapeCount" resultType="int">
+		select count(*) from blli_member_scrape where posting_url = #{postingUrl} and small_product_id = #{smallProductId}
+	</select>
+	
+	<select id="getPostingLikeCount" resultType="int">
+		select count(*) from blli_posting_like where posting_url = #{postingUrl} and small_product_id = #{smallProductId}
+	</select>
+	
+	<select id="getPostingDislikeCount" resultType="int">
+		select count(*) from blli_posting_dislike where posting_url = #{postingUrl} and small_product_id = #{smallProductId}
 	</select>
 	<!-- 현석 쿼리 끝 -->
 	

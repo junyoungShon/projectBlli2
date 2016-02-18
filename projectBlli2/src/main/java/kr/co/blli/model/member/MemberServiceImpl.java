@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import kr.co.blli.model.security.BlliUserDetails;
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMailVO;
+import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.utility.BlliFileUtils;
 
@@ -388,6 +389,16 @@ public class MemberServiceImpl implements MemberService {
 			sb.append(charSet[index]);
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public int denySendEmail(String memberEmail) {
+		return memberDAO.denySendEmail(memberEmail);
+	}
+
+	@Override
+	public ArrayList<BlliMemberScrapeVO> getScrapeInfoByMemberId(BlliMemberVO memberVO) {
+		return (ArrayList<BlliMemberScrapeVO>)memberDAO.getScrapeInfoByMemberId(memberVO);
 	}
 
 	

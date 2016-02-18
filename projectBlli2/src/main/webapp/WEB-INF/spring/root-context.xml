@@ -22,7 +22,10 @@
 	<bean class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" autowire="default"/>
 	<context:component-scan base-package="kr.ac.kaist.swrc.jhannanum"/>
 	<bean class="kr.ac.kaist.swrc.jhannanum.hannanum.Workflow" autowire="default">
-		<constructor-arg name="baseDir" value="${initParam.root}WEB-INF\classes\jhannanum"/>
+		<!-- 서버용 -->
+		<!-- <constructor-arg name="baseDir" value="/usr/bin/apache-tomcat-7.0.64/webapps/projectBlli2/WEB-INF/classes/jhannanum"/> -->
+		<!-- 로컬용 -->
+		<constructor-arg name="baseDir" value="C:\Users\용호\git\projectBlli2\projectBlli2\src\main\resources\jhannanum"/>
 	</bean>
 	
 	<!-- model 계층 빈 설정 , AOP설정 비워둠 -->
@@ -33,13 +36,20 @@
 			<value>oracle.jdbc.driver.OracleDriver</value>
 		</property>
 		<property name="url">
-			<value>jdbc:oracle:thin:@bllidb.crmhrt8hv6dt.ap-northeast-2.rds.amazonaws.com:1521:ORCL</value>
+			<!-- 서버용 -->
+			<!-- <value>jdbc:oracle:thin:@bllidb.crmhrt8hv6dt.ap-northeast-2.rds.amazonaws.com:1521:ORCL</value> -->
+			<!-- 로컬용 -->
+			<value>jdbc:oracle:thin:@127.0.0.1:1521:xe</value>
 		</property>
 		<property name="username">
-			<value>bllidbadmin</value>
+			<!-- 서버용 -->
+			<!-- <value>bllidbadmin</value> -->
+			<value>scott</value>
 		</property>
 		<property name="password">
-			<value>blliadmin890430</value>
+			<!-- 서버용 -->
+			<!-- <value>blliadmin890430</value> -->
+			<value>tiger</value>
 		</property>
 		<property name="maxActive">
 			<value>30</value>

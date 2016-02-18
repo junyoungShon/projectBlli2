@@ -26,11 +26,12 @@
 <div class="main_top">
 		<div class="in_fr">
 			<div class="top_nav">
+				<a href="${initParam.root}goScrapePage.do">스크랩</a>   ㅣ
 				<a href="${initParam.root}goModifyMemberInfoPage.do">회원정보수정</a>   ㅣ   
 				<a href="${initParam.root}goModifyBabyInfoPage.do">아이정보수정</a>   ㅣ  
 				<a href="#">스크랩</a>   ㅣ   <a href="#">알림</a>   ㅣ   
-				<a href="#">아이일정</a>ㅣ <a href="${initParam.root}logout.do">로그아웃</a>
-				
+				<a href="${initParam.root}goCalenderPage.do">아이일정</a> ㅣ
+				<a href="${initParam.root}logout.do">로그아웃</a>
 			</div>
 			<div class="main_logo">
 				<a href="#"><img src="${initParam.root}img/main_logo.png" alt="로고" style="margin-top:-6px"></a>

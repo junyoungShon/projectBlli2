@@ -291,3 +291,213 @@ img {
 	position:fixed;
 	bottom:0px;
 }
+
+/* calendar */
+
+.cal_year{
+	font-size:16px;
+	color:#b4b4b4;
+	font-family:'Nanum Barun Gothic';
+}
+
+.cal_month{
+	color:#000;
+	font-size:40px;
+	font-weight:bold;
+	font-family:'Nanum Barun Gothic';
+}
+
+.cal{
+	 text-align:center;
+	 margin-left:450px;
+}
+
+.calendar{
+	clear:both;
+	padding-top:30px;
+}
+
+.calendar table{
+	margin-bottom:20px;
+}
+
+.calendar th{
+	font-weight:bold;
+	font-family:'Nanum Barun Gothic';
+	font-size:24px;
+	text-align:center;
+	vertical-align:middle;
+	padding:10px;
+}
+
+.calendar td{
+	width:128px;
+	height:100px;
+	border:1px solid #cacaca;
+	padding:10px;
+	font-family:'Nanum Barun Gothic';
+	vertical-align:top;
+}
+
+.cal_day{
+	font-size:18px !important;
+	text-align:left;
+}
+	
+.calendar p{
+	height:19px;
+	font-family:'Nanum Barun Gothic';
+	font-size:12px;
+	padding-top:5px;
+	cursor:pointer;
+}
+
+.cal_bg1{
+	background:#fee04a;
+	vertical-align:middle;
+	cursor:pointer;
+}
+
+.cal_bg2{
+	background:#fe704a;
+	vertical-align:middle;
+	cursor:pointer;
+}
+
+.cal_bg3{
+	background:#9f4afe;
+	vertical-align:middle;
+	cursor:pointer;
+}
+
+/* calendar_plus */
+
+.cal_plus_form{
+	position:fixed;
+	width:280px;
+	height:100%;
+	background:#fee04a;
+	right:0;
+	font-family:'Nanum Barun Gothic';
+	padding:20px;
+}
+
+.cal_plus_ti{
+	font-weight:bold;
+	text-align:center;
+	font-size:24px;
+	margin-top:30px;
+	margin-bottom:50px;
+}
+
+.cal_plus_form th{
+	height:30px;
+	background:url(../img/dot_black.jpg) no-repeat;
+	font-size:16px;
+	padding-left:15px;
+	text-align:left;
+	font-weight:bold;
+}
+
+.cal_plus_form td{
+	height:50px;
+	font-size:14px;
+	margin-bottom:20px;
+	text-align:left;
+	padding:5px;
+}
+
+.cal_plus_form input{
+	border:1px solid #fff;
+	height:30px;
+}
+
+.cal_plus_form textarea{
+	width:100%;
+	border:1px solid #fff;
+	height:200px;
+}
+
+
+/* calendar2 */
+
+.cal_plus_form2{
+	position:fixed;
+	width:280px;
+	height:100%;
+	background:#fe704a;
+	right:0;
+	font-family:'Nanum Barun Gothic';
+	padding:20px;
+	color:#fff;
+}
+
+.cal_plus_form2 th{
+	height:30px;
+	background:url(../img/dot_black.jpg) no-repeat;
+	font-size:16px;
+	padding-left:15px;
+	text-align:left;
+	font-weight:bold;
+}
+
+.cal_plus_form2 td{
+	height:50px;
+	font-size:14px;
+	margin-bottom:20px;
+	text-align:left;
+	padding:5px;
+}
+
+.cal_plus_form2 input{
+	border:1px solid #fff;
+	height:30px;
+}
+
+.cal_plus_form2 textarea{
+	width:100%;
+	border:1px solid #fff;
+	height:200px;
+}
+
+/* calendar3 */
+
+.cal_plus_form3{
+	position:fixed;
+	width:280px;
+	height:100%;
+	background:#9f4afe;
+	right:0;
+	font-family:'Nanum Barun Gothic';
+	padding:20px;
+	color:#fff;
+}
+
+.cal_plus_form3 th{
+	height:30px;
+	background:url(../img/dot_black.jpg) no-repeat;
+	font-size:16px;
+	padding-left:15px;
+	text-align:left;
+	font-weight:bold;
+}
+
+.cal_plus_form3 td{
+	height:50px;
+	font-size:14px;
+	margin-bottom:20px;
+	text-align:left;
+	padding:5px;
+}
+
+.cal_plus_form3 input{
+	border:1px solid #fff;
+	height:30px;
+}
+
+.cal_plus_form3 textarea{
+	width:100%;
+	border:1px solid #fff;
+	height:200px;
+	font-family:'Nanum Barun Gothic';
+}

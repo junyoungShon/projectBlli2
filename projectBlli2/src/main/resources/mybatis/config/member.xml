@@ -27,6 +27,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="mailSubject" column="mail_subject"/>
  		<result property="mailContentFile" column="mail_content_file"/>
  	</resultMap>
+ 	<!-- BlliMemberScrapeVO Result Map 설정 -->
+ 	<resultMap type="blliMemberScrapeVO" id="bmsvRM">
+ 		<result property="memberId" column="member_id"/>
+ 		<result property="postingUrl" column="posting_url"/>
+ 		<result property="smallProductId" column="small_product_id"/>
+ 		<result property="scrapeTime" column="scrape_time"/>
+ 	</resultMap>
  	
  	<!-- 준영 작성 쿼리 -->
  	<!-- id로 회원의 존재 여부를 찾습니다. -->
@@ -96,7 +103,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getMemberHavingBabyAgeChangedList" resultMap="bmvRM">
 		select bm.member_id, bm.member_email, bm.member_name 
 		from blli_member bm, (select distinct bb.member_id from blli_baby bb where substr(to_char(baby_birthday), 7) = substr(to_char(sysdate), 7)) idt 
-		where bm.member_id = idt.member_id
+		where bm.member_id = idt.member_id and bm.mail_agree = 0
 	</select>
  	<!-- 회원의 월령이 바뀐 아이 VO 목록을 얻어온다. -->
 	<select id="getBabyAgeChangedListOfMember" resultMap="bbvRM">
@@ -113,6 +120,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update blli_member set member_password = #{memberPassword} where member_email = #{memberEmail}
 	</update>
 	<!-- 용호 쿼리 끝 -->
+	
+	<!-- 현석 쿼리 시작 -->
+	<update id="denySendEmail">
+		update blli_member set mail_agree = 1 where member_email = #{memberEmail}
+	</update>
+	
+	<select id="getScrapeInfoByMemberId" resultMap="bmsvRM">
+		select posting_url, small_product_id from blli_member_scrape where member_id = #{memberId}
+	</select>
+	<!-- 현석 쿼리 끝 -->
 	
  </mapper>
  

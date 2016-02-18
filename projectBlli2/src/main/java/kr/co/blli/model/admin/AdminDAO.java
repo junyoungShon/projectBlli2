@@ -1,6 +1,5 @@
 package kr.co.blli.model.admin;
 
-import java.util.HashMap;
 import java.util.List;
 
 import kr.co.blli.model.vo.BlliMailVO;
@@ -58,11 +57,19 @@ public interface AdminDAO {
 
 	void insertWordCloud(BlliWordCloudVO blliWordCloudVO);
 
+<<<<<<< HEAD
 	void snsShareCountUp(String smallProductId);
 
 	List<BlliMidCategoryVO> selectAllMidCategory();
 
 	List<BlliSmallProductVO> selectAllSmallProduct();
+=======
+	List<BlliPostingVO> checkPosting();
+
+	void notAdvertisingPosting(BlliPostingVO postingVO);
+
+	List<BlliMemberVO> checkMember();
+>>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 	
 }
  

@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -141,6 +140,31 @@ public class PostingServiceImpl implements PostingService {
 		DecimalFormat df = new DecimalFormat("#,##0");
 		String totalPostingNum = df.format(Integer.parseInt(postingDAO.selectTotalPostingtNum()));
 		return totalPostingNum;
+	}
+
+	@Override
+	public BlliPostingVO getPostingInfo(BlliMemberScrapeVO blliMemberScrapeVO, String memberId) {
+		BlliPostingVO postingVO = postingDAO.getPostingInfo(blliMemberScrapeVO);
+		postingVO.setSmallProductId(blliMemberScrapeVO.getSmallProductId());
+		BlliMemberScrapeVO scrapeVO = new BlliMemberScrapeVO();
+		scrapeVO.setMemberId(memberId);
+		scrapeVO.setPostingUrl(postingVO.getPostingUrl());
+		scrapeVO.setSmallProductId(blliMemberScrapeVO.getSmallProductId());
+		postingVO.setIsScrapped(postingDAO.selectThisPostingScrape(scrapeVO));
+		BlliPostingLikeVO postingLikeVO = new BlliPostingLikeVO();
+		postingLikeVO.setMemberId(memberId);
+		postingLikeVO.setPostingUrl(postingVO.getPostingUrl());
+		postingLikeVO.setSmallProductId(blliMemberScrapeVO.getSmallProductId());
+		postingVO.setIsLike(postingDAO.selectThisPostingLike(postingLikeVO));
+		BlliPostingDisLikeVO postingDisLikeVO = new BlliPostingDisLikeVO();
+		postingDisLikeVO.setMemberId(memberId);
+		postingDisLikeVO.setPostingUrl(postingVO.getPostingUrl());
+		postingDisLikeVO.setSmallProductId(blliMemberScrapeVO.getSmallProductId());
+		postingVO.setIsDisLike(postingDAO.selectThisPostingDisLike(postingDisLikeVO));
+		postingVO.setPostingScrapeCount(postingDAO.getPostingScrapeCount(scrapeVO));
+		postingVO.setPostingLikeCount(postingDAO.getPostingLikeCount(scrapeVO));
+		postingVO.setPostingDislikeCount(postingDAO.getPostingDislikeCount(scrapeVO));
+		return postingVO;
 	}
 
 }

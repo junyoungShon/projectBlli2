@@ -8,9 +8,13 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import kr.co.blli.model.admin.AdminService;
-import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliLogVO;
+<<<<<<< HEAD
 import kr.co.blli.utility.BlliFileDownLoader;
+=======
+import kr.co.blli.model.vo.BlliMemberVO;
+import kr.co.blli.model.vo.BlliPostingVO;
+>>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -116,10 +120,6 @@ public class AdminController {
 	public void registerSmallProduct(@RequestBody List<Map<String, Object>> smallProductInfo){
 		adminService.registerSmallProduct(smallProductInfo);
 	}
-	@RequestMapping("insertCafeArticle.do")
-	public void insertCafeArticle(){
-		adminService.insertCafeArticle();
-	}
 	/**
 	  * @Method Name : makingWordCloud
 	  * @Method 설명 : 워드클라우드 만드는 임시 메서드
@@ -144,6 +144,7 @@ public class AdminController {
 		ArrayList<BlliLogVO> list = (ArrayList<BlliLogVO>)adminService.checkLog();
 		return new ModelAndView("admin/log", "logList", list);
 	}	
+<<<<<<< HEAD
 	/**
 	 * 
 	 * @Method Name : snsShareCountUp
@@ -162,4 +163,26 @@ public class AdminController {
 		adminService.allProductDownLoader();
 	}
 	
+=======
+	@RequestMapping("checkPosting.do")
+	public ModelAndView checkPosting(){
+		ArrayList<BlliPostingVO> list = (ArrayList<BlliPostingVO>)adminService.checkPosting();
+		return new ModelAndView("admin/checkPosting", "postingList", list);
+	}	
+	@ResponseBody
+	@RequestMapping("deletePosting.do")
+	public void deletePosting(BlliPostingVO postingVO){
+		adminService.deletePosting(postingVO);
+	}
+	@ResponseBody
+	@RequestMapping("notAdvertisingPosting.do")
+	public void notAdvertisingPosting(BlliPostingVO postingVO){
+		adminService.notAdvertisingPosting(postingVO);
+	}
+	@RequestMapping("checkMember.do")
+	public ModelAndView checkMember(){
+		ArrayList<BlliMemberVO> list = (ArrayList<BlliMemberVO>)adminService.checkMember();
+		return new ModelAndView("admin/checkMember", "memberList", list);
+	}
+>>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 }

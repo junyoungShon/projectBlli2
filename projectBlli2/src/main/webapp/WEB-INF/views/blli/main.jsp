@@ -331,11 +331,6 @@
 	});
 </script>
 
-<form id="blliMemberVOForm" action="sendPasswordMail.do" method="post">
-	<input type="hidden" name="memberName" value="${sessionScope.blliMemberVO.memberName}">
-	<input type="hidden" name="memberEmail" value="${sessionScope.blliMemberVO.memberEmail}">
-</form>
-
 <div class="main_yellow">
 		<div class="in_fr">
 			<div class="main_yellow_in">

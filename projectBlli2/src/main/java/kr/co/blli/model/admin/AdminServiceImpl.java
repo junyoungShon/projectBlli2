@@ -315,9 +315,14 @@ public class AdminServiceImpl implements AdminService{
 			if(delete.equals("YES")){
 				adminDAO.deletePosting(vo);
 			}else{
+<<<<<<< HEAD
 				vo.setPostingPhotoLink
 				(blliFileDownLoader.imgFileDownLoader(postingPhotoLink,UUID.randomUUID().toString().replace("-", ""),
 						"postingImage"));
+=======
+				vo.setPostingPhotoLink(blliFileDownLoader.imgFileDownLoader(
+						postingPhotoLink,UUID.randomUUID().toString().replace("-", ""), "postingImage"));
+>>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 				blliPostingVOList.add(vo);
 				int updateResult = adminDAO.registerPosting(vo);
 				if(updateResult != 0){
@@ -370,20 +375,6 @@ public class AdminServiceImpl implements AdminService{
 			}
 		}
 	}
-	@Override
-	public void insertCafeArticle() {
-		try {
-			Document doc = Jsoup.connect("http://openapi.naver.com/search?key=2a636a785d0e03f7048319f8adb3d912&query=요리&target=cafearticle&start=1&display=10&sort=sim").get();
-			//System.out.println(doc);
-			String cafeUrl = doc.select("item link").text();
-			System.out.println(cafeUrl);
-			doc = Jsoup.connect(cafeUrl).get();
-			System.out.println(doc);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	@Override
 	public void makingWordCloud(BlliPostingVO blliPostingVO) {
 		String smallProductId = blliPostingVO.getSmallProductId();
@@ -450,6 +441,7 @@ public class AdminServiceImpl implements AdminService{
 		BlliDetailException exceptionVO = null;
 		int number = 1;
 		try {
+<<<<<<< HEAD
 			String localPath = null;
 			if(System.getProperty("os.name").contains("Windows")){
 				localPath = "C:\\Users\\PARK\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\logFile\\blliLog.log";
@@ -458,6 +450,9 @@ public class AdminServiceImpl implements AdminService{
 				localPath = "/usr/bin/apache-tomcat-7.0.64/webapps/logFile/blliLog.log";
 			}
 			BufferedReader in = new BufferedReader(new FileReader(localPath));
+=======
+			BufferedReader in = new BufferedReader(new FileReader("C:\\Users\\용호\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\logFile\\blliLog.log"));
+>>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 			String message;
 			String exceptionContent = "";
 			while ((message = in.readLine()) != null) {
@@ -547,6 +542,7 @@ public class AdminServiceImpl implements AdminService{
 		}
 		return list;
 	}
+<<<<<<< HEAD
 	/**
 	  * @Method Name : snsShareCountUp
 	  * @Method 설명 : 공유 횟수를 증가시켜줍니다.
@@ -569,5 +565,22 @@ public class AdminServiceImpl implements AdminService{
 		for (int i = 0; i < smallProductList.size(); i++) {
 			blliFileDownLoader.imgFileDownLoader(smallProductList.get(i).getSmallProductMainPhotoLink(), smallProductList.get(i).getSmallProductId(), "smallProduct");
 		}
+=======
+	@Override
+	public ArrayList<BlliPostingVO> checkPosting() {
+		return (ArrayList<BlliPostingVO>)adminDAO.checkPosting();
+	}
+	@Override
+	public void deletePosting(BlliPostingVO postingVO) {
+		adminDAO.deletePosting(postingVO);
+	}
+	@Override
+	public void notAdvertisingPosting(BlliPostingVO postingVO) {
+		adminDAO.notAdvertisingPosting(postingVO);
+	}
+	@Override
+	public ArrayList<BlliMemberVO> checkMember() {
+		return (ArrayList<BlliMemberVO>)adminDAO.checkMember();
+>>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 	}
 }

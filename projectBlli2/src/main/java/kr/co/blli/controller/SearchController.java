@@ -72,20 +72,20 @@ public class SearchController {
 			if(smallProductInfo.get("smallProduct") != null){
 				ArrayList<BlliPostingVO> postingList = 
 						postingService.searchPostingListInProductDetail(((BlliSmallProductVO)smallProductInfo.get("smallProduct")).getSmallProductId(),request,"1");
-				viewName = "smallProductDetailPage";
+				viewName = "blli_smallProductDetailPage";
 				mav.addObject("smallProductInfo", smallProductInfo);
 				mav.addObject("blliPostingVOList", postingList);
 				System.out.println("스몰프로덕트 :" +postingList);
 			}else{
 				smallProductList = productService.searchSmallProductList(pageNo, searchWord);
-				viewName = "midCategoryDetailPage";
+				viewName = "blli_midCategoryDetailPage";
 				mav.addObject("resultList", smallProductList);
 				mav.addObject("totalPage", productService.totalPageOfSmallProductRelatedSearchWord(searchWord));
 				mav.addObject("searchWord", searchWord);
 			}
 			//ArrayList<BlliPostingVO> postingList = postingService.searchPosting(pageNo, searchWord);
 		}else{
-			viewName = "midCategoryDetailPage";
+			viewName = "blli_midCategoryDetailPage";
 			for(int i = 0;i<smallProductList.size();i++){
 				List<BlliWordCloudVO> list = productService.selectWordCloudList
 						(smallProductList.get(i).getSmallProductId());
@@ -179,7 +179,7 @@ public class SearchController {
 	@RequestMapping("goMidCategoryDetailView.do")
 	public ModelAndView goMidCategoryDetailView(BlliMidCategoryVO blliMidCategoryVO){
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("midCategoryDetailPage");
+		mav.setViewName("blli_midCategoryDetailPage");
 		blliMidCategoryVO.getMidCategoryId();
 		return mav;
 	}
@@ -212,7 +212,7 @@ public class SearchController {
 		mav.addObject("blliPostingVOList", postingList);
 		mav.addObject("blliMemberVO",blliMemberVO);
 		mav.addObject("wordCloudList",wordCloudList);
-		mav.setViewName("smallProductDetailPage");
+		mav.setViewName("blli_smallProductDetailPage");
 		return mav;
 	}
 	/**

@@ -4,12 +4,13 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.stereotype.Repository;
-
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMailVO;
+import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.stereotype.Repository;
 @Repository
 public class MemberDAOImpl implements MemberDAO{
 	@Resource
@@ -95,6 +96,16 @@ public class MemberDAOImpl implements MemberDAO{
 	@Override
 	public void updateMemberPasswordToTemporaryPassword(BlliMemberVO blliMemberVO) {
 		sqlSessionTemplate.update("member.updateMemberPasswordToTemporaryPassword", blliMemberVO);
+	}
+
+	@Override
+	public int denySendEmail(String memberEmail) {
+		return sqlSessionTemplate.update("member.denySendEmail", memberEmail);
+	}
+
+	@Override
+	public List<BlliMemberScrapeVO> getScrapeInfoByMemberId(BlliMemberVO memberVO) {
+		return sqlSessionTemplate.selectList("member.getScrapeInfoByMemberId", memberVO);
 	}
 
 
