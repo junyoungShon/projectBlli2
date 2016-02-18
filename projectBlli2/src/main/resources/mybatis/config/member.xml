@@ -37,6 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="scheduleContent" column="schedule_content"/>
  		<result property="scheduleLocation" column="schedule_location"/>
  		<result property="scheduleCheckState" column="schedule_check_state"/>
+ 	</resultMap>
  	<!-- BlliMemberScrapeVO Result Map 설정 -->
  	<resultMap type="blliMemberScrapeVO" id="bmsvRM">
  		<result property="memberId" column="member_id"/>
