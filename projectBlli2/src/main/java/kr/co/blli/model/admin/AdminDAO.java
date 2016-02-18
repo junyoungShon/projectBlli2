@@ -4,6 +4,7 @@ import java.util.List;
 
 import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberVO;
+import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 import kr.co.blli.model.vo.BlliWordCloudVO;
@@ -56,6 +57,11 @@ public interface AdminDAO {
 
 	void insertWordCloud(BlliWordCloudVO blliWordCloudVO);
 
+	void snsShareCountUp(String smallProductId);
+
+	List<BlliMidCategoryVO> selectAllMidCategory();
+
+	List<BlliSmallProductVO> selectAllSmallProduct();
 	List<BlliPostingVO> checkPosting();
 
 	void notAdvertisingPosting(BlliPostingVO postingVO);

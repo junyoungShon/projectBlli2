@@ -10,9 +10,9 @@ import java.util.Map;
 
 import javax.mail.MessagingException;
 
+import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliLogVO;
 import kr.co.blli.model.vo.BlliMemberVO;
-import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.ListVO;
 
 public interface AdminService {
@@ -37,6 +37,9 @@ public interface AdminService {
 	
 	public ArrayList<BlliLogVO> checkLog();
 
+	public void snsShareCountUp(String smallProductId);
+
+	public void allProductDownLoader();
 	public ArrayList<BlliPostingVO> checkPosting();
 
 	public void deletePosting(BlliPostingVO postingVO);

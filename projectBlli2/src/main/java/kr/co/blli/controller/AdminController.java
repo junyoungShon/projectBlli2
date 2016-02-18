@@ -140,6 +140,24 @@ public class AdminController {
 		ArrayList<BlliLogVO> list = (ArrayList<BlliLogVO>)adminService.checkLog();
 		return new ModelAndView("admin/log", "logList", list);
 	}	
+	/**
+	 * 
+	 * @Method Name : snsShareCountUp
+	 * @Method 설명 : 확정안된 소제품을 확정하는 메서드 
+	 * @작성일 : 2016. 1. 27.
+	 * @작성자 : hyunseok
+	 * @param smallProductInfo
+	 */
+	@ResponseBody
+	@RequestMapping("snsShareCountUp.do")
+	public void snsShareCountUp(String smallProductId){
+		adminService.snsShareCountUp(smallProductId);
+	}
+	@RequestMapping("allProductDownLoader.do")
+	public void allProductDownLoader(){
+		adminService.allProductDownLoader();
+	}
+	
 	@RequestMapping("checkPosting.do")
 	public ModelAndView checkPosting(){
 		ArrayList<BlliPostingVO> list = (ArrayList<BlliPostingVO>)adminService.checkPosting();

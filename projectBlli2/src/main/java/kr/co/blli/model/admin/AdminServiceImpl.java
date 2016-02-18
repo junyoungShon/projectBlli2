@@ -23,6 +23,7 @@ import kr.co.blli.model.vo.BlliDetailException;
 import kr.co.blli.model.vo.BlliLogVO;
 import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberVO;
+import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliPagingBean;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
@@ -324,6 +325,9 @@ public class AdminServiceImpl implements AdminService{
 			if(delete.equals("YES")){
 				adminDAO.deletePosting(vo);
 			}else{
+				vo.setPostingPhotoLink
+				(blliFileDownLoader.imgFileDownLoader(postingPhotoLink,UUID.randomUUID().toString().replace("-", ""),
+						"postingImage"));
 				vo.setPostingPhotoLink(blliFileDownLoader.imgFileDownLoader(
 						postingPhotoLink,UUID.randomUUID().toString().replace("-", ""), "postingImage"));
 				blliPostingVOList.add(vo);
@@ -406,26 +410,33 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public void insertAndUpdateWordCloud(ArrayList<BlliPostingVO> blliPostingVOList) {
 		if(blliPostingVOList.size()>0){
-			String smallProductId = blliPostingVOList.get(0).getSmallProductId();
-			StringBuffer sb = new StringBuffer();
-			System.out.println("총 조사 포스팅 수 : "+blliPostingVOList.size());
-			for (int i = 0; i < blliPostingVOList.size(); i++) {
-				blliPostingVOList.get(i).setPostingContent(adminDAO.selectPostingContentByPostingUrl(blliPostingVOList.get(i).getPostingUrl()));
-				sb.append(blliPostingVOList.get(i).getPostingContent());
+			HashMap<String, StringBuffer> sbMap = new HashMap<String, StringBuffer>();
+			for(int i=0;i<blliPostingVOList.size();i++){
+				String smallProductId = blliPostingVOList.get(i).getSmallProductId();
+				if(sbMap.get(blliPostingVOList.get(i).getSmallProductId())==null){
+					sbMap.put(smallProductId,new StringBuffer());
+				}
+				blliPostingVOList.get(i).setPostingContent
+				(adminDAO.selectPostingContentByPostingUrl(blliPostingVOList.get(i).getPostingUrl()));
+				sbMap.get(smallProductId).append(blliPostingVOList.get(i).getPostingContent());
 			}
-			HashMap<String, Integer> wordCounting = blliWordCounter.wordCounting(sb);
-			Iterator<String> it = wordCounting.keySet().iterator();
+			Iterator<String> it = sbMap.keySet().iterator();
 			while(it.hasNext()){
-				String key = it.next();
-				int value = wordCounting.get(key);  
-				BlliWordCloudVO blliWordCloudVO = new BlliWordCloudVO();
-				blliWordCloudVO.setSmallProductId(smallProductId);
-				blliWordCloudVO.setWord(key);
-				blliWordCloudVO.setWordCount(value);
-				System.out.println();
-				if(adminDAO.updateWordCloud(blliWordCloudVO)==0){
-					System.out.println("여기와야해");
-					adminDAO.insertWordCloud(blliWordCloudVO);
+				String smallProductId = it.next();
+				HashMap<String, Integer> wordCounting = 
+						blliWordCounter.wordCounting(sbMap.get(smallProductId));
+				Iterator<String> it2 = wordCounting.keySet().iterator();
+				while(it2.hasNext()){
+					String key = it2.next();
+					int value = wordCounting.get(key);  
+					BlliWordCloudVO blliWordCloudVO = new BlliWordCloudVO();
+					blliWordCloudVO.setSmallProductId(smallProductId);
+					blliWordCloudVO.setWord(key);
+					blliWordCloudVO.setWordCount(value);
+					System.out.println();
+					if(adminDAO.updateWordCloud(blliWordCloudVO)==0){
+						adminDAO.insertWordCloud(blliWordCloudVO);
+					}
 				}
 			}
 		}
@@ -439,7 +450,14 @@ public class AdminServiceImpl implements AdminService{
 		BlliDetailException exceptionVO = null;
 		int number = 1;
 		try {
-			BufferedReader in = new BufferedReader(new FileReader("C:\\Users\\용호\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\logFile\\blliLog.log"));
+			String localPath = null;
+			if(System.getProperty("os.name").contains("Windows")){
+				localPath = "C:\\Users\\PARK\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\logFile\\blliLog.log";
+			}else{
+				//서버 환경일 경우 path
+				localPath = "/usr/bin/apache-tomcat-7.0.64/webapps/logFile/blliLog.log";
+			}
+			BufferedReader in = new BufferedReader(new FileReader(localPath));
 			String message;
 			String exceptionContent = "";
 			while ((message = in.readLine()) != null) {
@@ -528,6 +546,34 @@ public class AdminServiceImpl implements AdminService{
 			System.exit(1);
 		}
 		return list;
+	}
+	/**
+	  * @Method Name : snsShareCountUp
+	  * @Method 설명 : 공유 횟수를 증가시켜줍니다.
+	  * @작성일 : 2016. 2. 18.
+	  * @작성자 : junyoung
+	  * @param smallProductId
+	 */
+	@Override
+	public void snsShareCountUp(String smallProductId) {
+		adminDAO.snsShareCountUp(smallProductId);
+	}
+	/**
+	  * @Method Name : allProductDownLoader
+	  * @Method 설명 : db 내의 모든 중분류 제품과 소분류 제품을 다운로드하는 메서드
+	  * @작성일 : 2016. 2. 18.
+	  * @작성자 : junyoung
+	 */
+	@Override
+	public void allProductDownLoader() {
+		List <BlliMidCategoryVO> midCategoryList = adminDAO.selectAllMidCategory();
+		List <BlliSmallProductVO> smallProductList = adminDAO.selectAllSmallProduct();
+		for (int i = 0; i < midCategoryList.size(); i++) {
+			blliFileDownLoader.imgFileDownLoader(midCategoryList.get(i).getMidCategoryMainPhotoLink(), midCategoryList.get(i).getMidCategoryId(), "midCategory");
+		}
+		for (int i = 0; i < smallProductList.size(); i++) {
+			blliFileDownLoader.imgFileDownLoader(smallProductList.get(i).getSmallProductMainPhotoLink(), smallProductList.get(i).getSmallProductId(), "smallProduct");
+		}
 	}
 	@Override
 	public ArrayList<BlliPostingVO> checkPosting() {

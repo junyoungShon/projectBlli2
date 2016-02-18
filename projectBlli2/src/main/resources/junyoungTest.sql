@@ -261,7 +261,7 @@ select posting_url,small_product,small_product_id,posting_title,posting_summary,
 		
 		update blli_posting set posting_status = 'unconfirmed' where posting_url = 'http://blog.naver.com/hee2752/130575057'
 		update blli_posting set posting_status = 'unconfirmed' where small_product_id = '7610052389'
-		update blli_posting set posting_status = 'unconfirmed' where small_product_id = '5702689300'
+		update blli_posting set posting_status = 'confirmed' where small_product_id = '5702689300'
 		update blli_posting set posting_status = 'confirmed' where posting_status = 'dead'
 		update blli
 		select * from (select rownum as rn , word,word_count,small_product_id from blli_word_cloud where small_product_id ='5702689300' order by word_count desc) 
@@ -286,7 +286,9 @@ select posting_url,small_product,small_product_id,posting_title,posting_summary,
 		order by posting_score desc)
 		) where rn >= 0 and rn < 6
 		
+		update blli_small_product  set  small_product_whentouse_max = 1 where  small_product_whentouse_max = 11
 		
+		select * from blli_small_product where small_product_whentouse_max = 11
 		
 		select * from 
 		(select 
@@ -297,6 +299,7 @@ select posting_url,small_product,small_product_id,posting_title,posting_summary,
 		where MID_CATEGORY_id = #{recommMid} and #{babyMonthAge}  >= SMALL_PRODUCT_WHENTOUSE_MIN and #{babyMonthAge} <= SMALL_PRODUCT_WHENTOUSE_MAX
 		order by SMALL_PRODUCT_DIBS_COUNT desc) 
 		where rn<3
+		select * from blli_small_product where sns_share_count >0 
 		
 		select * from (
 			select buy_link_price,rownum as rn from blli_small_prod_buy_link where small_product_id = '7909155651' 

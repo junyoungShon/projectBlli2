@@ -9,8 +9,10 @@ import java.util.Map;
  
 
 
+
 import javax.servlet.http.HttpServletRequest;
  
+
 
 
 import kr.co.blli.model.vo.BlliBabyVO;
@@ -22,10 +24,15 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
  
 @Component("fileUtils")
 public class BlliFileUtils {
-    private static final String filePath 
-    = "C:\\Users\\PARK\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\babyphoto\\";
     public ArrayList<BlliBabyVO> parseInsertFileInfo
     (HttpServletRequest request,ArrayList<BlliBabyVO> list) throws Exception{
+    	String filePath = null;
+    	if(System.getProperty("os.name").contains("Windows")){
+    		filePath = "C:\\Users\\junyoung\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\babyphoto\\";
+    	}else{
+    		//서버 환경일 경우 path
+    		filePath = "/usr/bin/apache-tomcat-7.0.64/webapps/projectBlli2/babyphoto";
+    	}
         MultipartHttpServletRequest multipartHttpServletRequest  = (MultipartHttpServletRequest)request;
         
         MultipartFile multipartFile = null;

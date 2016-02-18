@@ -32,7 +32,11 @@ public class BlliSmallProductVO {
 	private int dbInsertPostingCount;
 	//16.02.07 추가
 	private List<BlliWordCloudVO> blliWordCloudVOList;
-	
+	//16.02.16추가
+	private int snsShareCount;
+	public BlliSmallProductVO() {
+		super();
+	}
 	public BlliSmallProductVO(String smallProduct, String midCategory,
 			String midCategoryId, String smallProductMaker,
 			int smallProductWhenToUseMin, int smallProductWhenToUseMax,
@@ -42,7 +46,8 @@ public class BlliSmallProductVO {
 			String productRegisterDay, String smallProductId,
 			int smallProductRanking, int isDib, String minPrice,
 			String searchTime, int detailViewCount, String productDbInsertDate,
-			int dbInsertPostingCount, List<BlliWordCloudVO> blliWordCloudVOList) {
+			int dbInsertPostingCount,
+			List<BlliWordCloudVO> blliWordCloudVOList, int snsShareCount) {
 		super();
 		this.smallProduct = smallProduct;
 		this.midCategory = midCategory;
@@ -66,10 +71,7 @@ public class BlliSmallProductVO {
 		this.productDbInsertDate = productDbInsertDate;
 		this.dbInsertPostingCount = dbInsertPostingCount;
 		this.blliWordCloudVOList = blliWordCloudVOList;
-	}
-	public BlliSmallProductVO() {
-		super();
-		// TODO Auto-generated constructor stub
+		this.snsShareCount = snsShareCount;
 	}
 	public String getSmallProduct() {
 		return smallProduct;
@@ -203,6 +205,12 @@ public class BlliSmallProductVO {
 	public void setBlliWordCloudVOList(List<BlliWordCloudVO> blliWordCloudVOList) {
 		this.blliWordCloudVOList = blliWordCloudVOList;
 	}
+	public int getSnsShareCount() {
+		return snsShareCount;
+	}
+	public void setSnsShareCount(int snsShareCount) {
+		this.snsShareCount = snsShareCount;
+	}
 	@Override
 	public String toString() {
 		return "BlliSmallProductVO [smallProduct=" + smallProduct
@@ -222,7 +230,9 @@ public class BlliSmallProductVO {
 				+ isDib + ", minPrice=" + minPrice + ", searchTime="
 				+ searchTime + ", detailViewCount=" + detailViewCount
 				+ ", productDbInsertDate=" + productDbInsertDate
-				+ ", dbInsertPostingCount=" + dbInsertPostingCount + "]";
+				+ ", dbInsertPostingCount=" + dbInsertPostingCount
+				+ ", blliWordCloudVOList=" + blliWordCloudVOList
+				+ ", snsShareCount=" + snsShareCount + "]";
 	}
 	
 }

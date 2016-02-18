@@ -42,6 +42,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="smallProduct" column="small_product"/>
  		<result property="smallProductId" column="small_product_id"/>
  	</resultMap>
+ 	<!-- BlliMidCategoryVO Result Map 설정 -->
+ 	<resultMap type="blliMidCategoryVO" id="bmcvRM">
+ 		<result property="midCategory" column="mid_category"/>
+ 		<result property="midCategoryInfo" column="mid_category_info"/>
+ 		<result property="midCategoryMainPhotoLink" column="mid_category_main_photo_link"/>
+ 		<result property="whenToUseMin" column="mid_category_whentouse_min"/>
+ 		<result property="whenToUseMax" column="mid_category_whentouse_max"/>
+ 		<result property="bigCategory" column="big_category"/>
+ 		<result property="midCategoryId" column="mid_category_id"/>
+ 		<result property="smallProductCount" column="small_product_count"/>
+ 	</resultMap>
  	<!-- BlliSmallProductVO Result Map 설정 -->
  	<resultMap type="blliSmallProductVO" id="bspvRM">
  		<result property="smallProductId" column="small_product_id"/>
@@ -203,11 +214,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select posting_content from blli_posting where posting_url = #{value}
 	</select>
 	<update id="updateWordCloud">
-		update blli_word_cloud set word_count = word_count + #{wordCount} where small_product_Id = #{smallProductId} and word = #{word}
+		update blli_word_cloud set word_count = word_count + #{wordCount} where small_product_Id = 
+		#{smallProductId} and word = #{word}
+	</update>
+	<update id="snsShareCountUp">
+		update blli_small_product set sns_share_count =+ 1 where small_product_id = #{value}
 	</update>
 	<insert id="insertWordCloud">
-		insert into blli_word_cloud (word,word_count,small_product_id) values (#{word},#{wordCount},#{smallProductId})
+		insert into blli_word_cloud (word,word_count,small_product_id) 
+		values (#{word},#{wordCount},#{smallProductId})
 	</insert>
+	<select id="selectAllMidCategory" resultMap="bmcvRM">
+		select mid_Category_Id,mid_category_main_photo_link from blli_mid_category 
+	</select>
+	<select id="selectAllSmallProduct" resultMap="bspvRM">
+		select small_product_id,small_product_main_photo_link from blli_small_product 
+	</select>
 	<!-- 준영 끝 -->
  </mapper>
  

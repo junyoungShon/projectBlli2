@@ -82,11 +82,14 @@ public class ProductServiceImpl implements ProductService{
 		int recommMidNumber = blliMidCategoryVOList.size();
 		if(recommMidNumber>9){
 			for(int i=0;i<blliMidCategoryVOList.size();i++){
-				HashMap<String,String> paraMap = new HashMap<String, String>();
-				paraMap.put("recommMid", blliMidCategoryVOList.get(i).getMidCategory());
-				paraMap.put("babyMonthAge",Integer.toString(blliBabyVO.getBabyMonthAge()));
-				//중제품 당 찜 상위 1개 만을 가져온다.
-				blliSmallProductVOList.add(productDAO.selectSameAgeMomBestPickedSmallProduct(paraMap));
+					HashMap<String,String> paraMap = new HashMap<String, String>();
+					paraMap.put("recommMid", blliMidCategoryVOList.get(i).getMidCategoryId());
+					paraMap.put("babyMonthAge",Integer.toString(blliBabyVO.getBabyMonthAge()));
+					//중제품 당 찜 상위 1개 만을 가져온다.
+					BlliSmallProductVO blliSmallProductVO = productDAO.selectSameAgeMomBestPickedSmallProduct(paraMap);
+					if(blliSmallProductVO!=null){
+						blliSmallProductVOList.add(blliSmallProductVO);
+					}
 			}
 		}else{
 			for(int i=0;i<blliMidCategoryVOList.size();i++){
@@ -96,15 +99,18 @@ public class ProductServiceImpl implements ProductService{
 				// 중제품 당 찜 상위 2개씩을 가져온다.
 				List<BlliSmallProductVO> tempList = productDAO.selectSameAgeMomBestPickedSmallProductList(paraMap);
 				for(int j=0;j<tempList.size();j++){
-					System.out.println(tempList.get(j).getSmallProduct());
-					blliSmallProductVOList.add(tempList.get(j));
+					if(tempList.get(j)!=null){
+						blliSmallProductVOList.add(tempList.get(j));
+					}
 				}
 			}
 		}
 		for(int i=0;i<blliSmallProductVOList.size();i++){
-			DecimalFormat df = new DecimalFormat("#,##0");
-			blliSmallProductVOList.get(i).setMinPrice(df.format(Integer.parseInt(productDAO.selectProductMinPrice(blliSmallProductVOList.get(i).getSmallProductId()))));
-			blliSmallProductVOList.set(i, productDibChecker(blliBabyVO.getMemberId(), blliSmallProductVOList.get(i)));
+			if(blliSmallProductVOList.get(i).getMinPrice()!=null){
+				DecimalFormat df = new DecimalFormat("#,##0");
+				blliSmallProductVOList.get(i).setMinPrice(df.format(Integer.parseInt(blliSmallProductVOList.get(i).getMinPrice())));
+				blliSmallProductVOList.set(i, productDibChecker(blliBabyVO.getMemberId(), blliSmallProductVOList.get(i)));
+			}
 		}
 		return blliSmallProductVOList;
 	}
@@ -124,11 +130,14 @@ public class ProductServiceImpl implements ProductService{
 		paraMap.put("pageNum", pageNum);
 		//점수순 노출 , 상태(confirmed) , 포스팅 대상 소제품 등을 기준으로 출력<!극혐주의!> 포스팅 관련 이므로 여기있으면 안되지만 구조상 여기왔다 . 상의해보자
 		for(int i=0;i<blliSmallProductVOList.size();i++){
-			paraMap.put("smallProductId", blliSmallProductVOList.get(i).getSmallProductId());
-			List<BlliPostingVO> tempList = productDAO.selectPostingBySmallProductList(paraMap);
-			if(tempList!=null){
-				for(int j=0;j<tempList.size();j++){
-					blliPostingVOList.add(tempList.get(j));
+			System.out.println(blliSmallProductVOList);
+			if(blliSmallProductVOList.get(i)!=null){
+				paraMap.put("smallProductId", blliSmallProductVOList.get(i).getSmallProductId());
+				List<BlliPostingVO> tempList = productDAO.selectPostingBySmallProductList(paraMap);
+				if(tempList!=null){
+					for(int j=0;j<tempList.size();j++){
+						blliPostingVOList.add(tempList.get(j));
+					}
 				}
 			}
 		}
@@ -422,6 +431,8 @@ public class ProductServiceImpl implements ProductService{
 		System.out.println(wordCloudList);
 		return wordCloudList;
 	}
+	
+	
 	@Override
 	public String selectTotalProductNum() {
 		DecimalFormat df = new DecimalFormat();

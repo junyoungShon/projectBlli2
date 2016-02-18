@@ -132,7 +132,7 @@
   </class>  
   <class id="15" language="java" name="kr.co.blli.model.vo.ListVO" project="projectBlli2" 
     file="/projectBlli2/src/main/java/kr/co/blli/model/vo/ListVO.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="53" width="87" x="273" y="57"/>    
+    <position height="-1" width="-1" x="179" y="141"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="false"/>      
@@ -141,7 +141,43 @@
   </class>  
   <class id="16" language="java" name="kr.co.blli.model.vo.BlliPagingBean" project="projectBlli2" 
     file="/projectBlli2/src/main/java/kr/co/blli/model/vo/BlliPagingBean.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="326" y="147"/>    
+    <position height="-1" width="-1" x="189" y="75"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="17" language="java" name="kr.co.blli.model.vo.BlliWordCloudVO" project="projectBlli2" 
+    file="/projectBlli2/src/main/java/kr/co/blli/model/vo/BlliWordCloudVO.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="296" y="449"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="18" language="java" name="kr.co.blli.model.vo.BlliBuyLinkClickVO" project="projectBlli2" 
+    file="/projectBlli2/src/main/java/kr/co/blli/model/vo/BlliBuyLinkClickVO.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="462" y="449"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="19" language="java" name="kr.co.blli.model.vo.BlliLogVO" project="projectBlli2" 
+    file="/projectBlli2/src/main/java/kr/co/blli/model/vo/BlliLogVO.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="611" y="449"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" name="kr.co.blli.model.vo.BlliDetailException" project="projectBlli2" 
+    file="/projectBlli2/src/main/java/kr/co/blli/model/vo/BlliDetailException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="746" y="450"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="false"/>      
