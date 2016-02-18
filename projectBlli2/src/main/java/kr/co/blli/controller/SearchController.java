@@ -87,7 +87,8 @@ public class SearchController {
 		}else{
 			viewName = "midCategoryDetailPage";
 			for(int i = 0;i<smallProductList.size();i++){
-				List<BlliWordCloudVO> list = productService.selectWordCloudList(smallProductList.get(i).getSmallProductId());
+				List<BlliWordCloudVO> list = productService.selectWordCloudList
+						(smallProductList.get(i).getSmallProductId());
 				smallProductList.get(i).setBlliWordCloudVOList(list);
 			}
 			mav.addObject("resultList", smallProductList);

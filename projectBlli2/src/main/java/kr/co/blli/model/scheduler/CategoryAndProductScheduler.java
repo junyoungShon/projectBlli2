@@ -328,7 +328,6 @@ public class CategoryAndProductScheduler {
 									continue;
 								}
 								
-								String smallProductMainPhotoLink = el.select(".img_area ._productLazyImg").attr("data-original");
 								String smallProductMaker = el.select(".info_mall .mall_txt .mall_img").attr("title");
 								if(smallProductMaker.equals("")){
 									smallProductMaker = "-";
@@ -356,7 +355,7 @@ public class CategoryAndProductScheduler {
 								blliSmallProductVO.setSmallProductId(smallProductId);
 								
 								doc = Jsoup.connect("http://shopping.naver.com/detail/detail.nhn?nv_mid="+smallProductId+"&cat_id="+midCategory.get(i).getMidCategoryId()+"&frm=NVSHMDL&query=").timeout(0).get();
-								smallProductMainPhotoLink = doc.select("#summary_thumbnail_img").attr("src");
+								String smallProductMainPhotoLink = doc.select("#summary_thumbnail_img").attr("src");
 								blliSmallProductVO.setSmallProductMainPhotoLink(blliFileDownLoader.imgFileDownLoader(smallProductMainPhotoLink, smallProductId, "smallProduct"));
 								
 								productDAO.insertSmallProduct(blliSmallProductVO);
@@ -457,11 +456,6 @@ public class CategoryAndProductScheduler {
 						allSmallProductCount += naverShoppingRank;
 						naverShoppingRank = 0;
 						
-						long end = System.currentTimeMillis();  //종료시간
-						//종료-시작=실행시간		
-						if((end-start)/1000.0 > 60*3){ //3시간을 초과하면 실행 중지
-							break label;
-						}
 					}while(page <= lastPage);
 				}
 				flag = false;

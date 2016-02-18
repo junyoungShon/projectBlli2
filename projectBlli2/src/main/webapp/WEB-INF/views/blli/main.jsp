@@ -355,10 +355,20 @@
 				<c:forEach items="${requestScope.blliMemberVO.blliBabyVOList}" var="babyList">
 					<c:if test="${babyList.recommending==1}">
 				<div class="main_baby_foto">
-					<img alt="아이 프사" src="${initParam.root}babyphoto/${babyList.babyPhoto}" style="border-radius:67px;width: 118px;height: 118px">
+					<c:if test="${babyList.babyPhoto ne 'default'}">
+						<img alt="아이 프사" src="${initParam.root}babyphoto/${babyList.babyPhoto}" style="border-radius:67px;width: 118px;height: 118px">
+					</c:if>
+					<c:if test="${babyList.babyPhoto eq 'default'}">
+						<img alt="아이 프사" src="${initParam.root}img/baby_foto.jpg" style="border-radius:67px;width: 118px;height: 118px">
+					</c:if>
 				</div>
 				<div class="main_baby_name">
-						 ${babyList.babyName } ${babyList.babyMonthAge} 개월 입니다.
+					<c:if test="${babyList.babyMonthAge<0}">
+						 ${babyList.babyName }는 아직 출산전입니다 ! 순산을 기원해요!
+					</c:if>
+					<c:if test="${babyList.babyMonthAge>0}">
+							 ${babyList.babyName } ${babyList.babyMonthAge} 개월 입니다.
+					</c:if>
 				</div>
 					</c:if>
 				</c:forEach>
@@ -372,7 +382,7 @@
 					<div id="menu-wrapper">
 						<ul class="midRecommProduct">
 						<c:forEach items="${requestScope.blliMidCategoryVOList}" var="recommProductList">
-							<li class="gallery-cell productInst" style="margin-left: 30px;">
+							<li class="gallery-cell productInst" style="margin-left: 30px; border-radius:20px;">
 								<div class="yellow_foto">
 								<img src='${recommProductList.midCategoryMainPhotoLink}' style="width: 115px;height: 115px;border-radius:20px; z-index: -1">
 								</div>

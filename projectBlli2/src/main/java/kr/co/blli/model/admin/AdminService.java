@@ -7,7 +7,9 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.mail.MessagingException;
+
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliLogVO;
 import kr.co.blli.model.vo.ListVO;
@@ -35,4 +37,8 @@ public interface AdminService {
 	public void makingWordCloud(BlliPostingVO blliPostingVO);
 	
 	public ArrayList<BlliLogVO> checkLog();
+
+	public void snsShareCountUp(String smallProductId);
+
+	public void allProductDownLoader();
 }

@@ -22,7 +22,7 @@
 	<bean class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" autowire="default"/>
 	<context:component-scan base-package="kr.ac.kaist.swrc.jhannanum"/>
 	<bean class="kr.ac.kaist.swrc.jhannanum.hannanum.Workflow" autowire="default">
-		<constructor-arg name="baseDir" value="C:\Users\junyoung\git\projectBlli2\projectBlli2\src\main\resources\jhannanum"/>
+		<constructor-arg name="baseDir" value="${initParam.root}WEB-INF\classes\jhannanum"/>
 	</bean>
 	
 	<!-- model 계층 빈 설정 , AOP설정 비워둠 -->
@@ -33,13 +33,13 @@
 			<value>oracle.jdbc.driver.OracleDriver</value>
 		</property>
 		<property name="url">
-			<value>jdbc:oracle:thin:@127.0.0.1:1521:xe</value>
+			<value>jdbc:oracle:thin:@bllidb.crmhrt8hv6dt.ap-northeast-2.rds.amazonaws.com:1521:ORCL</value>
 		</property>
 		<property name="username">
-			<value>scott</value>
+			<value>bllidbadmin</value>
 		</property>
 		<property name="password">
-			<value>tiger</value>
+			<value>blliadmin890430</value>
 		</property>
 		<property name="maxActive">
 			<value>30</value>

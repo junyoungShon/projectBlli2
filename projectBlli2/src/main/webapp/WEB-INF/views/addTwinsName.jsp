@@ -13,7 +13,7 @@
 <META http-equiv="Cache-Control" content="No-Cache"> 
 <link rel="stylesheet" type="text/css" href="${initParam.root}css/reset.css" />
 <link rel="stylesheet" type="text/css" href="${initParam.root}css/css.css" />
-<link href='https://cdn.rawgit.com/openhiun/hangul/14c0f6faa2941116bb53001d6a7dcd5e82300c3f/nanumbarungothic.css' rel='stylesheet' type='text/css'>
+
 <!-- jquery -->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>

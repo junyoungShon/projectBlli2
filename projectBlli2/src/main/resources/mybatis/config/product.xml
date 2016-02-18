@@ -75,7 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<insert id="insertBigCategory">
-		insert into blli_big_category(big_category_id, big_category) values(#{bigCategoryId}, #{bigCategory})
+		insert into blli_big_category (big_category_id, big_category) values(#{bigCategoryId}, #{bigCategory})
 	</insert>
 	
 	<select id="getBigCategory" resultMap="bbcvRM">
@@ -254,7 +254,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<!-- 전체 소제품 리스트를 출력 -->
 	<select id="selectAllSmallProduct" resultMap="bspvRM">
-		select mid_category_id,small_product_id,small_product_dibs_count,detail_view_count,naver_shopping_rank,product_register_day,product_db_insert_date from blli_small_product
+		select mid_category_id,small_product_id,small_product_dibs_count,detail_view_count,naver_shopping_rank,product_register_day,product_db_insert_date,sns_share_count
+		from blli_small_product
 		where small_product_status = 'confirmed'
 	</select>
 	<!-- 구매링크 클릭 수를 반환 받는다.-->
@@ -296,14 +297,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into  blli_buy_link_click (member_id,click_time,seller,small_product_id) values
 		(#{memberId},sysdate,#{seller},#{smallProductId})
 	</insert>
+	
 	<!-- 워드클라우드 용  단어 출력-->
 	<select id="selectWordCloudList" resultMap="bwc">
 		<![CDATA[
 		select * from(
 		select rownum as rn , word,word_count,small_product_id from (
-		select  word,word_count,small_product_id from blli_word_cloud where small_product_id =#{value} order by word_count desc))where rn < 21
+		select  word,word_count,small_product_id from blli_word_cloud where small_product_id =#{value}
+		 order by word_count desc))where rn < 21
 		]]> 
 	</select>
+	
 	<select id="selectProductMinPrice" resultType="String">
 		select * from (
 			select buy_link_price,rownum as rn from blli_small_prod_buy_link where small_product_id = #{value} 

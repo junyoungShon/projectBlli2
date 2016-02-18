@@ -20,8 +20,6 @@ margin-left:0px;line-height:20px;overflow-y:scroll;}
 .result_num{width: 100%;float:left;font-size:135px;font-family:'Nanum Barun Gothic';font-weight:bold;text-align:center;
 line-height:300px;}
 </style>
-<link href='https://cdn.rawgit.com/openhiun/hangul/14c0f6faa2941116bb53001d6a7dcd5e82300c3f/nanumbarungothic.css' 
-rel='stylesheet' type='text/css'>
 <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script type="text/javascript">

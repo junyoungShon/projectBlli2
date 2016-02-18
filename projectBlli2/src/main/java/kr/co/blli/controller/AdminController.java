@@ -10,6 +10,8 @@ import javax.annotation.Resource;
 import kr.co.blli.model.admin.AdminService;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliLogVO;
+import kr.co.blli.utility.BlliFileDownLoader;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -142,4 +144,22 @@ public class AdminController {
 		ArrayList<BlliLogVO> list = (ArrayList<BlliLogVO>)adminService.checkLog();
 		return new ModelAndView("admin/log", "logList", list);
 	}	
+	/**
+	 * 
+	 * @Method Name : snsShareCountUp
+	 * @Method 설명 : 확정안된 소제품을 확정하는 메서드 
+	 * @작성일 : 2016. 1. 27.
+	 * @작성자 : hyunseok
+	 * @param smallProductInfo
+	 */
+	@ResponseBody
+	@RequestMapping("snsShareCountUp.do")
+	public void snsShareCountUp(String smallProductId){
+		adminService.snsShareCountUp(smallProductId);
+	}
+	@RequestMapping("allProductDownLoader.do")
+	public void allProductDownLoader(){
+		adminService.allProductDownLoader();
+	}
+	
 }

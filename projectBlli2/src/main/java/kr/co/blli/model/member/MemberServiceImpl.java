@@ -222,7 +222,7 @@ public class MemberServiceImpl implements MemberService {
 			babyMonthAge = diffYears * 12; 
 		}else if(diffYears==0){
 			babyMonthAge = 0;
-		}else if(diffYears==0){
+		}else if(diffYears<0){
 			//아직 태어나지 않았으므로 월령은 -1로 설정
 			babyMonthAge = -1;
 		}

@@ -26,6 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="smallProductId" column="small_product_id"/>
  		<result property="postingDbInsertDate" column="posting_Db_Insert_Date"/>
  	</resultMap>
+ 	
  	<!-- 현석 쿼리 시작 -->
  	<select id="countOfPostingUrl" resultType="int">
  		select count(posting_url) from blli_posting where posting_url = #{postingUrl}
@@ -182,6 +183,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectTotalPostingtNum" resultType="String">
 		select count(*) from blli_posting
 	</select>
+	
+	
 	<!-- 준영 쿼리 끝 -->
 	<update id="updatePostingViewCountAndResidenceTime">
 		update blli_posting set posting_total_residence_time = posting_total_residence_time + #{postingTotalResidenceTime} , posting_view_count = posting_view_count+1
