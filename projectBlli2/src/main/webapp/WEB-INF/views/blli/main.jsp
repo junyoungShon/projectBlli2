@@ -578,7 +578,6 @@
 						<c:if test="${postingList.isDisLike==0}">
 							<i class="fa fa-thumbs-down postingDisLikeBtn" style="color: gray" data-tooltip-text="광고,상관없는 포스팅등은 가차없이 싫어요!"></i>
 							<span style="font-size: 11px; line-height: 16px ;margin-right:15px" class="disLikeCount">${postingList.postingDislikeCount}</span>
-							
 						</c:if>
 						<c:if test="${postingList.isDisLike==1}">
 							<i class="fa fa-thumbs-down postingDisLikeBtn" style="color: hotpink" data-tooltip-text="광고,상관없는 포스팅등은 가차없이 싫어요!"></i>
@@ -615,7 +614,6 @@
 				</div>
 				</c:forEach>
 			</div>
-
 		</div>
 		 <a href="#" id="return-to-top"><i class="fa fa-chevron-up"></i></a>
 </div>

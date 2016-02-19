@@ -254,229 +254,6 @@ public class CategoryAndProductScheduler {
 	 * @작성자 : hyunseok
 	 * @throws IOException
 	 */
-<<<<<<< HEAD
-	//@Scheduled(cron = "00 00 02 * * *")
-	public ArrayList<String> insertSmallProduct() {
-		long start = System.currentTimeMillis(); // 시작시간 
-		ArrayList<String> logList = new ArrayList<String>();
-		String methodName = new Throwable().getStackTrace()[0].getMethodName();
-		logList.add("start : "+methodName);
-		logList.add("요청자 : scheduler");
-		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
-		String datetime = sdf.format(cal.getTime());
-		logList.add("발생 일자 : "+datetime);
-		
-		ArrayList<BlliMidCategoryVO> midCategory = (ArrayList<BlliMidCategoryVO>)productDAO.getMidCategory();
-		String key = "6694c8294c8d04cdfe78262583a13052"; //네이버 검색API 이용하기 위해 발급받은 key값
-		int count = 0;
-		int exceptionCount = 0;
-		boolean flag = true;
-		int allSmallProductCount = 0;
-		int insertSmallProductCount = 0;
-		int updateSmallProductCount = 0;
-		int denySmallProductCount = 0;
-		int notUpdateProductCount = 0;
-		int allExceptionCount = 0;
-		String smallProductId = "";
-		LinkedHashMap<String, String> detailException = new LinkedHashMap<String, String>();
-		int naverShoppingRank = 0;
-		
-		while(flag){
-			try{	
-				for(int i=count;i<midCategory.size();i++){
-					if(exceptionCount > 3){
-						count = i+1;
-						exceptionCount = 0;
-					}else{
-						count = i;
-					}
-					BlliSmallProductVO blliSmallProductVO = new BlliSmallProductVO();
-					int page = 1;
-					double lastPage = 0;
-					
-					System.out.println("중분류 카테고리 : "+midCategory.get(i).getMidCategory());
-					System.out.println("중분류 카운트 : "+(i+1));
-					
-					do{
-						Document doc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?pagingIndex="+
-								page+"&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&cat_id="+
-								midCategory.get(i).getMidCategoryId()+"&frm=NVSHMDL&oldModel=true").timeout(0).get();
-						int resultCount = Integer.parseInt(doc.select("#_resultCount").text().replace(",", ""));
-						lastPage = Math.ceil(resultCount/40.0);
-						double maxSmallProduct = 10;
-						if(resultCount > 10 && resultCount < 100){
-							maxSmallProduct = resultCount/10;
-						}
-						Elements e = doc.select(".goods_list ._model_list");
-						for(Element el : e){
-							//System.out.println("*************** 소제품 ***************");
-							naverShoppingRank++;
-							
-							smallProductId = el.select(".img_area .report").attr("product_id");
-							String smallProductStatus = productDAO.getSmallProductStatus(smallProductId);
-							
-							if(smallProductStatus == null){
-								String smallProduct = el.select(".info .tit").text();
-								smallProduct = smallProduct.replaceAll("&", "%26");
-								try{
-									doc = Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+smallProduct+
-											"&display=1&start=1&target=blog&sort=sim").timeout(5000).get();
-									if(doc.select("message").text().contains("Query limit exceeded")){
-										key = "0a044dc7c63b8f3b9394e1a5e49db7ab";
-										doc = Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+smallProduct+
-												"&display=1&start=1&target=blog&sort=sim").timeout(5000).get();
-									}
-								}catch(SocketTimeoutException se){
-									se.printStackTrace();
-									continue;
-								}
-								String totalPostingText = doc.select("total").text().trim();
-								if(totalPostingText.equals("")){
-									totalPostingText = "0";
-								}
-								int smallProductPostingCount = Integer.parseInt(totalPostingText);
-								
-								if(smallProductPostingCount >= 20 && smallProductPostingCount <= 50 && resultCount > 10){
-									if(naverShoppingRank > maxSmallProduct){
-										denySmallProductCount++;
-										blliSmallProductVO.setSmallProductId(smallProductId);
-										blliSmallProductVO.setMidCategoryId(midCategory.get(i).getMidCategoryId());
-										blliSmallProductVO.setMidCategory(midCategory.get(i).getMidCategory());
-										productDAO.insertDeadSmallProduct(blliSmallProductVO);
-										continue;
-									}
-								}else if(smallProductPostingCount < 50 || smallProductPostingCount > 1000){
-									denySmallProductCount++;
-									blliSmallProductVO.setSmallProductId(smallProductId);
-									blliSmallProductVO.setMidCategoryId(midCategory.get(i).getMidCategoryId());
-									blliSmallProductVO.setMidCategory(midCategory.get(i).getMidCategory());
-									productDAO.insertDeadSmallProduct(blliSmallProductVO);
-									continue;
-								}
-								
-								String smallProductMainPhotoLink = el.select(".img_area ._productLazyImg").attr("data-original");
-								String smallProductMaker = el.select(".info_mall .mall_txt .mall_img").attr("title");
-								if(smallProductMaker.equals("")){
-									smallProductMaker = "-";
-								}
-								String productRegisterDay = el.select(".etc .date").text();
-								productRegisterDay = productRegisterDay.substring(productRegisterDay.indexOf(" ")+1, productRegisterDay.lastIndexOf("."))+".01";
-								
-								
-								/*System.out.println("중분류 : "+midCategory.get(i).getMidCategory());
-								System.out.println("제품명 : "+smallProduct);
-								System.out.println("이미지 : "+smallProductMainPhotoLink);
-								System.out.println("포스팅 개수 : "+smallProductPostingCount);
-								System.out.println("네이버 쇼핑 검색 순서 : "+(naverShoppingRank));
-								System.out.println("제조사 : "+smallProductMaker);
-								System.out.println("제조일 : "+productRegisterDay);
-								System.out.println("제품ID : "+smallProductId);*/
-								
-								blliSmallProductVO.setMidCategory(midCategory.get(i).getMidCategory());
-								blliSmallProductVO.setMidCategoryId(midCategory.get(i).getMidCategoryId());
-								blliSmallProductVO.setSmallProduct(smallProduct.replaceAll("%26", "&"));
-								blliSmallProductVO.setSmallProductPostingCount(smallProductPostingCount);
-								blliSmallProductVO.setNaverShoppingRank(naverShoppingRank);
-								blliSmallProductVO.setSmallProductMaker(smallProductMaker);
-								blliSmallProductVO.setProductRegisterDay(productRegisterDay);
-								blliSmallProductVO.setSmallProductId(smallProductId);
-								
-								doc = Jsoup.connect("http://shopping.naver.com/detail/detail.nhn?nv_mid="+smallProductId+"&cat_id="+midCategory.get(i).getMidCategoryId()+"&frm=NVSHMDL&query=").timeout(0).get();
-								smallProductMainPhotoLink = doc.select("#summary_thumbnail_img").attr("src");
-								blliSmallProductVO.setSmallProductMainPhotoLink(blliFileDownLoader.imgFileDownLoader(smallProductMainPhotoLink, smallProductId, "smallProduct"));
-								
-								productDAO.insertSmallProduct(blliSmallProductVO);
-								
-								Elements ele = doc.select("#price_compare tbody tr");
-								//System.out.println("*************** 구매링크 ***************");
-								for(Element elem : ele){
-									BlliSmallProductBuyLinkVO blliSmallProductBuyLinkVO = new BlliSmallProductBuyLinkVO();
-									String buyLink = elem.select(".buy_area a").attr("href");
-									String buyLinkPrice = elem.select(".price a").text().replace(",", "");
-									String buyLinkDeliveryCost = elem.select(".gift").first().text().trim();
-									String buyLinkOption = elem.select(".gift").last().text().trim();
-									String seller = elem.select(".mall a").text();
-									if(seller.equals("")){
-										seller = elem.select(".mall a img").attr("alt");
-									}
-									/*System.out.println("구매 링크 : "+buyLink);
-									System.out.println("판매 가격 : "+buyLinkPrice);
-									System.out.println("배송비 : "+buyLinkDeliveryCost);
-									System.out.println("부가정보 : "+buyLinkOption);
-									System.out.println("쇼핑몰 : "+seller);
-									System.out.println("제품 ID : "+smallProductId);*/
-									
-									blliSmallProductBuyLinkVO.setSmallProductId(smallProductId);
-									blliSmallProductBuyLinkVO.setBuyLink(buyLink);
-									blliSmallProductBuyLinkVO.setBuyLinkPrice(buyLinkPrice);
-									blliSmallProductBuyLinkVO.setBuyLinkDeliveryCost(buyLinkDeliveryCost);
-									blliSmallProductBuyLinkVO.setBuyLinkOption(buyLinkOption);
-									blliSmallProductBuyLinkVO.setSeller(seller);
-									
-									int isSmallProductSeller = productDAO.isSmallProductSeller(blliSmallProductBuyLinkVO);
-									if(isSmallProductSeller == 0){
-										productDAO.insertSmallProductBuyLink(blliSmallProductBuyLinkVO);
-									}
-								}
-								insertSmallProductCount++;
-								//System.out.println("*****************************************");
-							}else if(smallProductStatus.equals("confirmed")){
-								String smallProduct = el.select(".info .tit").text();
-								smallProduct = smallProduct.replaceAll("&", "%26");
-								try{
-									doc = Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+smallProduct+
-											"&display=1&start=1&target=blog&sort=sim").timeout(5000).get();
-									if(doc.select("message").text().contains("Query limit exceeded")){
-										key = "0a044dc7c63b8f3b9394e1a5e49db7ab";
-										doc = Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+smallProduct+
-												"&display=1&start=1&target=blog&sort=sim").timeout(5000).get();
-									}
-								}catch(SocketTimeoutException se){
-									se.printStackTrace();
-									continue;
-								}
-								String totalPostingText = doc.select("total").text().trim();
-								if(totalPostingText.equals("")){
-									totalPostingText = "0";
-								}
-								int smallProductPostingCount = Integer.parseInt(totalPostingText);
-								blliSmallProductVO.setSmallProductPostingCount(smallProductPostingCount);
-								blliSmallProductVO.setNaverShoppingRank(naverShoppingRank);
-								blliSmallProductVO.setSmallProductId(smallProductId);
-								
-								productDAO.updateSmallProduct(blliSmallProductVO);
-								
-								doc = Jsoup.connect("http://shopping.naver.com/detail/detail.nhn?nv_mid="+smallProductId+"&cat_id="+midCategory.get(i).getMidCategoryId()+"&frm=NVSHMDL&query=").timeout(0).get();
-								Elements ele = doc.select("#price_compare tbody tr");
-								//System.out.println("*************** 구매링크 ***************");
-								for(Element elem : ele){
-									BlliSmallProductBuyLinkVO blliSmallProductBuyLinkVO = new BlliSmallProductBuyLinkVO();
-									String buyLink = elem.select(".buy_area a").attr("href");
-									String buyLinkPrice = elem.select(".price a").text().replace(",", "");
-									String buyLinkDeliveryCost = elem.select(".gift").first().text().trim();
-									String buyLinkOption = elem.select(".gift").last().text().trim();
-									String seller = elem.select(".mall a").text();
-									if(seller.equals("")){
-										seller = elem.select(".mall a img").attr("alt");
-									}
-									/*System.out.println("구매 링크 : "+buyLink);
-									System.out.println("판매 가격 : "+buyLinkPrice);
-									System.out.println("배송비 : "+buyLinkDeliveryCost);
-									System.out.println("부가정보 : "+buyLinkOption);
-									System.out.println("쇼핑몰 : "+seller);*/
-									
-									blliSmallProductBuyLinkVO.setSmallProductId(smallProductId);
-									blliSmallProductBuyLinkVO.setBuyLink(buyLink);
-									blliSmallProductBuyLinkVO.setBuyLinkPrice(buyLinkPrice);
-									blliSmallProductBuyLinkVO.setBuyLinkDeliveryCost(buyLinkDeliveryCost);
-									blliSmallProductBuyLinkVO.setBuyLinkOption(buyLinkOption);
-									blliSmallProductBuyLinkVO.setSeller(seller);
-									
-									productDAO.updateSmallProductBuyLink(blliSmallProductBuyLinkVO);
-								}
-								updateSmallProductCount++;
-=======
 	@Scheduled(cron = "00 00 02 * * *")
 	public void insertSmallProduct() {
 		Random random = new Random();
@@ -517,7 +294,6 @@ public class CategoryAndProductScheduler {
 							if(exceptionCount > 3){
 								count = i+1;
 								exceptionCount = 0;
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 							}else{
 								count = i;
 							}
@@ -718,13 +494,6 @@ public class CategoryAndProductScheduler {
 								naverShoppingRank = 0;
 							}while(page <= lastPage);
 						}
-<<<<<<< HEAD
-						page++;
-						allSmallProductCount += naverShoppingRank;
-						naverShoppingRank = 0;
-						
-					}while(page <= lastPage);
-=======
 						flag = false;
 					}catch(Exception e){
 						exceptionCount++;
@@ -733,7 +502,6 @@ public class CategoryAndProductScheduler {
 							detailException.put(smallProductId, e.getMessage());
 						}
 					}
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 				}
 				logger.info("총 중분류 개수 : "+midCategory.size());
 				logger.info("총 소제품 개수 : "+allSmallProductCount);

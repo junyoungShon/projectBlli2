@@ -8,13 +8,11 @@ import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
-<<<<<<< HEAD
 import kr.co.blli.model.vo.BlliScheduleVO;
-=======
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
+
 @Repository
 public class MemberDAOImpl implements MemberDAO{
 	@Resource

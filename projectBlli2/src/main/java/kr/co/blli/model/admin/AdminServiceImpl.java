@@ -450,18 +450,14 @@ public class AdminServiceImpl implements AdminService{
 		BlliDetailException exceptionVO = null;
 		int number = 1;
 		try {
-<<<<<<< HEAD
-			BufferedReader in = new BufferedReader(new FileReader("C:\\Users\\"+System.getProperty("user.name")+"\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\logFile\\blliLog.log"));
-=======
 			String localPath = null;
 			if(System.getProperty("os.name").contains("Windows")){
-				localPath = "C:\\Users\\PARK\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\logFile\\blliLog.log";
+				localPath = "C:\\Users\\"+System.getProperty("user.name")+"\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\logFile\\blliLog.log";
 			}else{
 				//서버 환경일 경우 path
 				localPath = "/usr/bin/apache-tomcat-7.0.64/webapps/logFile/blliLog.log";
 			}
 			BufferedReader in = new BufferedReader(new FileReader(localPath));
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 			String message;
 			String exceptionContent = "";
 			while ((message = in.readLine()) != null) {

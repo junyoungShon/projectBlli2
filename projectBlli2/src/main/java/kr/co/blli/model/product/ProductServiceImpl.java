@@ -85,27 +85,14 @@ public class ProductServiceImpl implements ProductService{
 		int recommMidNumber = blliMidCategoryVOList.size();
 		if(recommMidNumber>9){
 			for(int i=0;i<blliMidCategoryVOList.size();i++){
-<<<<<<< HEAD
 				HashMap<String,String> paraMap = new HashMap<String, String>();
 				paraMap.put("recommMid", blliMidCategoryVOList.get(i).getMidCategoryId());
 				paraMap.put("babyMonthAge",Integer.toString(blliBabyVO.getBabyMonthAge()));
-				System.out.println(paraMap);
-				BlliSmallProductVO blliSmallProductVO = productDAO.selectSameAgeMomBestPickedSmallProduct(paraMap);
-				System.out.println("추천 소제품 : "+blliSmallProductVO);
 				//중제품 당 찜 상위 1개 만을 가져온다.
+				BlliSmallProductVO blliSmallProductVO = productDAO.selectSameAgeMomBestPickedSmallProduct(paraMap);
 				if(blliSmallProductVO!=null){
 					blliSmallProductVOList.add(blliSmallProductVO);
 				}
-=======
-					HashMap<String,String> paraMap = new HashMap<String, String>();
-					paraMap.put("recommMid", blliMidCategoryVOList.get(i).getMidCategoryId());
-					paraMap.put("babyMonthAge",Integer.toString(blliBabyVO.getBabyMonthAge()));
-					//중제품 당 찜 상위 1개 만을 가져온다.
-					BlliSmallProductVO blliSmallProductVO = productDAO.selectSameAgeMomBestPickedSmallProduct(paraMap);
-					if(blliSmallProductVO!=null){
-						blliSmallProductVOList.add(blliSmallProductVO);
-					}
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 			}
 		}else{
 			for(int i=0;i<blliMidCategoryVOList.size();i++){
@@ -114,30 +101,13 @@ public class ProductServiceImpl implements ProductService{
 				paraMap.put("babyMonthAge",Integer.toString(blliBabyVO.getBabyMonthAge()));
 				// 중제품 당 찜 상위 2개씩을 가져온다.
 				List<BlliSmallProductVO> tempList = productDAO.selectSameAgeMomBestPickedSmallProductList(paraMap);
-<<<<<<< HEAD
-				if(tempList!=null){
-					for(int j=0;j<tempList.size();j++){
-						System.out.println(tempList.get(j).getSmallProduct());
-=======
 				for(int j=0;j<tempList.size();j++){
 					if(tempList.get(j)!=null){
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 						blliSmallProductVOList.add(tempList.get(j));
 					}
 				}
 			}
 		}
-<<<<<<< HEAD
-		
-			for(int i=0;i<blliSmallProductVOList.size();i++){
-				System.out.println(blliSmallProductVOList.get(i).getSmallProductId());
-				DecimalFormat df = new DecimalFormat("#,##0");
-				if(blliSmallProductVOList.get(i)!=null) { //용호 추가 - null포인터 방지
-					blliSmallProductVOList.get(i).setMinPrice(df.format(Integer.parseInt(productDAO.selectProductMinPrice(blliSmallProductVOList.get(i).getSmallProductId()))));
-					blliSmallProductVOList.set(i, productDibChecker(blliBabyVO.getMemberId(), blliSmallProductVOList.get(i)));
-				}
-			}
-=======
 		for(int i=0;i<blliSmallProductVOList.size();i++){
 			if(blliSmallProductVOList.get(i).getMinPrice()!=null){
 				DecimalFormat df = new DecimalFormat("#,##0");
@@ -145,7 +115,6 @@ public class ProductServiceImpl implements ProductService{
 				blliSmallProductVOList.set(i, productDibChecker(blliBabyVO.getMemberId(), blliSmallProductVOList.get(i)));
 			}
 		}
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 		return blliSmallProductVOList;
 	}
 	/**
@@ -164,16 +133,6 @@ public class ProductServiceImpl implements ProductService{
 		paraMap.put("pageNum", pageNum);
 		//점수순 노출 , 상태(confirmed) , 포스팅 대상 소제품 등을 기준으로 출력<!극혐주의!> 포스팅 관련 이므로 여기있으면 안되지만 구조상 여기왔다 . 상의해보자
 		for(int i=0;i<blliSmallProductVOList.size();i++){
-<<<<<<< HEAD
-			List<BlliPostingVO> tempList = null;
-			if(blliSmallProductVOList.get(i)!=null) { //용호 추가 - null포인터 방지
-				paraMap.put("smallProductId", blliSmallProductVOList.get(i).getSmallProductId());
-				tempList = productDAO.selectPostingBySmallProductList(paraMap);
-			}
-			if(tempList!=null){
-				for(int j=0;j<tempList.size();j++){
-					blliPostingVOList.add(tempList.get(j));
-=======
 			System.out.println(blliSmallProductVOList);
 			if(blliSmallProductVOList.get(i)!=null){
 				paraMap.put("smallProductId", blliSmallProductVOList.get(i).getSmallProductId());
@@ -182,7 +141,6 @@ public class ProductServiceImpl implements ProductService{
 					for(int j=0;j<tempList.size();j++){
 						blliPostingVOList.add(tempList.get(j));
 					}
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 				}
 			}
 		}

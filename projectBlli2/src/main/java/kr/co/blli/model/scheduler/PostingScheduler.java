@@ -349,17 +349,6 @@ public class PostingScheduler {
 							allExceptionCount++;
 							detailException.put(postingVO.getPostingUrl(), e.getMessage());
 						}
-<<<<<<< HEAD
-					} //for
-					System.out.println("포스팅 카운트 : "+countOfPosting);
-					countOfAllPosting += countOfPosting;
-					productDAO.updateSearchTime(smallProductList.get(i).getSmallProductId());
-					end = System.currentTimeMillis();  //종료시간
-					//종료-시작=실행시간		
-					if((end-start)/1000.0 > 60*60){ //3시간을 초과하면 실행 중지
-						break label;
-=======
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 					}
 				}
 				logger.info("총 소제품 개수 : "+smallProductList.size());
@@ -395,38 +384,5 @@ public class PostingScheduler {
 		}catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-<<<<<<< HEAD
-		logList.add("총 소제품 개수 : "+smallProductList.size());
-		logList.add("총 포스팅 개수 : "+countOfAllPosting);
-		logList.add("insert한 포스팅 개수 : "+insertPostingCount);
-		logList.add("update한 포스팅 개수 : "+updatePostingCount);
-		logList.add("insert하지 않은 조건에 맞지 않는 포스팅 개수 : "+denyPostingCount);
-		logList.add("update하지 않은 포스팅 개수 : "+notUpdatePostingCount);
-		logList.add("시간지연되어 insert하지 않은 포스팅 개수 : "+delayConnectionCount);
-		logList.add("Exception 발생 횟수 : "+allExceptionCount);
-		Iterator<String> postingUrlList = detailException.keySet().iterator();
-		while(postingUrlList.hasNext()){
-			postingUrl = postingUrlList.next();
-			logList.add("Exception이 발생한 postingUrl : "+postingUrl);
-			logList.add("Exception 내용 : "+detailException.get(postingUrl));
-		}
-		end = System.currentTimeMillis();  //종료시간
-		//종료-시작=실행시간		
-		if((end-start)/1000 > 60*60){
-			int hour = (int)Math.floor((((end-start)/1000.0)/60.0)/60);
-			int minute = (int)Math.floor(((end-start)/1000.0)/60-hour*60);
-			int second = (int)Math.ceil((end-start)/1000.0-minute*60);
-			logList.add("실행 시간  : "+hour+"시간 "+minute+"분 "+second+"초");
-		}else if((end-start)/1000 > 60){
-			int minute = (int)Math.floor(((end-start)/1000.0)/60.0);
-			int second = (int)Math.ceil((end-start)/1000.0-minute*60);
-			logList.add("실행 시간  : "+minute+"분 "+second+"초");
-		}else{
-			logList.add("실행 시간  : "+(int)Math.ceil((end-start)/1000.0)+"초");
-		}
-		logList.add("end : "+methodName);
-		return logList;
-=======
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 	}
 }

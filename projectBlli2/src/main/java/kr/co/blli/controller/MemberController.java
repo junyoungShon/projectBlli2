@@ -3,10 +3,7 @@ package kr.co.blli.controller;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
-<<<<<<< HEAD
-=======
 import java.util.ArrayList;
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 import java.util.Iterator;
 import java.util.List;
 
@@ -137,7 +134,6 @@ public class MemberController {
 			
 			//메인페이지로 이동할 때 회원에게 추천 될 소분류 상품과 관련 된 포스팅을 보여준다.<으아아아 여기있으면 아니되오!!>
 			List<BlliPostingVO> blliPostingVOList = productService.selectPostingBySmallProductList(blliSmallProductVOList,blliMemberVO.getMemberId(),"1");
-<<<<<<< HEAD
 			System.out.println(blliSmallProductVOList);
 			for(int i=0;i<blliSmallProductVOList.size();i++){
 				if(blliSmallProductVOList.get(i)!=null) { //용호 추가 - null포인터 방지
@@ -145,8 +141,6 @@ public class MemberController {
 				}
 			}
 			System.out.println(blliPostingVOList);
-=======
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 			mav.setViewName("home");
 			//회원정보 삽입
 			mav.addObject("blliMemberVO", blliMemberVO);
@@ -490,7 +484,6 @@ public class MemberController {
 	
 	
 	//용호 메소드 작성 영역
-<<<<<<< HEAD
 	/**
 	  * @Method Name : goFindPasswordPage
 	  * @Method 설명 : 임시비밀번호를 받는 링크를 받기위한 이메일 입력 페이지로 이동
@@ -498,22 +491,6 @@ public class MemberController {
 	  * @작성자 : yongho
 	  * @return
 	  */
-=======
-	@RequestMapping("goCalenderPage.do")
-	@ResponseBody
-	public ModelAndView calendar(BlliMemberVO blliMemberVO){
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("calendar_calendarPage");
-		/*boolean result = false;
-		if(memberService.findMemberById(blliMemberVO)!=null){
-			result = true;
-		}else{
-			result = false;
-		}*/
-		return mv;
-	}
-	
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 	@RequestMapping("goFindPasswordPage.do")
 	public String goFindPasswordPage(){
 		return "findPasswordPage";
@@ -552,7 +529,7 @@ public class MemberController {
 		return new ModelAndView("loginPage", "memberEmail", memberEmail);
 	}
 	
-<<<<<<< HEAD
+	
 	/**
 	  * @Method Name : calendar
 	  * @Method 설명 : 회원 일정을 관리하는 달력 페이지로 이동
@@ -563,7 +540,7 @@ public class MemberController {
 	  */
 	@RequestMapping("goCalenderPage.do")
 	public String calendar(BlliMemberVO blliMemberVO){
-		return "calendarPage";
+		return "calendar_calendarPage";
 	}
 	
 	
@@ -582,7 +559,7 @@ public class MemberController {
 		memberService.updateSchedule(bsvo);
 		return memberService.selectSchedule(bsvo);
 	}
-=======
+
 	@RequestMapping("goScrapePage.do")
 	public ModelAndView goScrapePage(HttpServletRequest request) {
 		HttpSession session = request.getSession();
@@ -606,5 +583,4 @@ public class MemberController {
 		return mav;
 	}
 	
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 }

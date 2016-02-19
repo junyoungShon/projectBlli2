@@ -8,22 +8,7 @@ import java.util.List;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
-
-
-
-
-
-
-
-
-
-<<<<<<< HEAD
-=======
-
-
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 import kr.co.blli.model.vo.BlliBabyVO;
-import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliScheduleVO;
@@ -58,13 +43,10 @@ public interface MemberService {
 	public String updateMemberPasswordToTemporaryPassword(String memberEmail);
 	public void sendTemporaryPasswordMail(String memberEmail, String TemporaryPassword) throws UnsupportedEncodingException, MessagingException;
 
-<<<<<<< HEAD
 	public int addSchedule(BlliScheduleVO bsvo);
 	public void updateSchedule(BlliScheduleVO bsvo);
 	public BlliScheduleVO selectSchedule(BlliScheduleVO bsvo);
-=======
 	public int denySendEmail(String memberEmail);
 
 	public ArrayList<BlliMemberScrapeVO> getScrapeInfoByMemberId(BlliMemberVO memberVO);
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 }

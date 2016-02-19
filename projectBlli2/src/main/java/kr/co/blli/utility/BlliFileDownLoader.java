@@ -6,22 +6,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 
 import org.springframework.stereotype.Component;
 
 @Component("fileDownLoader")
 public class BlliFileDownLoader {
 	public String imgFileDownLoader(String url,String productId,String fileKind){
-<<<<<<< HEAD
-		String localPath = "C:\\Users\\"+System.getProperty("user.name")+"\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\scrawlImage\\";
-		System.out.println(url);
-=======
 		String localPath = null;
 		if(System.getProperty("os.name").contains("Windows")){
 			localPath = "C:\\Users\\junyoung\\git\\projectBlli2\\projectBlli2\\src\\main\\webapp\\scrawlImage\\";
@@ -29,26 +19,10 @@ public class BlliFileDownLoader {
 			//서버 환경일 경우 path
 			localPath = "/usr/bin/apache-tomcat-7.0.64/webapps/projectBlli2/scrawlImage";
 		}
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 		String fileEXT = url.substring(url.lastIndexOf(".")+1, url.lastIndexOf(".")+4).toLowerCase();
 		if(!fileEXT.equals("jpeg")){
 			fileEXT.substring(0, 2);
 		}
-<<<<<<< HEAD
-		/*BufferedImage image = null; 
-		try {
-			image = ImageIO.read(new URL(url));
-			BufferedImage bufferedImage = image;
-			Graphics2D graphics = (Graphics2D) bufferedImage.getGraphics();
-			graphics.setBackground(Color.WHITE);
-			graphics.drawImage(image, 0, 0, null);
-			ImageIO.write(bufferedImage, fileEXT, new File(localPath+"\\"+fileKind+"\\"+productId+"."+fileEXT));
-			System.out.println(fileKind+productId+fileEXT+" 다운완료");
-		}catch(Exception e){
-			e.printStackTrace();
-		}*/
-=======
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli2.git
 		try {
 			URL urlObject = new URL(url);
 		    InputStream in = new BufferedInputStream(urlObject.openStream());
